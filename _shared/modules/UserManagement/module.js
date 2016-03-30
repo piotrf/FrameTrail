@@ -312,7 +312,7 @@ FrameTrail.defineModule('UserManagement', function(){
 
 
 	function renderUserColorCollectionForm(selectedColor, targetElement) {
-		var elem = $("<div class='userColorCollectionContainer'><input type='hidden' name='color'>User Color:<div class='userColorCollection'></div></div>");
+		var elem = $("<div class='userColorCollectionContainer'><input type='hidden' name='color' value='"+ selectedColor +"'>User Color:<div class='userColorCollection'></div></div>");
 		for (var c in userColorCollection) {
 			elem.find(".userColorCollection").append("<div class='userColorCollectionItem"+((userColorCollection[c] == selectedColor) ? " selected" : "")+"' style='background-color:#"+userColorCollection[c]+"' data-color='"+userColorCollection[c]+"'></div>");
 		}
