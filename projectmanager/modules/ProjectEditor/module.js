@@ -414,7 +414,7 @@
 	 		modal: true,
 	        resizable: false,
 	        width:      725,
-	        height:     570,
+	        height:     580,
 	        create: function() {
 	            
 	        },
