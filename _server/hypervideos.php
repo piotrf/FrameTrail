@@ -472,7 +472,7 @@ function hypervideoChange($projectID, $hypervideoID, $name = false, $description
 			move_uploaded_file($subtitles["tmp_name"][$subtitleKey], $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles/".$subtitleKey.".vtt");
 		}
 	}
-	$file->writeClose(json_encode($hv, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	$file->writeClose(json_encode($hv, $conf["settings"]["json_flags"]));
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Hypervideo has been updated.";

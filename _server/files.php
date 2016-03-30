@@ -109,7 +109,7 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 			$newResource["type"] = $urlAttr["type"];
 			$newResource["attributes"] = $urlAttr["attributes"];
 			$newResource["thumb"] = $urlAttr["thumb"];
-			break;
+		break;
 		case "image":
 			if ($uploadsAllowed === false) {
 				$return["status"] = "fail";
@@ -194,7 +194,7 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 			}
 
 			$newResource["type"] = "video";
-			break;
+		break;
 		case "map":
 			if ((!$lat) || (!$lon)) {
 				$return["status"] = "fail";
@@ -226,7 +226,7 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 	}
 	$res["resources-increment"]++;
 	$res["resources"][$res["resources-increment"]] = $newResource;
-	$file->writeClose(json_encode($res, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	$file->writeClose(json_encode($res, $conf["settings"]["json_flags"]));
 
 	$return["status"] = "success";
 	$return["code"] = 0;
@@ -320,7 +320,7 @@ function fileUploadThumb($projectID,$resourcesID,$thumb) {
 	file_put_contents($conf["dir"]["projects"]."/".$projectID."/resources/".$filename.".png", $data);
 
 	$res["resources"][$resourcesID]["thumb"] = $filename.".png";
-	$file->writeClose(json_encode($res, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	$file->writeClose(json_encode($res, $conf["settings"]["json_flags"]));
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "thumb saved";
@@ -482,7 +482,7 @@ function fileDelete($projectID,$resourcesID) {
 		}
 	}
 	unset($res["resources"][$resourcesID]);
-	$file->writeClose(json_encode($res, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	$file->writeClose(json_encode($res, $conf["settings"]["json_flags"]));
 	//$file->close();
 	$return["status"] = "success";
 	$return["code"] = 0;
