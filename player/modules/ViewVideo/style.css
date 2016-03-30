@@ -735,6 +735,7 @@ path {
 }
 
 #TimelineList .userTimeline {
+	position: relative;
 	height: 20px;
 	background-color: #b5b5bc;
 	box-shadow: 0 0 2px 0px #303030 inset;
