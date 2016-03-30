@@ -132,7 +132,7 @@ function projectsEdit($projectID, $name, $description, $config, $userNeedsConfir
 	/* Check for User is ProjectAdmin */
 
 	if ($_SESSION["ohv"]["projects"][$projectID]["login"]) {
-		$tmp = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/users.json"));
+		$tmp = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/users.json"), true);
 		$tmpUserIsAdmin = ($tmp["user"][$_SESSION["ohv"]["projects"][$projectID]["user"]["id"]]["role"] == "admin") ? true : false;
 	}
 
