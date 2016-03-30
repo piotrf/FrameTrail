@@ -245,6 +245,7 @@ switch($_REQUEST["a"]) {
 				"autoUpdate"=> false,
 				"defaultUserRole"=> "user",
 				"userNeedsConfirmation"=> false,
+				"allowUploads"=> true,
 				"userColorCollection"=> ["597081", "339966", "16a09c", "cd4436", "0073a6", "8b5180", "999933", "CC3399", "7f8c8d", "ae764d", "cf910d", "b85e02"]
 			);
 			if (!file_put_contents($conf["dir"]["data"]."/config.json", json_encode($tmpConf,$conf["settings"]["json_flags"]))) {

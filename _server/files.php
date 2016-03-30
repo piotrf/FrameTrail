@@ -81,6 +81,10 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 	$memory_limit = (int)(ini_get('memory_limit'));
 	$upload_mb = min($max_upload, $max_post, $memory_limit);
 
+	$configjson = file_get_contents($conf["dir"]["data"]."/config.json");
+	$configDB = json_decode($configjson, true);
+	$uploadsAllowed = $configDB["allowUploads"];
+
 	$cTime = time();
 	$newResource["name"] = $name;
 	$newResource["creator"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
@@ -107,6 +111,14 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 			$newResource["thumb"] = $urlAttr["thumb"];
 			break;
 		case "image":
+			if ($uploadsAllowed === false) {
+				$return["status"] = "fail";
+				$return["code"] = 20;
+				$return["string"] = "User not allowed to upload files";
+				return $return;
+				exit;
+			}
+
 			if ((!$files["image"]) || (!$files["image"]["size"])) {
 				$return["status"] = "fail";
 				$return["code"] = 4;
@@ -134,6 +146,13 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 			move_uploaded_file($files["image"]["tmp_name"], $conf["dir"]["projects"]."/".$projectID."/resources/".$filename);
 		break;
 		case "video":
+			if ($uploadsAllowed === false) {
+				$return["status"] = "fail";
+				$return["code"] = 20;
+				$return["string"] = "User not allowed to upload files";
+				return $return;
+				exit;
+			}
 
 			if ((!$_FILES["webm"]) || (!$_FILES["webm"]["size"]) || (!$_FILES["mp4"]) || (!$_FILES["mp4"]["size"])) {
 				$return["status"] = "fail";
