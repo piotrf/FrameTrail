@@ -454,6 +454,11 @@ FrameTrail.defineModule('ResourceManager', function(){
                                     uploadDialog.find('#NewResourceConfirm').prop('disabled', false);
                                     $('#UploadDialog').append('<div class="message active error">Empty field: URL. Please provide a valid url.</div>');
                                     break;
+                                case 20:
+                                    uploadDialog.find('.progress').hide();
+                                    uploadDialog.find('#NewResourceConfirm').prop('disabled', false);
+                                    $('#UploadDialog').append('<div class="message active error">You are not allowed to upload files.</div>');
+                                    break;
                                 default:
                                     uploadDialog.find('.progress').hide();
                                     uploadDialog.find('#NewResourceConfirm').prop('disabled', false);
