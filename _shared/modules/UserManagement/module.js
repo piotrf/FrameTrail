@@ -611,7 +611,13 @@ FrameTrail.defineModule('UserManagement', function(){
 	                  modal: true,
 	                  close: function() {
 	                    loggedOutDialog.remove();
-	                  }
+	                    document.location.reload();
+	                  },
+	                  buttons: {
+				        "OK": function() {
+				          $( this ).dialog( "close" );
+				        }
+				      }
 	                });
 				}
 
