@@ -51,7 +51,9 @@ All data is kept in files using a structured JSON format, there is no database. 
 ### Prerequisites
 
 * **Apache** Web Server (2.2.29 +) with **PHP** (5.6.2 +)
+
 (any other configuration might also be fine, but this one has been tested)
+Please note that you can use FrameTrail "read-only" locally without any server, as long as your browser supports local Ajax requests (there are known issues with Chrome, but Firefox should work in most cases). Of course you won't be able to use the editing features.
 
 ### Setup
 
