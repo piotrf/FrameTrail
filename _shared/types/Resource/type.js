@@ -327,16 +327,20 @@ FrameTrail.defineType(
                 min: 0,
                 max: 1,
                 animate: false,
-
+                create: function() {
+                    if ($.isArray(overlay.data.attributes) && overlay.data.attributes.length < 1) {
+                        overlay.data.attributes = {};
+                    }
+                },
                 slide:  function(evt, ui) {
 
-                            overlay.data.attributes.opacity = ui.value;
+                    overlay.data.attributes.opacity = ui.value;
 
-                            overlay.updateOverlayElement();
+                    overlay.updateOverlayElement();
 
-                            FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+                    FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
 
-                        }
+                }
             });
 
             controlsContainer.find('#ArrangeTop').click( function() {
