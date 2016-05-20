@@ -1212,7 +1212,7 @@
 					a 		=	"hypervideoChangeFile"
 					projectID 	=	number 	// Required. ID of Project
 					hypervideoID 	=	string 	// Required. The hypervideo
-					type 		=	string 	// "overlays" or "links"
+					type 		=	string 	// "overlays", "links" or "codeSnippets"
 					src 		=	string 	// Required. JSON object as String which shall replace the old $type.json
 
 			Returning Code:
@@ -1235,6 +1235,7 @@
 			<select name="type" size="2" id="hypervideoChangeFile_type">
 				<option value="overlays" selected>overlays</option>
 				<option value="links">links</option>
+				<option value="codeSnippets">codeSnippets</option>
 			</select><br>
 			<textarea name="src" style="width: 300px; height:90px;" id="hypervideoChangeFile_src">
 [{

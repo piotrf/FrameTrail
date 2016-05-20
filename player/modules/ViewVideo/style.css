@@ -267,6 +267,24 @@ path {
 	pointer-events: none;
 }
 
+/* Code Snippets */
+
+#PlayerContainer #CodeSnippetTimeline {
+	position: relative;
+	width: 100%;
+	height: 0px;
+	background: #00ff00;
+	z-index: 3;
+	pointer-events: none;
+	overflow: hidden;
+	display: none;
+}
+
+#PlayerContainer #CodeSnippetTimeline.editable {
+	display: block;
+	overflow: visible;
+}
+
 /* Controls */
 
 #PlayerContainer #Controls {
@@ -726,7 +744,7 @@ path {
 
 /* EDITING UI */
 
-#PlayerContainer #AnnotationTimeline.editable, #PlayerContainer #VideolinkTimeline.editable, #PlayerContainer #OverlayTimeline.editable, #PlayerContainer #AudioTimeline.editable {
+#PlayerContainer #AnnotationTimeline.editable, #PlayerContainer #VideolinkTimeline.editable, #PlayerContainer #OverlayTimeline.editable, #PlayerContainer #CodeSnippetTimeline.editable, #PlayerContainer #AudioTimeline.editable {
 	min-height: 20px;
 	height: : 40px;
 	background-color: transparent;
@@ -751,6 +769,33 @@ path {
 
 #PlayerContainer .editable .timelineElement.brushed {
 
+}
+
+#PlayerContainer #CodeSnippetTimeline.editable .timelineElement {
+	width: 20px;
+	margin-left: -10px;
+}
+
+#PlayerContainer #CodeSnippetTimeline.editable .timelineElement:before {
+	border-top: 4px solid #00ff00;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    content: "";
+    left: 5px;
+    position: absolute;
+    bottom: -4px;
+    width: 2px;
+}
+
+#PlayerContainer #CodeSnippetTimeline.editable .timelineElement:after {
+	border-bottom: 4px solid #00ff00;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    content: "";
+    left: 5px;
+    position: absolute;
+    top: -4px;
+    width: 2px;
 }
 
 #EditingOptions {

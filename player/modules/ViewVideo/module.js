@@ -48,6 +48,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                    <div id="EditPropertiesContainer"></div>'
                         + '                </div>'
                         + '            </div>'
+                        + '            <div id="CodeSnippetTimeline" class="timeline"></div>'
                         + '            <div id="OverlayTimeline" class="timeline"></div>'
                         + '            <div id="Controls">'
                         + '                <div id="LeftControlPanel">'
@@ -124,6 +125,8 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         OverlayTimeline         = domElement.find('#OverlayTimeline'),
         OverlayContainer        = domElement.find('#OverlayContainer'),
+
+        CodeSnippetTimeline     = domElement.find('#CodeSnippetTimeline'),
 
         Controls                = domElement.find('#Controls'),
         EditingOptions          = domElement.find('#EditingOptions'),
@@ -576,6 +579,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                 PlayerContainer.height() 
             -   (videolinkTimelineVisible  ? VideolinkTimeline.height()  : 0) 
             -   (annotationTimelineVisible ? AnnotationTimeline.height() : 0) 
+            -   CodeSnippetTimeline.height() 
             -   OverlayTimeline.height() 
             -   Controls.height() 
         );
@@ -587,6 +591,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         domElement.find('#PlayerProgress .ui-slider-handle-circle').css( 'bottom', 
                 Controls.height() 
+            +   CodeSnippetTimeline.height()
             +   OverlayTimeline.height()
             +   ((annotationTimelineVisible && annotationsPosition == 'bottom') ? AnnotationTimeline.height() : 0) 
             +   ((videolinkTimelineVisible && annotationsPosition == 'top') ? VideolinkTimeline.height() : 0) 
@@ -768,6 +773,9 @@ FrameTrail.defineModule('ViewVideo', function(){
             case 'links': 
                 enterLinkMode();
                 break;
+            case 'codesnippets':
+                enterCodeSnippetMode();
+                break;
             case 'annotations': 
                 enterAnnotationMode();
                 break;
@@ -821,7 +829,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         VideolinkTiles.hide();
         VideolinkContainer.hide();
 
-        domElement.find('.timeline').show();
+        domElement.find('.timeline').not('#CodeSnippetTimeline').show();
 
         EditingOptions.show();
 
@@ -899,6 +907,19 @@ FrameTrail.defineModule('ViewVideo', function(){
         EditPropertiesContainer
             .html('<div class="message active">Add video links by dragging hypervideos into the active timeline or entering a link manually.</div>')
             .attr('data-editmode', 'links');
+    }
+
+    /**
+     * I am called when the app enters the editMode "codesnippets"
+     * @method enterCodeSnippetMode
+     */
+    function enterCodeSnippetMode() {
+        initEditMode();
+        CodeSnippetTimeline.addClass('editable');
+
+        EditPropertiesContainer
+            .html('<div class="message active">Add code snippets links by ...</div>')
+            .attr('data-editmode', 'codesnippets');
     }
 
     /**
@@ -1727,6 +1748,13 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get OverlayTimeline()  { return OverlayTimeline  },
+
+        /**
+         * I contain the CodeSnippetTimeline element.
+         * @attribute CodeSnippetTimeline
+         * @type HTMLElement
+         */
+        get CodeSnippetTimeline()  { return CodeSnippetTimeline  },
 
         /**
          * I contain the VideolinkContainer element.

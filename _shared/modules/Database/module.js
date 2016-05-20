@@ -27,6 +27,7 @@
         
         overlays     = [],
         links        = [],
+        codeSnippets = [],
         resources    = {},
 
         annotations            = {},
@@ -385,8 +386,43 @@
     };
 
 
+    /**
+     * I load the Code Snippet data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}} 
+     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /codeSnippets.json) from the server
+     * and save the data in my attribute {{#crossLink "Database/codesnippets:attribute"}}Database/codesnippets{{/crossLink}}.
+     * I call my success or fail callback respectively.
+     *
+     * @method loadCodeSnippetData
+     * @param {Function} success
+     * @param {Function} fail
+     * @private 
+     */
+    function loadCodeSnippetData(success, fail) {
 
+        $.ajax({
 
+            type: "GET",
+            url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/codeSnippets.json'),
+            cache: false,
+            dataType: "json",
+            mimeType: "application/json"
+        }).done(function(data){
+
+            codeSnippets = data;
+            success.call(this);
+
+        }).fail(function() {
+
+            // call success anyway to deal with old versions (without codeSnippets.json file)
+            success.call(this);
+            
+            //fail('No Code data.');
+
+        });
+
+    };
+
+    
     /**
      * I load the subtitles data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}} 
      * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /subtitles/...) from the server
@@ -520,6 +556,7 @@
             annotations  = {};
             overlays     = [];
             links        = [];
+            codeSnippets = [];
 
             return  loadProjectData(function(){
 
@@ -569,7 +606,11 @@
 
                                         loadAnnotationData(function(){
 
-                                            success.call();
+                                            loadCodeSnippetData(function(){
+                                                
+                                                success.call();
+
+                                            }, fail);
 
                                         }, fail);
 
@@ -627,7 +668,11 @@
 
                             loadAnnotationData(function(){
 
-                                success.call();
+                                loadCodeSnippetData(function(){
+                                                
+                                    success.call();
+
+                                }, fail);
 
                             }, fail);
 
@@ -759,6 +804,67 @@
 
             callback.call(window, { 
                 failed: 'links', 
+                error: error 
+            });
+
+        });
+
+
+    };
+
+
+    /**
+     * I save the code snippet data back to the server.
+     *
+     * My success callback gets one argument, which is either
+     *
+     *     { success: true }
+     *
+     * or
+     *
+     *     { failed: 'codesnippets', error: ... }
+     *
+     * @method saveCodeSnippets
+     * @param {} callback
+     */
+    function saveCodeSnippets(callback) {
+
+        $.ajax({
+            type:   'POST',
+            url:    '../_server/ajaxServer.php',
+            cache:  false,
+
+            data: {
+
+                a:              'hypervideoChangeFile',
+                projectID:      projectID,
+                hypervideoID:   hypervideoID,
+                type:           'codeSnippets',
+
+                src:            JSON.stringify(codeSnippets)
+
+            }
+
+        }).done(function(data) {
+            
+            if (data.code === 0) {
+
+                callback.call(window, { success: true });
+
+            } else {
+
+                callback.call(window, { 
+                    failed: 'codeSnippets', 
+                    error: 'ServerError', 
+                    code: data.code 
+                });
+
+            }
+
+        }).fail(function(error){
+
+            callback.call(window, { 
+                failed: 'codeSnippets', 
                 error: error 
             });
 
@@ -934,6 +1040,11 @@
          * @attribute links
          */
         get links()         { return links },
+        /**
+         * I store the code snippets data (from the server's ../_data/projects/<ID>/hypervideos/<ID>/codeSnippets.json)
+         * @attribute codesnippets
+         */
+        get codeSnippets()         { return codeSnippets },
 
         /**
          * I store the annotation data (from all json files from the server's ../_data/projects/<ID>/hypervideos/<ID>/annotationfiles/).
@@ -1003,6 +1114,7 @@
 
         saveOverlays:          saveOverlays,
         saveLinks:             saveLinks,
+        saveCodeSnippets:      saveCodeSnippets,
         saveAnnotations:       saveAnnotations
 
     }

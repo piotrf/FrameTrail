@@ -56,8 +56,9 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '                    <div style="clear: both;"></div>'
                             + '                </div>'
                             + '                <button class="editMode" data-editmode="preview">Preview</button>'
-                            + '                <button class="editMode" data-editmode="overlays">Edit Overlays</button>'
                             + '                <button class="editMode" data-editmode="links">Edit Video Links</button>'
+                            + '                <button class="editMode" data-editmode="overlays">Edit Overlays</button>'
+                            + '                <button class="editMode" data-editmode="codesnippets">Edit Custom Code</button>'
                             + '                <button class="editMode" data-editmode="annotations">Edit Annotations</button>'
                             + '            </div>'
                             + '        </div>'
@@ -226,14 +227,19 @@ FrameTrail.defineModule('Sidebar', function(){
     /**
      * I am called from the {{#crossLink "HypervideoModel/newUnsavedChange:method"}}HypervideoModel/newUnsavedChange(){{/crossLink}}.
      *
-     * I mark the categories (overlays, videolinks, annotations), which have unsaved changes inside them.
+     * I mark the categories (overlays, videolinks, annotations, codeSnippets), which have unsaved changes inside them.
      *
      * @method newUnsavedChange
      * @param {String} category
      */
     function newUnsavedChange(category) {
 
-        domElement.find('button[data-editmode="'+category+'"]').addClass('unsavedChanges');
+        if (category == 'codeSnippets') {
+            // camelCase not valid in attributes
+            domElement.find('button[data-editmode="codesnippets"]').addClass('unsavedChanges');
+        } else {
+            domElement.find('button[data-editmode="'+category+'"]').addClass('unsavedChanges');
+        }
 
     };
 
@@ -331,6 +337,7 @@ FrameTrail.defineModule('Sidebar', function(){
 
                     videoContainerControls.find('.editMode[data-editmode="overlays"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="links"]').addClass('disabled');
+                    videoContainerControls.find('.editMode[data-editmode="codesnippets"]').addClass('disabled');
 
                 }
             }

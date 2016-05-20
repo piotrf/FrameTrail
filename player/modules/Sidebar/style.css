@@ -94,6 +94,10 @@
 	background-image: url('icons/menuItemVideolinks.dark.png');
 }
 
+.viewmodeControls button.editMode[data-editmode="codesnippets"], #EditPropertiesContainer[data-editmode="codesnippets"] {
+	background-image: url('icons/menuItemCodeSnippets.dark.png');
+}
+
 .viewmodeControls button.editMode[data-editmode="annotations"], #EditPropertiesContainer[data-editmode="annotations"] {
 	background-image: url('icons/menuItemAnnotations.dark.png');
 }
