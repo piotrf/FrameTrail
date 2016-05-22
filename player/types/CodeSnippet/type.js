@@ -54,6 +54,13 @@ FrameTrail.defineType(
         codeSnippetFunction:    null,
 
         /**
+         * I hold the codeEditorInstance (if initialized).
+         * @attribute codeEditorInstance
+         * @type HTMLElement
+         */
+        codeEditorInstance:    null,
+
+        /**
          * I store my state, wether I am "active" (this is, when my timelineElement and tileElements are highlighted) or not.
          * @attribute activeState
          * @type Boolean
@@ -103,7 +110,14 @@ FrameTrail.defineType(
          */
         initCodeSnippetFunction: function () {
 
-            this.codeSnippetFunction = Function(this.data.snippet);
+            try {
+		         this.codeSnippetFunction = new Function(this.data.snippet);
+		     
+		     } catch (exception) {
+		         // could not parse and compile JS code!
+		         // ignore for now (since constructor has made an empty function in line 28)
+		         // but maybe give user feedback of invalid code
+		     }
             
         },
 
@@ -148,7 +162,12 @@ FrameTrail.defineType(
             this.activeState = true;
 
             this.timelineElement.addClass('active');
-            this.codeSnippetFunction();
+            
+            try {
+		        this.codeSnippetFunction();
+		    } catch (ex) { 
+		    	// do some user error feedback (ex.message)
+		    }
 
         },
 
@@ -330,27 +349,70 @@ FrameTrail.defineType(
             
             var propertiesControls = $('<div>'
                                      + '    <div class="propertiesTypeIcon" data-type="codesnippet"></div>'
-                                     + '    <div>Edit Custom Code</div>'
-                                     + '    <textarea id="CodeSnippetCode">' + this.data.snippet + '</textarea><br>'
+                                     + '    <textarea id="CodeSnippetCode">' + this.data.snippet + '</textarea>'
                                      + '    <button id="DeleteCodeSnippet">Delete</button>'
                                      + '</div>');
 
-                propertiesControls.find('#CodeSnippetCode').change(function() {
+            propertiesControls.find('#DeleteCodeSnippet').click(function() {
 
-                    self.data.snippet = $(this).val();
-                    self.initCodeSnippetFunction();
-                    
-                    FrameTrail.module('HypervideoModel').newUnsavedChange('codeSnippets');
+                FrameTrail.module('CodeSnippetsController').deleteCodeSnippet(self);
 
-                });
-
-                propertiesControls.find('#DeleteCodeSnippet').click(function() {
-
-                    FrameTrail.module('CodeSnippetsController').deleteCodeSnippet(self);
-
-                });
+            });
 
             EditPropertiesContainer.addClass('active').append(propertiesControls);
+
+
+            /*
+            propertiesControls.find('#CodeSnippetCode').change(function() {
+
+                self.data.snippet = $(this).val();
+                self.initCodeSnippetFunction();
+                
+                FrameTrail.module('HypervideoModel').newUnsavedChange('codeSnippets');
+
+            });
+            */
+            /*
+            var editor = ace.edit('CodeSnippetCode');
+            
+            editor.setTheme("ace/theme/monokai");
+            editor.setMode("ace/mode/javascript")
+            editor.getSession().on('blur', function(e) {
+                
+                self.data.snippet = editor.getValue();
+                self.initCodeSnippetFunction();
+
+                FrameTrail.module('HypervideoModel').newUnsavedChange('codeSnippets');
+
+            });
+            */
+
+            var snippetElement = propertiesControls.find('#CodeSnippetCode'),
+                snippet = snippetElement.val();
+
+            var codeEditor = CodeMirror.fromTextArea(snippetElement[0], {
+              value: snippet,
+              lineNumbers: true,
+              mode:  'javascript',
+              gutters: ['CodeMirror-lint-markers'],
+              lint: true,
+              lineWrapping: true,
+              tabSize: 2,
+              theme: 'hopscotch'
+            });
+
+            codeEditor.on('change', function(instance, changeObj) {
+                self.data.snippet = codeEditor.getValue();
+                self.initCodeSnippetFunction();
+
+                FrameTrail.module('HypervideoModel').newUnsavedChange('codeSnippets');
+            });
+
+            var editorHeight = FrameTrail.module('ViewVideo').EditPropertiesContainer.height() - 70;
+        	codeEditor.setSize(null, editorHeight);
+
+            this.codeEditorInstance = codeEditor;
+            
 
             this.timelineElement.addClass('highlighted');
 
@@ -372,6 +434,7 @@ FrameTrail.defineType(
 
             FrameTrail.module('ViewVideo').EditPropertiesContainer.removeClass('active').empty();
 
+            this.codeEditorInstance = null;
             this.timelineElement.removeClass('highlighted');
 
 

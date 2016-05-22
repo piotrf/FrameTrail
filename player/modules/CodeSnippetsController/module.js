@@ -394,7 +394,10 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      */
     function onViewSizeChanged() {
 
-        
+        if (codeSnippetInFocus && codeSnippetInFocus.codeEditorInstance) {
+        	var editorHeight = ViewVideo.EditPropertiesContainer.height() - 70;
+        	codeSnippetInFocus.codeEditorInstance.setSize(null, editorHeight);
+        }
 
     }
 

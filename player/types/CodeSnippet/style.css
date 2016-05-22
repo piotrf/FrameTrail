@@ -161,13 +161,10 @@
 	background-image: url("icons/codeSnippetTile.png");
 }
 
-#EditPropertiesContainer #CodeSnippetHref {
-	width: 300px;
-	border-color: transparent;
-	background-color: transparent;
+#EditPropertiesContainer #CodeSnippetCode {
+	height: 400px;
 }
 
-#EditPropertiesContainer #CodeSnippetHref:hover, #EditPropertiesContainer #CodeSnippetHref:focus {
-	border-color: inherit;
-	background-color: inherit;
+#EditPropertiesContainer .CodeMirror {
+	margin-bottom: 6px;
 }
