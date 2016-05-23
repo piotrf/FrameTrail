@@ -602,7 +602,7 @@ FrameTrail.defineModule('UserManagement', function(){
 			success: function(data) {
 				
 				if (userID != '') {
-					var loggedOutDialog = $('<div title="Logged Out">'
+					var loggedOutDialog = $('<div id="loggedOutDialog" title="Logged Out">'
                                       + '    <div class="message success active">You have been logged out.</div>'
                                       + '</div>');
 

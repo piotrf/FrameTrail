@@ -15,3 +15,7 @@
 #UserLoginOverlay #UserTabRegister {
 	display: none;
 }
+
+.ui-dialog[aria-describedby="loggedOutDialog"] {
+	z-index: 100002;
+}
