@@ -167,17 +167,17 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
             codeSnippetEditingOptions = $('<div id="CodeSnippetEditingTabs">'
                                     +   '    <ul>'
                                     +   '        <li>'
-                                    +   '            <a href="#CodeSnippetlist">Add Custom Code</a>'
+                                    +   '            <a href="#CodeSnippetList">Add Custom Code</a>'
                                     +   '        </li>'
                                     +   '    </ul>'
-                                    +   '    <div id="CodeSnippetlist">'
+                                    +   '    <div id="CodeSnippetList">'
                                     +   '    </div>'
                                     +   '</div>')
                                     .tabs({
                                         heightStyle: "fill"
                                     }),
 
-            codeSnippetList = codeSnippetEditingOptions.find('#CodeSnippetlist');
+            codeSnippetList = codeSnippetEditingOptions.find('#CodeSnippetList');
 
 
         /* Append custom code snippet element to 'Custom Code Snippet' tab */
@@ -395,8 +395,8 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
     function onViewSizeChanged() {
 
         if (codeSnippetInFocus && codeSnippetInFocus.codeEditorInstance) {
-        	var editorHeight = ViewVideo.EditPropertiesContainer.height() - 70;
-        	codeSnippetInFocus.codeEditorInstance.setSize(null, editorHeight);
+            var editorHeight = ViewVideo.EditPropertiesContainer.height() - 70;
+            codeSnippetInFocus.codeEditorInstance.setSize(null, editorHeight);
         }
 
     }

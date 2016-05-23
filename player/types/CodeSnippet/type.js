@@ -93,6 +93,7 @@ FrameTrail.defineType(
 
             this.timelineElement.unbind('hover');
             this.timelineElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
+            this.timelineElement.attr('title', this.data.snippet);
 
             ViewVideo.CodeSnippetTimeline.append(this.timelineElement);
             this.updateTimelineElement();
@@ -109,15 +110,13 @@ FrameTrail.defineType(
          * @method initCodeSnippetFunction
          */
         initCodeSnippetFunction: function () {
-
+            
             try {
-		         this.codeSnippetFunction = new Function(this.data.snippet);
-		     
-		     } catch (exception) {
-		         // could not parse and compile JS code!
-		         // ignore for now (since constructor has made an empty function in line 28)
-		         // but maybe give user feedback of invalid code
-		     }
+                this.codeSnippetFunction = new Function(this.data.snippet);
+            } catch (exception) {
+                // could not parse and compile JS code!
+                console.warn('Code Snippet contains errors: '+ exception.message);
+            }
             
         },
 
@@ -164,10 +163,11 @@ FrameTrail.defineType(
             this.timelineElement.addClass('active');
             
             try {
-		        this.codeSnippetFunction();
-		    } catch (ex) { 
-		    	// do some user error feedback (ex.message)
-		    }
+                this.codeSnippetFunction();
+            } catch (exception) { 
+                // do some user error feedback (ex.message)
+                console.warning('Code Snippet contains errors: '+ exception.message);
+            }
 
         },
 
@@ -351,41 +351,24 @@ FrameTrail.defineType(
                                      + '    <div class="propertiesTypeIcon" data-type="codesnippet"></div>'
                                      + '    <textarea id="CodeSnippetCode">' + this.data.snippet + '</textarea>'
                                      + '    <button id="DeleteCodeSnippet">Delete</button>'
+                                     + '    <button id="ExecuteCodeSnippet">Run Code</button>'
                                      + '</div>');
 
             propertiesControls.find('#DeleteCodeSnippet').click(function() {
-
                 FrameTrail.module('CodeSnippetsController').deleteCodeSnippet(self);
+            });
 
+            propertiesControls.find('#ExecuteCodeSnippet').click(function() {
+                try {
+                    var testRun = new Function(self.data.snippet);
+                    testRun();
+                } catch (exception) {
+                    alert('Code contains errors: '+ exception.message);
+                }
             });
 
             EditPropertiesContainer.addClass('active').append(propertiesControls);
 
-
-            /*
-            propertiesControls.find('#CodeSnippetCode').change(function() {
-
-                self.data.snippet = $(this).val();
-                self.initCodeSnippetFunction();
-                
-                FrameTrail.module('HypervideoModel').newUnsavedChange('codeSnippets');
-
-            });
-            */
-            /*
-            var editor = ace.edit('CodeSnippetCode');
-            
-            editor.setTheme("ace/theme/monokai");
-            editor.setMode("ace/mode/javascript")
-            editor.getSession().on('blur', function(e) {
-                
-                self.data.snippet = editor.getValue();
-                self.initCodeSnippetFunction();
-
-                FrameTrail.module('HypervideoModel').newUnsavedChange('codeSnippets');
-
-            });
-            */
 
             var snippetElement = propertiesControls.find('#CodeSnippetCode'),
                 snippet = snippetElement.val();
@@ -409,7 +392,7 @@ FrameTrail.defineType(
             });
 
             var editorHeight = FrameTrail.module('ViewVideo').EditPropertiesContainer.height() - 70;
-        	codeEditor.setSize(null, editorHeight);
+            codeEditor.setSize(null, editorHeight);
 
             this.codeEditorInstance = codeEditor;
             

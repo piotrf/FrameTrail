@@ -918,7 +918,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         CodeSnippetTimeline.addClass('editable');
 
         EditPropertiesContainer
-            .html('<div class="message active">Add code snippets links by ...</div>')
+            .html('<div class="message active">Add custom code by dragging Code Snippets into the active timeline.</div>')
             .attr('data-editmode', 'codesnippets');
     }
 
