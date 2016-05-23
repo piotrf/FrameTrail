@@ -243,7 +243,7 @@ switch($_REQUEST["a"]) {
 			$tmpConf = array(
 				"updateServiceURL"=> "http://update.frametrail.org",
 				"autoUpdate"=> false,
-				"defaultUserRole"=> "user",
+				"defaultUserRole"=> "admin",
 				"userNeedsConfirmation"=> false,
 				"allowUploads"=> true,
 				"userColorCollection"=> ["597081", "339966", "16a09c", "cd4436", "0073a6", "8b5180", "999933", "CC3399", "7f8c8d", "ae764d", "cf910d", "b85e02"]
