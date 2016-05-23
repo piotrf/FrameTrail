@@ -59,7 +59,7 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '                <button class="editMode" data-editmode="links">Edit Video Links</button>'
                             + '                <button class="editMode" data-editmode="overlays">Edit Overlays</button>'
                             + '                <button class="editMode" data-editmode="codesnippets">Edit Custom Code</button>'
-                            + '                <button class="editMode" data-editmode="annotations">Edit Annotations</button>'
+                            + '                <button class="editMode" data-editmode="annotations">My Annotations</button>'
                             + '            </div>'
                             + '        </div>'
                             + '    </div>'
