@@ -45,12 +45,13 @@ FrameTrail.defineType(
         renderContent: function() {
 
         	var splitUri = this.resourceData.src.split('://'),
-                mobileUri = '//' + splitUri[1].substr(0, 3) + 'm.' + splitUri[1].substr(3);
+                mobileUri = '//' + splitUri[1].substr(0, 3) + 'm.' + splitUri[1].substr(3),
+                hash = (mobileUri.indexOf('#') != -1) ? '' : '#section_0';
 
             var resourceDetail = $(
                      '<iframe class="resourceDetail" data-type="'+ this.resourceData.type +'" src="'
                 +    mobileUri
-                +    '#section_0'
+                +    hash
                 +    '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>'
                 +    '</iframe>')
                 .bind('error', function() {
