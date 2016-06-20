@@ -60,7 +60,7 @@
 								} else {
 									for (var firstProjectID in data.projects) break;
 
-									var projectUrl = window.location.href + 'player/?project=' + firstProjectID;
+									var projectUrl = window.location.href.replace('index.html', '') + 'player/?project=' + firstProjectID;
 									window.location.replace(projectUrl);
 
 									/*
