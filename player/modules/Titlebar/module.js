@@ -60,7 +60,7 @@ FrameTrail.defineModule('Titlebar', function(){
         toogleUnsavedChanges(FrameTrail.getState('unsavedChanges'));
         
         if ( FrameTrail.getState('embed') ) {
-            domElement.find('#SidebarToggleButton, #SharingWidgetButton').hide();
+            //domElement.find('#SidebarToggleButton, #SharingWidgetButton').hide();
         }
 
         $('body').append(domElement)
