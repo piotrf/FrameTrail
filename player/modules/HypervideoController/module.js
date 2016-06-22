@@ -136,6 +136,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 					if (RouteNavigation.hashTime) {
 						setCurrentTime(RouteNavigation.hashTime);
+					} else {
+						setCurrentTime(0);
 					}
 
 					callback.call();
@@ -167,6 +169,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 			if (RouteNavigation.hashTime) {
 				setCurrentTime(RouteNavigation.hashTime);
+			} else {
+				setCurrentTime(0);
 			}
 
 			callback.call();
