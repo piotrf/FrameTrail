@@ -242,9 +242,17 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 		ViewVideo.PlayButton.click(function(){
 
-			if (isPlaying) {
+			if ( isPlaying ) {
 				pause();
 			} else {
+				play();
+			}
+
+		});
+
+		ViewVideo.VideoStartOverlay.click(function(){
+
+			if ( !isPlaying ) {
 				play();
 			}
 
@@ -343,7 +351,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 													  +	'    <div>' + changed + '</div>'
 													  + '</div>'
 
-												    );
+													);
 
 
 	};
@@ -500,6 +508,10 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 			}
 			
+		}
+
+		if ( !ViewVideo.VideoStartOverlay.hasClass('inactive') ) {
+			ViewVideo.VideoStartOverlay.addClass('inactive').fadeOut();
 		}
 
 

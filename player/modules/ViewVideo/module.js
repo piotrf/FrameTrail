@@ -27,14 +27,16 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '        </div>'
                         + '        <div id="PlayerContainer">'
                         + '            <div id="VideolinkTimeline" class="timeline"></div>'
-                        + '            <div id="PlayerProgress">'
-                        + '            </div>'
+                        + '            <div id="PlayerProgress"></div>'
                         + '            <div id="HypervideoContainer">'
                         + '                <div id="VideoContainer">'
                         + '                    <div id="Hypervideo">'
                         + '                        <video id="Video"></video>'
                         + '                        <div id="OverlayContainer"></div>'
                         + '                        <div id="CaptionContainer"></div>'
+                        + '                    </div>'
+                        + '                    <div id="VideoStartOverlay">'
+                        + '                        <div id="PlayButtonBig"></div>'
                         + '                    </div>'
                         + '                    <div id="ExpandButton">'
                         + '                        <div id="ExpandLabel">Expand</div>'
@@ -135,6 +137,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         CurrentTime             = domElement.find('#CurrentTime'),
         TotalDuration           = domElement.find('#TotalDuration'),
         PlayButton              = domElement.find('#PlayButton'),
+        VideoStartOverlay       = domElement.find('#VideoStartOverlay'),
         VolumeButton            = domElement.find('#VolumeButton'),
         FullscreenButton        = domElement.find('#FullscreenButton'),
 
@@ -1709,45 +1712,50 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @attribute Video
          * @type HTMLElement
          */
-        get Video()            { return Video          },
+        get Video()             { return Video          },
         /**
          * I contain the CaptionContainer element.
          * @attribute CaptionContainer
          * @type HTMLElement
          */
-        get CaptionContainer() { return CaptionContainer },
+        get CaptionContainer()  { return CaptionContainer },
         /**
          * I contain the progress bar element.
          * @attribute PlayerProgress
          * @type HTMLElement
          */
-        get PlayerProgress()   { return PlayerProgress },
+        get PlayerProgress()    { return PlayerProgress },
         /**
          * I contain the play button element.
          * @attribute PlayButton
          * @type HTMLElement
          */
-        get PlayButton()       { return PlayButton     },
-
+        get PlayButton()        { return PlayButton     },
+        /**
+         * I contain the start overlay element (containing the big play button).
+         * @attribute VideoStartOverlay
+         * @type HTMLElement
+         */
+        get VideoStartOverlay() { return VideoStartOverlay },
         /**
          * I contain the EditingOptions element (where e.g. the ResourcePicker is rendered).
          * @attribute EditingOptions
          * @type HTMLElement
          */
-        get EditingOptions()   { return EditingOptions },
+        get EditingOptions()    { return EditingOptions },
 
         /**
          * I contain the OverlayContainer element.
          * @attribute OverlayContainer
          * @type HTMLElement
          */
-        get OverlayContainer() { return OverlayContainer },
+        get OverlayContainer()  { return OverlayContainer },
         /**
          * I contain the OverlayTimeline element.
          * @attribute OverlayTimeline
          * @type HTMLElement
          */
-        get OverlayTimeline()  { return OverlayTimeline  },
+        get OverlayTimeline()   { return OverlayTimeline  },
 
         /**
          * I contain the CodeSnippetTimeline element.
