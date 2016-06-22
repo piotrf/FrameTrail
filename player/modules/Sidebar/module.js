@@ -136,8 +136,6 @@ FrameTrail.defineModule('Sidebar', function(){
         FrameTrail.changeState('editMode', ($(this).attr('data-editmode')));
     });
 
-    
-    
 
     /**
      * I am called from {{#crossLink "Interface/create:method"}}Interface/create(){{/crossLink}} and set up all my elements.
@@ -150,9 +148,13 @@ FrameTrail.defineModule('Sidebar', function(){
         toggleFullscreen(FrameTrail.getState('fullscreen'));
         toogleUnsavedChanges(FrameTrail.getState('unsavedChanges'));
         toggleViewMode(FrameTrail.getState('viewMode'));
-        toggleEditMode(FrameTrail.getState('editMode'))
+        toggleEditMode(FrameTrail.getState('editMode'));
 
         $('body').append(domElement);
+
+        if ( FrameTrail.getState('embed') ) {
+            domElement.find('.viewmodeControls').hide();
+        }
 
         // parse project description here in case we can't use the HypervideoController
         FrameTrail.module('Sidebar').ProjectDescription = FrameTrail.module('Database').project.description;
