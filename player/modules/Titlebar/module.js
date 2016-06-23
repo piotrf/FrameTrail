@@ -36,8 +36,49 @@ FrameTrail.defineModule('Titlebar', function(){
 
     domElement.find('#SharingWidgetButton').click(function(){
 
-        alert('The Sharing-Feature is currently being implemented. When finished, it will show you an embed code, as well as a configurable link to this page. Just use the URL for now ;)');
+        var RouteNavigation = FrameTrail.module('RouteNavigation'),
+            baseUrl = window.location.href.split('?'),
+            url = baseUrl[0] + '?project=' + RouteNavigation.projectID,
+            secUrl = '//'+ window.location.host + window.location.pathname,
+            iframeUrl = secUrl + '?project=' + RouteNavigation.projectID,
+            label = 'Project';
 
+        if ( FrameTrail.getState('viewMode') == 'video' && RouteNavigation.hypervideoID ) {
+            url += '&hypervideo='+ RouteNavigation.hypervideoID;
+            iframeUrl += '&hypervideo='+ RouteNavigation.hypervideoID;
+            label = 'Hypervideo'
+        }
+
+        var shareDialog = $('<div id="ShareDialog" title="Share / Embed '+ label +'">'
+                        + '    <div>Link</div>'
+                        + '    <input type="text" value="'+ url +'"/>'
+                        + '    <div>Embed Code</div>'
+                        + '    <textarea style="height: 100px;" readonly><iframe width="800" height="600" scrolling="no" src="'+ iframeUrl +'" frameborder="0" allowfullscreen></iframe></textarea>'
+                        + '</div>');
+        
+        shareDialog.find('input[type="text"], textarea').click(function() {
+            $(this).focus();
+            $(this).select();
+        });
+
+        shareDialog.dialog({
+            modal: true,
+            resizable: false,
+            width:      500,
+            height:     360,
+            close: function() {
+                $(this).dialog('close');
+                $(this).remove();
+            },
+            buttons: [
+                { text: 'OK',
+                    click: function() {
+                        $( this ).dialog( 'close' );
+                    }
+                }
+            ]
+        });
+        
     });
 
     domElement.find('#LogoutButton').click(function(){
