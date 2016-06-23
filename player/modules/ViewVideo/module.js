@@ -629,6 +629,14 @@ FrameTrail.defineModule('ViewVideo', function(){
                                     - editBorder,
             _video              = $(Video);
 
+        if (mainContainerWidth < 800) {
+            domElement.find('#InfoAreaRight').width(200);
+        } else {
+            domElement.find('#InfoAreaRight').width(400);
+        }
+
+
+
         if (animate) {
             VideoContainer.css({
                 'transition-duration': '',
