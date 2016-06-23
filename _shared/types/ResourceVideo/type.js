@@ -153,6 +153,19 @@ FrameTrail.defineType(
 
             return basicControls;
 
+        },
+
+
+        /**
+         * See {{#crossLink "Resource/renderBasicTimeControls:method"}}Resource/renderBasicTimeControls(){{/crossLink}}
+         * @method renderTimeControls
+         * @param {Annotation} annotation
+         * @return &#123; controlsContainer: HTMLElement, changeStart: Function, changeEnd: Function &#125;
+         */
+        renderTimeControls: function(annotation) {
+
+            return this.renderBasicTimeControls(annotation);
+
         }
 
 

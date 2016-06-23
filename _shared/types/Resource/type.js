@@ -8,12 +8,13 @@
  *
  * I am an abstract type, I should not be instantiated directly but rather my sub-types:
  * * {{#crossLink "ResourceImage"}}ResourceImage{{/crossLink}}
- * * {{#crossLink "ResourceLocation"}}ResourceImage{{/crossLink}}
+ * * {{#crossLink "ResourceLocation"}}ResourceLocation{{/crossLink}}
  * * {{#crossLink "ResourceVideo"}}ResourceVideo{{/crossLink}}
  * * {{#crossLink "ResourceVimeo"}}ResourceVimeo{{/crossLink}}
  * * {{#crossLink "ResourceWebpage"}}ResourceWebpage{{/crossLink}}
  * * {{#crossLink "ResourceWikipedia"}}ResourceWikipedia{{/crossLink}}
  * * {{#crossLink "ResourceYoutube"}}ResourceYoutube{{/crossLink}}
+ * * {{#crossLink "ResourceText"}}ResourceText{{/crossLink}}
  *
  * @class Resource
  * @category TypeDefinition
@@ -125,10 +126,11 @@ FrameTrail.defineType(
          */
         renderBasicPropertiesControls: function(overlay) {
 
-            var controlsContainer = $('<div></div>'),
+            var controlsContainer = $('<div class="controlsWrapper"></div>'),
                 manualInputMode   = true,
                 defaultControls   = $('<div id="TimeControls">'
                 					+ '    <div class="propertiesTypeIcon" data-type="' + overlay.data.type + '"></div>'
+                                    + '    <button id="DeleteOverlay">Delete</button>'
                                     + '    <label for="TimeStart">Start</label>'
                                     + '    <input id="TimeStart" value="' + overlay.data.start + '">'
                                     + '    <label for="TimeEnd">End</label>'
@@ -140,16 +142,34 @@ FrameTrail.defineType(
                                     + '    <input id="PositionWidth" value="' + overlay.data.position.width + '">'
                                     + '    <input id="PositionHeight" value="' + overlay.data.position.height + '">'
                                     + '</div>'
-                                    + '<div style="clear: both;">Opacity</div>'
-                                    + '<div id="OpacitySlider"></div>'
-                                    //+ '<div>Arrange</div>'
-                                    //+ '<button id="ArrangeTop">Move to top</button>'
-                                    //+ '<button id="ArrangeBottom">Move to bottom</button>'
-                                    + '<button id="DeleteOverlay">Delete</button>'
-                                    + '<hr>');
-                
-
+                                    + '<div id="OverlayOptionsTabs">'
+                                    + '    <ul>'
+                                    + '        <li>'
+                                    + '            <a href="#OverlayOptions">Options</a>'
+                                    + '        </li>'
+                                    + '        <li>'
+                                    + '            <a href="#OverlayAppearance">Appearance</a>'
+                                    + '        </li>'
+                                    + '        <li>'
+                                    + '            <a href="#OverlayActions">Actions</a>'
+                                    + '        </li>'
+                                    + '    </ul>'
+                                    + '    <div id="OverlayOptions"></div>'
+                                    + '    <div id="OverlayAppearance">'
+                                    + '        <div style="clear: both;">Opacity</div>'
+                                    + '        <div id="OpacitySlider"></div>'
+                                    //+ '        <div>Arrange</div>'
+                                    //+ '        <button id="ArrangeTop">Move to top</button>'
+                                    //+ '        <button id="ArrangeBottom">Move to bottom</button>'
+                                    + '    </div>'
+                                    + '    <div id="OverlayActions">Not implemented yet</div>'
+                                    + '</div>');
+                                  
             controlsContainer.append(defaultControls);
+
+            controlsContainer.find('#OverlayOptionsTabs').tabs({
+                heightStyle: 'auto'
+            });
 
             controlsContainer.find('#TimeStart').spinner({
                 step: 0.1,
@@ -381,6 +401,137 @@ FrameTrail.defineType(
                     controlsContainer.find('#PositionLeft').spinner('value', val.left);
                     controlsContainer.find('#PositionWidth').spinner('value', val.width);
                     controlsContainer.find('#PositionHeight').spinner('value', val.height);
+                    manualInputMode = true;
+                }
+
+            }
+
+
+
+
+            return PropertiesControlsInterface;
+
+        },
+
+        /**
+         * When an {{#crossLink "Annotation/gotInFocus:method"}}Annotation got into Focus{{/crossLink}}, its properties and some additional controls attributes 
+         * should be shown in the right window of the player.
+         *
+         * I provide a basic method, which can be extended by my sub-types.
+         *
+         * I render properities controls for the UI for the annotations's following attributes:
+         *
+         * * annotation.data.start
+         * * annotation.data.end
+         * 
+         * __Why__ is this function a method of Resource and not Annotation? --> Because there is only one type of Annotation, but this can hold in its resourceData attribute different types of Resources.
+         * And because the properties controls can depend on resourceData, the method is placed here and in the sub-types of Resource.
+         * 
+         * @method renderBasicTimeControls
+         * @param {Annotation} annotation
+         * @return &#123; controlsContainer: HTMLElement, changeStart: Function, changeEnd: Function &#125;
+         */
+        renderBasicTimeControls: function(annotation) {
+
+            var controlsContainer = $('<div class="controlsWrapper"></div>'),
+                manualInputMode   = true,
+                defaultControls   = $('<div id="TimeControls">'
+                                    + '    <div class="propertiesTypeIcon" data-type="' + annotation.data.type + '"></div>'
+                                    + '    <button id="DeleteAnnotation">Delete</button>'
+                                    + '    <label for="TimeStart">Start</label>'
+                                    + '    <input id="TimeStart" value="' + annotation.data.start + '">'
+                                    + '    <label for="TimeEnd">End</label>'
+                                    + '    <input id="TimeEnd" value="' + annotation.data.end + '">'
+                                    + '</div>'),
+                thumbContainer    = $('<div id="PreviewThumbContainer"></div>');
+
+            thumbContainer.append(annotation.resourceItem.renderThumb());
+                                  
+            controlsContainer.append(defaultControls, thumbContainer);
+
+            controlsContainer.find('#TimeStart').spinner({
+                step: 0.1,
+                min: 0,
+                max: FrameTrail.module('HypervideoModel').duration,
+                numberFormat: 'n',
+                create: function(evt, ui) {
+                    $(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+                },
+                spin: function(evt, ui) {
+
+                    if(manualInputMode){
+                        annotation.data.start = ui.value;
+                        annotation.updateTimelineElement();
+                        FrameTrail.module('HypervideoController').currentTime = annotation.data.start;
+                        FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+                    }
+
+                    
+
+                },
+                change: function(evt, ui) {
+
+                    if(manualInputMode){
+                        annotation.data.start = $(evt.target).val();
+                        annotation.updateTimelineElement();
+                        FrameTrail.module('HypervideoController').currentTime = annotation.data.start;
+                        FrameTrail.module('AnnotationsController').stackTimelineView();
+                        FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+                    } 
+
+                }
+            });
+
+            controlsContainer.find('#TimeEnd').spinner({
+                step: 0.1,
+                min: 0,
+                max: FrameTrail.module('HypervideoModel').duration,
+                numberFormat: 'n',
+                create: function(evt, ui) {
+                    $(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+                },
+                spin: function(evt, ui) {
+
+                    if(manualInputMode){
+                        annotation.data.end = ui.value;
+                        annotation.updateTimelineElement();
+                        FrameTrail.module('HypervideoController').currentTime = annotation.data.end; 
+                        FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+                    }
+
+                },
+                change: function(evt, ui) {
+
+                    if(manualInputMode){
+                        annotation.data.end = $(evt.target).val();
+                        annotation.updateTimelineElement();  
+                        FrameTrail.module('HypervideoController').currentTime = annotation.data.end;
+                        FrameTrail.module('AnnotationsController').stackTimelineView();
+                        FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+                    } 
+
+                }
+            });
+
+            controlsContainer.find('#DeleteAnnotation').click(function(){
+
+                FrameTrail.module('AnnotationsController').deleteAnnotation(annotation);
+
+            });
+
+            var PropertiesControlsInterface = {
+
+                controlsContainer: controlsContainer,
+                
+                changeStart:  function(val) { 
+                    manualInputMode = false;
+                    controlsContainer.find('#TimeStart').spinner('value', val);
+                    manualInputMode = true;
+                },
+
+                changeEnd: function(val) { 
+                    manualInputMode = false;
+                    controlsContainer.find('#TimeEnd').spinner('value', val);
                     manualInputMode = true;
                 }
 

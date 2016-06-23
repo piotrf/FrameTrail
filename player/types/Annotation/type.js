@@ -393,9 +393,13 @@ FrameTrail.defineType(
 
                     var videoDuration = FrameTrail.module('HypervideoModel').duration,
                         leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
-                        newStartValue = leftPercent * (videoDuration / 100);
+                        widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width()),
+                        newStartValue = leftPercent * (videoDuration / 100),
+                        newEndValue   = (leftPercent + widthPercent) * (videoDuration / 100);
 
-                    FrameTrail.module('HypervideoController').currentTime = newStartValue;    
+                    FrameTrail.module('HypervideoController').currentTime = newStartValue;
+                    FrameTrail.module('AnnotationsController').updateControlsStart(newStartValue);
+                    FrameTrail.module('AnnotationsController').updateControlsEnd( newEndValue );  
                     
                 },
 
@@ -494,11 +498,13 @@ FrameTrail.defineType(
 
                         newValue = (leftPercent + widthPercent) * (videoDuration / 100);
                         FrameTrail.module('HypervideoController').currentTime = newValue;
+                        FrameTrail.module('AnnotationsController').updateControlsEnd(newValue);
 
                     } else {
 
                         newValue = leftPercent * (videoDuration / 100);
                         FrameTrail.module('HypervideoController').currentTime = newValue;
+                        FrameTrail.module('AnnotationsController').updateControlsStart(newValue);
 
                     }
                     
@@ -548,6 +554,7 @@ FrameTrail.defineType(
          */
         gotInFocus: function () {
 
+            /*
             var EditPropertiesContainer = FrameTrail.module('ViewVideo').EditPropertiesContainer,
                 self = this;
 
@@ -567,6 +574,11 @@ FrameTrail.defineType(
                 propertiesControls.find('#PreviewThumbContainer').append(this.resourceItem.renderThumb());
                 
             EditPropertiesContainer.addClass('active').append(propertiesControls);
+            */
+
+            FrameTrail.module('AnnotationsController').renderPropertiesControls(
+                this.resourceItem.renderTimeControls(this)
+            );
 
             this.timelineElement.addClass('highlighted');
 
@@ -586,10 +598,7 @@ FrameTrail.defineType(
          */
         removedFromFocus: function () {
 
-            FrameTrail.module('ViewVideo').EditPropertiesContainer.removeClass('active').empty();
-
             this.timelineElement.removeClass('highlighted');
-
 
         },
 

@@ -129,9 +129,22 @@ FrameTrail.defineType(
 
                     });
 
-            basicControls.controlsContainer.append(textLabel, textarea);
+            basicControls.controlsContainer.find('#OverlayOptions').append(textLabel, textarea);
 
             return basicControls;
+
+        },
+
+
+        /**
+         * See {{#crossLink "Resource/renderTimeControls:method"}}Resource/renderTimeControls(){{/crossLink}}
+         * @method renderTimeControls
+         * @param {Annotation} annotation
+         * @return &#123; controlsContainer: HTMLElement, changeStart: Function, changeEnd: Function &#125;
+         */
+        renderTimeControls: function(annotation) {
+
+            return this.renderBasicTimeControls(annotation);
 
         }
 

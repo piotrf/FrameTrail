@@ -20,7 +20,9 @@
         annotationInFocus = null,
         openedAnnotation  = null,
 
-        annotations;
+        annotations,
+        updateControlsStart      = function(){},
+        updateControlsEnd        = function(){};
 
 
 
@@ -898,6 +900,7 @@
             annotationInFocus.permanentFocusState = false;
             annotationInFocus.removedFromFocus();
 
+            removePropertiesControls();
         }
 
         annotationInFocus = annotation;
@@ -914,7 +917,39 @@
     }
 
 
+    /**
+     * When an annotation got "into focus", its {{#crossLink "Annotation/gotInFocus:method"}}gotInFocus method{{/crossLink}}
+     * calls this method, to do two jobs:
+     * * first, append the properties controls elements to the respective DOM element.
+     * * secondly, save references to the update functions of the control interface, so that the textual data values of the controls (like start and end time) can be updated, when they are changed directly by mouse interactions with the timeline element.
+     *
+     * @method renderPropertiesControls
+     * @param {Object} propertiesControlsInterface
+     */
+    function renderPropertiesControls(propertiesControlsInterface) {
 
+        ViewVideo.EditPropertiesContainer.empty().addClass('active').append( propertiesControlsInterface.controlsContainer );
+
+        updateControlsStart        = propertiesControlsInterface.changeStart;
+        updateControlsEnd          = propertiesControlsInterface.changeEnd;
+
+    }
+
+
+    /**
+     * I am the counterpart of {{#crossLink "AnnotationsController/renderPropertiesControls:method"}}renderPropertiesControls method{{/crossLink}}.
+     * I remove the DOM element and the update functions.
+     * @method removePropertiesControls
+     */
+    function removePropertiesControls() {
+
+        
+        updateControlsStart      = function(){};
+        updateControlsEnd        = function(){};
+                
+        ViewVideo.EditPropertiesContainer.removeClass('active').empty();
+
+    }
 
 
     /**
@@ -1258,6 +1293,7 @@
         deleteAnnotation:           deleteAnnotation,
 
         findTopMostActiveAnnotation: findTopMostActiveAnnotation,
+        renderPropertiesControls:    renderPropertiesControls,
 
         /**
          * An annotation can be selected to be
@@ -1269,6 +1305,31 @@
          */
         set annotationInFocus(annotation) { return setAnnotationInFocus(annotation) },
         get annotationInFocus()           { return annotationInFocus                },
+
+        /**
+         * I hold the callback function for start time (annotation.data.start) of the properties controls interface 
+         * (see {{#crossLink "AnnotationsController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
+         *
+         * I am called from the "drag" event handler in {{#crossLink "Annotation/makeTimelineElementDraggable:method"}}Annotation/makeTimelineElementDraggable(){{/crossLink}}
+         * and from the "resize" event handler in {{#crossLink "Annotation/makeTimelineElementResizeable:method"}}Annotation/makeTimelineElementResizeable(){{/crossLink}}.
+         * 
+         * @attribute updateControlsStart
+         * @type Function
+         * @readOnly
+         */
+        get updateControlsStart()      {  return updateControlsStart     },
+        /**
+         * I hold the callback function for end time (annotation.data.end) of the properties controls interface 
+         * (see {{#crossLink "AnnotationsController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
+         *
+         * I am called from the "drag" event handler in {{#crossLink "Annotation/makeTimelineElementDraggable:method"}}Annotation/makeTimelineElementDraggable(){{/crossLink}}
+         * and from the "resize" event handler in {{#crossLink "Annotation/makeTimelineElementResizeable:method"}}Annotation/makeTimelineElementResizeable(){{/crossLink}}.
+         * 
+         * @attribute updateControlsEnd
+         * @type Function
+         * @readOnly
+         */
+        get updateControlsEnd()        {  return updateControlsEnd       },
 
 
         /**
