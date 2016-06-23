@@ -565,10 +565,10 @@ FrameTrail.defineModule('ResourceManager', function(){
                 },
                 function (src, name) {
                     // Vimeo
-                    var res = /^http:\/\/(www\.)?vimeo\.com\/(clip\:)?(\d+).*$/.exec(src);
+                    var res = /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.exec(src);
                     if (res !== null) {
                         // Create the resource beforehand, so that we can update its thumb property asynchronously
-                        var r = createResource("//player.vimeo.com/video/" + res[3], "vimeo", name);
+                        var r = createResource("//player.vimeo.com/video/" + res[4], "vimeo", name);
                         $.ajax({
                             url: "http://vimeo.com/api/v2/video/" + res[3] + ".json",
                             async: false
@@ -627,7 +627,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                     }
                     return null;
                 }
-                    ];
+            ];
 
             for (var i in checkers) {
                 newResource = checkers[i](uriValue, nameValue);

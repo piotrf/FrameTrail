@@ -69,7 +69,8 @@ FrameTrail.defineType(
          */
         renderThumb: function(id) {
 
-            var trueID;
+            var trueID,
+                self = this;
 
             if (!id) {
                 trueID = FrameTrail.module('Database').getIdOfResource(this.resourceData);
