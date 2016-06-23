@@ -554,34 +554,11 @@ FrameTrail.defineType(
          */
         gotInFocus: function () {
 
-            /*
-            var EditPropertiesContainer = FrameTrail.module('ViewVideo').EditPropertiesContainer,
-                self = this;
-
-            EditPropertiesContainer.empty();
-
-            var propertiesControls = $('<div>'
-                                     + '    <div id="PreviewThumbContainer"></div>'
-                                     + '    <button id="DeleteAnnotation">Delete</button>'
-                                     + '</div>');
-
-                propertiesControls.find('#DeleteAnnotation').click(function() {
-
-                    FrameTrail.module('AnnotationsController').deleteAnnotation(self);
-
-                });
-
-                propertiesControls.find('#PreviewThumbContainer').append(this.resourceItem.renderThumb());
-                
-            EditPropertiesContainer.addClass('active').append(propertiesControls);
-            */
-
             FrameTrail.module('AnnotationsController').renderPropertiesControls(
                 this.resourceItem.renderTimeControls(this)
             );
 
             this.timelineElement.addClass('highlighted');
-
 
         },
 
