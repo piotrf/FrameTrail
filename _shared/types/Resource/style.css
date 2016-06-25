@@ -260,5 +260,6 @@
 }
 
 #EditPropertiesContainer textarea {
-	width: 348px;
+	box-sizing: border-box;
+    width: 100%;
 }

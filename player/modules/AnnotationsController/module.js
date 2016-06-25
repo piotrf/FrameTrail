@@ -669,7 +669,18 @@
     }
 
 
+    /**
+     * I trigger the {{#crossLink "Annotation/scaleAnnotationElements:method"}}scaleAnnotationElements{{/crossLink}} 
+     * method for all annotations.
+     * @method rescaleAnnotations
+     */
+    function rescaleAnnotations() {
 
+        for (var idx in annotations) {
+            annotations[idx].scaleAnnotationElements();
+        }
+        
+    };
 
 
     /**
@@ -1290,6 +1301,8 @@
         updateController:           updateController,
         updateStatesOfAnnotations:  updateStatesOfAnnotations,
         stackTimelineView:          stackTimelineView,
+        rescaleAnnotations:         rescaleAnnotations,
+
         deleteAnnotation:           deleteAnnotation,
 
         findTopMostActiveAnnotation: findTopMostActiveAnnotation,

@@ -629,7 +629,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                                     - editBorder,
             _video              = $(Video);
 
-        if (mainContainerWidth < 800) {
+        if (mainContainerWidth < 800 && !FrameTrail.getState('editMode')) {
             domElement.find('#InfoAreaRight').width(200);
         } else {
             domElement.find('#InfoAreaRight').width(400);
@@ -705,8 +705,16 @@ FrameTrail.defineModule('ViewVideo', function(){
             height: _video.height()
         });
 
+        if (animate) {
+            window.setTimeout(function() {
+                FrameTrail.module('OverlaysController').rescaleOverlays();
+                FrameTrail.module('AnnotationsController').rescaleAnnotations();
+            }, 220);
+        } else {
+            FrameTrail.module('OverlaysController').rescaleOverlays();
+            FrameTrail.module('AnnotationsController').rescaleAnnotations();
+        }
     };
-
 
 
     /**

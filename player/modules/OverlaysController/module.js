@@ -240,6 +240,21 @@ FrameTrail.defineModule('OverlaysController', function(){
 
     };
 
+
+
+    /**
+     * I trigger the {{#crossLink "Overlay/scaleOverlayElement:method"}}scaleOverlayElement{{/crossLink}} 
+     * method for all overlays.
+     * @method rescaleOverlays
+     */
+    function rescaleOverlays() {
+
+        for (var idx in overlays) {
+            overlays[idx].scaleOverlayElement();
+        }
+        
+    };
+
   
 
     /**
@@ -254,6 +269,7 @@ FrameTrail.defineModule('OverlaysController', function(){
         ViewVideo.adjustHypervideo();
 
     };
+
 
 
     /**
@@ -271,6 +287,7 @@ FrameTrail.defineModule('OverlaysController', function(){
         });
 
     };
+
 
 
     /**
@@ -546,13 +563,14 @@ FrameTrail.defineModule('OverlaysController', function(){
 
         onChange: {
 
-            editMode:       toggleEditMode
+            editMode:        toggleEditMode
 
         },
 
         initController:         initController,
         updateStatesOfOverlays: updateStatesOfOverlays,
         stackTimelineView:      stackTimelineView,
+        rescaleOverlays:        rescaleOverlays,
 
         addSyncedMedia:         addSyncedMedia,
         removeSyncedMedia:      removeSyncedMedia,

@@ -194,6 +194,49 @@ FrameTrail.defineType(
 
         },
 
+
+        /**
+        * I scale the overlay element in case the space is too small
+        * (text overlays are always scaled to assure proper display)
+        * @method scaleOverlayElement
+        */
+        scaleOverlayElement: function() {
+            
+            if (this.data.type == 'wikipedia' || this.data.type == 'webpage' || this.data.type == 'text') {
+
+                var elementToScale = this.overlayElement.children('.resourceDetail'),
+                    wrapperElement = this.overlayElement,
+                    scaleBase = (this.data.type == 'text') ? 800 : 400;
+
+                if (scaleBase / wrapperElement.width() < 1 && this.data.type != 'text') {
+                    elementToScale.css({
+                        top: 0,
+                        left: 0,
+                        height: '',
+                        width: '',
+                        transform: "none"
+                    });
+                    return;
+                }
+
+                var referenceWidth = (this.data.type == 'text') ? FrameTrail.module('ViewVideo').OverlayContainer.width() : wrapperElement.width();
+                    scale = referenceWidth / scaleBase,
+                    negScale = 1/scale,
+                    newWidth = (this.data.type == 'text') ? wrapperElement.width() * negScale : scaleBase;
+
+                elementToScale.css({
+                    top: 50 + '%',
+                    left: 50 + '%',
+                    width: newWidth + 'px',
+                    height: wrapperElement.height() * negScale + 'px',
+                    transform: "translate(-50%, -50%) scale(" + scale + ")"
+                });
+
+            }
+
+        },
+
+
         /**
          * I update my behavior, wether my time-based content (video) should be synchronized with the main
          * video or not.
@@ -542,6 +585,8 @@ FrameTrail.defineType(
                         FrameTrail.module('OverlaysController').updateControlsStart(newValue);
 
                     }
+
+                    scaleOverlayElement();
                     
                     
                 },
@@ -572,6 +617,8 @@ FrameTrail.defineType(
                     self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
                     FrameTrail.module('OverlaysController').stackTimelineView();
+
+                    scaleOverlayElement();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
                     

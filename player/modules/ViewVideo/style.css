@@ -565,7 +565,7 @@ path {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 10px;
+    padding: 0px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -o-box-sizing: border-box;

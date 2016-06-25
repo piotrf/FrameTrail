@@ -465,11 +465,11 @@ input[readonly], textarea[readonly] {
 /* Tabs */
 
 .ui-tabs {
-
+    padding: 0.2em 0;
 }
 
 .ui-tabs .ui-tabs-nav {
-
+    padding: 0.2em 0 0;
 }
 
 .ui-tabs .ui-tabs-nav li {
@@ -481,9 +481,10 @@ input[readonly], textarea[readonly] {
 	pointer-events: none;
 }
 
-.ui-tabs .ui-tabs-nav li a {
+.ui-tabs .ui-tabs-nav li a, .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 	color: #777;
 	border-bottom: 3px solid transparent;
+    padding: 2px 8px;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-state-active {
@@ -497,7 +498,7 @@ input[readonly], textarea[readonly] {
 }
 
 .ui-tabs .ui-tabs-panel {
-	padding: 14px 10px;
+	padding: 12px 8px;
 }
 
 /* Droppable UI */

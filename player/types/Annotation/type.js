@@ -170,6 +170,53 @@ FrameTrail.defineType(
 
 
         /**
+        * I scale the two annotation elements (annotationElement and previewElement) 
+        * in case the space is too small
+        * @method scaleAnnotationElements
+        */
+        scaleAnnotationElements: function() {
+            
+            if (this.data.type == 'wikipedia' || this.data.type == 'webpage') {
+
+                rescale( this.annotationElement, FrameTrail.module('ViewVideo').AnnotationContainer.width() );
+                rescale( this.previewElement, FrameTrail.module('ViewVideo').AnnotationPreviewContainer.width() );
+
+            }
+
+            function rescale(element, referenceWidth) {
+
+                var elementToScale = element.children('.resourceDetail'),
+                    wrapperElement = element,
+                    scaleBase = 400;
+
+                if (referenceWidth >= scaleBase) {
+                    elementToScale.css({
+                        top: 0,
+                        left: 0,
+                        height: '',
+                        width: '',
+                        transform: "none"
+                    });
+                    return;
+                }
+
+                var scale = referenceWidth / scaleBase,
+                    negScale = 1/scale;
+
+                elementToScale.css({
+                    top: 50 + '%',
+                    left: 50 + '%',
+                    width: scaleBase + 'px',
+                    height: wrapperElement.height() * negScale + 'px',
+                    transform: "translate(-50%, -50%) scale(" + scale + ")"
+                });
+
+            }
+
+        },
+
+
+        /**
          * I remove my elements from the DOM.
          *
          * I am called when the Annotation is to be deleted.
