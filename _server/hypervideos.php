@@ -99,6 +99,7 @@ function hypervideoAdd($projectID, $resourcesID, $duration = false, $name, $desc
 	$newHV["config"]["slidingTrigger"] = "key";
 	$newHV["config"]["theme"] = "CssClassName";
 	$newHV["config"]["autohideControls"] = true;
+	$newHV["config"]["captionsVisible"] = false;
 	$newHV["config"] = array_replace_recursive($newHV["config"], $projectConfig["defaultHypervideoConfig"], $config);
 	foreach ($newHV["config"] as $k=>$v) {
 		if (($v == "true") || ($v == "false")) {
@@ -431,6 +432,11 @@ function hypervideoChange($projectID, $hypervideoID, $name = false, $description
 		$hv["hypervideos"][$hypervideoID]["hidden"] = (boolean)$hidden;
 	}
 	if (is_array($config)) {
+		
+		if ($config["captionsVisible"] == "") {
+			$config["captionsVisible"] = false;
+		}
+		
 		foreach ($config as $k=>$v) {
 			if (($v == "true") || ($v == "false")) {
 				$config[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
