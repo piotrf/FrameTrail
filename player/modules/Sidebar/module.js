@@ -92,6 +92,7 @@ FrameTrail.defineModule('Sidebar', function(){
         domElement.find('button[data-viewmode="video"]').hide();
     }
 
+    
     SidebarViewMode.children().click(function(evt){
         FrameTrail.changeState('viewMode', ($(this).attr('data-viewmode')));
     });
@@ -256,6 +257,21 @@ FrameTrail.defineModule('Sidebar', function(){
 
         if (FrameTrail.module('RouteNavigation').hypervideoID) {
             domElement.find('button[data-viewmode="video"]').show();
+
+            // count visible hypervideos in project
+            var hypervideos = FrameTrail.module('Database').hypervideos,
+                visibleCount = 0;
+            for (var id in hypervideos) {
+                if (!hypervideos[id].hidden) {
+                    visibleCount++;
+                }
+            }
+            
+            // hide 'Overview' and 'Video' controls when there's only one hypervideo
+            if (visibleCount == 1) {
+                SidebarViewMode.addClass('hidden');
+            }
+
         }
 
         sidebarContainer.children().removeClass('active');

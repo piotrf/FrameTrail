@@ -32,6 +32,18 @@
 	padding-bottom: 10px;
 }
 
+#SidebarViewMode.hidden {
+	height: 0px;
+	overflow: hidden;
+	padding-bottom: 0px;
+}
+
+#Sidebar.editActive #SidebarViewMode.hidden {
+	height: auto;
+	overflow: visible;
+	padding-bottom: 10px;
+}
+
  #SidebarViewMode button {
 	display: block;
 	position: relative;
