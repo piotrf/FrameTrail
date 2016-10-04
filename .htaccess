@@ -3,7 +3,9 @@
 ########################################################
 <IfModule mod_rewrite.c>
 	#Options +FollowSymLinks
-	#RewriteEngine on
+	# Try to fix conflicting rewrite rules set by Wordpress etc:
+	RewriteEngine Off
+	RewriteEngine On
 </IfModule>
 ########################################################
 # Deny access to users.json file
