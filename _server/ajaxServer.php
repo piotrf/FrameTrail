@@ -175,6 +175,14 @@ switch($_REQUEST["a"]) {
 
 	case "setupCheck":
 
+		if ( version_compare(phpversion(), '5.6.2', '<') ) {
+			$return["status"] = "fail";
+			$return["code"] = 6;
+			$return["string"] = "Server does not meet the requirements. PHP version needs to be 5.6.20 or later.";
+			echo json_encode($return);
+			exit;
+		}
+		
 		if (	(!file_exists($conf["dir"]["data"]) && !is_dir($conf["dir"]["data"]))
 			||	(!file_exists($conf["dir"]["projects"]) && !is_dir($conf["dir"]["projects"]))
 			||	(!file_exists($conf["dir"]["data"]."/config.json"))
@@ -187,7 +195,7 @@ switch($_REQUEST["a"]) {
 			} else {
 				$return["status"] = "fail";
 				$return["code"] = 0;
-				$return["string"] = "Setup not correct. Please reply it.";
+				$return["string"] = "Setup not correct. Please retry.";
 			}
 		} elseif (!file_exists($conf["dir"]["data"]."/masterpassword.php")) {
 			$return["status"] = "fail";
@@ -240,13 +248,15 @@ switch($_REQUEST["a"]) {
 		}
 
 		if (!file_exists($conf["dir"]["data"]."/config.json")) {
+			$tmpColors = array("597081", "339966", "16a09c", "cd4436", "0073a6", "8b5180", "999933", "CC3399", "7f8c8d", "ae764d", "cf910d", "b85e02");
+
 			$tmpConf = array(
 				"updateServiceURL"=> "http://update.frametrail.org",
 				"autoUpdate"=> false,
 				"defaultUserRole"=> "admin",
 				"userNeedsConfirmation"=> false,
 				"allowUploads"=> true,
-				"userColorCollection"=> ["597081", "339966", "16a09c", "cd4436", "0073a6", "8b5180", "999933", "CC3399", "7f8c8d", "ae764d", "cf910d", "b85e02"]
+				"userColorCollection"=> $tmpColors
 			);
 			if (!file_put_contents($conf["dir"]["data"]."/config.json", json_encode($tmpConf,$conf["settings"]["json_flags"]))) {
 				$errorCnt++;

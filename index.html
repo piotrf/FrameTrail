@@ -77,6 +77,10 @@
 								content.html('<a href="./projectmanager/"><button type="button">Open Project Manager</button></a>');
 
 							});
+						} else if (ret["code"] == 6) {
+							title.html('Server does not fulfil requirements').show();
+							message.html('Your server uses an <b>outdated PHP version</b>. <br><br>In order to perform certain JSON operations, FrameTrail requires at least <b>PHP 5.6.20</b> <br>(see <a href="http://frametrail.org/installation.html"></a>). <br><br>Please update PHP or ask your admin to do so.').show();
+							content.html('');
 						} else {
 							
 							content.html('<form id="initSetup"><input name="masterpassword" placeholder="Master Password" type="password"><button type="submit" id="submitBtn">OK</button><div id="returnFromSetup" class="message error" style="margin-top: 10px;"></div></form>');
