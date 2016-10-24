@@ -84,6 +84,8 @@
 
  		updateList();
 
+ 		initWindowResizeHandler();
+
  		
  	}
 
@@ -105,7 +107,35 @@
 
  		}
 
+ 		$(window).resize();
+
  	}
+
+ 	/**
+     * I set the event handler for the window's resize event.
+     * @method initWindowResizeHandler
+     */
+    function initWindowResizeHandler() {
+
+        var _window = $(window);
+
+        _window.resize(function(){
+
+            var width   = _window.width(),
+                height  = _window.height();
+
+            
+            $('#ProjectsList').css({
+                height: height - 40 - $('#Titlebar').height() - $('#ProjectManagerOptions').height() + 'px'
+            });
+            FrameTrail.changeState('viewSize', [width, height])
+
+        });
+
+        _window.resize();
+
+        
+    }
 
 
 
