@@ -18,26 +18,31 @@ FrameTrail.defineModule('Sidebar', function(){
     
 
     var domElement  = $(      '<div id="Sidebar">'
-                            + '    <div id="SidebarViewMode">'
-                            + '        <button data-viewmode="overview">Overview</button>'
-                            + '        <button data-viewmode="video">Player</button>'
-                            + '    </div>'
                             + '    <div id="SidebarContainer">'
                             + '        <div data-viewmode="overview">'
-                            + '            <div class="viewmodeInfo">'
-                            + '                <span id="ProjectDescription"></span>'
-                            + '            </div>'
                             + '            <div class="viewmodeControls">'
                             + '                <div class="viewModeActionButtonContainer">'
-                            + '                    <button class="startEditButton" data-tooltip-left="Edit"></button>'
-                            + '                    <button class="leaveEditModeButton" data-tooltip-left="Stop Editing"></button>'
-                            + '                    <button class="exportButton" data-tooltip-left="Export Project"></button>'
-                            + '                    <button class="userSettingsButton" data-tooltip-right="User Management"></button>'
+                            + '                    <button class="exportButton" data-tooltip-bottom-left="Export Project"></button>'
                             + '                    <div style="clear: both;"></div>'
                             + '                </div>'
                             + '            </div>'
+                            + '            <div class="viewmodeInfo">'
+                            + '                <span id="ProjectDescription"></span>'
+                            + '            </div>'
                             + '        </div>'
                             + '        <div data-viewmode="video">'
+                            + '            <div class="viewmodeControls">'
+                            + '                <div class="viewModeActionButtonContainer">'
+                            + '                    <button class="saveButton" data-tooltip-bottom-left="Save changes"></button>'
+                            + '                    <button class="exportButton" data-tooltip-bottom-left="Export Hypervideo"></button>'
+                            + '                    <div style="clear: both;"></div>'
+                            + '                </div>'
+                            + '                <button class="editMode" data-editmode="preview">Preview</button>'
+                            + '                <button class="editMode" data-editmode="links">Video Links</button>'
+                            + '                <button class="editMode" data-editmode="overlays">Overlays</button>'
+                            + '                <button class="editMode" data-editmode="codesnippets">Custom Code</button>'
+                            + '                <button class="editMode" data-editmode="annotations">My Annotations</button>'
+                            + '            </div>'
                             + '            <div class="viewmodeInfo">'
                             + '                <span id="VideoDescription"></span>'
                             + '            </div>'
@@ -45,21 +50,6 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '                <div class="descriptionLabel">Annotations</div>'
                             + '                <select id="SelectAnnotation" name=""></select>'
                             + '                <div id="SelectAnnotationSingle"></div>'
-                            + '            </div>'
-                            + '            <div class="viewmodeControls">'
-                            + '                <div class="viewModeActionButtonContainer">'
-                            + '                    <button class="startEditButton" data-tooltip-left="Edit"></button>'
-                            + '                    <button class="leaveEditModeButton" data-tooltip-left="Stop Editing"></button>'
-                            + '                    <button class="saveButton" data-tooltip-left="Save changes"></button>'
-                            + '                    <button class="exportButton" data-tooltip-left="Export Hypervideo"></button>'
-                            + '                    <button class="userSettingsButton" data-tooltip-right="User Management"></button>'
-                            + '                    <div style="clear: both;"></div>'
-                            + '                </div>'
-                            + '                <button class="editMode" data-editmode="preview">Preview</button>'
-                            + '                <button class="editMode" data-editmode="links">Edit Video Links</button>'
-                            + '                <button class="editMode" data-editmode="overlays">Edit Overlays</button>'
-                            + '                <button class="editMode" data-editmode="codesnippets">Edit Custom Code</button>'
-                            + '                <button class="editMode" data-editmode="annotations">My Annotations</button>'
                             + '            </div>'
                             + '        </div>'
                             + '    </div>'
@@ -74,44 +64,15 @@ FrameTrail.defineModule('Sidebar', function(){
         videoContainerControls = videoContainer.children('.viewmodeControls'),
         resourcesContainer     = sidebarContainer.children('[data-viewmode="resources"]'),
 
-        SidebarViewMode        = domElement.find('#SidebarViewMode'),
-        StartEditButton        = domElement.find('.startEditButton'),
-        LeaveEditModeButton    = domElement.find('.leaveEditModeButton'),
         SaveButton             = domElement.find('.saveButton'),
         ExportButton           = domElement.find('.exportButton'),
-        UserSettingsButton     = domElement.find('.userSettingsButton'),
-
+        
         ProjectDescription     = sidebarContainer.find('#ProjectDescription'),
         VideoDescription       = sidebarContainer.find('#VideoDescription'),
 
         SelectAnnotationContainer       = domElement.find('#SelectAnnotationContainer');
 
 
-
-    if (!FrameTrail.module('RouteNavigation').hypervideoID) {
-        domElement.find('button[data-viewmode="video"]').hide();
-    }
-
-    
-    SidebarViewMode.children().click(function(evt){
-        FrameTrail.changeState('viewMode', ($(this).attr('data-viewmode')));
-    });
-
-    
-    StartEditButton.click(function(){
-        FrameTrail.module('UserManagement').ensureAuthenticated(
-            function(){
-                
-                FrameTrail.changeState('editMode', 'preview');
-
-            },
-            function(){ /* Start edit mode canceled */ }
-        );
-    });
-
-    LeaveEditModeButton.click(function(){
-        FrameTrail.module('HypervideoModel').leaveEditMode();
-    });
 
     SaveButton.click(function(){
         FrameTrail.module('HypervideoModel').save();
@@ -120,10 +81,6 @@ FrameTrail.defineModule('Sidebar', function(){
 
     ExportButton.click(function(){
         FrameTrail.module('HypervideoModel').exportIt();
-    });
-
-    UserSettingsButton.click(function(){
-        FrameTrail.module('UserManagement').showAdministrationBox();
     });
     
     /*
@@ -187,9 +144,8 @@ FrameTrail.defineModule('Sidebar', function(){
      */
     function changeViewSize(arrayWidthAndHeight) {
 
-        var viewModeHeight          = SidebarViewMode.height(),
-            controlsHeight          = domElement.find('#SidebarContainer > div.active > .viewmodeControls').height(),
-            viewModeInfoHeight      = domElement.height() - FrameTrail.module('Titlebar').height - (viewModeHeight + controlsHeight),
+        var controlsHeight          = domElement.find('#SidebarContainer > div.active > .viewmodeControls').height(),
+            viewModeInfoHeight      = domElement.height() - FrameTrail.module('Titlebar').height - controlsHeight,
             selectAnnotationsHeight = SelectAnnotationContainer.height();
 
         domElement.find('#SidebarContainer > div.active > .viewmodeInfo').css('max-height', viewModeInfoHeight - selectAnnotationsHeight - 40);
@@ -255,28 +211,7 @@ FrameTrail.defineModule('Sidebar', function(){
      */
     function toggleViewMode(viewMode) {
 
-        if (FrameTrail.module('RouteNavigation').hypervideoID) {
-            domElement.find('button[data-viewmode="video"]').show();
-
-            // count visible hypervideos in project
-            var hypervideos = FrameTrail.module('Database').hypervideos,
-                visibleCount = 0;
-            for (var id in hypervideos) {
-                if (!hypervideos[id].hidden) {
-                    visibleCount++;
-                }
-            }
-            
-            // hide 'Overview' and 'Video' controls when there's only one hypervideo
-            if (visibleCount == 1) {
-                SidebarViewMode.addClass('hidden');
-            }
-
-        }
-
         sidebarContainer.children().removeClass('active');
-
-        SidebarViewMode.children().removeClass('active');
 
         domElement.find('[data-viewmode=' + viewMode + ']').addClass('active');
 
@@ -298,9 +233,7 @@ FrameTrail.defineModule('Sidebar', function(){
 
             if (oldEditMode === false) {
 
-                StartEditButton.hide();
                 ExportButton.hide();
-                LeaveEditModeButton.show();
                 SaveButton.show();
 
                 videoContainerControls.find('.editMode').addClass('inEditMode');
@@ -311,23 +244,19 @@ FrameTrail.defineModule('Sidebar', function(){
 
             videoContainerControls.find('[data-editmode="' + editMode + '"]').addClass('active');
 
+            FrameTrail.changeState('sidebarOpen', true);
+
 
         } else {
 
             domElement.removeClass('editActive');
-
-            StartEditButton.show();
-
-            // Hide Edit Button when not in a server environment
-            if (!FrameTrail.module('RouteNavigation').environment.server) {
-                StartEditButton.hide();
-            }
             
             //ExportButton.show();
-            LeaveEditModeButton.hide();
             SaveButton.hide();
 
             videoContainerControls.find('.editMode').removeClass('inEditMode');
+
+            FrameTrail.changeState('sidebarOpen', false);
 
         }
 
@@ -360,32 +289,9 @@ FrameTrail.defineModule('Sidebar', function(){
                 }
             }
 
-            UserSettingsButton.show();
-
         } else {
 
-            UserSettingsButton.hide();
-
-        }
-
-    }
-
-    /**
-     * I react to a change in the global state "userColor"
-     * @method changeUserColor
-     * @param {String} color
-     */
-    function changeUserColor(color) {
-
-        if (color.length > 1) {
-
-            /*
-            // Too much color in the interface, keep default color for now
-            UserSettingsButton.css({
-                'border-color': '#' + FrameTrail.getState('userColor'),
-                'background-color': '#' + FrameTrail.getState('userColor')
-            });
-            */
+            // not logged in
 
         }
 
@@ -405,8 +311,7 @@ FrameTrail.defineModule('Sidebar', function(){
             unsavedChanges: toogleUnsavedChanges,
             viewMode:       toggleViewMode,
             editMode:       toggleEditMode,
-            loggedIn:       changeUserLogin,
-            userColor:      changeUserColor
+            loggedIn:       changeUserLogin
         },
 
         SelectAnnotationContainer: SelectAnnotationContainer,

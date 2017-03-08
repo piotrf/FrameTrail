@@ -1,7 +1,7 @@
 #Titlebar {
 	position: absolute;
 	top: 0;
-	background: #2F323A;
+	background: var(--primary-bg-color);
 	height: 40px;
 	width: 100%;
 	padding: 0;
@@ -42,10 +42,11 @@
 #Titlebar #SidebarToggleWidget {
 	float: left;
 	background-color: transparent;
+	display: none;
 }
 
 #Titlebar #SidebarToggleWidget.sidebarActive {
-	background-color: #2F323A;
+	background-color: var(--primary-bg-color);
 }
 
 #Titlebar.editActive #SidebarToggleWidget.sidebarActive {
@@ -71,19 +72,123 @@
 	padding-right: 6px;
 }
 
+#TitlebarViewMode {
+	float: left;
+}
+
+#TitlebarViewMode.hidden {
+	display: none;
+}
+
+#Titlebar.editActive #TitlebarViewMode.hidden {
+	display: block;
+}
+
+ #TitlebarViewMode button {
+	float: left;
+	position: relative;
+	opacity: .7;
+}
+
+#Titlebar #TitlebarViewMode button[data-viewmode="overview"] {
+	background-image: url('icons/menuItemOverview.png');
+}
+
+#Titlebar.editActive #TitlebarViewMode button[data-viewmode="overview"] {
+	background-image: url('icons/menuItemOverview.dark.png');
+}
+
+#Titlebar #TitlebarViewMode button[data-viewmode="video"] {
+	margin-left: 20px;
+	background-image: url('icons/menuItemHypervideo.png');
+}
+
+#Titlebar #TitlebarViewMode button[data-viewmode="video"]:after {
+	content: ">";
+	position: absolute;
+	top: 8px;
+	left: -13px;
+	color: var(--primary-fg-color);
+	font-weight: normal;
+	font-size: 13px;
+}
+
+#Titlebar.editActive #TitlebarViewMode button[data-viewmode="video"] {
+	background-image: url('icons/menuItemHypervideo.dark.png');
+}
+
+#Titlebar.editActive #TitlebarViewMode button[data-viewmode="video"]:after {
+	color: var(--primary-bg-color);
+}
+
+#TitlebarViewMode button.unsavedChanges:before {
+	content: "*";
+	position: absolute;
+	top: -4px;
+	right: -5px;
+	color: #FF9900;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#TitlebarViewMode button:hover {
+	opacity: 1;
+}
+
+
+#TitlebarViewMode button.active {
+	background-color: transparent;
+	color: var(--primary-fg-color);
+	opacity: 1;
+	pointer-events: none;
+}
+
+#Titlebar.editActive #TitlebarViewMode button.active {
+	opacity: 1;
+	pointer-events: none;
+}
+
 #Titlebar #TitlebarTitle {
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: 100%;
 	text-align: center;
-	color: #fff;
+	color: var(--primary-fg-color);
 	line-height: 38px;
 	z-index: -1;
 }
 
 #Titlebar.editActive #TitlebarTitle {
-	color: #2f323a;
+	color: var(--primary-bg-color);
+}
+
+#Titlebar #TitlebarActionButtonContainer {
+	float: right;
+}
+
+#Titlebar #TitlebarActionButtonContainer .startEditButton {
+	float: left;
+	background-image: url("icons/edit.start.png");
+	background-size: 24px auto;
+}
+
+#Titlebar #TitlebarActionButtonContainer .leaveEditModeButton {
+	float: left;
+	background-size: 26px auto;
+	background-image: url("icons/edit.stop.png");
+}
+
+#Titlebar #TitlebarActionButtonContainer .userSettingsButton {
+	float: left;
+	background-size: 100%;
+	background-image: url("icons/user_dark.png");
+	background-color: var(--primary-fg-color);
+}
+
+#Titlebar.editActive #TitlebarActionButtonContainer .userSettingsButton {
+	background-image: url("icons/user.png");
+	background-color: var(--primary-bg-color);
 }
 
 #Titlebar #SharingWidget {

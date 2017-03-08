@@ -18,7 +18,7 @@
 }
 
 .resourceThumb.dragPlaceholder {
-	outline: 1px dashed #2F323A;
+	outline: 1px dashed var(--primary-bg-color);
 	background: transparent;
 }
 
@@ -69,7 +69,7 @@
 	background-color: rgba(80, 80, 80, 0.8);
 	font-size: 13px;
 	padding: 6px 5px 3px 5px;
-	color: #fff;
+	color: var(--primary-fg-color);
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -94,7 +94,7 @@
 }
 
 .resourceThumb .resourcePreviewButton:hover {
-	background-color: #2F323A;
+	background-color: var(--primary-bg-color);
 }
 
 .resourceThumb:hover .resourcePreviewButton {
@@ -138,7 +138,7 @@
     margin-right: 10px;
     padding: 2px;
     width: 53px;
-    background: #fff;
+    background: var(--primary-fg-color);
 }
 
 #EditPropertiesContainer .ui-spinner input {
@@ -253,7 +253,7 @@
 }
 
 #EditPropertiesContainer #OpacitySlider .ui-slider-handle {
-	background: #2F323A;
+	background: var(--primary-bg-color);
 	height: 14px;
 	width: 10px;
 	margin-left: -5px;

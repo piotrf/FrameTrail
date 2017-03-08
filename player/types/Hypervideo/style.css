@@ -32,11 +32,11 @@
 }
 
 .ui-tabs-panel .hypervideoThumb:hover {
-	border-color: #2F323A;
+	border-color: var(--primary-bg-color);
 }
 
 .hypervideoThumb.activeHypervideo {
-	border-color: #fff;
+	border-color: var(--primary-fg-color);
 }
 
 .hypervideoThumb .hypervideoThumbContent {
@@ -74,7 +74,7 @@
 	background-color: rgba(80, 80, 80, 0.8);
 	text-align: center;
 	padding: 6px 5px 3px 5px;
-	color: #fff;
+	color: var(--primary-fg-color);
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -86,7 +86,7 @@
 }
 
 .hypervideoThumb.dragPlaceholder {
-	outline: 1px dashed #2F323A;
+	outline: 1px dashed var(--primary-bg-color);
 	border-color: transparent;
 	background: none !important;
 }
@@ -97,7 +97,7 @@
 
 .hypervideoThumb.ui-draggable-dragging {
 	outline: 1px solid #FF9919;
-	border-color: #2F323A;
+	border-color: var(--primary-bg-color);
 	box-shadow: 0 0 3px 2px rgba(100,100,110,.7);
 }
 

@@ -126,7 +126,7 @@ path {
 }
 
 #PlayerContainer #PlayerProgress .ui-slider-handle:hover .ui-slider-handle-circle, #PlayerContainer #PlayerProgress .ui-slider-handle:hover, #PlayerContainer #PlayerProgress .ui-slider-handle:hover:after, #PlayerContainer #PlayerProgress .ui-slider-handle:before {
-    background: #fff;
+    background: var(--primary-fg-color);
 }
 
 #PlayerContainer #PlayerProgress .ui-slider-handle-circle-inner {
@@ -138,12 +138,12 @@ path {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background: #2F323A;
+    background: var(--primary-bg-color);
 }
 
 #PlayerContainer #PlayerProgress .ui-slider-handle.highlight {
     opacity: 1;
-    background: #fff;
+    background: var(--primary-fg-color);
 }
 
 /* Annotations */
@@ -340,16 +340,16 @@ path {
 }
 
 #PlayerContainer #Controls .playerControl#SettingsButton #SettingsContainer {
-    background: #2f323a;
+    background: var(--primary-bg-color);
     display: none;
     height: 144px;
     position: absolute;
     right: 4px;
     font-size: 12px;
-    color: #fff;
+    color: var(--primary-fg-color);
     top: -155px;
     width: 315px;
-    border: 5px solid #2f323a;
+    border: 5px solid var(--primary-bg-color);
     box-shadow: 0 0 3px 2px #000;
     overflow: hidden;
     cursor: default;
@@ -362,7 +362,7 @@ path {
 #PlayerContainer #Controls .playerControl#SettingsButton #SettingsContainer #LayoutSettingsWrapper {
     float: left;
     width: 180px;
-    border-right: 5px solid #2f323a;
+    border-right: 5px solid var(--primary-bg-color);
 }
 
 #PlayerContainer #Controls #SettingsContainer [data-config] {
@@ -471,11 +471,11 @@ path {
 }
 
 #PlayerContainer #Controls .playerControl#CaptionsButton #CaptionSelectContainer {
-    background: #2f323a;
+    background: var(--primary-bg-color);
     display: none;
     font-size: 12px;
-    color: #fff;
-    border: 5px solid #2f323a;
+    color: var(--primary-fg-color);
+    border: 5px solid var(--primary-bg-color);
     box-shadow: 0 0 3px 2px #000;
     height: auto;
     min-height: 10px;
@@ -493,7 +493,7 @@ path {
 #PlayerContainer #Controls .playerControl#CaptionsButton #CaptionSelectContainer .captionSelect {
     padding: 3px 5px;
     background-color: #959698;
-    border-bottom: 2px solid #2F323A;
+    border-bottom: 2px solid var(--primary-bg-color);
     color: #333;
     font-weight: 100;
 }
@@ -525,7 +525,7 @@ path {
 }
 
 #PlayerContainer #Controls .playerControl#TimeDisplay {
-    color: #fff;
+    color: var(--primary-fg-color);
     height: 30px;
     line-height: 16px;
     padding: 4px 10px;
@@ -588,7 +588,7 @@ path {
     background-color: #e0e3e6;
     background-repeat: no-repeat;
     background-position: center center;
-    color: #2F323A;
+    color: var(--primary-bg-color);
     border-right: 1px solid #999;
     display: none;
 }
@@ -743,7 +743,7 @@ path {
 }
 
 #HypervideoContainer #VideoContainer #VideoStartOverlay:hover #PlayButtonBig {
-    border-color: #ffffff;
+    border-color: var(--primary-fg-color);
 }
 
 #HypervideoContainer #VideoContainer #ExpandButton {

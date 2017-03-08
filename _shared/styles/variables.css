@@ -1,0 +1,7 @@
+/* CSS Variables / Custom Properties */
+
+html {
+  --primary-bg-color: #2F323A; /* Backgrounds */
+  --primary-fg-color: #FFFFFF; /* Texts Borders etc. */
+  --tooltip-bg-color: #D8D3AD;
+}

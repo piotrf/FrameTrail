@@ -8,7 +8,7 @@
 
 */
 
-.cm-s-hopscotch.CodeMirror {background: #2F323A; color: #d5d3d5;}
+.cm-s-hopscotch.CodeMirror {background: var(--primary-bg-color); color: #d5d3d5;}
 .cm-s-hopscotch div.CodeMirror-selected {background: #433b42 !important;}
 .cm-s-hopscotch .CodeMirror-gutters {background: #23262e; border-right: 0px;}
 .cm-s-hopscotch .CodeMirror-linenumber {color: #797379;}

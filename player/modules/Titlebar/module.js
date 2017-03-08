@@ -18,18 +18,57 @@ FrameTrail.defineModule('Titlebar', function(){
 
     var domElement = $(   '<div id="Titlebar">'
                             + '  <div id="SidebarToggleWidget" class=""><button id="SidebarToggleButton">Sidebar</button></div>'
+                            + '  <div id="TitlebarViewMode">'
+                            + '      <button data-viewmode="overview" data-tooltip-bottom-left="Overview"></button>'
+                            + '      <button data-viewmode="video"></button>'
+                            + '  </div>'
                             + '  <div id="TitlebarTitle"></div>'
+                            + '  <div id="TitlebarActionButtonContainer">'
+                            + '      <button class="startEditButton" data-tooltip-bottom-left="Edit"></button>'
+                            + '      <button class="leaveEditModeButton" data-tooltip-bottom-left="Stop Editing"></button>'
+                            + '      <button class="userSettingsButton" data-tooltip-bottom-right="User Management"></button>'
+                            + '      <button id="LogoutButton" data-tooltip-bottom-right="Logout"></button>'
+                            + '  </div>'
                             + '  <div id="SharingWidget"><button id="SharingWidgetButton" data-tooltip-bottom-right="Share">Share</button></div>'
-                            + '  <button id="LogoutButton" data-tooltip-bottom-right="Logout"></button>'
                             + '</div>'
-                          );
+                          ),
+    TitlebarViewMode        = domElement.find('#TitlebarViewMode'),
+    StartEditButton         = domElement.find('.startEditButton'),
+    LeaveEditModeButton     = domElement.find('.leaveEditModeButton'),
+    UserSettingsButton      = domElement.find('.userSettingsButton');
 
 
+    StartEditButton.click(function(){
+        FrameTrail.module('UserManagement').ensureAuthenticated(
+            function(){
+                
+                FrameTrail.changeState('editMode', 'preview');
+
+            },
+            function(){ /* Start edit mode canceled */ }
+        );
+    });
+
+    LeaveEditModeButton.click(function(){
+        FrameTrail.module('HypervideoModel').leaveEditMode();
+    });
+
+    UserSettingsButton.click(function(){
+        FrameTrail.module('UserManagement').showAdministrationBox();
+    });
 
     domElement.find('#SidebarToggleButton').click(function(){
 
         FrameTrail.changeState('sidebarOpen', ! FrameTrail.getState('sidebarOpen'));
 
+    });
+
+    if (!FrameTrail.module('RouteNavigation').hypervideoID) {
+        domElement.find('button[data-viewmode="video"]').hide();
+    }
+
+    TitlebarViewMode.children().click(function(evt){
+        FrameTrail.changeState('viewMode', ($(this).attr('data-viewmode')));
     });
 
 
@@ -99,12 +138,14 @@ FrameTrail.defineModule('Titlebar', function(){
 
         toggleSidebarOpen(FrameTrail.getState('sidebarOpen'));
         toogleUnsavedChanges(FrameTrail.getState('unsavedChanges'));
+        toggleViewMode(FrameTrail.getState('viewMode'));
+        toggleEditMode(FrameTrail.getState('editMode'));
         
         if ( FrameTrail.getState('embed') ) {
             //domElement.find('#SidebarToggleButton, #SharingWidgetButton').hide();
         }
 
-        $('body').append(domElement)
+        $('body').append(domElement);
 
     }
 
@@ -141,11 +182,44 @@ FrameTrail.defineModule('Titlebar', function(){
     function toogleUnsavedChanges(aBoolean) {
 
         if(aBoolean){
-            domElement.find('#SidebarToggleWidget').addClass('unsavedChanges');
+            TitlebarViewMode.find('[data-viewmode="video"]').addClass('unsavedChanges');
         }else{
-            domElement.find('#SidebarToggleWidget').removeClass('unsavedChanges');
+            TitlebarViewMode.find('[data-viewmode="video"]').removeClass('unsavedChanges');
         }
         
+    }
+
+
+    /**
+     * I react to a change in the global state "viewMode"
+     * @method toggleViewMode
+     * @param {String} viewMode
+     */
+    function toggleViewMode(viewMode) {
+
+        if (FrameTrail.module('RouteNavigation').hypervideoID) {
+            domElement.find('button[data-viewmode="video"]').show();
+
+            // count visible hypervideos in project
+            var hypervideos = FrameTrail.module('Database').hypervideos,
+                visibleCount = 0;
+            for (var id in hypervideos) {
+                if (!hypervideos[id].hidden) {
+                    visibleCount++;
+                }
+            }
+            
+            // hide 'Overview' and 'Video' controls when there's only one hypervideo
+            if (visibleCount == 1) {
+                TitlebarViewMode.addClass('hidden');
+            }
+
+        }
+
+        TitlebarViewMode.children().removeClass('active');
+
+        domElement.find('[data-viewmode=' + viewMode + ']').addClass('active');
+
     }
 
 
@@ -161,9 +235,25 @@ FrameTrail.defineModule('Titlebar', function(){
 
             domElement.addClass('editActive');
 
+            if (oldEditMode === false) {
+
+                StartEditButton.hide();
+                LeaveEditModeButton.show();
+
+            }
+
         } else {
 
             domElement.removeClass('editActive');
+
+            StartEditButton.show();
+
+            // Hide Edit Button when not in a server environment
+            if (!FrameTrail.module('RouteNavigation').environment.server) {
+                StartEditButton.hide();
+            }
+            
+            LeaveEditModeButton.hide();
 
         }
 
@@ -180,10 +270,34 @@ FrameTrail.defineModule('Titlebar', function(){
         if (loggedIn) {
             
             domElement.find('#LogoutButton').show();
+            UserSettingsButton.show();
 
         } else {
 
             domElement.find('#LogoutButton').hide();
+            UserSettingsButton.hide();
+
+        }
+
+    }
+
+
+    /**
+     * I react to a change in the global state "userColor"
+     * @method changeUserColor
+     * @param {String} color
+     */
+    function changeUserColor(color) {
+
+        if (color.length > 1) {
+
+            /*
+            // Too much color in the interface, keep default color for now
+            UserSettingsButton.css({
+                'border-color': '#' + FrameTrail.getState('userColor'),
+                'background-color': '#' + FrameTrail.getState('userColor')
+            });
+            */
 
         }
 
@@ -198,8 +312,10 @@ FrameTrail.defineModule('Titlebar', function(){
         onChange: {
             sidebarOpen:    toggleSidebarOpen,
             unsavedChanges: toogleUnsavedChanges,
+            viewMode:       toggleViewMode,
             editMode:       toggleEditMode,
-            loggedIn:       changeUserLogin
+            loggedIn:       changeUserLogin,
+            userColor:      changeUserColor
         },
 
         /**

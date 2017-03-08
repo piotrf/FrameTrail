@@ -16,7 +16,7 @@
 }
 
 body {
-	background: #2F323A;
+	background: var(--primary-bg-color);
 	font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	overflow: hidden;
@@ -29,8 +29,8 @@ button, input[type="submit"], input[type="button"] {
 	text-align: left;
 	padding: 4px 6px;
 	background-color: transparent;
-	border: 2px solid #2F323A;
-	color: #2F323A;
+	border: 2px solid var(--primary-bg-color);
+	color: var(--primary-bg-color);
 }
 
 button:focus, input[type="submit"]:focus, input[type="button"]:focus {
@@ -58,7 +58,7 @@ input[type="text"], input[type="password"], textarea {
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	border-color: #2F323A;
+	border-color: var(--primary-bg-color);
 }
 
 input[readonly], textarea[readonly] {
@@ -68,14 +68,14 @@ input[readonly], textarea[readonly] {
 /* Select Menu */
 
 .ui-selectmenu-button {
-	background-color: #2F323A;
-	border: 2px solid #2F323A;
+	background-color: var(--primary-bg-color);
+	border: 2px solid var(--primary-bg-color);
 	color: #F8F8F8;
 }
 
 .ui-selectmenu-button:hover {
 	background-color: #3F4247;
-	color: #fff;
+	color: var(--primary-fg-color);
 }
 
 .ui-selectmenu-button .ui-icon {
@@ -88,7 +88,7 @@ input[readonly], textarea[readonly] {
 }
 
 .ui-selectmenu-open {
-	background: #fff;
+	background: var(--primary-fg-color);
 	box-shadow: 0 0 1px 1px #444;
 }
 
@@ -112,7 +112,7 @@ input[readonly], textarea[readonly] {
 }
 
 .message.error {
-	background-color: #FFF9F7;
+	background-color: var(--primary-fg-color)9F7;
 	border: 1px solid #cd0a0a;
 	color: #cd0a0a;
 }
@@ -148,7 +148,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-left]::before {
-    background-color: #d8d3ad;
+    background-color: var(--tooltip-bg-color);
     border-radius: 5px;
     color: #333333;
     content: attr(data-tooltip-left);
@@ -167,7 +167,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-left]::after {
-    border-top: 4px solid #d8d3ad;
+    border-top: 4px solid var(--tooltip-bg-color);
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     content: "";
@@ -187,7 +187,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-right]::before {
-    background-color: #d8d3ad;
+    background-color: var(--tooltip-bg-color);
     border-radius: 5px;
     color: #333333;
     content: attr(data-tooltip-right);
@@ -206,7 +206,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-right]::after {
-    border-top: 4px solid #d8d3ad;
+    border-top: 4px solid var(--tooltip-bg-color);
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     content: "";
@@ -226,7 +226,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-bottom-right]::before {
-    background-color: #d8d3ad;
+    background-color: var(--tooltip-bg-color);
     border-radius: 5px;
     color: #333333;
     content: attr(data-tooltip-bottom-right);
@@ -245,7 +245,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-bottom-right]::after {
-    border-bottom: 4px solid #d8d3ad;
+    border-bottom: 4px solid var(--tooltip-bg-color);
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     content: "";
@@ -265,7 +265,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-bottom-left]::before {
-    background-color: #d8d3ad;
+    background-color: var(--tooltip-bg-color);
     border-radius: 5px;
     color: #333333;
     content: attr(data-tooltip-bottom-left);
@@ -284,7 +284,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-bottom-left]::after {
-    border-bottom: 4px solid #d8d3ad;
+    border-bottom: 4px solid var(--tooltip-bg-color);
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     content: "";
@@ -304,7 +304,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-left-left]::before {
-    background-color: #d8d3ad;
+    background-color: var(--tooltip-bg-color);
     border-radius: 5px;
     color: #333333;
     content: attr(data-tooltip-left-left);
@@ -324,7 +324,7 @@ input[readonly], textarea[readonly] {
 
 [data-tooltip-left-left]::after {
     border-bottom: 4px solid transparent;
-    border-right: 4px solid #d8d3ad;
+    border-right: 4px solid var(--tooltip-bg-color);
     border-top: 4px solid transparent;
     content: "";
     display: none;
@@ -343,7 +343,7 @@ input[readonly], textarea[readonly] {
 }
 
 [data-tooltip-right-right]::before {
-    background-color: #d8d3ad;
+    background-color: var(--tooltip-bg-color);
     border-radius: 5px;
     color: #333333;
     content: attr(data-tooltip-right-right);
@@ -363,7 +363,7 @@ input[readonly], textarea[readonly] {
 
 [data-tooltip-right-right]::after {
     border-bottom: 4px solid transparent;
-    border-left: 4px solid #d8d3ad;
+    border-left: 4px solid var(--tooltip-bg-color);
     border-top: 4px solid transparent;
     content: "";
     display: none;
@@ -385,13 +385,13 @@ input[readonly], textarea[readonly] {
     width: 100%;
     height: 100%;
     background: #484a54;
-    background: -moz-radial-gradient(center, ellipse cover,  #484a54 1%, #2f323a 100%);
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#484a54), color-stop(100%,#2f323a));
-    background: -webkit-radial-gradient(center, ellipse cover,  #484a54 1%,#2f323a 100%);
-    background: -o-radial-gradient(center, ellipse cover,  #484a54 1%,#2f323a 100%);
-    background: -ms-radial-gradient(center, ellipse cover,  #484a54 1%,#2f323a 100%);
-    background: radial-gradient(ellipse at center,  #484a54 1%,#2f323a 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#484a54', endColorstr='#2f323a',GradientType=1 );
+    background: -moz-radial-gradient(center, ellipse cover,  #484a54 1%, var(--primary-bg-color) 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#484a54), color-stop(100%,var(--primary-bg-color)));
+    background: -webkit-radial-gradient(center, ellipse cover,  #484a54 1%,var(--primary-bg-color) 100%);
+    background: -o-radial-gradient(center, ellipse cover,  #484a54 1%,var(--primary-bg-color) 100%);
+    background: -ms-radial-gradient(center, ellipse cover,  #484a54 1%,var(--primary-bg-color) 100%);
+    background: radial-gradient(ellipse at center,  #484a54 1%,var(--primary-bg-color) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#484a54', endColorstr='var(--primary-bg-color)',GradientType=1 );
     z-index: 100000;
 }
 
@@ -406,7 +406,7 @@ input[readonly], textarea[readonly] {
 }
 
 .ui-blocking-overlay .ui-overlay-box .boxTitle {
-    color: #fff;
+    color: var(--primary-fg-color);
     font-size: 22px;
     font-weight: 100;
     text-align: center;
@@ -438,7 +438,7 @@ input[readonly], textarea[readonly] {
 
 .ui-dialog .ui-dialog-titlebar {
 	background: rgba(47, 50, 58, 1);
-	color: #fff;
+	color: var(--primary-fg-color);
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
@@ -492,8 +492,8 @@ input[readonly], textarea[readonly] {
 }
 
 .ui-tabs .ui-tabs-nav li.ui-state-active a {
-	color: #2F323A;
-	border-bottom: 3px solid #2F323A;
+	color: var(--primary-bg-color);
+	border-bottom: 3px solid var(--primary-bg-color);
 	outline: none;
 }
 
@@ -515,14 +515,14 @@ input[readonly], textarea[readonly] {
 /* Generic Hypervideo Settings */
 
 .hypervideoLayout .settingsContainer {
-    background: #2f323a;
+    background: var(--primary-bg-color);
     height: 144px;
     position: relative;
     margin-bottom: 10px;
     font-size: 12px;
-    color: #fff;
+    color: var(--primary-fg-color);
     width: 315px;
-    border: 5px solid #2f323a;
+    border: 5px solid var(--primary-bg-color);
     overflow: hidden;
     cursor: default;
 }
@@ -530,7 +530,7 @@ input[readonly], textarea[readonly] {
 .hypervideoLayout .settingsContainer .layoutSettingsWrapper {
     float: left;
     width: 180px;
-    border-right: 5px solid #2f323a;
+    border-right: 5px solid var(--primary-bg-color);
 }
 
 .hypervideoLayout .settingsContainer [data-config] {
@@ -659,6 +659,6 @@ input[readonly], textarea[readonly] {
 }
 
 .userColorCollectionItem.selected {
-    outline: 3px solid #2f323a;
+    outline: 3px solid var(--primary-bg-color);
     opacity: 1;
 }

@@ -1,5 +1,5 @@
 #MainContainer {
-	background-color: #2F323A;
+	background-color: var(--primary-bg-color);
     left: 0;
     margin-left: 0;
     position: relative;
@@ -13,7 +13,7 @@
 
 
 #MainContainer.sidebarOpen {
-	margin-left: 200px;
+	margin-left: 164px;
 }
 
 #MainContainer.inFullscreen {

@@ -41,14 +41,14 @@
 	top: -2px;
 	width: 3px;
 	height: 100%;
-	background-color: #fff;
+	background-color: var(--primary-fg-color);
 	border: 2px solid #000;
 	border-radius: 3px;
 	display: none;
 }
 
 #VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
-	background-color: #fff;
+	background-color: var(--primary-fg-color);
 }
 
 #VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
@@ -103,14 +103,14 @@
 }
 
 #VideolinkTiles .tileElement.open {
-	background-color: #fff;
+	background-color: var(--primary-fg-color);
 }
 
 /* Content Element */
 
 #VideolinkContainer .videolinkElement {
-	background: #2F323A;
-    border: 1px solid #fff;
+	background: var(--primary-bg-color);
+    border: 1px solid var(--primary-fg-color);
     opacity: 1;
     height: 92%;
     left: 15%;
@@ -147,7 +147,7 @@
 	padding: 0 10px;
 	background-color: #f8f8f8;
 	line-height: 38px;
-	color: #2F323A;
+	color: var(--primary-bg-color);
 	text-decoration: none;
 }
 

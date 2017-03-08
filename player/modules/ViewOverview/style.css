@@ -32,7 +32,7 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 24px auto;
-    border: 2px solid #2f323a;
+    border: 2px solid var(--primary-bg-color);
     border-radius: 50%;
     font-size: 0;
     height: 40px;
@@ -110,8 +110,8 @@
 
 .subtitlesSettingsWrapper .existingSubtitlesItem > span {
 	color: #f8f8f8;
-	background: #2F323A;
-	border: 3px solid #2f323a;
+	background: var(--primary-bg-color);
+	border: 3px solid var(--primary-bg-color);
 	display: inline-block;
     width: 120px;
 }

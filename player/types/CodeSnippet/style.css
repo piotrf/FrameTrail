@@ -57,7 +57,7 @@
 /* CodeSnippet Editing Tabs */
 
 #CodeSnippetEditingTabs #CodeSnippetList .codeSnippetElement {
-    background: #2f323a none repeat scroll 0 0;
+    background: var(--primary-bg-color) none repeat scroll 0 0;
     border-left: 14px solid #23262e;
     color: #c5d0d3;
     float: left;
@@ -70,13 +70,13 @@
 }
 
 #CodeSnippetEditingTabs #CodeSnippetList .dragPlaceholder {
-    outline: 1px dashed #2F323A;
+    outline: 1px dashed var(--primary-bg-color);
     background: transparent;
     border-color: #efefef;
 }
 
 body .codeSnippetElement {
-    background: #2f323a none repeat scroll 0 0;
+    background: var(--primary-bg-color) none repeat scroll 0 0;
     border-left: 14px solid #23262e;
     color: #c5d0d3;
     height: 80px;

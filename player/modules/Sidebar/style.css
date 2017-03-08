@@ -1,10 +1,10 @@
 #Sidebar {
 	position: absolute;
-	left: -200px;
+	left: -164px;
 	top: 0px;
-	width: 200px;
+	width: 164px;
 	height: 100%;
-	background-color: #2F323A;
+	background-color: var(--primary-bg-color);
 	color: #cececb;
 	font-weight: 100;
 	z-index: 2;
@@ -22,46 +22,12 @@
 
 #Sidebar.editActive {
 	background-color: #e0e3e6;
-	color: #2F323A;
+	color: var(--primary-bg-color);
 	box-shadow: none;
 	border-right: 1px solid #999;
 }
 
-#SidebarViewMode {
-	margin-top: 40px;
-	padding-bottom: 10px;
-}
-
-#SidebarViewMode.hidden {
-	height: 0px;
-	overflow: hidden;
-	padding-bottom: 0px;
-}
-
-#Sidebar.editActive #SidebarViewMode.hidden {
-	height: auto;
-	overflow: visible;
-	padding-bottom: 10px;
-}
-
- #SidebarViewMode button {
-	display: block;
-	position: relative;
-	width: 100%;
-	padding: 10px 6px 10px 41px;
-	background-color: transparent;
-	background-repeat: no-repeat;
-	background-position: 7px center;
-	background-size: 24px auto;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: 1px solid #696966;
-	color: #cececb;
-	opacity: .7;
-}
-
-#Sidebar.editActive #SidebarViewMode button, .viewmodeControls button.editMode {
+.viewmodeControls button.editMode {
 	display: block;
 	position: relative;
 	width: 100%;
@@ -74,24 +40,8 @@
 	border-left: none;
 	border-right: none;
 	border-bottom: 1px solid transparent;
-	color: #2F323A;
+	color: var(--primary-bg-color);
 	opacity: .7;
-}
-
-#Sidebar #SidebarViewMode button[data-viewmode="overview"] {
-	background-image: url('icons/menuItemOverview.png');
-}
-
-#Sidebar.editActive #SidebarViewMode button[data-viewmode="overview"] {
-	background-image: url('icons/menuItemOverview.dark.png');
-}
-
-#Sidebar #SidebarViewMode button[data-viewmode="video"] {
-	background-image: url('icons/menuItemHypervideo.png');
-}
-
-#Sidebar.editActive #SidebarViewMode button[data-viewmode="video"] {
-	background-image: url('icons/menuItemHypervideo.dark.png');
 }
 
 .viewmodeControls button.editMode[data-editmode="preview"] {
@@ -113,17 +63,6 @@
 .viewmodeControls button.editMode[data-editmode="annotations"], #EditPropertiesContainer[data-editmode="annotations"] {
 	background-image: url('icons/menuItemAnnotations.dark.png');
 }
-
-#SidebarViewMode button.unsavedChanges:before {
-	content: "*";
-	position: absolute;
-	top: 6px;
-	right: 10px;
-	color: #FF9900;
-	font-weight: bold;
-	font-size: 20px;
-}
-
 
 #SidebarContainer .viewmodeControls button.editMode  {
 	display: none;
@@ -148,25 +87,18 @@
 	font-size: 20px;
 }
 
-#SidebarViewMode button:hover, .viewmodeControls button.editMode:hover {
+.viewmodeControls button.editMode:hover {
 	opacity: 1;
 }
 
-
-#SidebarViewMode button.active {
-	background-color: transparent;
-	color: #fff;
-	opacity: 1;
-}
-
-#Sidebar.editActive #SidebarViewMode button.active, .viewmodeControls button.editMode.active {
+.viewmodeControls button.editMode.active {
 	background-color: #F8F8F8;
 	border-color: #999;
 	opacity: 1;
 	pointer-events: none;
 }
 
-#Sidebar.editActive #SidebarViewMode button.active:after, .viewmodeControls button.editMode.active:after {
+.viewmodeControls button.editMode.active:after {
 	content: "";
 	position: absolute;
 	top: 0px;
@@ -176,9 +108,9 @@
 	background: #F8F8F8;
 }
 
-
 #SidebarContainer {
 	display: block;
+	margin-top: 40px;
 }
 
 #SidebarContainer > div {
@@ -212,9 +144,7 @@
 }
 
 #SidebarContainer .viewmodeControls {
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
+	position: relative;
 	width: 100%;
 }
 
@@ -238,22 +168,12 @@
 }
 
 #Sidebar.editActive #SidebarContainer .viewmodeControls .viewModeActionButtonContainer button {
-	border-color: #2F323A;
+	border-color: var(--primary-bg-color);
 }
 
 #SidebarContainer .viewmodeControls .viewModeActionButtonContainer button.unsavedChanges {
 	border-color: #FF9900 !important;
 	background-color: rgba(255, 153, 0, .15);
-}
-
-#SidebarContainer .viewmodeControls .startEditButton {
-	background-image: url("icons/edit.start.png");
-}
-
-#SidebarContainer .viewmodeControls .viewModeActionButtonContainer .leaveEditModeButton {
-	background-size: 26px auto;
-	background-image: url("icons/edit.stop.png");
-	background-color: #F8F8F8;
 }
 
 #SidebarContainer .viewmodeControls .saveButton {
@@ -267,19 +187,6 @@
 
 #Sidebar.editActive #SidebarContainer .viewmodeControls .exportButton {
 	background-image: url("icons/export.png");
-}
-
-#SidebarContainer .viewmodeControls .viewModeActionButtonContainer .userSettingsButton {
-	float: right;
-	margin-right: 0px;
-	background-size: 100%;
-	background-image: url("icons/user_dark.png");
-	background-color: #ffffff;
-}
-
-#Sidebar.editActive #SidebarContainer .viewmodeControls .userSettingsButton {
-	background-image: url("icons/user.png");
-	background-color: #2F323A;
 }
 
 #SidebarContainer #SelectAnnotationContainer {

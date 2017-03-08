@@ -30,7 +30,7 @@
 #ViewResources #ResourcesControls #ResourceDeleteConfirm {
 	background-color: rgba(205, 10, 10, .6) !important;
 	border-color: #cd0a0a;
-	color: #fff;
+	color: var(--primary-fg-color);
 }
 
 #ViewResources #ResourcesControls #ResourceDeleteConfirm:hover {
@@ -70,7 +70,7 @@
 }
 
 #ViewResources #ResourcesList .resourceThumb.selected, #NewHypervideoDialog #NewHypervideoDialogResources .resourceThumb.selected {
-	outline: 2px solid #2F323A;
+	outline: 2px solid var(--primary-bg-color);
 }
 
 #ViewResources #ResourcesList .resourceThumb.markedForDeletion { 
@@ -178,7 +178,7 @@
 	list-style: none;
 	font-size: 13px;
     font-weight: 100;
-	border-bottom: 1px solid #fff;
+	border-bottom: 1px solid var(--primary-fg-color);
 	padding: 2px 6px;
 }
 

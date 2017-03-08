@@ -1,11 +1,11 @@
 #Titlebar {
-	background: #2f323a;
+	background: var(--primary-bg-color);
 	font-weight: 200;
     height: 40px;
 	padding: 0px;
 	width: 100%;
 	text-align: center;
-	color: #fff;
+	color: var(--primary-fg-color);
 	line-height: 38px;
 }
 
