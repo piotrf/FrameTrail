@@ -239,6 +239,11 @@
         }).done(function(data){
         
             sequence = data;
+
+            if (!sequence.events) {
+                sequence.events = {};
+            }
+
             success.call(this);
 
         }).fail(function() {

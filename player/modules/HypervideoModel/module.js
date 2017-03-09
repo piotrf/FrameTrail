@@ -36,6 +36,7 @@
         videolinks              = [],
 
         codeSnippets            = [],
+        events                  = {},
 
         annotationSets          = {},
         selectedAnnotationSet   = '',
@@ -67,7 +68,8 @@
 
         var database   = FrameTrail.module('Database'),
             hypervideo = database.hypervideo,
-            videoData  = database.sequence.clips[0];
+            sequence   = database.sequence,
+            videoData  = sequence.clips[0];
 
 
         // Read in metadata
@@ -78,6 +80,8 @@
         created        = hypervideo.created;
         lastchanged    = hypervideo.lastchanged;
         hidden         = hypervideo.hidden;
+
+        events         = sequence.events;
 
 
 
@@ -1074,6 +1078,14 @@
          * @type {}
          */
         get sourceFiles()       { return sourceFiles     },
+
+        /**
+         * I contain the global event handlers for the hypervideo.
+         * @type Object
+         * @attribute events
+         * @readOnly
+         */
+        get events()            { return events          },
 
         /**
          * The hypervideo's creator name

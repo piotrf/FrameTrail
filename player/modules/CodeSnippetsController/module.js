@@ -166,11 +166,18 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
             codeSnippetEditingOptions = $('<div id="CodeSnippetEditingTabs">'
                                     +   '    <ul>'
-                                    +   '        <li>'
-                                    +   '            <a href="#CodeSnippetList">Add Custom Code</a>'
-                                    +   '        </li>'
+                                    +   '        <li><a href="#CodeSnippetList">Add Code Snippets</a></li>'
+                                    +   '        <li class="ui-tabs-right"><a href="#EventOnEnded">onEnded</a></li>'
+                                    +   '        <li class="ui-tabs-right"><a href="#EventOnPause">onPause</a></li>'
+                                    +   '        <li class="ui-tabs-right"><a href="#EventOnPlay">onPlay</a></li>'
+                                    +   '        <li class="ui-tabs-right"><a href="#EventOnReady">onReady</a></li>'
+                                    +   '        <li class="ui-tabs-right tab-label">Events: </li>'
                                     +   '    </ul>'
                                     +   '    <div id="CodeSnippetList">'
+                                    +   '    <div id="EventOnReady">'
+                                    +   '    <div id="EventOnPlay">'
+                                    +   '    <div id="EventOnPause">'
+                                    +   '    <div id="EventOnEnded">'
                                     +   '    </div>'
                                     +   '</div>')
                                     .tabs({

@@ -110,6 +110,16 @@ FrameTrail.defineModule('HypervideoController', function(){
 				FrameTrail.changeState('videoWorking', false);
 			});
 
+			_video.on('ended', function() {
+				try {
+	            	var endedEvent = new Function(HypervideoModel.events.onEnded);
+	            	endedEvent();
+	            } catch (exception) {
+	                // could not parse and compile JS code!
+	                console.warn('Event handler contains errors: '+ exception.message);
+	            }
+			});
+
 			_video.attr('preload', 'auto');
 			videoElement.load();
 
@@ -133,6 +143,16 @@ FrameTrail.defineModule('HypervideoController', function(){
 					initProgressBar();
 
 					InteractionController.initController();
+
+					if (HypervideoModel.events.onReady) {
+						try {
+		                	var readyEvent = new Function(HypervideoModel.events.onReady);
+		                	readyEvent();
+			            } catch (exception) {
+			                // could not parse and compile JS code!
+			                console.warn('Event handler contains errors: '+ exception.message);
+			            }
+					}
 
 					if (RouteNavigation.hashTime) {
 						setCurrentTime(RouteNavigation.hashTime);
@@ -166,6 +186,16 @@ FrameTrail.defineModule('HypervideoController', function(){
 			initProgressBar();
 
 			InteractionController.initController();
+
+			if (HypervideoModel.events.onReady) {
+				try {
+                	var readyEvent = new Function(HypervideoModel.events.onReady);
+                	readyEvent();
+	            } catch (exception) {
+	                // could not parse and compile JS code!
+	                console.warn('Event handler contains errors: '+ exception.message);
+	            }
+			}
 
 			if (RouteNavigation.hashTime) {
 				setCurrentTime(RouteNavigation.hashTime);
@@ -514,6 +544,16 @@ FrameTrail.defineModule('HypervideoController', function(){
 			ViewVideo.VideoStartOverlay.addClass('inactive').fadeOut();
 		}
 
+		if (HypervideoModel.events.onPlay) {
+			try {
+            	var playEvent = new Function(HypervideoModel.events.onPlay);
+            	playEvent();
+            } catch (exception) {
+                // could not parse and compile JS code!
+                console.warn('Event handler contains errors: '+ exception.message);
+            }
+		}
+
 
 
 	};
@@ -540,6 +580,27 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 			_pause();
 
+		}
+
+		if (HypervideoModel.events.onPause && currentTime !== HypervideoModel.duration) {
+			try {
+            	var pauseEvent = new Function(HypervideoModel.events.onPause);
+            	pauseEvent();
+            } catch (exception) {
+                // could not parse and compile JS code!
+                console.warn('Event handler contains errors: '+ exception.message);
+            }
+		}
+
+		// Hack to fire ended event in NullVideo
+		if (!HypervideoModel.hasHTML5Video && HypervideoModel.events.onEnded) {
+			try {
+            	var endedEvent = new Function(HypervideoModel.events.onEnded);
+            	endedEvent();
+            } catch (exception) {
+                // could not parse and compile JS code!
+                console.warn('Event handler contains errors: '+ exception.message);
+            }
 		}
 
 	};

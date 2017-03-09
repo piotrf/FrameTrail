@@ -476,6 +476,16 @@ input[readonly], textarea[readonly] {
 
 }
 
+.ui-tabs .ui-tabs-nav li.ui-tabs-right {
+    float: right;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-right.tab-label {
+    color: #999;
+    padding: 2px 8px 0 0;
+    text-shadow: 1px 1px 0 #FFFFFF;
+}
+
 .ui-tabs .ui-tabs-nav li.ui-state-disabled a {
 	color: #cfcfcf;
 	pointer-events: none;
