@@ -189,6 +189,8 @@ FrameTrail.defineModule('RouteNavigation', function(){
         * contains the previous editMode state
         */
 
+    	//console.log(FrameTrail.module('RouteNavigation').hypervideoID, getQueryVariable('hypervideo'));
+
     	var hypervideoID = getQueryVariable('hypervideo');
 
     	if ( hypervideoID ) {
@@ -196,7 +198,8 @@ FrameTrail.defineModule('RouteNavigation', function(){
     		if ( FrameTrail.getState('editMode') ) {
     			FrameTrail.changeState('editMode', false);
     			FrameTrail.module('HypervideoModel').updateHypervideo(hypervideoID, true);
-    		} else {
+    		} else if (FrameTrail.module('RouteNavigation').hypervideoID != hypervideoID) {
+    			//console.log('change');
     			FrameTrail.module('HypervideoModel').updateHypervideo(hypervideoID);
     		}
 

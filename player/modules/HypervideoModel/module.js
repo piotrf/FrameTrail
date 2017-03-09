@@ -995,6 +995,7 @@
         $('#MainContainer #ViewVideo').remove();
         
         FrameTrail.module('RouteNavigation').hypervideoID = newHypervideoID;
+        FrameTrail.module('RouteNavigation').hashTime = undefined;
 
         FrameTrail.module('Database').updateHypervideoData(function() {
 

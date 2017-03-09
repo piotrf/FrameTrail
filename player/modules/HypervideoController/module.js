@@ -614,15 +614,17 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 */
 	function setCurrentTime(aNumber) {
 
-		
-		
+		if ( isNaN(parseFloat(aNumber)) ) {
+			return;
+		}
+
 		if (HypervideoModel.hasHTML5Video) {
 
-			videoElement.currentTime = currentTime = aNumber;
+			videoElement.currentTime = currentTime = parseFloat(aNumber);
 			
 		} else {
 
-			currentTime = aNumber;
+			currentTime = parseFloat(aNumber);
 			nullVideoStartDate = Date.now() - (currentTime * 1000)
 
 		}
@@ -633,7 +635,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		OverlaysController.syncMedia();
 
 		
-		return aNumber;
+		return parseFloat(aNumber);
 
 	};
 
