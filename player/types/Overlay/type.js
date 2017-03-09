@@ -192,6 +192,10 @@ FrameTrail.defineType(
                 opacity: (this.data.attributes.opacity || 1)
             });
 
+            if (this.overlayElement.find('.resourceDetail').data().map) {
+                this.overlayElement.find('.resourceDetail').data().map.updateSize();
+            }
+
         },
 
 
@@ -273,7 +277,13 @@ FrameTrail.defineType(
         setActive: function (onlyTimelineElement) {
 
             if (!onlyTimelineElement) {
+                
                 this.overlayElement.addClass('active');
+
+                if (this.overlayElement.find('.resourceDetail').data().map) {
+                    this.overlayElement.find('.resourceDetail').data().map.updateSize();
+                }
+                
             }
             
             this.timelineElement.addClass('active');

@@ -44,27 +44,27 @@ FrameTrail.defineType(
         renderContent: function() {
 
             var self = this;
-
+            
             var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'" style="width: 100%; height: 100%;"></div>');
-            var map = new OpenLayers.Map({
-                div: resourceDetail[0],
-                autoUpdateSize: true
+            var map = new ol.Map({
+                target: resourceDetail[0],
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([parseFloat(self.resourceData.attributes.lon), parseFloat(self.resourceData.attributes.lat)]),
+                    zoom: 15
+                })
             });
-            var layer = new OpenLayers.Layer.OSM("Simple OSM Map");
-
-            map.addLayer(layer);
-            map.setCenter(
-                new OpenLayers.LonLat(self.resourceData.attributes.lon, self.resourceData.attributes.lat).transform(
-                    new OpenLayers.Projection("EPSG:4326"),
-                    new OpenLayers.Projection("EPSG:900913"),
-                    map.getProjectionObject()
-                ), 17
-            );
-
+            
             if ( self.resourceData.attributes.boundingBox ) {
+                
+                // TODO: Check for compatibility
                 /*
                 map.zoomToExtent(
-                    new OpenLayers.Bounds(
+                    new ol.Bounds(
                         self.resourceData.attributes.boundingBox[0],
                         self.resourceData.attributes.boundingBox[1],
                         self.resourceData.attributes.boundingBox[2],
