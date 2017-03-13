@@ -45,6 +45,7 @@
         unsavedOverlays         = false,
         unsavedVideolinks       = false,
         unsavedCodeSnippets     = false,
+        unsavedEvents           = false,
         unsavedAnnotations      = false;
 
 
@@ -187,16 +188,17 @@
      */
     function initModelOfCodeSnippets(database) {
 
-        for (var idx in database.codeSnippets) {
+        for (var idx in database.codeSnippets.timebasedEvents) {
 
             codeSnippets.push(
                 FrameTrail.newObject('CodeSnippet',
-                    database.codeSnippets[idx]
+                    database.codeSnippets.timebasedEvents[idx]
                 )
             );
-
         }
 
+        events = database.codeSnippets.globalEvents;
+        
     };
 
     /**
@@ -337,8 +339,8 @@
         idx = codeSnippets.indexOf(codeSnippet);
         codeSnippets.splice(idx, 1);
 
-        idx = FrameTrail.module('Database').codeSnippets.indexOf(codeSnippet.data);
-        FrameTrail.module('Database').codeSnippets.splice(idx, 1);
+        idx = FrameTrail.module('Database').codeSnippets.timebasedEvents.indexOf(codeSnippet.data);
+        FrameTrail.module('Database').codeSnippets.timebasedEvents.splice(idx, 1);
 
         newUnsavedChange('codeSnippets');
 
@@ -496,7 +498,7 @@
                         };
 
 
-            FrameTrail.module('Database').codeSnippets.push(newData);
+            FrameTrail.module('Database').codeSnippets.timebasedEvents.push(newData);
             newCodeSnippet = FrameTrail.newObject('CodeSnippet', newData)
             codeSnippets.push(newCodeSnippet);
 
@@ -790,6 +792,10 @@
 
             unsavedCodeSnippets = true;
 
+        } else if (category === 'events') {
+
+            unsavedEvents = true;
+
         } else if (category === 'annotations') {
 
             unsavedAnnotations = true;
@@ -846,7 +852,7 @@
                     FrameTrail.module('Database').saveLinks(databaseCallback);
                 });
 
-                if (unsavedCodeSnippets) saveRequests.push(function(){
+                if (unsavedCodeSnippets || unsavedEvents) saveRequests.push(function(){
                     FrameTrail.module('Database').saveCodeSnippets(databaseCallback);
                 });
 
@@ -887,6 +893,7 @@
             unsavedOverlays     = false;
             unsavedVideolinks   = false;
             unsavedCodeSnippets = false;
+            unsavedEvents       = false;
             unsavedAnnotations  = false;
             FrameTrail.changeState('unsavedChanges', false)
 

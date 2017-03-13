@@ -166,7 +166,7 @@ FrameTrail.defineType(
                 this.codeSnippetFunction();
             } catch (exception) { 
                 // do some user error feedback (ex.message)
-                console.warning('Code Snippet contains errors: '+ exception.message);
+                console.warn('Code Snippet contains errors: '+ exception.message);
             }
 
         },

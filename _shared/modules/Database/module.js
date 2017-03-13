@@ -27,7 +27,7 @@
         
         overlays     = [],
         links        = [],
-        codeSnippets = [],
+        codeSnippets = {},
         resources    = {},
 
         annotations            = {},
@@ -413,7 +413,16 @@
             mimeType: "application/json"
         }).done(function(data){
 
-            codeSnippets = data;
+            // compatibility fix
+            if ( Array.isArray(data) ) {
+                var oldSnippets = data;
+                codeSnippets = {};
+                codeSnippets.globalEvents = {};
+                codeSnippets.timebasedEvents = oldSnippets;
+            } else {
+                codeSnippets = data;
+            }
+
             success.call(this);
 
         }).fail(function() {
@@ -561,7 +570,7 @@
             annotations  = {};
             overlays     = [];
             links        = [];
-            codeSnippets = [];
+            codeSnippets = {};
 
             return  loadProjectData(function(){
 

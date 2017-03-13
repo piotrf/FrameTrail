@@ -862,3 +862,10 @@ path {
     z-index: 1;
     display: none;
 }
+
+#EditingOptions .executeEventCode {
+    position: absolute;
+    right: 12px;
+    bottom: 18px;
+    background-color: #eaeaef;
+}
