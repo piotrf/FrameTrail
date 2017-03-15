@@ -651,6 +651,7 @@
      */
     function toggleSidebarOpen() {
 
+        /*
         var maxSlideDuration = 280,
             interval;
 
@@ -664,6 +665,7 @@
             window.clearInterval(interval);
 
         }, maxSlideDuration)
+        */
 
 
     }
