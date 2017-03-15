@@ -240,10 +240,6 @@
         
             sequence = data;
 
-            if (!sequence.events) {
-                sequence.events = {};
-            }
-
             success.call(this);
 
         }).fail(function() {
@@ -426,6 +422,10 @@
             success.call(this);
 
         }).fail(function() {
+
+            codeSnippets = {};
+            codeSnippets.globalEvents = {};
+            codeSnippets.timebasedEvents = {};
 
             // call success anyway to deal with old versions (without codeSnippets.json file)
             success.call(this);

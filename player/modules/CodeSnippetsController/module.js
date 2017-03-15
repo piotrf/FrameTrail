@@ -177,19 +177,19 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                                     +   '    <div id="CodeSnippetList">'
                                     +   '    </div>'
                                     +   '    <div id="EventOnReady">'
-                                    +   '        <textarea id="OnReadyCode" style="box-sizing: border-box;width: 100%;">' + (events.onReady ? events.onReady : '') + '</textarea>'
+                                    +   '        <textarea id="OnReadyCode" class="codeTextarea" data-eventname="onReady">' + (events.onReady ? events.onReady : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '    <div id="EventOnPlay">'
-                                    +   '        <textarea id="OnPlayCode">' + (events.onPlay ? events.onPlay : '') + '</textarea>'
+                                    +   '        <textarea id="OnPlayCode" class="codeTextarea" data-eventname="onPlay">' + (events.onPlay ? events.onPlay : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '    <div id="EventOnPause">'
-                                    +   '        <textarea id="OnPauseCode">' + (events.onPause ? events.onPause : '') + '</textarea>'
+                                    +   '        <textarea id="OnPauseCode" class="codeTextarea" data-eventname="onPause">' + (events.onPause ? events.onPause : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '    <div id="EventOnEnded">'
-                                    +   '        <textarea id="OnEndedCode">' + (events.onEnded ? events.onEnded : '') + '</textarea>'
+                                    +   '        <textarea id="OnEndedCode" class="codeTextarea" data-eventname="onEnded">' + (events.onEnded ? events.onEnded : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '</div>')
@@ -202,11 +202,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                                         }
                                     }),
 
-            codeSnippetList = codeSnippetEditingOptions.find('#CodeSnippetList'),
-            onReadyTextarea = codeSnippetEditingOptions.find('#OnReadyCode'),
-            onPlayTextarea = codeSnippetEditingOptions.find('#OnPlayCode'),
-            onPauseTextarea = codeSnippetEditingOptions.find('#OnPauseCode'),
-            onEndedTextarea = codeSnippetEditingOptions.find('#OnEndedCode');
+            codeSnippetList = codeSnippetEditingOptions.find('#CodeSnippetList');
 
         codeSnippetEditingOptions.find('.executeEventCode').click(function(evt) {
             var textarea = $(evt.currentTarget).siblings('textarea');
@@ -255,74 +251,32 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
         codeSnippetList.append(codeSnippetElement);
 
         // Init CodeMirror for Events
-        
-        var onReadyEditor = CodeMirror.fromTextArea(onReadyTextarea[0], {
-              value: onReadyTextarea[0].value,
-              lineNumbers: true,
-              mode:  'javascript',
-              gutters: ['CodeMirror-lint-markers'],
-              lint: true,
-              lineWrapping: true,
-              tabSize: 2,
-              theme: 'hopscotch'
-            });
-            onReadyEditor.on('change', function(instance, changeObj) {
-                FrameTrail.module('HypervideoModel').events.onReady = onReadyEditor.getValue();
-                onReadyTextarea.val(onReadyEditor.getValue());
-                FrameTrail.module('HypervideoModel').newUnsavedChange('events');
-            });
-            onReadyEditor.setSize(null, '100%');
-        
-        var onPlayEditor = CodeMirror.fromTextArea(onPlayTextarea[0], {
-              value: onPlayTextarea[0].value,
-              lineNumbers: true,
-              mode:  'javascript',
-              gutters: ['CodeMirror-lint-markers'],
-              lint: true,
-              lineWrapping: true,
-              tabSize: 2,
-              theme: 'hopscotch'
-            });
-            onPlayEditor.on('change', function(instance, changeObj) {
-                FrameTrail.module('HypervideoModel').events.onPlay = onPlayEditor.getValue();
-                onPlayTextarea.val(onPlayEditor.getValue());
-                FrameTrail.module('HypervideoModel').newUnsavedChange('events');
-            });
-            onPlayEditor.setSize(null, '100%');
 
-        var onPauseEditor = CodeMirror.fromTextArea(onPauseTextarea[0], {
-              value: onPauseTextarea[0].value,
-              lineNumbers: true,
-              mode:  'javascript',
-              gutters: ['CodeMirror-lint-markers'],
-              lint: true,
-              lineWrapping: true,
-              tabSize: 2,
-              theme: 'hopscotch'
-            });
-            onPauseEditor.on('change', function(instance, changeObj) {
-                FrameTrail.module('HypervideoModel').events.onPause = onPauseEditor.getValue();
-                onPauseTextarea.val(onPauseEditor.getValue());
-                FrameTrail.module('HypervideoModel').newUnsavedChange('events');
-            });
-            onPauseEditor.setSize(null, '100%');
+        var codeTextareas = codeSnippetEditingOptions.find('.codeTextarea');
 
-        var onEndedEditor = CodeMirror.fromTextArea(onEndedTextarea[0], {
-              value: onEndedTextarea[0].value,
-              lineNumbers: true,
-              mode:  'javascript',
-              gutters: ['CodeMirror-lint-markers'],
-              lint: true,
-              lineWrapping: true,
-              tabSize: 2,
-              theme: 'hopscotch'
-            });
-            onEndedEditor.on('change', function(instance, changeObj) {
-                FrameTrail.module('HypervideoModel').events.onEnded = onEndedEditor.getValue();
-                onEndedTextarea.val(onEndedEditor.getValue());
+        for (var i=0; i<codeTextareas.length; i++) {
+            var textarea = codeTextareas.eq(i),
+                codeEditor = CodeMirror.fromTextArea(textarea[0], {
+                    value: textarea[0].value,
+                    lineNumbers: true,
+                    mode:  'javascript',
+                    gutters: ['CodeMirror-lint-markers'],
+                    lint: true,
+                    lineWrapping: true,
+                    tabSize: 2,
+                    theme: 'hopscotch'
+                });
+            codeEditor.on('change', function(instance, changeObj) {
+                
+                var thisTextarea = $(instance.getTextArea());
+                
+                FrameTrail.module('HypervideoModel').events[thisTextarea.data('eventname')] = instance.getValue();
+                thisTextarea.val(instance.getValue());
+                
                 FrameTrail.module('HypervideoModel').newUnsavedChange('events');
             });
-            onEndedEditor.setSize(null, '100%');
+            codeEditor.setSize(null, '100%');
+        }
 
 
     };
