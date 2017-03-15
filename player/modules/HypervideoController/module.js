@@ -111,13 +111,15 @@ FrameTrail.defineModule('HypervideoController', function(){
 			});
 
 			_video.on('ended', function() {
-				try {
-	            	var endedEvent = new Function(HypervideoModel.events.onEnded);
-	            	endedEvent();
-	            } catch (exception) {
-	                // could not parse and compile JS code!
-	                console.warn('Event handler contains errors: '+ exception.message);
-	            }
+				if (HypervideoModel.events.onEnded) {
+					try {
+		            	var endedEvent = new Function(HypervideoModel.events.onEnded);
+		            	endedEvent();
+		            } catch (exception) {
+		                // could not parse and compile JS code!
+		                console.warn('Event handler contains errors: '+ exception.message);
+		            }
+		        }
 			});
 
 			_video.attr('preload', 'auto');
@@ -593,7 +595,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		}
 
 		// Hack to fire ended event in NullVideo
-		if (!HypervideoModel.hasHTML5Video && HypervideoModel.events.onEnded) {
+		if (!HypervideoModel.hasHTML5Video && currentTime == HypervideoModel.duration && HypervideoModel.events.onEnded) {
 			try {
             	var endedEvent = new Function(HypervideoModel.events.onEnded);
             	endedEvent();
