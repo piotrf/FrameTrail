@@ -144,15 +144,13 @@ FrameTrail.defineType(
                                     + '</div>'
                                     + '<div id="OverlayOptionsTabs">'
                                     + '    <ul>'
-                                    + '        <li>'
-                                    + '            <a href="#OverlayOptions">Options</a>'
-                                    + '        </li>'
-                                    + '        <li>'
-                                    + '            <a href="#OverlayAppearance">Appearance</a>'
-                                    + '        </li>'
-                                    + '        <li>'
-                                    + '            <a href="#OverlayActions">Actions</a>'
-                                    + '        </li>'
+                                    + '        <li><a href="#OverlayOptions">Options</a></li>'
+                                    + '        <li><a href="#OverlayAppearance">Appearance</a></li>'
+                                    + '        <li class="ui-tabs-right"><a href="#ActionOnEnd">onEnd</a></li>'
+                                    + '        <li class="ui-tabs-right"><a href="#ActionOnStart">onStart</a></li>'
+                                    + '        <li class="ui-tabs-right"><a href="#ActionOnClick">onClick</a></li>'
+                                    + '        <li class="ui-tabs-right"><a href="#ActionOnReady">onReady</a></li>'
+                                    + '        <li class="ui-tabs-right tab-label">Actions: </li>'
                                     + '    </ul>'
                                     + '    <div id="OverlayOptions"></div>'
                                     + '    <div id="OverlayAppearance">'
@@ -162,13 +160,37 @@ FrameTrail.defineType(
                                     //+ '        <button id="ArrangeTop">Move to top</button>'
                                     //+ '        <button id="ArrangeBottom">Move to bottom</button>'
                                     + '    </div>'
-                                    + '    <div id="OverlayActions">Not implemented yet</div>'
+                                    + '    <div id="ActionOnReady">'
+                                    + '        <textarea id="OnReadyAction" class="codeTextarea" data-eventname="onReady">' + (overlay.data.events.onReady ? overlay.data.events.onReady : '') + '</textarea>'
+                                    + '        <button class="executeActionCode">Run Code</button>'
+                                    + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                    + '    </div>'
+                                    + '    <div id="ActionOnClick">'
+                                    + '        <textarea id="OnClickAction" class="codeTextarea" data-eventname="onClick">' + (overlay.data.events.onClick ? overlay.data.events.onClick : '') + '</textarea>'
+                                    + '        <button class="executeActionCode">Run Code</button>'
+                                    + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                    + '    </div>'
+                                    + '    <div id="ActionOnStart">'
+                                    + '        <textarea id="OnStartAction" class="codeTextarea" data-eventname="onStart">' + (overlay.data.events.onStart ? overlay.data.events.onStart : '') + '</textarea>'
+                                    + '        <button class="executeActionCode">Run Code</button>'
+                                    + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                    + '    </div>'
+                                    + '    <div id="ActionOnEnd">'
+                                    + '        <textarea id="OnEndAction" class="codeTextarea" data-eventname="onEnd">' + (overlay.data.events.onEnd ? overlay.data.events.onEnd : '') + '</textarea>'
+                                    + '        <button class="executeActionCode">Run Code</button>'
+                                    + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                    + '    </div>'
                                     + '</div>');
                                   
             controlsContainer.append(defaultControls);
 
             controlsContainer.find('#OverlayOptionsTabs').tabs({
-                heightStyle: 'auto'
+                heightStyle: 'auto',
+                activate: function(event, ui) {
+                    if (ui.newPanel.find('.CodeMirror').length != 0) {
+                        ui.newPanel.find('.CodeMirror')[0].CodeMirror.refresh();
+                    }
+                }
             });
 
             controlsContainer.find('#TimeStart').spinner({
@@ -377,7 +399,45 @@ FrameTrail.defineType(
 
                 FrameTrail.module('OverlaysController').deleteOverlay(overlay);
 
-            })
+            });
+
+            // Init CodeMirror for Actions / Events
+            var codeTextareas = controlsContainer.find('.codeTextarea');
+
+            for (var i=0; i<codeTextareas.length; i++) {
+                var textarea = codeTextareas.eq(i),
+                    codeEditor = CodeMirror.fromTextArea(textarea[0], {
+                        value: textarea[0].value,
+                        lineNumbers: true,
+                        mode:  'javascript',
+                        gutters: ['CodeMirror-lint-markers'],
+                        lint: true,
+                        lineWrapping: true,
+                        tabSize: 2,
+                        theme: 'hopscotch'
+                    });
+                codeEditor.on('change', function(instance, changeObj) {
+                    
+                    var thisTextarea = $(instance.getTextArea());
+                    
+                    overlay.data.events[thisTextarea.data('eventname')] = instance.getValue();
+                    thisTextarea.val(instance.getValue());
+                    
+                    FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+                });
+                codeEditor.setSize(null, 124);
+            }
+
+            controlsContainer.find('.executeActionCode').click(function(evt) {
+                var textarea = $(evt.currentTarget).siblings('textarea');
+                try {
+                    var testRun = new Function(textarea.val());
+                    testRun.call(overlay);
+                } catch (exception) {
+                    alert('Code contains errors: '+ exception.message);
+                }
+            });
+
 
             var PropertiesControlsInterface = {
 

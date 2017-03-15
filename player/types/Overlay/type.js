@@ -23,7 +23,11 @@ FrameTrail.defineType(
 
     function(data){
 
-        
+        // compatibility fix
+        if ( !data.events ) {
+            data.events = {};
+        }
+
         this.data = data;
 
         this.resourceItem = FrameTrail.newObject(
@@ -133,6 +137,31 @@ FrameTrail.defineType(
 
             this.timelineElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
             this.overlayElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
+
+            if (this.data.events.onReady) {
+                try {
+                    var readyEvent = new Function(this.data.events.onReady);
+                    readyEvent.call(this);
+                } catch (exception) {
+                    // could not parse and compile JS code!
+                    console.warn('Event handler contains errors: '+ exception.message);
+                }
+            }
+
+            this.overlayElement.click({overlayObject: this}, function(evt) {
+                
+                var self = evt.data.overlayObject;
+                if (self.data.events.onClick && FrameTrail.getState('editMode') != 'overlays') {
+                    try {
+                        var clickEvent = new Function(self.data.events.onClick);
+                        clickEvent.call(self);
+                    } catch (exception) {
+                        // could not parse and compile JS code!
+                        console.warn('Event handler contains errors: '+ exception.message);
+                    }
+                }
+
+            });
 
 
         },
@@ -277,7 +306,6 @@ FrameTrail.defineType(
         setActive: function (onlyTimelineElement) {
 
             if (!onlyTimelineElement) {
-                
                 this.overlayElement.addClass('active');
 
                 if (this.overlayElement.find('.resourceDetail').data().map) {
@@ -292,6 +320,16 @@ FrameTrail.defineType(
 
                 FrameTrail.module('OverlaysController').addSyncedMedia(this);
 
+            }
+
+            if (this.data.events.onStart && !this.activeState && !this.permanentFocusState) {
+                try {
+                    var thisEvent = new Function(this.data.events.onStart);
+                    thisEvent.call(this);
+                } catch (exception) {
+                    // could not parse and compile JS code!
+                    console.warn('Event handler contains errors: '+ exception.message);
+                }
             }
 
             this.activeState = true;
@@ -311,6 +349,16 @@ FrameTrail.defineType(
 
                 FrameTrail.module('OverlaysController').removeSyncedMedia(this);
 
+            }
+
+            if (this.data.events.onEnd && this.activeState && !this.permanentFocusState) {
+                try {
+                    var thisEvent = new Function(this.data.events.onEnd);
+                    thisEvent.call(this);
+                } catch (exception) {
+                    // could not parse and compile JS code!
+                    console.warn('Event handler contains errors: '+ exception.message);
+                }
             }
 
             this.activeState = false;
@@ -397,8 +445,8 @@ FrameTrail.defineType(
             this.makeOverlayElementDraggable();
             this.makeOverlayElementResizeable();
 
-            this.timelineElement.on('click', putInFocus);
-            this.overlayElement.on('click', putInFocus);
+            this.timelineElement.on('click.edit', putInFocus);
+            this.overlayElement.on('click.edit', putInFocus);
 
             function putInFocus() {
 
@@ -429,8 +477,8 @@ FrameTrail.defineType(
             this.overlayElement.draggable('destroy');
             this.overlayElement.resizable('destroy');
 
-            this.timelineElement.unbind('click');
-            this.overlayElement.unbind('click');
+            this.timelineElement.unbind('click.edit');
+            this.overlayElement.unbind('click.edit');
 
         },
 

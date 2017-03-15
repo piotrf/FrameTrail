@@ -601,7 +601,7 @@ path {
     bottom: 14px;
     left: 20px;
     position: absolute;
-    width: 350px;
+    width: 450px;
 }
 
 #EditPropertiesContainer[data-editmode="overlays"] {

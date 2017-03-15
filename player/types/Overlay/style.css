@@ -148,3 +148,12 @@
 #OverlayContainer .overlayElement.ui-resizable:hover .ui-resizable-handle {
 	display: block !important;
 }
+
+/* Edit Overlay Properties */
+
+#EditPropertiesContainer #OverlayOptionsTabs .message {
+	float: right;
+	width: 330px;
+	font-size: 13px;
+	line-height: 16px;
+}
