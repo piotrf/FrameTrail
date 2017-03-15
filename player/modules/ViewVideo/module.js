@@ -629,11 +629,16 @@ FrameTrail.defineModule('ViewVideo', function(){
                                     - editBorder,
             _video              = $(Video);
 
-        if (mainContainerWidth < 800 && !FrameTrail.getState('editMode')) {
-            domElement.find('#InfoAreaRight').width(200);
+        if (FrameTrail.getState('editMode')) {
+            domElement.find('#InfoAreaRight').width(500);
         } else {
-            domElement.find('#InfoAreaRight').width(400);
+            if (mainContainerWidth < 800) {
+                domElement.find('#InfoAreaRight').width(200);
+            } else {
+                domElement.find('#InfoAreaRight').width(400);
+            }
         }
+        
 
 
 
@@ -798,6 +803,10 @@ FrameTrail.defineModule('ViewVideo', function(){
             case 'annotations': 
                 enterAnnotationMode();
                 break;
+        }
+
+        if ( editMode && !VideoStartOverlay.hasClass('inactive') ) {
+            VideoStartOverlay.addClass('inactive').fadeOut();
         }
 
         window.setTimeout(function() {
