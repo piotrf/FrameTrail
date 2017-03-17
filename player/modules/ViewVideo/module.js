@@ -61,8 +61,14 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                    </div>'
                         + '                </div>'
                         + '                <div id="RightControlPanel">'
-                        + '                    <div class="playerControl" id="SettingsButton">'
-                        + '                        <div id="SettingsContainer">'
+                        + '                    <div class="playerControl contextButton" id="AnnotationSettingsButton">'
+                        + '                        <div id="AnnotationSettingsContainer" class="contextButtonContainer">'
+                        + '                            <div>Annotations</div>'
+                        + '                            <div id="SelectAnnotationContainer"></div>'
+                        + '                        </div>'
+                        + '                    </div>'
+                        + '                    <div class="playerControl contextButton" id="SettingsButton">'
+                        + '                        <div id="SettingsContainer" class="contextButtonContainer">'
                         + '                            <div id="LayoutSettingsWrapper">'
                         + '                                <div data-config="hv_config_videolinksVisible">Videolinks'
                         + '                                    <div data-config="hv_config_annotationsPosition"></div>'
@@ -106,52 +112,53 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '</div>'),
 
 
-        slideArea             = domElement.children('#SlideArea'),
+        slideArea                  = domElement.children('#SlideArea'),
         
-        PlayerContainer         = domElement.find('#PlayerContainer'),
-        HypervideoContainer     = domElement.find('#HypervideoContainer'),
-        VideoContainer          = domElement.find('#VideoContainer'),
-        Hypervideo              = domElement.find('#Hypervideo'),
-        CaptionContainer        = domElement.find('#CaptionContainer'),
+        PlayerContainer            = domElement.find('#PlayerContainer'),
+        HypervideoContainer        = domElement.find('#HypervideoContainer'),
+        VideoContainer             = domElement.find('#VideoContainer'),
+        Hypervideo                 = domElement.find('#Hypervideo'),
+        CaptionContainer           = domElement.find('#CaptionContainer'),
         
-        VideolinkContainer      = domElement.find('#VideolinkContainer'),
-        VideolinkTiles          = domElement.find('#VideolinkTiles'),
-        VideolinkTileSlider     = domElement.find('#VideolinkTiles .tileSlider'),
-        VideolinkTimeline       = domElement.find('#VideolinkTimeline'),
+        VideolinkContainer         = domElement.find('#VideolinkContainer'),
+        VideolinkTiles             = domElement.find('#VideolinkTiles'),
+        VideolinkTileSlider        = domElement.find('#VideolinkTiles .tileSlider'),
+        VideolinkTimeline          = domElement.find('#VideolinkTimeline'),
 
-        AnnotationTimeline      = domElement.find('#AnnotationTimeline'),
-        AnnotationContainer     = domElement.find('#AnnotationContainer'),
-        AnnotationTiles         = domElement.find('#AnnotationTiles'),
-        AnnotationTileSlider    = domElement.find('#AnnotationTiles .tileSlider'),
-        AnnotationSlider        = domElement.find('#AnnotationSlider'),
+        AnnotationTimeline         = domElement.find('#AnnotationTimeline'),
+        AnnotationContainer        = domElement.find('#AnnotationContainer'),
+        AnnotationTiles            = domElement.find('#AnnotationTiles'),
+        AnnotationTileSlider       = domElement.find('#AnnotationTiles .tileSlider'),
+        AnnotationSlider           = domElement.find('#AnnotationSlider'),
 
-        OverlayTimeline         = domElement.find('#OverlayTimeline'),
-        OverlayContainer        = domElement.find('#OverlayContainer'),
+        OverlayTimeline            = domElement.find('#OverlayTimeline'),
+        OverlayContainer           = domElement.find('#OverlayContainer'),
 
-        CodeSnippetTimeline     = domElement.find('#CodeSnippetTimeline'),
+        CodeSnippetTimeline        = domElement.find('#CodeSnippetTimeline'),
 
-        Controls                = domElement.find('#Controls'),
-        EditingOptions          = domElement.find('#EditingOptions'),
+        Controls                   = domElement.find('#Controls'),
+        AnnotationSettingsButton   = domElement.find('#AnnotationSettingsButton'),
+        EditingOptions             = domElement.find('#EditingOptions'),
 
         
-        CurrentTime             = domElement.find('#CurrentTime'),
-        TotalDuration           = domElement.find('#TotalDuration'),
-        PlayButton              = domElement.find('#PlayButton'),
-        VideoStartOverlay       = domElement.find('#VideoStartOverlay'),
-        VolumeButton            = domElement.find('#VolumeButton'),
-        FullscreenButton        = domElement.find('#FullscreenButton'),
+        CurrentTime                = domElement.find('#CurrentTime'),
+        TotalDuration              = domElement.find('#TotalDuration'),
+        PlayButton                 = domElement.find('#PlayButton'),
+        VideoStartOverlay          = domElement.find('#VideoStartOverlay'),
+        VolumeButton               = domElement.find('#VolumeButton'),
+        FullscreenButton           = domElement.find('#FullscreenButton'),
 
-        PlayerProgress          = domElement.find('#PlayerProgress'),
+        PlayerProgress             = domElement.find('#PlayerProgress'),
 
-        Video                   = domElement.find('#Video')[0],
+        Video                      = domElement.find('#Video')[0],
 
-        EditPropertiesContainer = domElement.find('#EditPropertiesContainer'),
+        EditPropertiesContainer    = domElement.find('#EditPropertiesContainer'),
         AnnotationPreviewContainer = domElement.find('#AnnotationPreviewContainer'),
 
-        ExpandButton            = domElement.find('#ExpandButton'),
+        ExpandButton               = domElement.find('#ExpandButton'),
 
-        shownDetails            = null,
-        wasPlaying              = false;
+        shownDetails               = null,
+        wasPlaying                 = false;
 
 
     ExpandButton.click(function() {
@@ -160,7 +167,7 @@ FrameTrail.defineModule('ViewVideo', function(){
     
     Controls.find('#CaptionsButton').click(function() {
                 
-        Controls.find('#RightControlPanel .active').not('[data-config], #CaptionsButton, #CaptionSelectContainer').removeClass('active');
+        Controls.find('#RightControlPanel .active').not('[data-config], #CaptionsButton, #CaptionSelectContainer, .annotationSetButton').removeClass('active');
 
         if ( !$(this).children('#CaptionSelectContainer').hasClass('active') ) {
             $(this).children('#CaptionSelectContainer').addClass('active');
@@ -178,7 +185,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         FrameTrail.changeState('hv_config_captionsVisible', false);
     });
 
-    Controls.find('#SettingsButton').click(function(evt) {
+    Controls.find('.contextButton').click(function(evt) {
         
         var settingsButton = $(this);
         
@@ -186,7 +193,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             
             $('body').on('mouseup', function(evt) {
                 
-                if ( !$(evt.target).attr('data-config') && $(evt.target).attr('id') != 'SettingsButton' ) {
+                if ( !$(evt.target).attr('data-config') && !$(evt.target).hasClass('contextButton') ) {
                     settingsButton.removeClass('active');
                     VideoContainer.css('opacity', 1);
                     domElement.find('#InfoAreaRight').css('opacity', 1);
@@ -197,7 +204,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                 
             });
             
-            Controls.find('#RightControlPanel .active').not('[data-config], #CaptionsButton').removeClass('active');
+            Controls.find('#RightControlPanel .active').not('[data-config], #CaptionsButton, .annotationSetButton').removeClass('active');
 
             settingsButton.addClass('active');
             VideoContainer.css('opacity', 0.3);
@@ -1861,6 +1868,13 @@ FrameTrail.defineModule('ViewVideo', function(){
         get shownDetails()     { return shownDetails },
         set shownDetails(mode) { return showDetails(mode) },
 
+
+        /**
+         * I contain the AnnotationSettingsButton element.
+         * @attribute AnnotationSettingsButton
+         * @type HTMLElement
+         */
+        get AnnotationSettingsButton() { return AnnotationSettingsButton },
 
         /**
          * I contain the ExpandButton element.

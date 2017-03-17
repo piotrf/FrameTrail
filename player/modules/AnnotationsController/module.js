@@ -39,13 +39,7 @@
         
         annotations = HypervideoModel.annotations;
 
-        initSidebarSelectmenu();
-        if ( FrameTrail.getState('hv_config_annotationsVisible') ) {
-            refreshSidebarSelectmenu(true);
-        } else {
-            refreshSidebarSelectmenu(false);
-        }
-
+        refreshAnnotationSelectmenu(true);
         initAnnotations();
         
     }
@@ -66,80 +60,11 @@
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
 
-        if ( FrameTrail.getState('hv_config_annotationsVisible') ) {
-            refreshSidebarSelectmenu(true);
-        } else {
-            refreshSidebarSelectmenu(false);
-        }
+        refreshAnnotationSelectmenu(true);
         
         initAnnotations();
         
     }
-
-
-
-    /**
-     * I connect the select menu (jquery-ui on select element)
-     * with the data model.
-     *
-     * @method initSidebarSelectmenu
-     * @private
-     */
-    function initSidebarSelectmenu() {
-
-        var SelectAnnotationContainer = FrameTrail.module('Sidebar').SelectAnnotationContainer,
-            SelectAnnotation = FrameTrail.module('Sidebar').SelectAnnotationContainer.find('#SelectAnnotation'),
-            HypervideoModel = FrameTrail.module('HypervideoModel');
-
-
-        $.widget( 'custom.stylableselectmenu', $.ui.selectmenu, {
-            _renderItem: function( ul, item ) {
-                var li = $( '<li>', { 
-                    text: item.label,
-                    style: 'color: ' + item.element.attr( 'data-color' )
-                });
-         
-                if ( item.disabled ) {
-                    li.addClass( 'ui-state-disabled' );
-                }
-
-                $( '<span>', {
-                    style: 'background-color: ' + item.element.attr( 'data-color' ),
-                    'class': 'color-square'
-                })
-                  .appendTo( li );
-         
-                return li.appendTo( ul );
-            }
-        });
-
-        SelectAnnotation.stylableselectmenu();
-
-        SelectAnnotation.on('stylableselectmenuchange', function(evt, ui) {
-            
-            FrameTrail.module('HypervideoModel').annotationSet = SelectAnnotation.val();
-            annotations = FrameTrail.module('HypervideoModel').annotations;
-
-            initAnnotations();
-
-        });
-
-        SelectAnnotation.on('stylableselectmenuselect', function(evt, ui) {
-
-            /*
-            // too much color in the interface, keep default color for now
-            SelectAnnotation.stylableselectmenu('widget').css({
-                'border-color': ui.item.element.attr( 'data-color' ),
-                color: ui.item.element.attr( 'data-color' )
-            });
-            */
-
-        });
-
-    }
-
-
-
 
     /**
      * I refresh the view of the select menu in the sidebar.
@@ -147,74 +72,80 @@
      * otherwise I show it an append all available annotation sets
      * as option to the select box.
      *
-     * @method refreshSidebarSelectmenu
+     * @method refreshAnnotationSelectmenu
      * @param {Boolean} visible
      * @private
      */
-    function refreshSidebarSelectmenu(visible) {
+    function refreshAnnotationSelectmenu(visible) {
 
-        var SelectAnnotationContainer = FrameTrail.module('Sidebar').SelectAnnotationContainer,
-            HypervideoModel = FrameTrail.module('HypervideoModel'),
-            SelectAnnotation,
+        var AnnotationSettingsButton  = ViewVideo.AnnotationSettingsButton,
+            SelectAnnotationContainer = AnnotationSettingsButton.find('#SelectAnnotationContainer'),
+            HypervideoModel           = FrameTrail.module('HypervideoModel'),
             annotationSets;
 
 
         if (visible) {
 
-            SelectAnnotation  = SelectAnnotationContainer.find('#SelectAnnotation'),
-            SelectSingle      = SelectAnnotationContainer.find('#SelectAnnotationSingle'),
-            annotationSets    = HypervideoModel.annotationSets;
+            annotationSets = HypervideoModel.annotationSets;
 
-            if ( annotationSets.length > 1 && !FrameTrail.getState('editMode') ) {
+            if ( annotationSets.length != 0 ) {
                 
-                SelectAnnotation.empty();
+                SelectAnnotationContainer.empty();
             
+                var noAnnotationsButton = $('<div class="annotationSetButton none">None</div>');
+                noAnnotationsButton.click(function() {
+                    FrameTrail.changeState('hv_config_annotationsVisible', false);
+                    FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+                }).appendTo(SelectAnnotationContainer);
+
                 for (var idx in annotationSets) {
 
-                    SelectAnnotation.append(
-                            '<option value="'
+                    var annotationSetButton = $('<div class="annotationSetButton" data-annotationset-id="'
                         +   annotationSets[idx].id 
-                        +   '" data-color="#'
+                        +   '" style="color: #'
                         +   annotationSets[idx].color
-                        +   '">'
+                        +   ';"><span class="colorSquare" style="background-color: #'
+                        +   annotationSets[idx].color 
+                        +   ';"></span>'
                         +   annotationSets[idx].name 
-                        +   '</option>'
-                    );
+                        +   '</div>');
+
+                    annotationSetButton.click(function() {
+                        var setID = $(this).data('annotationset-id');
+
+                        FrameTrail.module('HypervideoModel').annotationSet = setID;
+                        annotations = FrameTrail.module('HypervideoModel').annotations;
+
+                        initAnnotations();
+
+                        FrameTrail.changeState('hv_config_annotationsVisible', true);
+                        FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+
+                    });
+
+                    SelectAnnotationContainer.append(annotationSetButton);
 
                 }
 
-                SelectAnnotation.stylableselectmenu('refresh');
-                SelectAnnotation.val(HypervideoModel.annotationSet).stylableselectmenu('refresh');
-
-                var uiObj = {
-                    item: {
-                        element: SelectAnnotationContainer.find('option').eq(0)
-                    }
+                var activeSet;
+                if ( !FrameTrail.getState('hv_config_annotationsVisible') ) {
+                    activeSet = SelectAnnotationContainer.find('.annotationSetButton.none');
+                } else {
+                    activeSet = SelectAnnotationContainer.find('.annotationSetButton[data-annotationset-id="'+ HypervideoModel.annotationSet +'"]');
                 }
-
-                SelectAnnotation.trigger('stylableselectmenuselect', uiObj);
                 
-                SelectAnnotation.stylableselectmenu('widget').show();
-                SelectSingle.text('').hide();
+                activeSet.addClass('active');
 
-            } else if ( annotationSets.length == 1 && !FrameTrail.getState('editMode') ) {
+                AnnotationSettingsButton.show();
 
-                SelectAnnotation.stylableselectmenu('widget').hide();
-                SelectSingle.text(annotationSets[0].name).show();
-
-            } else if ( FrameTrail.getState('editMode') ) {
-                
-                SelectAnnotation.stylableselectmenu('widget').hide();
-                SelectSingle.text(FrameTrail.getState('username')).show();
-
+            } else {
+                AnnotationSettingsButton.hide();
             }
-
-            SelectAnnotationContainer.show();
             
 
         } else if ( !FrameTrail.getState('editMode') ) {
 
-            SelectAnnotationContainer.hide();
+            AnnotationSettingsButton.hide();
             
         }
 
@@ -989,23 +920,23 @@
 
         if ( editMode === false && oldEditMode !== false && FrameTrail.getState('hv_config_annotationsVisible') ) {
 
-            refreshSidebarSelectmenu(true);
+            refreshAnnotationSelectmenu(true);
 
         } else if ( editMode && oldEditMode === false ) {
 
             HypervideoModel.annotationSet = '#myAnnotationSet';
             
-            refreshSidebarSelectmenu(true);
+            refreshAnnotationSelectmenu(true);
 
             initAnnotations();
 
         } else if ( editMode === false && FrameTrail.getState('hv_config_annotationsVisible') ) {
 
-            refreshSidebarSelectmenu(true);
+            refreshAnnotationSelectmenu(true);
             
         } else {
 
-            refreshSidebarSelectmenu(false);
+            refreshAnnotationSelectmenu(false);
             
         }
 
@@ -1248,8 +1179,7 @@
      */
     function changeUserColor(newColor) {
 
-        var annotationSets = HypervideoModel.annotationSets,
-            SelectAnnotation = FrameTrail.module('Sidebar').SelectAnnotationContainer.find('#SelectAnnotation');
+        var annotationSets = HypervideoModel.annotationSets;
 
         for (var idx in annotationSets) {
 
@@ -1259,9 +1189,9 @@
 
         }
 
-        if (newColor.length > 1 && SelectAnnotation.stylableselectmenu) {
+        if (newColor.length > 1) {
 
-            refreshSidebarSelectmenu(true);
+            refreshAnnotationSelectmenu(true);
 
         }
 
@@ -1278,11 +1208,7 @@
      * @param {Boolean} oldState
      */
     function toggleConfig_annotationsVisible(newState, oldState) {
-        if (newState == true) {
-            refreshSidebarSelectmenu(true);
-        } else {
-            refreshSidebarSelectmenu(false);
-        }
+        refreshAnnotationSelectmenu(true);
     }
 
         

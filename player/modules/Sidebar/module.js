@@ -46,11 +46,13 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '            <div class="viewmodeInfo">'
                             + '                <span id="VideoDescription"></span>'
                             + '            </div>'
+                            /*
                             + '            <div id="SelectAnnotationContainer" class="ui-front">'
                             + '                <div class="descriptionLabel">Annotations</div>'
                             + '                <select id="SelectAnnotation" name=""></select>'
                             + '                <div id="SelectAnnotationSingle"></div>'
                             + '            </div>'
+                            */
                             + '        </div>'
                             + '    </div>'
                             + '    </div>'
@@ -68,10 +70,7 @@ FrameTrail.defineModule('Sidebar', function(){
         ExportButton           = domElement.find('.exportButton'),
         
         ProjectDescription     = sidebarContainer.find('#ProjectDescription'),
-        VideoDescription       = sidebarContainer.find('#VideoDescription'),
-
-        SelectAnnotationContainer       = domElement.find('#SelectAnnotationContainer');
-
+        VideoDescription       = sidebarContainer.find('#VideoDescription');
 
 
     SaveButton.click(function(){
@@ -145,10 +144,9 @@ FrameTrail.defineModule('Sidebar', function(){
     function changeViewSize(arrayWidthAndHeight) {
 
         var controlsHeight          = domElement.find('#SidebarContainer > div.active > .viewmodeControls').height(),
-            viewModeInfoHeight      = domElement.height() - FrameTrail.module('Titlebar').height - controlsHeight,
-            selectAnnotationsHeight = SelectAnnotationContainer.height();
+            viewModeInfoHeight      = domElement.height() - FrameTrail.module('Titlebar').height - controlsHeight;
 
-        domElement.find('#SidebarContainer > div.active > .viewmodeInfo').css('max-height', viewModeInfoHeight - selectAnnotationsHeight - 40);
+        domElement.find('#SidebarContainer > div.active > .viewmodeInfo').css('max-height', viewModeInfoHeight - 40);
 
     };
 
@@ -314,7 +312,6 @@ FrameTrail.defineModule('Sidebar', function(){
             loggedIn:       changeUserLogin
         },
 
-        SelectAnnotationContainer: SelectAnnotationContainer,
         newUnsavedChange: newUnsavedChange,
 
         /**

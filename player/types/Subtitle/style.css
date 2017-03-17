@@ -1,7 +1,7 @@
 /* Subtitle Element */
 
 #CaptionContainer .subtitleElement {
-	color: var(--primary-fg-color);
+	color: #ffffff;
     font-size: 20px;
     font-weight: 200;
     letter-spacing: 1px;
