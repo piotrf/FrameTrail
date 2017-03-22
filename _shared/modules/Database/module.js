@@ -425,7 +425,7 @@
 
             codeSnippets = {};
             codeSnippets.globalEvents = {};
-            codeSnippets.timebasedEvents = {};
+            codeSnippets.timebasedEvents = [];
 
             // call success anyway to deal with old versions (without codeSnippets.json file)
             success.call(this);
