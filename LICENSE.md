@@ -1,17 +1,14 @@
-#License
+# License
 
 FrameTrail is dual licensed under the terms of the MIT license (below) and the [GPL](http://www.gnu.org/licenses/gpl-3.0.html).
 
 #### Library Licenses:
 
-* The Greensock Animation Platform (GSAP) is used per its ["No Charge" license](http://greensock.com/standard-license).  
-For some cases the extended ["Business Green" license](http://greensock.com/licensing/) will be necessary.
-
-* For all other licenses of included libraries, please check the "_/lib" folder in the repository.
+* For licenses of included libraries, please check the "_/lib" folder in the repository.
 
 ---
 
-##MIT License
+## MIT License
 
 Copyright (c) 2016 Joscha Jaeger
 
