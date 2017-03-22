@@ -61,7 +61,7 @@ FrameTrail.defineModule('VideolinksController', function(){
 
         var videolinks = FrameTrail.module('HypervideoModel').videolinks;
         
-        ViewVideo.VideolinkTiles.empty();
+        ViewVideo.VideolinkTileSlider.empty();
         ViewVideo.VideolinkContainer.empty();
 
         for (var i = 0; i < videolinks.length; i++) {
@@ -768,7 +768,7 @@ FrameTrail.defineModule('VideolinksController', function(){
      */
     function onViewSizeChanged() {
 
-        
+        distributeTiles();
 
     }
 
@@ -863,7 +863,9 @@ FrameTrail.defineModule('VideolinksController', function(){
     function toggleViewMode(viewMode, oldViewMode){
 
         if (viewMode === 'video' && oldViewMode !== 'video') {
-            distributeTiles();
+            window.setTimeout(function() {
+                distributeTiles();
+            }, 300);
         }
 
     }
