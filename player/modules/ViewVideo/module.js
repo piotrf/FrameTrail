@@ -658,7 +658,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                                     - $('#Titlebar').height()
                                     - editBorder,
             _video              = $(Video);
-
+            
         if (animate) {
             VideoContainer.css({
                 'transition-duration': '',
