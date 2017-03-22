@@ -20,6 +20,13 @@ body {
 	font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100vh;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
 }
 
 button, input[type="submit"], input[type="button"] {

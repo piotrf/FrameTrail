@@ -314,7 +314,6 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         $('#MainContainer').append(domElement);
 
-
     }
 
     /**
@@ -367,7 +366,22 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function onViewSizeChanged() {
 
-        
+        slideArea.css({
+            'transition-duration': '0ms',
+            '-moz-transition-duration': '0ms',
+            '-webkit-transition-duration': '0ms',
+            '-o-transition-duration': '0ms'
+        });
+
+        adjustLayout();
+        adjustHypervideo();
+
+        slideArea.css({
+            'transition-duration': '',
+            '-moz-transition-duration': '',
+            '-webkit-transition-duration': '',
+            '-o-transition-duration': ''
+        });
 
     };
 
@@ -384,12 +398,10 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function adjustLayout() {
 
+        
         var editMode            = FrameTrail.getState('editMode'),
-
-            smallPlayerHeight   = ( (FrameTrail.getState('embed') && !FrameTrail.getState('fullscreen') ) ? 120 : 280 ),
-            mediumPlayerHeight  = 450,
             playerMargin        = parseInt(PlayerContainer.css('marginTop')),
-            editBorder          = (editMode != false) ? (parseInt(domElement.css('borderTopWidth'))*2) : 0,
+            editBorder          = (editMode != false) ? 20 : 0,
             slidePosition       = FrameTrail.getState('slidePosition'),
             slidingMode         = FrameTrail.getState('hv_config_slidingMode'),
 
@@ -402,58 +414,51 @@ FrameTrail.defineModule('ViewVideo', function(){
             annotationTimelineVisible   = ( (editMode != false && editMode != 'preview') ? true : FrameTrail.getState('hv_config_annotationsVisible') ),
             videolinkTimelineVisible    = ( (editMode != false && editMode != 'preview') ? true : FrameTrail.getState('hv_config_videolinksVisible') );
 
-        if ( (slidePosition == 'middle' && (editMode == false || editMode == 'preview')) || ( slidingMode == 'overlay' && (editMode == false || editMode == 'preview') ) ) {
-            PlayerContainer.height( 
+        if (slidingMode == 'overlay') {
+            PlayerContainer.css({
+                'flex-grow': 0,
+                'flex-shrink': 0,
+                'flex-basis': 
                     $('#MainContainer').height() 
-                -   editBorder
-                -   ((videolinksVisible) ? VideolinkTiles.height() + playerMargin : 0) 
-                -   ((annotationsVisible) ? AnnotationTiles.height() + playerMargin : 0)
-            );
-        } else if ( (editMode != false && editMode != 'preview') && FrameTrail.getState('viewSize')[1] > 650 ) {
-            PlayerContainer.height( mediumPlayerHeight );
+                    - ((videolinksVisible) ? (VideolinkTiles.height() + playerMargin) : 0) 
+                    - ((annotationsVisible) ? (AnnotationTiles.height() + playerMargin) : 0) 
+                    - editBorder
+                    + 'px'
+            });
         } else {
-            PlayerContainer.height( smallPlayerHeight );
-        }
-        
-        if ( annotationsVisible ) {
-            AnnotationContainer.height( 
-                    $('#MainContainer').height() 
-                -   smallPlayerHeight 
-                -   editBorder
-                -   AnnotationTiles.height() 
-                -   playerMargin 
-            );
-        } else {
-            AnnotationContainer.height(0);
-        }
-
-        if ( videolinksVisible ) {
-            VideolinkContainer.height( 
-                    $('#MainContainer').height() 
-                -   smallPlayerHeight 
-                -   editBorder
-                -   VideolinkTiles.height() 
-                -   playerMargin 
-            );
-        } else {
-            VideolinkContainer.height(0);
+            PlayerContainer.css({
+                'flex': ''
+            });
         }
 
         if ( slidePosition == 'top' ) {
             
             if ( slidingMode == 'adjust' ) {
-                slideArea.css('marginTop',
-                    - ((editMode != false && editMode != 'preview') ? playerMargin : 0) 
-                    + 'px'
-                );
+                
+                slideArea.css({
+                    marginTop:
+                        - ((editMode != false && editMode != 'preview') ? playerMargin : 0) 
+                        + 'px',
+                    minHeight:
+                        $('#MainContainer').height() 
+                        + ((videolinksVisible && annotationsPosition == 'top') ? VideolinkContainer.height() + VideolinkTiles.height() : 0) 
+                        + ((annotationsVisible && annotationsPosition == 'bottom') ? AnnotationContainer.height() + AnnotationTiles.height() : 0) 
+                        + ((    annotationsVisible && annotationsPosition == 'top' 
+                             || videolinksVisible && annotationsPosition == 'bottom') ? playerMargin : 0)
+                        - editBorder
+                        + 'px'
+                });
+
             } else if ( slidingMode == 'overlay' ) {
-                slideArea.css('marginTop', 
-                    - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
-                    - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
-                    - ((    annotationsVisible && annotationsPosition == 'top' 
-                         || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
-                    + 'px'
-                );
+                
+                slideArea.css({
+                    marginTop: 
+                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
+                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
+                        - ((    annotationsVisible && annotationsPosition == 'top' 
+                             || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
+                        + 'px'
+                });
 
                 // slidingMode overlay top behaviour
                 var targetOffset = playerMargin + ( (PlayerContainer.height() - Controls.height())/2 ),
@@ -506,22 +511,33 @@ FrameTrail.defineModule('ViewVideo', function(){
         } else if ( slidePosition == 'bottom' ) {
             
             if ( slidingMode == 'adjust' ) {
-                slideArea.css('marginTop', 
-                    - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() + VideolinkTiles.height() : 0) 
-                    - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() + AnnotationTiles.height() : 0) 
-                    - playerMargin 
-                    + 'px'
-                );
-            } else if ( slidingMode == 'overlay' ) {
-                slideArea.css('marginTop', 
-                    - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
-                    - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
-                    - ((    annotationsVisible && annotationsPosition == 'top' 
-                         || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
-                    + 'px'
-                );
+                
+                slideArea.css({
+                    marginTop: 
+                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() + VideolinkTiles.height() : 0) 
+                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() + AnnotationTiles.height() : 0) 
+                        - playerMargin 
+                        + 'px',
+                    minHeight:
+                        $('#MainContainer').height() 
+                        + ((videolinksVisible && annotationsPosition == 'bottom') ? (VideolinkContainer.height() + VideolinkTiles.height()) : 0) 
+                        + ((annotationsVisible && annotationsPosition == 'top') ? (AnnotationContainer.height() + AnnotationTiles.height()) : 0) 
+                        - editBorder
+                        + 'px'
+                });
 
-                var targetOffset = playerMargin + (PlayerContainer.height()/2) + (OverlayTimeline.height()*2);
+            } else if ( slidingMode == 'overlay' ) {
+                
+                slideArea.css({
+                    marginTop: 
+                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
+                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
+                        - ((    annotationsVisible && annotationsPosition == 'top' 
+                             || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
+                        + 'px'
+                });
+
+                var targetOffset = playerMargin + (PlayerContainer.height()/2) + (OverlayTimeline.height()*2) + (Controls.height()/2);
 
                 // slidingMode overlay bottom behaviour
                 if ( annotationsPosition == 'bottom' ) {
@@ -557,15 +573,20 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         } else {
             
-            slideArea.css('marginTop', 
-                - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
-                - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
-                - ((    annotationsVisible && annotationsPosition == 'top' 
-                     || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
-                + 'px'
-            );
-
-            
+            slideArea.css({
+                marginTop: 
+                    - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
+                    - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
+                    - ((    annotationsVisible && annotationsPosition == 'top' 
+                         || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
+                    + 'px',
+                minHeight:
+                    $('#MainContainer').height() 
+                    + (videolinksVisible ? VideolinkContainer.height() : playerMargin)
+                    + (annotationsVisible ? AnnotationContainer.height() : playerMargin)
+                    - editBorder
+                    + 'px'
+            });
                 
             AnnotationContainer.css({
                 marginTop: ''
@@ -585,31 +606,32 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         }
 
-        HypervideoContainer.height( 
-                PlayerContainer.height() 
-            -   (videolinkTimelineVisible  ? VideolinkTimeline.height()  : 0) 
-            -   (annotationTimelineVisible ? AnnotationTimeline.height() : 0) 
-            -   CodeSnippetTimeline.height() 
-            -   OverlayTimeline.height() 
-            -   Controls.height() 
-        );
-
         if ( editMode != false && editMode != 'preview' ) {
-            EditingOptions.height( $('#MainContainer').height() - PlayerContainer.height() - editBorder );
+            slideArea.css({
+                minHeight: ''
+            });
+            PlayerContainer.css({
+                marginBottom: 0
+            });
             EditingOptions.find('.ui-tabs').tabs('refresh');
+        } else {
+            PlayerContainer.css({
+                marginBottom: ''
+            });
         }
 
-        domElement.find('#PlayerProgress .ui-slider-handle-circle').css( 'bottom', 
+        domElement.find('#PlayerProgress .ui-slider-handle-circle').css({
+            bottom: 
                 Controls.height() 
             +   CodeSnippetTimeline.height()
-            +   OverlayTimeline.height()
+            +   ((editMode == 'codesnippets') ? 6 : OverlayTimeline.height())
             +   ((annotationTimelineVisible && annotationsPosition == 'bottom') ? AnnotationTimeline.height() : 0) 
             +   ((videolinkTimelineVisible && annotationsPosition == 'top') ? VideolinkTimeline.height() : 0) 
-        );
+        });
 
-        slideArea.children("svg").css({
-            width: $(document).width() + "px",
-            height: $(document).height() + "px"
+        slideArea.children('svg').css({
+            width: $(document).width() + 'px',
+            height: slideArea.height() + 'px'
         });
 
     };
@@ -627,6 +649,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function adjustHypervideo(animate) {
 
+        
         var editBorder = (FrameTrail.getState('editMode') != false) ? (parseInt(domElement.css('borderTopWidth'))*2) : 0;
             mainContainerWidth  = $(window).width() 
                                     - ((FrameTrail.getState('sidebarOpen') && !FrameTrail.getState('fullscreen')) ? FrameTrail.module('Sidebar').width : 0)
@@ -635,19 +658,6 @@ FrameTrail.defineModule('ViewVideo', function(){
                                     - $('#Titlebar').height()
                                     - editBorder,
             _video              = $(Video);
-
-        if (FrameTrail.getState('editMode')) {
-            domElement.find('#InfoAreaRight').width(500);
-        } else {
-            if (mainContainerWidth < 800) {
-                domElement.find('#InfoAreaRight').width(200);
-            } else {
-                domElement.find('#InfoAreaRight').width(400);
-            }
-        }
-        
-
-
 
         if (animate) {
             VideoContainer.css({
@@ -726,6 +736,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             FrameTrail.module('OverlaysController').rescaleOverlays();
             FrameTrail.module('AnnotationsController').rescaleAnnotations();
         }
+        
     };
 
 
@@ -817,21 +828,8 @@ FrameTrail.defineModule('ViewVideo', function(){
         }
 
         window.setTimeout(function() {
-            slideArea.css({
-                'transition-duration': '0ms',
-                '-moz-transition-duration': '0ms',
-                '-webkit-transition-duration': '0ms',
-                '-o-transition-duration': '0ms'
-            });
-            adjustLayout();
-            adjustHypervideo();
-            slideArea.css({
-                'transition-duration': '',
-                '-moz-transition-duration': '',
-                '-webkit-transition-duration': '',
-                '-o-transition-duration': ''
-            });
-        }, 10);
+            FrameTrail.changeState('viewSizeChanged');
+        }, 300);
 
     };
 
@@ -840,7 +838,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method resetEditMode
      */
     function resetEditMode() {
-        domElement.find('.timeline').removeClass('editable');
+        domElement.find('.timeline').removeClass('editable').css('flex-basis', '');
     }
 
     /**
@@ -866,7 +864,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         domElement.find('.timeline').not('#CodeSnippetTimeline').show();
 
-        EditingOptions.show();
+        EditingOptions.addClass('active');
 
         if ( FrameTrail.getState('hv_config_annotationPreviewVisible') ) {
             HypervideoContainer.find('#AnnotationPreviewContainer').hide();
@@ -884,7 +882,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method leaveEditMode
      */
     function leaveEditMode() {
-        EditingOptions.hide();
+        EditingOptions.removeClass('active');
         EditPropertiesContainer.removeAttr('data-editmode').hide();
 
         toggleConfig_annotationsVisible(FrameTrail.getState('hv_config_annotationsVisible'));
@@ -1057,10 +1055,9 @@ FrameTrail.defineModule('ViewVideo', function(){
         } else {
             domElement.find('#AnnotationTiles, #AnnotationContainer, #AnnotationTimeline').hide();
             Controls.find('[data-config="hv_config_annotationsVisible"]').removeClass('active');
-
-            if ( FrameTrail.getState('slidePosition') != 'middle' ) {
-                FrameTrail.changeState('slidePosition', 'middle');
-            }
+        }
+        if ( FrameTrail.getState('slidePosition') != 'middle' ) {
+            FrameTrail.changeState('slidePosition', 'middle');
         }
     };
 
@@ -1116,7 +1113,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         adjustLayout();
         adjustHypervideo();
-
+        
         if (newState == 'overlay') {
 
             Controls.find('[data-config="hv_config_slidingMode"]').addClass('active');
@@ -1174,10 +1171,9 @@ FrameTrail.defineModule('ViewVideo', function(){
         } else {
             domElement.find('#VideolinkTiles, #VideolinkContainer, #VideolinkTimeline').hide();
             Controls.find('[data-config="hv_config_videolinksVisible"]').removeClass('active');
-
-            if ( FrameTrail.getState('slidePosition') != 'middle' ) {
-                FrameTrail.changeState('slidePosition', 'middle');
-            }
+        }
+        if ( FrameTrail.getState('slidePosition') != 'middle' ) {
+            FrameTrail.changeState('slidePosition', 'middle');
         }
     };
 
@@ -1220,6 +1216,10 @@ FrameTrail.defineModule('ViewVideo', function(){
     function changeSlidePosition(newState, oldState) {
         adjustLayout();
         adjustHypervideo();
+        window.setTimeout(function() {
+            adjustLayout();
+            adjustHypervideo();
+        }, 300);
 
         if ( FrameTrail.getState('editMode') && FrameTrail.getState('editMode') != 'preview' ) return;
 
@@ -1547,139 +1547,6 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     }
 
-
-    /**
-     * Init Scroll Animations (using ScrollMagic & TweenMax)
-     * 
-     * @method initScrollAnimations
-     */
-    function initScrollAnimations() {
-        
-        /*
-        $('#ViewVideo').css({
-            'overflow': 'hidden'
-        }).height( $(window).height() - 40 );
-        */
-
-        $('#SlideArea').css({
-            marginRight: 10 + "px"
-        });
-
-        $('#AnnotationTiles').css({
-            position: 'fixed'
-        });
-
-        $('#PlayerContainer').css({
-            position: 'fixed'
-        }).addClass('scrollFix');
-
-        $('#PlayerContainer').after( $('<div id="PlayerContainerSpacer"></div>').height($('#PlayerContainer').height()) );
-
-        $('#AnnotationContainer').css({
-            zIndex: 2
-        });
-
-        scrollController = new ScrollMagic({container: '#ViewVideo'});
-
-        var annotationAnimation = TweenMax.fromTo('#AnnotationContainer', 0.5, { css: { 
-            top: 100 + 'px'
-        }}, { css: { 
-            top: -180 + 'px'
-        }});
-
-        var annotationTileAnimation = TweenMax.fromTo('#AnnotationTiles', 0.5, { css: { 
-            bottom: '-40px'
-        }}, { css: {
-            bottom: '0px'
-        }});
-
-        var playerOpacityAnimation = TweenMax.fromTo('#PlayerContainer', 0.5, {
-            opacity: 1
-        }, {
-            opacity: 0.3
-        });
-
-        /*
-        var playerScene = new ScrollScene({
-            offset: 0
-        }).setPin('#PlayerContainer', {pinnedClass: 'scrollFix'}).addTo(scrollController);
-        */
-
-        /*
-        var playerPin = TweenMax.fromTo('#PlayerContainer', 0.5, { css: { 
-            top: 3 + "px"
-        }}, { css: { 
-            top: 3 + "px"
-        }});
-
-        var playerScene = new ScrollScene({
-            offset: 35
-        }).setTween(playerPin).addTo(controller);
-        */
-
-        var annotationTileScene = new ScrollScene({
-            offset: 200,
-            duration: '10%'
-        }).setTween(annotationTileAnimation).addTo(scrollController);
-
-        var annotationScene = new ScrollScene({
-            offset: 10,
-            duration: '80%'
-        }).setTween(annotationAnimation).addTo(scrollController);
-
-        var videoPaused = false;
-        var playerOpacityScene = new ScrollScene({
-            offset: 70,
-            duration: '80%'
-        }).setTween(playerOpacityAnimation).on('start', function(evt) {
-            
-            if (evt.scrollDirection == 'FORWARD') {
-                videoPaused = !FrameTrail.module('HypervideoController').isPlaying;
-            } else if (!videoPaused) {
-                FrameTrail.module('HypervideoController').play();
-            }
-            
-        }).on('end', function(evt) {
-            FrameTrail.module('HypervideoController').pause();
-        }).addTo(scrollController);
-        
-        $('#ViewVideo').perfectScrollbar({
-            wheelSpeed: 4,
-            suppressScrollX: true,
-            wheelPropagation: true
-        });
-
-    }
-
-
-    /**
-     * Destroy Scroll Animations
-     * 
-     * @method destroyScrollAnimations
-     * @param {Method} callback  
-     */
-    function destroyScrollAnimations(callback) {
-        
-        var testInterval = setInterval(function() {
-
-            if ( $('.scrollmagic-pin-spacer').length > 0 ) {
-                scrollController.destroy(true);
-                $('#ViewVideo').perfectScrollbar('destroy');
-
-                $('#AnnotationContainer').css({
-                    zIndex: ''
-                });
-            } else {
-                clearInterval(testInterval);
-                if (callback) {
-                    callback.call();
-                }
-            }
-
-        }, 10);
-
-    }
-
         
     return {
 
@@ -1716,9 +1583,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         slidePositionUp:         slidePositionUp,
         slidePositionDown:       slidePositionDown,
         closestToOffset:         closestToOffset,
-        initScrollAnimations:    initScrollAnimations,
-        destroyScrollAnimations: destroyScrollAnimations,
-
+        
         /**
          * I display a (formated time) string in an area of the progress bar.
          * @attribute currentTime

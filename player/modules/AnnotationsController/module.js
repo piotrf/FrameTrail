@@ -143,7 +143,7 @@
             }
             
 
-        } else if ( !FrameTrail.getState('editMode') ) {
+        } else /*if ( !FrameTrail.getState('editMode') )*/ {
 
             AnnotationSettingsButton.hide();
             
@@ -568,7 +568,10 @@
      */
     function onViewSizeChanged() {
 
-        
+        if (HypervideoModel.annotationSets.length != 0) {
+            updateAnnotationSlider();
+            distributeTiles();
+        }
 
     }
 
@@ -582,21 +585,22 @@
      */
     function toggleSidebarOpen() {
 
-        /*
-        var maxSlideDuration = 280,
-            interval;
-
-        interval = window.setInterval(function(){
-            distributeTiles();
-            updateAnnotationSlider();
-        }, 40);
         
-        window.setTimeout(function(){
+        if (HypervideoModel.annotationSets.length != 0) {
+            var maxSlideDuration = 280,
+                interval;
 
-            window.clearInterval(interval);
+            interval = window.setInterval(function(){
+                distributeTiles();
+                updateAnnotationSlider();
+            }, 40);
+            
+            window.setTimeout(function(){
 
-        }, maxSlideDuration)
-        */
+                window.clearInterval(interval);
+
+            }, maxSlideDuration);
+        }
 
 
     }
@@ -809,6 +813,8 @@
 
         if (openedAnnotation) {
 
+            initAnnotationSlider();
+            
             var itemPosition = openedAnnotation.annotationElement.position();
             
             var leftOffset = -1 * (     itemPosition.left 
@@ -926,9 +932,11 @@
 
             HypervideoModel.annotationSet = '#myAnnotationSet';
             
-            refreshAnnotationSelectmenu(true);
+            refreshAnnotationSelectmenu(false);
 
-            initAnnotations();
+            window.setTimeout(function() {
+                initAnnotations();
+            }, 300);
 
         } else if ( editMode === false && FrameTrail.getState('hv_config_annotationsVisible') ) {
 
@@ -1166,7 +1174,9 @@
     function toggleViewMode(viewMode, oldViewMode){
 
         if (viewMode === 'video' && oldViewMode !== 'video') {
-            distributeTiles();
+            window.setTimeout(function() {
+                distributeTiles();
+            }, 300);
         }
 
     }

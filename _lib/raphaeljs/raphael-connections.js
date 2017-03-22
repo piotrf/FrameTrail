@@ -1,8 +1,8 @@
-/* Open Hypervideo Specific DrawConnections Methods
+/* FrameTrail Specific DrawConnections Methods
 *  @TODO Move to own module
 */
 
-var ra = 0;
+var ra = false;
 
 function initRaphael() {
     ra = Raphael( $('#SlideArea').get(0), 0,0, $(document).width(), $(document).height());
@@ -11,7 +11,7 @@ function initRaphael() {
         top: 0 + "px",
         left: 0 + "px",
         width: $(document).width() + "px",
-        height: $(document).height() + "px",
+        height: $("#SlideArea").height() + "px",
         "zIndex": "0"
     });
 }
@@ -36,7 +36,7 @@ function drawConnections(from, to, curviness, attr) {
         obj1["box"] = getRaphaelObject(obj1);
         obj2["box"] = getRaphaelObject(obj2);
         
-        if (!ra) {
+        if (!ra || $("#SlideArea > svg").length == 0) {
             initRaphael();
         }
         ra.connection(obj1, obj2, curviness, attr);
@@ -55,7 +55,7 @@ function getRaphaelObject(selector) {
     }
     
     var leftOffset = $(selector).offset().left - parseInt($('#MainContainer').css('margin-left'));
-    var topOffset = $(selector).offset().top - titleOffset /*- parseInt($('#SlideArea').css('margin-top'))*/;
+    var topOffset = $(selector).offset().top - titleOffset - parseInt($('#SlideArea').css('margin-top'));
 
     obj["x"] = leftOffset;
     obj["y"] = topOffset;

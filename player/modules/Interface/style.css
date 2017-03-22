@@ -1,18 +1,21 @@
 #MainContainer {
+	order: 1;
+    flex: 1 1 auto;
+    align-self: auto;
 	background-color: var(--primary-bg-color);
-    left: 0;
     margin-left: 0;
     position: relative;
-    top: 40px;
-    height: 300px;
-	-webkit-transition: margin-left 200ms linear; /* Firefox */
-	-moz-transition: margin-left 200ms linear; /* WebKit */
-	-o-transition: margin-left 200ms linear; /* Opera */
-	transition: margin-left 200ms linear; /* Standard */
+    width: 100%;
+    overflow: hidden;
+	-webkit-transition: all 200ms linear; /* Firefox */
+	-moz-transition: all 200ms linear; /* WebKit */
+	-o-transition: all 200ms linear; /* Opera */
+	transition: all 200ms linear; /* Standard */
 }
 
 
 #MainContainer.sidebarOpen {
+	width: calc(100vw - 164px);
 	margin-left: 164px;
 }
 

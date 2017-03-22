@@ -1,18 +1,16 @@
 #Titlebar {
-	position: absolute;
-	top: 0;
+	order: 0;
+    flex: 0 1 40px;
+    align-self: auto;
 	background: var(--primary-bg-color);
-	height: 40px;
 	width: 100%;
 	padding: 0;
 	z-index: 99;
 	font-weight: 200;
-	/*
 	-webkit-transition: all 200ms linear;
 	-moz-transition: all 200ms linear;
 	-o-transition: all 200ms linear;
 	transition: all 200ms linear;
-	*/
 }
 
 #Titlebar.sidebarOpen {
@@ -181,14 +179,14 @@
 
 #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
 	float: left;
-	background-size: 100%;
-	background-image: url("icons/user_dark.png");
-	background-color: var(--primary-fg-color);
+	background-size: 16px auto;
+	background-image: url("icons/user.png");
+	/*background-color: var(--primary-fg-color);*/
 }
 
 #Titlebar.editActive #TitlebarActionButtonContainer .userSettingsButton {
-	background-image: url("icons/user.png");
-	background-color: var(--primary-bg-color);
+	background-image: url("icons/user_dark.png");
+	/*background-color: var(--primary-bg-color);*/
 }
 
 #Titlebar #SharingWidget {

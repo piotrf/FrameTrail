@@ -1004,6 +1004,7 @@
         
         //TODO: Implement proper destroy method
         $('#MainContainer #ViewVideo').remove();
+        ra = false;
         
         FrameTrail.module('RouteNavigation').hypervideoID = newHypervideoID;
         FrameTrail.module('RouteNavigation').hashTime = undefined;
@@ -1030,6 +1031,10 @@
                         }
 
                         FrameTrail.module('InterfaceModal').hideMessage(600);
+
+                        window.setTimeout(function() {
+                            FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+                        }, 300);
                         
                     },
 

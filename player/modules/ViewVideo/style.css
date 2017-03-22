@@ -5,16 +5,23 @@ path {
 
 #ViewVideo {
     display: none;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
+    -webkit-transition: all 200ms linear;
+    -moz-transition: all 200ms linear;
+    -o-transition: all 200ms linear;
+    transition: all 200ms linear;
 }
 
 #ViewVideo.active {
-    display: block;
+    display: flex;
 }
 
 #MainContainer.editActive #ViewVideo {
@@ -23,14 +30,26 @@ path {
 }
 
 #ViewVideo #SlideArea {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+    order: 0;
+    flex: 1 1 auto;
+    align-self: auto;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
     margin-top: 0px;
-    transition-property: margin-top;
+    transition-property: all;
     transition-duration: 200ms;
-    -moz-transition-property: margin-top;
+    -moz-transition-property: all;
     -moz-transition-duration: 200ms;
-    -webkit-transition-property: margin-top;
+    -webkit-transition-property: all;
     -webkit-transition-duration: 200ms;
-    -o-transition-property: margin-top;
+    -o-transition-property: all;
     -o-transition-duration: 200ms;
 }
 
@@ -44,13 +63,29 @@ path {
 #PlayerContainer {
     position: relative;
     width: 100%;
-    height: 500px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+    order: 0;
+    flex: 1 1 auto;
+    align-self: auto;
     margin: 30px 0;
     z-index: 1;
+    overflow: hidden;
 }
 
 #PlayerContainer.scrollFix {
     pointer-events: none;
+}
+
+#PlayerContainer .timeline {
+    order: 0;
+    flex: 0 1 6px;
+    min-height: 6px;
+    align-self: auto;
 }
 
 /* Progress Bar */
@@ -118,7 +153,7 @@ path {
     bottom: 37px;
     width: 15px;
     height: 15px;
-    margin-bottom: -15px;
+    margin-bottom: -21px;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 8px;
@@ -149,9 +184,12 @@ path {
 /* Annotations */
 
 #AnnotationTiles {
+    order: 0;
+    flex: 0 1 auto;
+    min-height: 35px;
+    align-self: auto;
     position: relative;
     width: 100%;
-    height: 35px;
     background: rgba(90,95,95,.4);
     transition-property: margin-top;
     transition-duration: 500ms;
@@ -172,7 +210,10 @@ path {
 #AnnotationContainer {
     position: relative;
     width: 100%;
-    height: 400px;
+    order: 0;
+    flex: 0 1 200px;
+    min-height: 200px;
+    align-self: auto;
     background: transparent;
     z-index: 2;
     transition-property: margin-top;
@@ -219,7 +260,10 @@ path {
 #VideolinkTiles {
     position: relative;
     width: 100%;
-    height: 35px;
+    order: 0;
+    flex: 0 1 auto;
+    min-height: 35px;
+    align-self: auto;
     background: rgba(90,95,95,.4);
     transition-property: margin-top;
     transition-duration: 500ms;
@@ -234,7 +278,10 @@ path {
 #VideolinkContainer {
     position: relative;
     width: 100%;
-    height: 80px;
+    order: 0;
+    flex: 0 1 200px;
+    min-height: 200px;
+    align-self: auto;
     background: transparent;
     z-index: 2;
     transition-property: margin-top;
@@ -262,6 +309,8 @@ path {
     position: relative;
     width: 100%;
     height: 0px;
+    min-height: 0px;
+    flex-basis: 0px;
     background: rgba(93, 96, 101, .3);
     z-index: 2;
     pointer-events: none;
@@ -289,7 +338,10 @@ path {
 
 #PlayerContainer #Controls {
     position: relative;
-    height: 40px;
+    order: 0;
+    flex: 0 1 40px;
+    min-height: 40px;
+    align-self: auto;
     width: 100%;
     background: transparent;
     z-index: 2;
@@ -579,17 +631,28 @@ path {
 
 #HypervideoContainer {
     position: relative;
-    height: 460px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    order: 0;
+    flex: 1 1 auto;
+    width: 100%;
+    align-self: auto;
     background: #000;
     z-index: 2;
 }
 
 #HypervideoContainer #InfoAreaRight {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 400px;
+    position: relative;
+    order: 0;
+    flex: 0 0 400px;
+    min-width: 400px;
     height: 100%;
+}
+
+.editActive[data-edit-mode="links"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="overlays"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="codesnippets"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="annotations"] #HypervideoContainer #InfoAreaRight {
+    flex: 0 0 500px;
 }
 
 #HypervideoContainer #InfoAreaRight #AnnotationPreviewContainer {
@@ -622,7 +685,8 @@ path {
     -webkit-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-color: #e0e3e6;
     background-repeat: no-repeat;
     background-position: center center;
@@ -663,13 +727,12 @@ path {
 
 #HypervideoContainer #VideoContainer {
     position: relative;
-    width: 100%;
+    order: 0;
+    flex: 1 1 auto;
     height: 100%;
+    align-self: auto;
     background: transparent;
     overflow: hidden;
-    transition-property: width;
-    transition-duration: 200ms;
-    transition-timing-function: linear;
     -moz-transition-property: width;
     -moz-transition-duration: 200ms;
     -moz-transition-timing-function: linear;
@@ -679,6 +742,9 @@ path {
     -o-transition-property: width;
     -o-transition-duration: 200ms;
     -o-transition-timing-function: linear;
+    transition-property: width;
+    transition-duration: 200ms;
+    transition-timing-function: linear;
 }
 
 #HypervideoContainer #VideoContainer #Hypervideo {
@@ -688,9 +754,6 @@ path {
     width: auto;
     height: 100%;
     overflow: hidden;
-    transition-property: width, height, margin-top;
-    transition-duration: 200ms;
-    transition-timing-function: linear;
     -moz-transition-property: width, height, margin-top;
     -moz-transition-duration: 200ms;
     -moz-transition-timing-function: linear;
@@ -700,6 +763,9 @@ path {
     -o-transition-property: width, height, margin-top;
     -o-transition-duration: 200ms;
     -o-transition-timing-function: linear;
+    transition-property: width, height, margin-top;
+    transition-duration: 200ms;
+    transition-timing-function: linear;
 }
 
 #HypervideoContainer #VideoContainer #Hypervideo video#Video {
@@ -707,9 +773,6 @@ path {
     height: 1080px;
     background: #101010;
     /*
-    transition-property: width, height;
-    transition-duration: 200ms;
-    transition-timing-function: linear;
     -moz-transition-property: width, height;
     -moz-transition-duration: 200ms;
     -moz-transition-timing-function: linear;
@@ -719,6 +782,9 @@ path {
     -o-transition-property: width, height;
     -o-transition-duration: 200ms;
     -o-transition-timing-function: linear;
+    transition-property: width, height;
+    transition-duration: 200ms;
+    transition-timing-function: linear;
     */
 }
 
@@ -829,7 +895,7 @@ path {
 
 #PlayerContainer #AnnotationTimeline.editable, #PlayerContainer #VideolinkTimeline.editable, #PlayerContainer #OverlayTimeline.editable, #PlayerContainer #CodeSnippetTimeline.editable, #PlayerContainer #AudioTimeline.editable {
     min-height: 20px;
-    height: : 40px;
+    height: 40px;
     background-color: transparent;
     box-shadow: 0 0 3px 2px #303030 inset;
     background-image: url("icons/timelineBackground.png");
@@ -892,13 +958,20 @@ path {
 }
 
 #EditingOptions {
-    position: absolute;
-    bottom: 0px;
+    order: 1;
+    flex: 0 1 200px;
+    align-self: auto;
+    position: relative;
     width: 100%;
+    overflow: hidden;
     background: #F8F8F8;
     box-shadow: 0 0 1px 2px #000;
     z-index: 1;
     display: none;
+}
+
+#EditingOptions.active {
+    display: block;
 }
 
 #EditingOptions .executeEventCode {
@@ -906,4 +979,88 @@ path {
     right: 12px;
     bottom: 18px;
     background-color: #eaeaef;
+}
+
+@media (min-height: 920px) {
+    #AnnotationContainer, #VideolinkContainer {
+        flex-basis: 600px;
+    }
+
+    #AnnotationContainer #AnnotationSlider .annotationElement {
+        width: 800px;
+    }
+
+    #EditingOptions {
+        flex-basis: 400px;
+    }
+}
+
+@media (min-height: 820px) and (max-height: 920px) {
+    #AnnotationContainer, #VideolinkContainer {
+        flex-basis: 500px;
+    }
+
+    #AnnotationContainer #AnnotationSlider .annotationElement {
+        width: 700px;
+    }
+
+    #EditingOptions {
+        flex-basis: 300px;
+    }
+}
+
+@media (min-height: 680px) and (max-height: 820px) {
+    #AnnotationContainer, #VideolinkContainer {
+        flex-basis: 400px;
+    }
+
+    #AnnotationContainer #AnnotationSlider .annotationElement {
+        width: 600px;
+    }
+
+    #EditingOptions {
+        flex-basis: 200px;
+    }
+}
+
+@media (min-height: 540px) and (max-height: 680px) {
+    #AnnotationContainer, #VideolinkContainer {
+        flex-basis: 260px;
+    }
+
+    #AnnotationContainer #AnnotationSlider .annotationElement {
+        width: 500px;
+    }
+
+    #EditingOptions {
+        flex-basis: 160px;
+    }
+}
+
+@media (min-height: 400px) and (max-height: 540px) {
+    #AnnotationContainer, #VideolinkContainer {
+        flex-basis: 220px;
+    }
+
+    #AnnotationContainer #AnnotationSlider .annotationElement {
+        width: 400px;
+    }
+
+    #EditingOptions {
+        flex-basis: 120px;
+    }
+}
+
+@media (max-height: 400px) {
+    #AnnotationContainer, #VideolinkContainer {
+        flex-basis: 200px;
+    }
+
+    #AnnotationContainer #AnnotationSlider .annotationElement {
+        width: 300px;
+    }
+
+    #EditingOptions {
+        flex-basis: 100px;
+    }
 }

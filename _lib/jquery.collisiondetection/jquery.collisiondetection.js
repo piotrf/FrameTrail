@@ -7,7 +7,7 @@
  *
  * Example: http://code.hnldesign.nl/demo/hnl.collision.detection.html
  * 
- * Open Hypervideo: Added option includeVerticalMargins
+ * FrameTrail: Added option includeVerticalMargins
  */
 (function ($, document, window) {
     "use strict";
@@ -96,7 +96,8 @@
         });
         //set container to match height of elements inside
         t.container.css({
-            height: prevHeight
+            height: prevHeight,
+            'flex-basis': prevHeight
         });
     };
     CollisionDetection.prototype.process = function (els) {

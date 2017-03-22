@@ -101,7 +101,7 @@ FrameTrail.defineModule('Interface', function(){
 		 	var width   = _window.width(),
 		 		height  = _window.height();
 
-		 	$('#MainContainer').height( height - FrameTrail.module('Titlebar').height );
+		 	//$('#MainContainer').height( height - FrameTrail.module('Titlebar').height );
 		 	FrameTrail.changeState('viewSize', [width, height]);
 
 		 	if ( resizeTimeout !== false ) {
@@ -110,7 +110,7 @@ FrameTrail.defineModule('Interface', function(){
 
 		 	resizeTimeout = setTimeout(function() {
 	 			FrameTrail.changeState('viewSizeChanged');
-	 		}, 200);
+	 		}, 300);
 		
 		});
 
@@ -158,11 +158,11 @@ FrameTrail.defineModule('Interface', function(){
 
         if (editMode) {
 
-            mainContainer.addClass('editActive');
+            mainContainer.addClass('editActive').attr('data-edit-mode', editMode);
 
         } else {
 
-            mainContainer.removeClass('editActive');
+            mainContainer.removeClass('editActive').removeAttr('data-edit-mode');
 
         }
 
