@@ -171,7 +171,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
                     uploadDialog.find('#locationQ').keyup(function(e) {
                         
-                        $.getJSON('http://nominatim.openstreetmap.org/search?q='+ uploadDialog.find('#locationQ').val() + '&format=json')
+                        $.getJSON('//nominatim.openstreetmap.org/search?q='+ uploadDialog.find('#locationQ').val() + '&format=json')
                             .done(function(respText) {
                                 
                                 uploadDialog.find('#locationSearchSuggestions').empty();
