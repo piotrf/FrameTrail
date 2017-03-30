@@ -153,14 +153,13 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 				return $return;
 				exit;
 			}
-
 			if ((!$_FILES["webm"]) || (!$_FILES["webm"]["size"]) || (!$_FILES["mp4"]) || (!$_FILES["mp4"]["size"])) {
 				$return["status"] = "fail";
 				$return["code"] = 5;
 				$return["string"] = "Not enough video sources";
 				return $return;
 				exit;
-			} else if ( ($_FILES["webm"]["type"] != "video/webm") || (!in_array($_FILES["mp4"]["type"], array("video/mp4", "video/mpeg4"))) ) {
+			} else if ( (($_FILES["webm"]["type"] != "video/webm") && ($_FILES["webm"]["type"] != "application/octet-stream")) || (!in_array($_FILES["mp4"]["type"], array("video/mp4", "video/mpeg4"))) ) {
 				$return["status"] = "fail";
 				$return["code"] = 6;
 				$return["string"] = "Wrong video file format";
