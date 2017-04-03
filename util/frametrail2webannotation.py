@@ -9,7 +9,6 @@ Copyright (c) 2017 Olivier Aubert <contact@olivieraubert.net>
 
 import datetime
 import json
-import sys
 import time
 from collections import OrderedDict
 
@@ -67,16 +66,16 @@ def generate_body(a, basename):
             ("frametrail,boundingBox", ",".join(a['attributes']['boundingBox']))
         ))
 
-def convert_annotation(a, video_url):
+def convert_annotation(a, video_url, basename):
     t = time.localtime(a["created"] / 1000)
     dt = datetime.datetime(*t[:-2])
     return OrderedDict((
         ("@context", [ "http://www.w3.org/ns/anno.jsonld",
                       { "frametrail": "http://frametrail.org/ns/" }
         ]),
-        ("id", a['resourceId']),
+        ("id", "".join((basename, a['resourceId']))),
         ("creator", {
-            "id": a["creatorId"],
+            "id": "".join((basename, a["creatorId"])),
             "type": "Person",
             "nick": a["creator"]
         }),
@@ -91,20 +90,28 @@ def convert_annotation(a, video_url):
                 "value": "t=%s,%s" % (a['start'], a['end'])
             })
         ))),
-        ("body", generate_body(a))
+        ("body", generate_body(a, basename))
     ))
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: %s input.js [output.json]" % sys.argv[0])
-        sys.exit(1)
-    source = sys.argv[1]
-    with open(source, 'r') as f:
-        data = json.load(f)
-    webannotation = [ convert_annotation(a, "http://specify.me/video_url.mp4") for a in data ]
-    if len(sys.argv) > 2:
-        out = open(sys.argv[2], 'w')
-    else:
-        out = sys.stdout
-    json.dump(webannotation, out, indent=2)
+    import argparse
+    import sys
 
+    ap = argparse.ArgumentParser(description="Convert FrameTrail annotations to WebAnnotation data model")
+    ap.add_argument("-v", "--video-url",
+                    default='http://specify.me/video_url.mp4',
+                    help="URL of the target videofile")
+    ap.add_argument("-b", "--basename",
+                    default='',
+                    help="basename for local ids")
+    ap.add_argument("input", type=file,
+                    help="Input file (.js)")
+    ap.add_argument("output", type=argparse.FileType('w'),
+                    nargs='?',
+                    default=sys.stdout,
+                    help="Output file")
+    args = ap.parse_args()
+
+    data = json.load(args.input)
+    webannotation = [ convert_annotation(a, args.video_url, args.basename) for a in data ]
+    json.dump(webannotation, args.output, indent=2)
