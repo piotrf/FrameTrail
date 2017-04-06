@@ -48,7 +48,7 @@ FrameTrail.defineType(
 
             var iFrame = $(
                     '<iframe frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
-                +   this.resourceData.src
+                +   this.resourceData.src.replace('http:', '').replace('https:', '')
                 +   '?color=ffffff&portrait=0&byline=0&title=0&badge=0" sandbox="allow-same-origin allow-scripts allow-popups allow-forms">'
                 +    '</iframe>'
             ).bind('error, message', function() {
