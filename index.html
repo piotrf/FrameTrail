@@ -91,6 +91,11 @@
 								message.html('Please define a Master Password to start the setup process').show();
 								$('input[name="masterpassword"]').show();
 								$('#submitBtn').text('OK');
+							} else if (ret["code"] == 7) {
+								title.html('Directory not writable').show();
+								message.html(ret["string"]).show();
+								$('input[name="masterpassword"]').hide();
+								$('#submitBtn').hide();
 							} else {
 								title.html('Installation corrupted').show();
 								message.html('Your installation contains errors in the file / data structure. Please click "Fix Installation" to auto-fix the data structure:').show();

@@ -183,6 +183,17 @@ switch($_REQUEST["a"]) {
 			exit;
 		}
 		
+		if ( !is_writable("../") ) {
+			chmod("../", 0755);
+			if ( !is_writable("../") ) {
+				$return["status"] = "fail";
+				$return["code"] = 7;
+				$return["string"] = "Root directory not writable. Please change permissions (755) or create '_data' directory manually.";
+				echo json_encode($return);
+				exit;
+			}
+		}
+
 		if (	(!file_exists($conf["dir"]["data"]) && !is_dir($conf["dir"]["data"]))
 			||	(!file_exists($conf["dir"]["projects"]) && !is_dir($conf["dir"]["projects"]))
 			||	(!file_exists($conf["dir"]["data"]."/config.json"))
