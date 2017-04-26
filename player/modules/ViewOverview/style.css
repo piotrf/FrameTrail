@@ -29,22 +29,21 @@
 	float: left;
 	margin: 4px 14px 14px 14px;
 	background-color: transparent;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 24px auto;
     border: 2px solid var(--primary-bg-color);
     border-radius: 50%;
-    font-size: 0;
     height: 40px;
     width: 40px;
 }
 
-#ViewOverview #OverviewControls button#NewHypervideoButton {
-	background-image: url('icons/hypervideoAdd.png');
-}
-
 #ViewOverview #OverviewControls button#ManageResourcesButton {
 	margin-left: 0px;
+}
+
+#ViewOverview #OverviewControls button [class^="icon-"]::before, #ViewOverview #OverviewControls button [class*=" icon-"]::before {
+	font-size: 18px;
+	margin-left: 2px;
+	margin-top: 2px;
+	width: 22px;
 }
 
 #ViewOverview #OverviewList {

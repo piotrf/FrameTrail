@@ -17,19 +17,19 @@ FrameTrail.defineModule('Titlebar', function(){
 
 
     var domElement = $(   '<div id="Titlebar">'
-                            + '  <div id="SidebarToggleWidget" class=""><button id="SidebarToggleButton">Sidebar</button></div>'
+                            + '  <div id="SidebarToggleWidget" class=""><button id="SidebarToggleButton"><span class="icon-menu"></span></button></div>'
                             + '  <div id="TitlebarViewMode">'
-                            + '      <button data-viewmode="overview" data-tooltip-bottom-left="Overview"></button>'
-                            + '      <button data-viewmode="video"></button>'
+                            + '      <button data-viewmode="overview" data-tooltip-bottom-left="Overview"><span class="icon-overview"></span></button>'
+                            + '      <button data-viewmode="video"><span class="icon-hypervideo"></span></button>'
                             + '  </div>'
                             + '  <div id="TitlebarTitle"></div>'
                             + '  <div id="TitlebarActionButtonContainer">'
-                            + '      <button class="startEditButton" data-tooltip-bottom-left="Edit"></button>'
-                            + '      <button class="leaveEditModeButton" data-tooltip-bottom-left="Stop Editing"></button>'
-                            + '      <button class="userSettingsButton" data-tooltip-bottom-right="User Management"></button>'
-                            + '      <button id="LogoutButton" data-tooltip-bottom-right="Logout"></button>'
+                            + '      <button class="startEditButton" data-tooltip-bottom-left="Edit"><span class="icon-edit"></span></button>'
+                            + '      <button class="leaveEditModeButton" data-tooltip-bottom-left="Stop Editing"><span class="icon-edit-circled"></span></button>'
+                            + '      <button class="userSettingsButton" data-tooltip-bottom-right="User Management"><span class="icon-user"></span></button>'
+                            + '      <button id="LogoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                             + '  </div>'
-                            + '  <div id="SharingWidget"><button id="SharingWidgetButton" data-tooltip-bottom-right="Share">Share</button></div>'
+                            + '  <div id="SharingWidget"><button id="SharingWidgetButton" data-tooltip-bottom-right="Share"><span class="icon-share"></span></button></div>'
                             + '</div>'
                           ),
     TitlebarViewMode        = domElement.find('#TitlebarViewMode'),

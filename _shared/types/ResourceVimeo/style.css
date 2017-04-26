@@ -6,18 +6,14 @@
 	background-image: url("icons/resourceThumb.png");
 }
 
-.resourceThumb[data-type="vimeo"] .resourceOverlay .resourceIcon {
-	background-image: url("icons/resourceIcon.png");
-}
-
 /* Annotation Tile */
 
-.tileElement[data-type="vimeo"] {
-	background-image: url("icons/resourceIcon.png");
+.tileElement[data-type="vimeo"] [class^="icon-"]::before, .tileElement[data-type="vimeo"] [class*=" icon-"]::before {
+    content: "\f194";
 }
 
 /* Edit Vimeo Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="vimeo"] {
-	background-image: url("icons/resourceIcon.png");
+#EditPropertiesContainer .propertiesTypeIcon[data-type="vimeo"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="vimeo"] [class*=" icon-"]::before {
+	content: "\f194";
 }

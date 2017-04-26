@@ -890,7 +890,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 			container		 	= $(	'<div id="ResourcePicker">'
 									  + '    <div id="ResourcePickerControls">'
 									  //+ '        <button id="ManageResourcesButton">Manage Resources</button>'
-                                      + '        <button id="AddResourcesButton" class="addResourceIcon" data-tooltip-right="Add Resource"></button>'
+                                      + '        <button id="AddResourcesButton" data-tooltip-right="Add Resource"><span class="icon-doc-new"></span></button>'
 									  + '    </div>'
 									  + '    <div id="ResourcePickerList"></div>'
 									  + '</div>'),

@@ -129,7 +129,7 @@ FrameTrail.defineType(
             var controlsContainer = $('<div class="controlsWrapper"></div>'),
                 manualInputMode   = true,
                 defaultControls   = $('<div id="TimeControls">'
-                					+ '    <div class="propertiesTypeIcon" data-type="' + overlay.data.type + '"></div>'
+                					+ '    <div class="propertiesTypeIcon" data-type="' + overlay.data.type + '"><span class="icon-doc-inv"></span></div>'
                                     + '    <button id="DeleteOverlay">Delete</button>'
                                     + '    <label for="TimeStart">Start</label>'
                                     + '    <input id="TimeStart" value="' + overlay.data.start + '">'
@@ -198,6 +198,7 @@ FrameTrail.defineType(
                 min: 0,
                 max: FrameTrail.module('HypervideoModel').duration,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                 	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -231,6 +232,7 @@ FrameTrail.defineType(
                 min: 0,
                 max: FrameTrail.module('HypervideoModel').duration,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                 	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -260,6 +262,7 @@ FrameTrail.defineType(
             controlsContainer.find('#PositionTop').spinner({
                 step: 0.1,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                 	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -286,6 +289,7 @@ FrameTrail.defineType(
             controlsContainer.find('#PositionLeft').spinner({
                 step: 0.1,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                 	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -312,6 +316,7 @@ FrameTrail.defineType(
             controlsContainer.find('#PositionWidth').spinner({
                 step: 0.1,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                 	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -338,6 +343,7 @@ FrameTrail.defineType(
             controlsContainer.find('#PositionHeight').spinner({
                 step: 0.1,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                 	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -496,7 +502,7 @@ FrameTrail.defineType(
             var controlsContainer = $('<div class="controlsWrapper"></div>'),
                 manualInputMode   = true,
                 defaultControls   = $('<div id="TimeControls">'
-                                    + '    <div class="propertiesTypeIcon" data-type="' + annotation.data.type + '"></div>'
+                                    + '    <div class="propertiesTypeIcon" data-type="' + annotation.data.type + '"><span class="icon-doc-inv"></span></div>'
                                     + '    <button id="DeleteAnnotation">Delete</button>'
                                     + '    <label for="TimeStart">Start</label>'
                                     + '    <input id="TimeStart" value="' + annotation.data.start + '">'
@@ -514,6 +520,7 @@ FrameTrail.defineType(
                 min: 0,
                 max: FrameTrail.module('HypervideoModel').duration,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                     $(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },
@@ -547,6 +554,7 @@ FrameTrail.defineType(
                 min: 0,
                 max: FrameTrail.module('HypervideoModel').duration,
                 numberFormat: 'n',
+                icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
                     $(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
                 },

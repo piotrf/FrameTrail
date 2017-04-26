@@ -38,10 +38,6 @@
 
 /* Edit CodeSnippet Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="codesnippet"] {
-    background-image: url("icons/codeSnippetTile.png");
-}
-
 #EditPropertiesContainer #CodeSnippetCode {
     height: 400px;
 }

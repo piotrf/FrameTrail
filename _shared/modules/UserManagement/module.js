@@ -352,7 +352,8 @@ FrameTrail.defineModule('UserManagement', function(){
 	});
 
     domElement.find('#user_change_user').selectmenu({
-        width: 150
+        width: 150,
+        icons: { button: "icon-angle-down" }
     });
 
 

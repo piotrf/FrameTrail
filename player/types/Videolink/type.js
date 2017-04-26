@@ -26,7 +26,7 @@ FrameTrail.defineType(
         this.data = data;
 
         this.timelineElement  = $('<div class="timelineElement"></div>');
-        this.tileElement      = $('<div class="tileElement"></div>');
+        this.tileElement      = $('<div class="tileElement"><span class="icon-play-1"></span></div>');
         this.videolinkElement = $('<div class="videolinkElement"></div>');
 
 
@@ -529,7 +529,7 @@ FrameTrail.defineType(
             EditPropertiesContainer.empty();
             
             var propertiesControls = $('<div>'
-                                     + '    <div class="propertiesTypeIcon" data-type="videolink"></div>'
+                                     + '    <div class="propertiesTypeIcon" data-type="videolink"><span class="icon-hypervideo"></span></div>'
                                      + '    <div>Title:</div>'
                                      + '    <div>' + this.data.name + '</div><br>'
                                      + '    <div>Link:</div>'

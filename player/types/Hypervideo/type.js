@@ -50,7 +50,7 @@ FrameTrail.defineType(
 
                 thumbElement    =   $('<div class="hypervideoThumb" data-hypervideoID="'+ hypervideoID +'" data-name="'+ this.data.name +'" style="'+ thumbBackground +'">'
                                     + '    <div class="hypervideoThumbContent">'
-                                    + '        <a href="'+ href +'" class="hypervideoIcon"></a>'
+                                    + '        <a href="'+ href +'" class="hypervideoIcon"><span class="icon-play-circled"></span></a>'
                                     + '    </div>'
                                     + '    <div class="hypervideoTitle">'+ this.data.name +'</div>'
                                     + '</div>');

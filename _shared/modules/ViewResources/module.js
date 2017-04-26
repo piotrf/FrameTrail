@@ -16,8 +16,8 @@ FrameTrail.defineModule('ViewResources', function(){
 
 	var domElement = $(    '<div id="ViewResources" title="Manage Resources">'
                         +  '    <div id="ResourcesControls">'
-                        +  '        <button id="ResourceUpload" class="addResourceIcon">Add New</button>'
-                        +  '        <button id="ResourceDelete">Delete</button>'
+                        +  '        <button id="ResourceUpload"><span class="icon-doc-new"></span>Add New</button>'
+                        +  '        <button id="ResourceDelete"><span class="icon-trash"></span>Delete</button>'
                         +  '        <button id="ResourceDeleteConfirm">Confirm Delete</button>'
                         +  '        <div class="message"></div>'
                         +  '        <div style="clear: both;"></div>'
@@ -141,7 +141,7 @@ FrameTrail.defineModule('ViewResources', function(){
 
         if (deleteActive) {
 
-            ResourceDelete.text('Delete').removeClass('active');
+            ResourceDelete.html('<span class="icon-trash"></span>Delete').removeClass('active');
             ResourceDeleteConfirm.hide();
             ResourcesList.children('.resourceThumb').removeClass('markedForDeletion').unbind('click');
             deleteActive = false;
@@ -150,7 +150,7 @@ FrameTrail.defineModule('ViewResources', function(){
 
         } else {
 
-            ResourceDelete.text('Cancel').addClass('active');
+            ResourceDelete.html('Cancel').addClass('active');
             ResourceDeleteConfirm.show();
             ResourcesList.children('.resourceThumb').click(function(evt){
                 $(evt.currentTarget).toggleClass('markedForDeletion');

@@ -93,12 +93,12 @@ FrameTrail.defineType(
 
             var thumbElement = $('<div class="resourceThumb" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="'+ thumbBackground +'">'
                 + '                  <div class="resourceOverlay">'
-                + '                      <div class="resourceIcon"></div>'
+                + '                      <div class="resourceIcon"><span class="icon-youtube"></span></div>'
                 + '                  </div>'
                 + '                  <div class="resourceTitle">'+ this.resourceData.name +'</div>'
                 + '              </div>');
 
-            var previewButton = $('<div class="resourcePreviewButton"></div>').click(function(evt) {
+            var previewButton = $('<div class="resourcePreviewButton"><span class="icon-eye"></span></div>').click(function(evt) {
                 // call the openPreview method (defined in abstract type: Resource)
                 self.openPreview( $(this).parent() );
                 evt.stopPropagation();

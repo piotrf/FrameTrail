@@ -88,11 +88,17 @@
 	height: 29px;
 	margin: 3px 3px 3px 0;
 	background-color: rgba(255,255,255,.3);
-	background-size: 25px auto;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-image: url("icons/videolinkTile.png");
 }
+
+ 
+#VideolinkTiles .tileElement [class^="icon-"]::before, #VideolinkTiles .tileElement [class*=" icon-"]::before {
+	font-size: 19px;
+	width: 100%;
+	margin: 0;
+	color: var(--primary-bg-color);
+	line-height: 30px;
+}
+
 
 #VideolinkTiles .tileElement:hover, #VideolinkTiles .tileElement.brushed {
 	background-color: rgba(255,255,255,.4);
@@ -156,10 +162,6 @@
 }
 
 /* Edit Videolink Properties */
-
-#EditPropertiesContainer .propertiesTypeIcon[data-type="videolink"] {
-	background-image: url("icons/videolinkTile.png");
-}
 
 #EditPropertiesContainer #VideolinkHref {
 	width: 300px;

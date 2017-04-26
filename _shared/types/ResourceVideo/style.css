@@ -6,20 +6,16 @@
 	background-image: url("icons/resourceThumb.png");
 }
 
-.resourceThumb[data-type="video"] .resourceOverlay .resourceIcon {
-	background-image: url("icons/resourceIcon.png");
-}
-
 /* Annotation Tile */
 
-.tileElement[data-type="video"] {
-	background-image: url("icons/resourceIcon.png");
+.tileElement[data-type="video"] [class^="icon-"]::before, .tileElement[data-type="video"] [class*=" icon-"]::before {
+    content: "\e8a7";
 }
 
 /* Edit Video Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="video"] {
-	background-image: url("icons/resourceIcon.png");
+#EditPropertiesContainer .propertiesTypeIcon[data-type="video"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="video"] [class*=" icon-"]::before {
+	content: "\e8a7";
 }
 
 #EditPropertiesContainer #SyncedRadio {

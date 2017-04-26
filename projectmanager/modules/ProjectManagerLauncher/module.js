@@ -80,7 +80,7 @@
     function appendTitlebar() {
 
         var titlebar = $(  '<div id="Titlebar">Project Manager'
-                         + '    <button type="button" id="LogoutButton" data-tooltip-bottom-right="Logout"></button>'
+                         + '    <button type="button" id="LogoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
     
         titlebar.appendTo($('body'));

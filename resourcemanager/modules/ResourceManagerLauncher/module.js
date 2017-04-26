@@ -79,7 +79,7 @@
 
         var titlebar = $(  '<div id="Titlebar">Resource Manager - Project: '
                          + FrameTrail.module('Database').project.name 
-                         + '    <button type="button" id="LogoutButton" data-tooltip-bottom-right="Logout"></button>'
+                         + '    <button type="button" id="LogoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
     
         titlebar.appendTo($('body'));

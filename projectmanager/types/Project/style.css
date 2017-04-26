@@ -28,21 +28,16 @@
 .projectThumb .projectsOptions button {
 	float: left;
 	background-color: transparent;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 24px auto;
     border: 2px solid var(--primary-bg-color);
     border-radius: 50%;
-    font-size: 0;
     height: 40px;
     width: 40px;
     margin: 8px 8px 0 0;
 }
 
-.projectThumb .projectsOptions button.deleteButton {
-	background-image: url("icons/projectDelete.png");
-}
-
-.projectThumb .projectsOptions button.editButton {
-	background-image: url("icons/projectEdit.png");
+.projectThumb .projectsOptions button [class^="icon-"]::before, .projectThumb .projectsOptions button [class*=" icon-"]::before {
+	font-size: 18px;
+	margin-left: 1px;
+	margin-top: 2px;
+	width: 22px;
 }

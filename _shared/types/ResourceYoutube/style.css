@@ -2,18 +2,14 @@
 	background-image: url("icons/resourceThumb.png");
 }
 
-.resourceThumb[data-type="youtube"] .resourceOverlay .resourceIcon {
-	background-image: url("icons/resourceIcon.png");
-}
-
 /* Annotation Tile */
 
-.tileElement[data-type="youtube"] {
-	background-image: url("icons/resourceIcon.png");
+.tileElement[data-type="youtube"] [class^="icon-"]::before, .tileElement[data-type="youtube"] [class*=" icon-"]::before {
+	content: "\f167";
 }
 
 /* Edit Youtube Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="youtube"] {
-	background-image: url("icons/resourceIcon.png");
+#EditPropertiesContainer .propertiesTypeIcon[data-type="youtube"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="youtube"] [class*=" icon-"]::before {
+	content: "\f167";
 }

@@ -11,8 +11,12 @@
     width: 120px;
 }
 
+.tileElement[data-type="text"] [class^="icon-"]::before, .tileElement[data-type="text"] [class*=" icon-"]::before {
+    content: "\f0f6";
+}
+
 /* Edit Text Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="text"] {
-	background-image: url("icons/resourceIcon.png");
+#EditPropertiesContainer .propertiesTypeIcon[data-type="text"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="text"] [class*=" icon-"]::before {
+	content: "\f0f6";
 }

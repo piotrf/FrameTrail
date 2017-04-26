@@ -28,13 +28,15 @@
 #Titlebar button {
 	width: 40px;
 	height: 40px;
+	font-size: 19px;
 	border: none;
 	background-color: transparent;
-	background-repeat: no-repeat;
-	background-size: 30px auto;
-	background-position: center;
 	cursor: pointer;
-	font-size: 0px;
+	color: var(--primary-fg-color);
+}
+
+#Titlebar.editActive button {
+	color: var(--primary-bg-color);
 }
 
 #Titlebar #SidebarToggleWidget {
@@ -49,15 +51,6 @@
 
 #Titlebar.editActive #SidebarToggleWidget.sidebarActive {
 	background-color: #e0e3e6;
-}
-
-#Titlebar #SidebarToggleWidget button {
-	background-image: url("icons/sidebarToggle.png");
-}
-
-
-#Titlebar.editActive #SidebarToggleWidget button {
-	background-image: url("icons/sidebarToggle.edit.png");
 }
 
 #Titlebar #SidebarToggleWidget.unsavedChanges:after {
@@ -88,17 +81,8 @@
 	opacity: .7;
 }
 
-#Titlebar #TitlebarViewMode button[data-viewmode="overview"] {
-	background-image: url('icons/menuItemOverview.png');
-}
-
-#Titlebar.editActive #TitlebarViewMode button[data-viewmode="overview"] {
-	background-image: url('icons/menuItemOverview.dark.png');
-}
-
 #Titlebar #TitlebarViewMode button[data-viewmode="video"] {
 	margin-left: 20px;
-	background-image: url('icons/menuItemHypervideo.png');
 }
 
 #Titlebar #TitlebarViewMode button[data-viewmode="video"]:after {
@@ -109,10 +93,6 @@
 	color: var(--primary-fg-color);
 	font-weight: normal;
 	font-size: 13px;
-}
-
-#Titlebar.editActive #TitlebarViewMode button[data-viewmode="video"] {
-	background-image: url('icons/menuItemHypervideo.dark.png');
 }
 
 #Titlebar.editActive #TitlebarViewMode button[data-viewmode="video"]:after {
@@ -136,7 +116,7 @@
 
 #TitlebarViewMode button.active {
 	background-color: transparent;
-	color: var(--primary-fg-color);
+	/*color: var(--primary-fg-color);*/
 	opacity: 1;
 	pointer-events: none;
 }
@@ -161,53 +141,12 @@
 	color: var(--primary-bg-color);
 }
 
-#Titlebar #TitlebarActionButtonContainer {
+#Titlebar #TitlebarActionButtonContainer, #Titlebar #SharingWidget, #Titlebar #LogoutButton {
 	float: right;
 }
 
-#Titlebar #TitlebarActionButtonContainer .startEditButton {
+#Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
 	float: left;
-	background-image: url("icons/edit.start.png");
-	background-size: 24px auto;
-}
-
-#Titlebar #TitlebarActionButtonContainer .leaveEditModeButton {
-	float: left;
-	background-size: 26px auto;
-	background-image: url("icons/edit.stop.png");
-}
-
-#Titlebar #TitlebarActionButtonContainer .userSettingsButton {
-	float: left;
-	background-size: 16px auto;
-	background-image: url("icons/user.png");
-	/*background-color: var(--primary-fg-color);*/
-}
-
-#Titlebar.editActive #TitlebarActionButtonContainer .userSettingsButton {
-	background-image: url("icons/user_dark.png");
-	/*background-color: var(--primary-bg-color);*/
-}
-
-#Titlebar #SharingWidget {
-	float: right;
-}
-
-#Titlebar #SharingWidget button {
-	background-image: url("icons/share.png");
-}
-
-#Titlebar.editActive #SharingWidget button {
-	background-image: url("icons/share.edit.png");
-}
-
-#Titlebar #LogoutButton {
-	float: right;
-	background-image: url("icons/logout.png");
-}
-
-#Titlebar.editActive #LogoutButton {
-	background-image: url("icons/logout.edit.png");
 }
 
 #ShareDialog input[type="text"], #ShareDialog textarea {

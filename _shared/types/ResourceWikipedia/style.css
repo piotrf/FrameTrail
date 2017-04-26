@@ -6,18 +6,14 @@
 	background-image: url("icons/resourceThumb.png");
 }
 
-.resourceThumb[data-type="wikipedia"] .resourceOverlay .resourceIcon {
-	background-image: url("icons/resourceIcon.png");
-}
-
 /* Annotation Tile */
 
-.tileElement[data-type="wikipedia"] {
-	background-image: url("icons/resourceIcon.png");
+.tileElement[data-type="wikipedia"] [class^="icon-"]::before, .tileElement[data-type="wikipedia"] [class*=" icon-"]::before {
+	content: "\f266";
 }
 
 /* Edit Wikipedia Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="wikipedia"] {
-	background-image: url("icons/resourceIcon.png");
+#EditPropertiesContainer .propertiesTypeIcon[data-type="wikipedia"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="wikipedia"] [class*=" icon-"]::before {
+	content: "\f266";
 }

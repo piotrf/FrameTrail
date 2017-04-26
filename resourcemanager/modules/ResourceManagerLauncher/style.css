@@ -12,13 +12,10 @@
 #Titlebar #LogoutButton {
 	float: right;
 	background-color: transparent;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 30px auto;
     border: medium none;
     cursor: pointer;
-    font-size: 0;
     height: 40px;
     width: 40px;
-	background-image: url("icons/logout.png");
+    font-size: 19px;
+    color: var(--primary-fg-color);
 }

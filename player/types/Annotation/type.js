@@ -34,7 +34,7 @@ FrameTrail.defineType(
         )
 
         this.timelineElement   = $('<div class="timelineElement"></div>');
-        this.tileElement       = $('<div class="tileElement" data-type="'+data.type+'"></div>');
+        this.tileElement       = $('<div class="tileElement" data-type="'+data.type+'"><span class="icon-doc-inv"></span></div>');
         this.annotationElement = $('<div class="annotationElement"></div>');
         this.previewElement    = $('<div class="previewElement"></div>');
 

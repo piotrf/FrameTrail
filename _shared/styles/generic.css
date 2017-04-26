@@ -88,10 +88,6 @@ input[readonly], textarea[readonly] {
 .ui-selectmenu-button .ui-icon {
 	width: 18px;
 	height: 18px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 18px auto;
-	background-image: url("../icons/select.down.png");
 }
 
 .ui-selectmenu-open {
@@ -449,10 +445,21 @@ input[readonly], textarea[readonly] {
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
-	background-color: transparent;
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-image: url("../icons/close.png");
+    width: 20px;
+    height: 20px;
+    background-color: transparent !important;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon {
+    margin-top: -10px;
+    margin-left: -12px;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon::before {
+	font-size: 20px;
+    color: var(--primary-fg-color);
+    margin-top: 0px;
+    margin-left: 0px;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -600,12 +607,23 @@ input[readonly], textarea[readonly] {
     position: absolute;
     top: 5px;
     right: 5px;
-    height: 10px;
+    height: 16px;
     width: 15px;
+    padding-top: 0px;
     background-color: #555;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-image: url("../icons/switchPositions.png");
+}
+
+.hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class^="icon-"], .hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class*=" icon-"] {
+    pointer-events: none;
+}
+
+.hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class^="icon-"]::before, .hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class*=" icon-"]::before {
+    font-size: 16px;
+    line-height: 16px;
+    margin: 0px;
+    width: 15px;
+    color: #ffffff;
+    pointer-events: none;
 }
 
 .hypervideoLayout .settingsContainer [data-config="annotationsPosition"]:hover {

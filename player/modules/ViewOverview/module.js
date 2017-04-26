@@ -56,7 +56,7 @@ FrameTrail.defineModule('ViewOverview', function(){
         OverviewControls.empty();
 
         var projectID = FrameTrail.module('RouteNavigation').projectID,
-            newButton = $('<button id="NewHypervideoButton" data-tooltip-left-left="New Hypervideo"></button>')
+            newButton = $('<button id="NewHypervideoButton" data-tooltip-left-left="New Hypervideo"><span class="icon-hypervideo-add"></span></button>')
                 .click(function(evt) {
 
                     var newDialog = $('<div id="NewHypervideoDialog" title="New Hypervideo">'
@@ -73,14 +73,14 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     + '            <div class="settingsContainer">'
                                     + '                <div class="layoutSettingsWrapper">'
                                     + '                    <div data-config="videolinksVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['videolinksVisible'].toString() == 'true') ? 'active' : '') +'">Videolinks'
-                                    + '                        <div data-config="annotationsPosition" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"></div>'
+                                    + '                        <div data-config="annotationsPosition" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
                                     + '                    </div>'
                                     + '                    <div class="playerWrapper">'
                                     + '                        <div data-config="overlaysVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'].toString() == 'true') ? 'active' : '') +'">Overlays</div>'
                                     + '                        <div data-config="annotationPreviewVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationPreviewVisible'].toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
                                     + '                    </div>'
                                     + '                    <div data-config="annotationsVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsVisible'].toString() == 'true') ? 'active' : '') +'">Annotations'
-                                    + '                        <div data-config="annotationsPosition" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"></div>'
+                                    + '                        <div data-config="annotationsPosition" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
                                     + '                    </div>'
                                     + '                </div>'
                                     + '                <div class="genericSettingsWrapper">Layout Mode'
@@ -368,7 +368,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                 }),
             
-            manageResourcesButton = $('<button id="ManageResourcesButton" class="resourceManagerIcon" data-tooltip-left-left="Manage Resources"></button>')
+            manageResourcesButton = $('<button id="ManageResourcesButton" class="resourceManagerIcon" data-tooltip-left-left="Manage Resources"><span class="icon-folder-open"></span></button>')
                     .click(function() {
                         FrameTrail.module('ViewResources').open();
                     });
@@ -417,7 +417,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     // Delete Hypervideo
 
-                    var deleteButton = $('<button class="deleteButton" data-tooltip-bottom-right="Delete Hypervideo"></button>')
+                    var deleteButton = $('<button class="deleteButton" data-tooltip-bottom-right="Delete Hypervideo"><span class="icon-trash"></span></button>')
                         .click(function(evt) {
                             
                             evt.preventDefault();
@@ -509,7 +509,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     // Show Options Hypervideo
 
-                    var optionButton = $('<button class="optionButton" data-tooltip-bottom-right="Hypervideo Options"></button>')
+                    var optionButton = $('<button class="optionButton" data-tooltip-bottom-right="Hypervideo Options"><span class="icon-cog"></span></button>')
                         .click(function(evt) {
                             
                             evt.preventDefault();
@@ -531,14 +531,14 @@ FrameTrail.defineModule('ViewOverview', function(){
                                              + '            <div class="settingsContainer">'
                                              + '                <div class="layoutSettingsWrapper">'
                                              + '                    <div data-config="videolinksVisible" class="'+ ((hypervideos[thisID]['config']['videolinksVisible'].toString() == 'true') ? 'active' : '') +'">Videolinks'
-                                             + '                        <div data-config="annotationsPosition" class="'+ ((hypervideos[thisID]['config']['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"></div>'
+                                             + '                        <div data-config="annotationsPosition" class="'+ ((hypervideos[thisID]['config']['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
                                              + '                    </div>'
                                              + '                    <div class="playerWrapper">'
                                              + '                        <div data-config="overlaysVisible" class="'+ ((hypervideos[thisID]['config']['overlaysVisible'].toString() == 'true') ? 'active' : '') +'">Overlays</div>'
                                              + '                        <div data-config="annotationPreviewVisible" class="'+ ((hypervideos[thisID]['config']['annotationPreviewVisible'].toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
                                              + '                    </div>'
                                              + '                    <div data-config="annotationsVisible" class="'+ ((hypervideos[thisID]['config']['annotationsVisible'].toString() == 'true') ? 'active' : '') +'">Annotations'
-                                             + '                        <div data-config="annotationsPosition" class="'+ ((hypervideos[thisID]['config']['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"></div>'
+                                             + '                        <div data-config="annotationsPosition" class="'+ ((hypervideos[thisID]['config']['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
                                              + '                    </div>'
                                              + '                </div>'
                                              + '                <div class="genericSettingsWrapper">Layout Mode'
@@ -845,7 +845,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     // Edit Hypervideo
 
-                    var editButton = $('<button class="editButton" data-tooltip-bottom-right="Edit Hypervideo"></button>')
+                    var editButton = $('<button class="editButton" data-tooltip-bottom-right="Edit Hypervideo"><span class="icon-pencil"></span></button>')
                         .click(function(evt) {
                             
                             thumb.click();
@@ -857,7 +857,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     // Fork Hypervideo
 
-                    var forkButton = $('<button class="forkButton" data-tooltip-bottom-right="Fork Hypervideo"></button>')
+                    var forkButton = $('<button class="forkButton" data-tooltip-bottom-right="Fork Hypervideo"><span class="icon-hypervideo-fork"></span></button>')
                         .click(function(evt) {
                             
                             evt.preventDefault();

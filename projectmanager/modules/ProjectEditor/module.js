@@ -61,14 +61,14 @@
 	                        +   '                    <div class="settingsContainer">'
 	                        +   '                        <div class="layoutSettingsWrapper">'
 	                        +   '                            <div data-config="videolinksVisible" class="'+ ((project.data.defaultHypervideoConfig['videolinksVisible'].toString() == 'true') ? 'active' : '') +'">Videolinks'
-	                        +   '                                <div data-config="annotationsPosition" class="'+ ((project.data.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"></div>'
+	                        +   '                                <div data-config="annotationsPosition" class="'+ ((project.data.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
 	                        +   '                            </div>'
 	                        +   '                            <div class="playerWrapper">'
 	                        +   '                                <div data-config="overlaysVisible" class="'+ ((project.data.defaultHypervideoConfig['overlaysVisible'].toString() == 'true') ? 'active' : '') +'">Overlays</div>'
 	                        +   '                                <div data-config="annotationPreviewVisible" class="'+ ((project.data.defaultHypervideoConfig['annotationPreviewVisible'].toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
 	                        +   '                            </div>'
 	                        +   '                            <div data-config="annotationsVisible" class="'+ ((project.data.defaultHypervideoConfig['annotationsVisible'].toString() == 'true') ? 'active' : '') +'">Annotations'
-	                        +   '                                <div data-config="annotationsPosition" class="'+ ((project.data.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"></div>'
+	                        +   '                                <div data-config="annotationsPosition" class="'+ ((project.data.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
 	                        +   '                            </div>'
 	                        +   '                        </div>'
 	                        +   '                        <div class="genericSettingsWrapper">Layout Mode'
@@ -340,7 +340,8 @@
 		}
 
 		domElement.find('#user_change_user').selectmenu({
-	        width: 150
+	        width: 150,
+	        icons: { button: "icon-angle-down" }
 	    });
 
 		domElement.find('#AdministrationFormRefresh').click(refreshAdministrationForm);

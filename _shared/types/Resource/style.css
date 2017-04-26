@@ -60,6 +60,13 @@
 	background-size: 100% 100%;
 }
 
+.resourceThumb .resourceOverlay .resourceIcon [class^="icon-"]::before, .resourceThumb .resourceOverlay .resourceIcon [class*=" icon-"]::before {
+	font-size: 20px;
+	color: var(--primary-fg-color);
+	text-shadow: 1px 1px 3px var(--primary-bg-color);
+}
+
+
 .resourceThumb .resourceTitle {
 	position: absolute;
 	top: 0;
@@ -80,17 +87,21 @@
 	bottom: 4px;
 	left: 4px;
 	z-index: 4;
-	background-image: url("icons/preview.png");
 	background-color: rgba(80, 80, 80, 0.8);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 30px auto;
-    border: 2px solid #F8F8F8;
+    border: 2px solid var(--primary-fg-color) ;
     border-radius: 50%;
     font-size: 0;
     height: 28px;
     width: 28px;
     display: none;
+}
+
+.resourceThumb .resourcePreviewButton [class^="icon-"]::before, .resourceThumb .resourcePreviewButton [class*=" icon-"]::before {
+	font-size: 18px;
+	width: 100%;
+	margin: 0;
+	line-height: 26px;
+	color: var(--primary-fg-color);
 }
 
 .resourceThumb .resourcePreviewButton:hover {
@@ -133,6 +144,12 @@
     width: 32px;
 }
 
+#EditPropertiesContainer .propertiesTypeIcon [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon [class*=" icon-"]::before {
+	font-size: 25px;
+	margin-left: 0px;
+	color: var(--primary-bg-color);
+}
+
 #EditPropertiesContainer .ui-spinner {
 	border: 1px solid #afafaf;
     margin-right: 10px;
@@ -150,10 +167,22 @@
 
 #EditPropertiesContainer .ui-spinner .ui-spinner-button {
 	background-color: rgba(47, 50, 58, .7);
-	background-position: center;
-	background-size: 10px;
-	background-repeat: no-repeat;
 }
+
+#EditPropertiesContainer .ui-spinner .ui-spinner-button [class^="icon-"], #EditPropertiesContainer .ui-spinner .ui-spinner-button [class*=" icon-"] {
+	overflow: visible;
+	line-height: 14px;
+}
+
+#EditPropertiesContainer .ui-spinner .ui-spinner-button [class^="icon-"]::before, #EditPropertiesContainer .ui-spinner .ui-spinner-button [class*=" icon-"]::before {
+	position: absolute;
+	left: 0px;
+	text-indent: 0;
+	color: var(--primary-fg-color);
+	font-size: 12px;
+	line-height: 15px;
+}
+
 
 #EditPropertiesContainer .ui-spinner:hover {
 	border-color: rgba(47, 50, 58, 1);
@@ -166,14 +195,6 @@
 #EditPropertiesContainer .ui-spinner .ui-spinner-button:hover {
 	background-color: rgba(47, 50, 58, 1);
 	cursor: pointer;
-}
-
-#EditPropertiesContainer .ui-spinner .ui-spinner-button.ui-spinner-up {
-	background-image: url("icons/value.up.png");
-}
-
-#EditPropertiesContainer .ui-spinner .ui-spinner-button.ui-spinner-down {
-	background-image: url("icons/value.down.png");
 }
 
 #EditPropertiesContainer #TimeControls {

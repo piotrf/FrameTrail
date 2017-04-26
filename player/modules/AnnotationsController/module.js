@@ -104,9 +104,7 @@
                         +   annotationSets[idx].id 
                         +   '" style="color: #'
                         +   annotationSets[idx].color
-                        +   ';"><span class="colorSquare" style="background-color: #'
-                        +   annotationSets[idx].color 
-                        +   ';"></span>'
+                        +   ';"><span class="icon-user"></span>'
                         +   annotationSets[idx].name 
                         +   '</div>');
 
@@ -1040,7 +1038,7 @@
 
             var userTimelineWrapper = $(    '<div class="userTimelineWrapper">'
                                         +   '    <div class="userLabel" style="color: #'+ otherUserColor +'">'
-                                        +   '        <span class="userIcon" style="background-color: #'+ otherUserColor +'"></span>'
+                                        +   '        <span class="icon-user"></span>'
                                         +   '        <span>'+ otherUsername + '</span>'
                                         +   '    </div>'
                                         +   '    <div class="userTimeline"></div>'

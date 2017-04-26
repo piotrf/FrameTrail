@@ -348,7 +348,7 @@ FrameTrail.defineType(
             EditPropertiesContainer.empty();
             
             var propertiesControls = $('<div>'
-                                     + '    <div class="propertiesTypeIcon" data-type="codesnippet"></div>'
+                                     + '    <div class="propertiesTypeIcon" data-type="codesnippet"><span class="icon-code"></span></div>'
                                      + '    <textarea id="CodeSnippetCode">' + this.data.snippet + '</textarea>'
                                      + '    <button id="DeleteCodeSnippet">Delete</button>'
                                      + '    <button id="ExecuteCodeSnippet">Run Code</button>'

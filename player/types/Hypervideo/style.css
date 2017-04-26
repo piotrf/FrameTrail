@@ -59,11 +59,22 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-repeat: no-repeat;
-	background-size: 40px auto;
-	background-position: center;
-	background-image: url("icons/hypervideoIcon.png");
 	cursor: pointer;
+}
+
+.hypervideoThumb .hypervideoIcon [class^="icon-"]::before, .hypervideoThumb .hypervideoIcon [class*=" icon-"]::before {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	font-size: 40px;
+	margin-left: -20px;
+	margin-top: -24px;
+	color: var(--primary-fg-color);
+	text-shadow: 1px 1px 3px var(--primary-bg-color);
+}
+
+.hypervideoThumb.activeHypervideo .hypervideoIcon [class^="icon-"]::before, .hypervideoThumb.activeHypervideo .hypervideoIcon [class*=" icon-"]::before {
+	content: "\e8a9";
 }
 
 .hypervideoThumb .hypervideoTitle {
@@ -126,29 +137,18 @@
 .hypervideoThumb .hypervideoOptions button {
 	float: right;
 	background-color: transparent;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 24px auto;
     border: 2px solid #F8F8F8;
+    border-color: var(--primary-fg-color);
     border-radius: 50%;
-    font-size: 0;
     height: 40px;
     width: 40px;
+    color: var(--primary-fg-color);
     margin: 8px 8px 8px 0;
 }
 
-.hypervideoThumb .hypervideoOptions button.deleteButton {
-	background-image: url("icons/hypervideoDelete.png");
-}
-
-.hypervideoThumb .hypervideoOptions button.editButton {
-	background-image: url("icons/hypervideoEdit.png");
-}
-
-.hypervideoThumb .hypervideoOptions button.optionButton {
-	background-image: url("icons/hypervideoOptions.png");
-}
-
-.hypervideoThumb .hypervideoOptions button.forkButton {
-	background-image: url("icons/hypervideoFork.png");
+.hypervideoThumb .hypervideoOptions button [class^="icon-"]::before, .hypervideoThumb .hypervideoOptions button [class*=" icon-"]::before {
+	font-size: 18px;
+	margin-left: 1px;
+	margin-top: 2px;
+	width: 22px;
 }

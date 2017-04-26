@@ -36,10 +36,10 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                        <div id="CaptionContainer"></div>'
                         + '                    </div>'
                         + '                    <div id="VideoStartOverlay">'
-                        + '                        <div id="PlayButtonBig"></div>'
+                        + '                        <div id="PlayButtonBig"><span class="icon-play-circled"></span></div>'
                         + '                    </div>'
                         + '                    <div id="ExpandButton">'
-                        + '                        <div id="ExpandLabel">Expand</div>'
+                        + '                        <div id="ExpandLabel"><span class="icon-resize-full-1"></span></div>'
                         + '                    </div>'
                         + '                    <div id="WorkingIndicator">'
                         + '                        <div class="workingSpinner"></div>'
@@ -54,7 +54,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '            <div id="OverlayTimeline" class="timeline"></div>'
                         + '            <div id="Controls">'
                         + '                <div id="LeftControlPanel">'
-                        + '                    <button class="playerControl" id="PlayButton"></button>'
+                        + '                    <div class="playerControl" id="PlayButton"><span class="icon-play-1"></span></div>'
                         + '                    <div class="playerControl" id="TimeDisplay">'
                         + '                        <div id="CurrentTime">00:00</div>'
                         + '                        <div id="TotalDuration">00:00</div>'
@@ -62,23 +62,25 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                </div>'
                         + '                <div id="RightControlPanel">'
                         + '                    <div class="playerControl contextButton" id="AnnotationSettingsButton">'
+                        + '                        <span class="icon-annotations"></span>'
                         + '                        <div id="AnnotationSettingsContainer" class="contextButtonContainer">'
                         + '                            <div>Annotations</div>'
                         + '                            <div id="SelectAnnotationContainer"></div>'
                         + '                        </div>'
                         + '                    </div>'
                         + '                    <div class="playerControl contextButton" id="SettingsButton">'
+                        + '                        <span class="icon-cog"></span>'
                         + '                        <div id="SettingsContainer" class="contextButtonContainer">'
                         + '                            <div id="LayoutSettingsWrapper">'
                         + '                                <div data-config="hv_config_videolinksVisible">Videolinks'
-                        + '                                    <div data-config="hv_config_annotationsPosition"></div>'
+                        + '                                    <div data-config="hv_config_annotationsPosition"><span class="icon-sort"></span></div>'
                         + '                                </div>'
                         + '                                <div id="PlayerWrapper">'
                         + '                                    <div data-config="hv_config_overlaysVisible">Overlays</div>'
                         + '                                    <div data-config="hv_config_annotationPreviewVisible">Annotation-Preview</div>'
                         + '                                </div>'
                         + '                                <div data-config="hv_config_annotationsVisible">Annotations'
-                        + '                                    <div data-config="hv_config_annotationsPosition"></div>'
+                        + '                                    <div data-config="hv_config_annotationsPosition"><span class="icon-sort"></span></div>'
                         + '                                </div>'
                         + '                            </div>'
                         + '                            <div id="GenericSettingsWrapper">Layout Mode'
@@ -90,13 +92,14 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                        </div>'
                         + '                    </div>'
                         + '                    <div class="playerControl" id="CaptionsButton">'
+                        + '                        <span class="icon-captions-off"></span>'
                         + '                        <div id="CaptionSelectContainer">'
                         + '                            <div class="captionSelect none" data-lang="" data-config="hv_config_captionsVisible">None</div>'
                         + '                            <div id="CaptionSelectList"></div>'
                         + '                        </div>'
                         + '                    </div>'
-                        + '                    <button class="playerControl" id="VolumeButton"></button>'
-                        + '                    <button class="playerControl" id="FullscreenButton"></button>'
+                        + '                    <div class="playerControl" id="VolumeButton"><span class="icon-volume-up"></span></div>'
+                        + '                    <div class="playerControl" id="FullscreenButton"><span class="icon-resize-full-alt"></span></div>'
                         + '                </div>'
                         + '            </div>'
                         + '            <div id="AnnotationTimeline" class="timeline"></div>'
@@ -917,7 +920,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         toggleConfig_overlaysVisible(true);
 
         EditPropertiesContainer
-            .html('<div class="message active">Add overlays by dragging resources into the video area.</div>')
+            .html('<span class="icon-overlays"></span><div class="message active">Add overlays by dragging resources into the video area.</div>')
             .attr('data-editmode', 'overlays');
     }
 
@@ -938,7 +941,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         VideolinkTimeline.addClass('editable');
 
         EditPropertiesContainer
-            .html('<div class="message active">Add video links by dragging hypervideos into the active timeline or entering a link manually.</div>')
+            .html('<span class="icon-videolinks"></span><div class="message active">Add video links by dragging hypervideos into the active timeline or entering a link manually.</div>')
             .attr('data-editmode', 'links');
     }
 
@@ -951,7 +954,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         CodeSnippetTimeline.addClass('editable');
 
         EditPropertiesContainer
-            .html('<div class="message active">Add custom code by dragging Code Snippets into the active timeline or react to other events by editing the "onReady", "onPlay", etc. tabs.</div>')
+            .html('<span class="icon-code"></span><div class="message active">Add custom code by dragging Code Snippets into the active timeline or react to other events by editing the "onReady", "onPlay", etc. tabs.</div>')
             .attr('data-editmode', 'codesnippets');
     }
 
@@ -964,7 +967,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         AnnotationTimeline.addClass('editable');
 
         EditPropertiesContainer
-            .html('<div class="message active">Add annotations by dragging resources into the active timeline.</div>')
+            .html('<span class="icon-annotations"></span><div class="message active">Add annotations by dragging resources into the active timeline.</div>')
             .attr('data-editmode', 'annotations');
     }
 

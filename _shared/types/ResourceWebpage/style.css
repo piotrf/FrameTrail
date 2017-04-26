@@ -18,18 +18,14 @@
     background-image: url("icons/resourceThumb.png");
 }
 
-.resourceThumb[data-type="webpage"] .resourceOverlay .resourceIcon {
-    background-image: url("icons/resourceIcon.png");
-}
-
 /* Annotation Tile */
 
-.tileElement[data-type="webpage"] {
-    background-image: url("icons/resourceIcon.png");
+.tileElement[data-type="webpage"] [class^="icon-"]::before, .tileElement[data-type="webpage"] [class*=" icon-"]::before {
+    content: "\e931";
 }
 
 /* Edit Webpage Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="webpage"] {
-    background-image: url("icons/resourceIcon.png");
+#EditPropertiesContainer .propertiesTypeIcon[data-type="webpage"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="webpage"] [class*=" icon-"]::before {
+    content: "\e931";
 }

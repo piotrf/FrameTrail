@@ -88,9 +88,14 @@
 	height: 29px;
 	margin: 3px 3px 3px 0;
 	background-color: rgba(255,255,255,.3);
-	background-size: 25px auto;
-	background-position: center;
-	background-repeat: no-repeat;
+}
+
+#AnnotationTiles .tileElement [class^="icon-"]::before, #AnnotationTiles .tileElement [class*=" icon-"]::before {
+	font-size: 18px;
+	margin: 0px;
+	color: var(--primary-bg-color);
+	width: 34px;
+	line-height: 29px;
 }
 
 #AnnotationTiles .tileElement:hover, #VideolinkTiles .tileElement.brushed {
@@ -157,15 +162,6 @@
 #TimelineList .userLabel {
 	font-weight: 300;
 	margin-bottom: 2px;
-}
-
-#TimelineList .userLabel .userIcon {
-	background-image: url("icons/user.png");
-    background-position: -4px center;
-    background-size: 22px auto;
-    float: left;
-    height: 20px;
-    width: 18px;
 }
 
 #TimelineList .userTimeline .compareTimelineElement {

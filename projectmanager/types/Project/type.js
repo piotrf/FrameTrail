@@ -36,8 +36,8 @@ FrameTrail.defineType(
                                     + '    <a href="'+ href +'" class="projectTitle">' + this.data.name + '</a>'
                                     + '    <div class="projectDescription">'+ this.data.description +'</div>'
                                     + '    <div class="projectsOptions">'
-                                    + '        <button type="button" class="deleteButton" data-tooltip-left="Delete Project"></button>'
-                                    + '        <button type="button" class="editButton" data-tooltip-left="Edit Project"></button>'
+                                    + '        <button type="button" class="deleteButton" data-tooltip-left="Delete Project"><span class="icon-trash"></span></button>'
+                                    + '        <button type="button" class="editButton" data-tooltip-left="Edit Project"><span class="icon-cog"></span></button>'
                                     + '    </div>'
                                     + '</div>');
 
