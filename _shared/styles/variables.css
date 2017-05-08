@@ -1,7 +1,27 @@
 /* CSS Variables / Custom Properties */
 
 html {
-  --primary-bg-color: #2F323A; /* Backgrounds */
-  --primary-fg-color: #FFFFFF; /* Texts Borders etc. */
-  --tooltip-bg-color: #D8D3AD;
+	--primary-bg-color: rgba(47, 50, 58, 1); /* Backgrounds */
+	--secondary-bg-color: rgba(73, 76, 81, .6); /* Secondary Backgrounds, Timelines, Tile-BG, Panels etc. NEEDS TO BE SEMI-TRANSPARENT */
+	--semi-transparent-bg-color: rgba(47, 50, 58, .8); 
+	--primary-fg-color: rgba(255, 255, 255, 1); /* Texts Borders etc. */
+	--secondary-fg-color: rgba(220, 220, 220, 1); /* Secondary Texts, Borders, Editable Panels etc. */
+	--semi-transparent-fg-color: rgba(255, 255, 255, .3);
+	--semi-transparent-fg-highlight-color: rgba(255, 255, 255, .4);
+	--semi-transparent-fg-active-color: var(--secondary-fg-color);
+	--annotation-preview-bg-color: rgba(100 ,100, 100, .2);
+	--tooltip-bg-color: #D8D3AD; /* Tooltips */
+}
+
+html.aw {
+	--primary-bg-color: rgba(255, 255, 255, 1);
+	--secondary-bg-color: rgba(220, 220, 220, .6);
+	--semi-transparent-bg-color: rgba(250, 250, 250, .8);
+	--primary-fg-color: rgba(245, 114, 71, 1);
+	--secondary-fg-color: rgba(125, 120, 120, 1);
+	--semi-transparent-fg-color: rgba(125, 120, 120, .3);
+	--semi-transparent-fg-highlight-color: rgba(125, 120, 120, .4);
+	--semi-transparent-fg-active-color: var(--secondary-fg-color);
+	--annotation-preview-bg-color: rgba(255, 255, 255, .9);
+	--tooltip-bg-color: #D8D3AD;
 }

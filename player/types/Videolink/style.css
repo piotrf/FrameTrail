@@ -3,7 +3,7 @@
 #VideolinkTimeline .timelineElement {
 	position: absolute;
 	height: 100%;
-	background: rgba(160, 163, 163, .6);
+	background: var(--semi-transparent-fg-color);
 	pointer-events: all;
 	-moz-transition-duration: 0.2s;
     -moz-transition-property: bottom;
@@ -16,20 +16,24 @@
 }
 
 #VideolinkTimeline .timelineElement.active {
-	background: rgba(160, 163, 163, 1);
+	background: var(--primary-fg-color);
 }
 
 #VideolinkTimeline .timelineElement.highlighted {
-	background: #f8f8f8 !important;
+	background: var(--primary-fg-color) !important;
 	z-index: 100000;
 }
 
 #VideolinkTimeline.editable .timelineElement {
-	background-color: rgba(160, 170, 175, 0.8);
+	background-color: var(--secondary-fg-color);
 }
 
 #VideolinkTimeline .timelineElement.brushed {
-	background: #cad4d9;
+	background: var(--semi-transparent-fg-highlight-color);
+}
+
+#VideolinkTimeline .timelineElement.brushed.active, #VideolinkTimeline.editable .timelineElement.brushed {
+	background-color: var(--primary-fg-color);
 }
 
 #VideolinkTimeline .timelineElement.ui-draggable:hover {
@@ -87,10 +91,9 @@
 	width: 44px;
 	height: 29px;
 	margin: 3px 3px 3px 0;
-	background-color: rgba(255,255,255,.3);
+	background-color: var(--semi-transparent-fg-color);
 }
 
- 
 #VideolinkTiles .tileElement [class^="icon-"]::before, #VideolinkTiles .tileElement [class*=" icon-"]::before {
 	font-size: 19px;
 	width: 100%;
@@ -99,13 +102,12 @@
 	line-height: 30px;
 }
 
-
 #VideolinkTiles .tileElement:hover, #VideolinkTiles .tileElement.brushed {
-	background-color: rgba(255,255,255,.4);
+	background-color: var(--semi-transparent-fg-highlight-color);
 }
 
 #VideolinkTiles .tileElement.active {
-	background-color: rgba(255,255,255,.5);
+	background-color: var(--semi-transparent-fg-active-color);
 }
 
 #VideolinkTiles .tileElement.open {

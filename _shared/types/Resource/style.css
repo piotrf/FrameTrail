@@ -13,7 +13,8 @@
 .resourceThumb {
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	background-color: #929599;
+	background-color: var(--primary-bg-color);
+	outline: 1px solid var(--primary-bg-color);
 	cursor: pointer;
 }
 
@@ -63,7 +64,7 @@
 .resourceThumb .resourceOverlay .resourceIcon [class^="icon-"]::before, .resourceThumb .resourceOverlay .resourceIcon [class*=" icon-"]::before {
 	font-size: 20px;
 	color: var(--primary-fg-color);
-	text-shadow: 1px 1px 3px var(--primary-bg-color);
+	text-shadow: 0px 0px 2px var(--secondary-bg-color);
 }
 
 
@@ -73,10 +74,11 @@
 	left: 0;
 	width: 100%;
 	height: auto;
-	background-color: rgba(80, 80, 80, 0.8);
+	background-color: var(--semi-transparent-bg-color);
 	font-size: 13px;
 	padding: 6px 5px 3px 5px;
 	color: var(--primary-fg-color);
+	text-shadow: 1px 1px 2px var(--primary-bg-color);
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -87,7 +89,7 @@
 	bottom: 4px;
 	left: 4px;
 	z-index: 4;
-	background-color: rgba(80, 80, 80, 0.8);
+	background-color: var(--semi-transparent-bg-color);
     border: 2px solid var(--primary-fg-color) ;
     border-radius: 50%;
     font-size: 0;

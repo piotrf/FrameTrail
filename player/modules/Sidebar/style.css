@@ -21,10 +21,10 @@
 }
 
 #Sidebar.editActive {
-	background-color: #e0e3e6;
+	background-color: var(--secondary-fg-color);
 	color: var(--primary-bg-color);
 	box-shadow: none;
-	border-right: 1px solid #999;
+	border-right: 1px solid var(--secondary-bg-color);
 }
 
 .viewmodeControls button.editMode {
@@ -69,8 +69,9 @@
 }
 
 .viewmodeControls button.editMode.active {
-	background-color: #F8F8F8;
-	border-color: #999;
+	background-color: var(--primary-fg-color);
+	color: var(--primary-bg-color);
+	border-color: var(--secondary-bg-color);
 	opacity: 1;
 	pointer-events: none;
 }
@@ -82,7 +83,7 @@
 	right: -2px;
 	width: 2px;
 	height: 100%;
-	background: #F8F8F8;
+	background: var(--primary-fg-color);
 }
 
 .viewmodeControls button.editMode [class^="icon-"]::before, .viewmodeControls button.editMode [class*=" icon-"]::before {
@@ -111,11 +112,11 @@
 
 #SidebarContainer .descriptionLabel {
 	margin-top: 10px;
-	color: #919497;
+	color: var(--secondary-fg-color);
 }
 
 #Sidebar.editActive #SidebarContainer .descriptionLabel {
-	color: #777;
+	color: var(--secondary-bg-color);
 }
 
 #SidebarContainer .descriptionDates {

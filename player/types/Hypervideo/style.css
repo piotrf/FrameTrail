@@ -82,7 +82,7 @@
 	bottom: 0;
 	width: 100%;
 	height: auto;
-	background-color: rgba(80, 80, 80, 0.8);
+	background-color: var(--semi-transparent-bg-color);
 	text-align: center;
 	padding: 6px 5px 3px 5px;
 	color: var(--primary-fg-color);
@@ -126,7 +126,7 @@
 	left: 0;
 	width: 100%;
 	z-index: 3;
-	background-color: rgba(80, 80, 80, 0.8);
+	background-color: var(--semi-transparent-bg-color);
 	display: none;
 }
 

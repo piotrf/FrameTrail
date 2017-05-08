@@ -22,7 +22,7 @@
 }
 
 #Titlebar.editActive {
-	background: #E0E3E6;
+	background: var(--secondary-fg-color);
 }
 
 #Titlebar button {
