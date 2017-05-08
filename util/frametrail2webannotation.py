@@ -30,8 +30,8 @@ def generate_body(a, basename):
             ("type", 'Text'),
             ("value", a["text"]),
             ("format", "text/plain"),
-            ("frametrail,name", a['name']),
-            ("frametrail,thumb", a['thumb']),
+            ("frametrail:name", a['name']),
+            ("frametrail:thumb", a['thumb']),
         ))
         return res
     elif a['type'] in bodytype_mapping:
@@ -50,20 +50,20 @@ def generate_body(a, basename):
     elif a['type'] == 'location':
         return OrderedDict((
             # Custom format
-            ("type", "frametrail,Location"),
+            ("type", "frametrail:Location"),
             ("format", "application/x-frametrail-location"),
-            ("frametrail,name", a['name']),
+            ("frametrail:name", a['name']),
             # This can be discussed. I chose to keep lat/long as
             # separate properties (because such properties exist in
             # the wgs84 ontology), but serialize the boundingBox
             # information, since the closest equivalent is the
             # MediaFragment box specification.
-            # frametrail,lat/lon should be defined as
+            # frametrail:lat/lon should be defined as
             # equivalent to
             # http,//www.w3.org/2003/01/geo/wgs84_pos#lat/long
-            ("frametrail,lat", a['attributes']['lat']),
-            ("frametrail,long", a['attributes']['lon']),
-            ("frametrail,boundingBox", ",".join(a['attributes']['boundingBox']))
+            ("frametrail:lat", a['attributes']['lat']),
+            ("frametrail:long", a['attributes']['lon']),
+            ("frametrail:boundingBox", ",".join(a['attributes']['boundingBox']))
         ))
 
 def convert_annotation(a, video_url, basename):
