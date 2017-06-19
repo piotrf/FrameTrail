@@ -300,4 +300,5 @@ switch($_REQUEST["a"]) {
 		$return["string"] = "No question? No answer!";
 		break;
 }
+
 echo json_encode($return,$conf["settings"]["json_flags"]);
