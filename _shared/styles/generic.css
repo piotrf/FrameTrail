@@ -126,7 +126,7 @@ input[readonly], textarea[readonly] {
 }
 
 .message.error {
-	background-color: var(--primary-fg-color)9F7;
+	background-color: var(--primary-fg-color);
 	border: 1px solid #cd0a0a;
 	color: #cd0a0a;
 }
@@ -138,21 +138,87 @@ input[readonly], textarea[readonly] {
 }
 
 .workingSpinner {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 60px;
-	height: 60px;
-	margin-top: -30px;
-	margin-left: -30px;
-	background-color: transparent;
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-image: url("../icons/spinner.gif");
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
+    border-radius: 50%;
+    background: var(--primary-fg-color);
+    background: -moz-linear-gradient(left, var(--primary-fg-color) 10%, transparent 42%);
+    background: -webkit-linear-gradient(left, var(--primary-fg-color) 10%, transparent 42%);
+    background: -o-linear-gradient(left, var(--primary-fg-color) 10%, transparent 42%);
+    background: -ms-linear-gradient(left, var(--primary-fg-color) 10%, transparent 42%);
+    background: linear-gradient(to right, var(--primary-fg-color) 10%, transparent 42%);
+    -webkit-animation: loading 1.4s infinite linear;
+    animation: loading 1s infinite linear;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    mask-image: radial-gradient(transparent 65%, #000 66%);
+    -webkit-mask-image: radial-gradient(transparent 65%, #000 66%);
+}
+
+.workingSpinner:before {
+    width: 50%;
+    height: 50%;
+    background: var(--primary-fg-color);
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+}
+
+.workingSpinner:after {
+    background: var(--primary-bg-color);
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .workingSpinner.dark {
-	background-image: url("../icons/spinner.dark.gif")
+    background: var(--primary-fg-color);
+    background: -moz-linear-gradient(left, var(--primary-bg-color) 10%, transparent 42%);
+    background: -webkit-linear-gradient(left, var(--primary-bg-color) 10%, transparent 42%);
+    background: -o-linear-gradient(left, var(--primary-bg-color) 10%, transparent 42%);
+    background: -ms-linear-gradient(left, var(--primary-bg-color) 10%, transparent 42%);
+    background: linear-gradient(to right, var(--primary-bg-color) 10%, transparent 42%);
+}
+
+.workingSpinner.dark::before {
+    background: var(--primary-bg-color);
+}
+
+@-webkit-keyframes loading {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loading {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 /* Tooltips */

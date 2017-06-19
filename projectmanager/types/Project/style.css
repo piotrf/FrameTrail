@@ -27,7 +27,6 @@
 
 .projectThumb .projectsOptions button {
 	float: left;
-	background-color: transparent;
     border: 2px solid var(--primary-bg-color);
     border-radius: 50%;
     height: 40px;
