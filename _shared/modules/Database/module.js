@@ -415,7 +415,12 @@
                 codeSnippets = {};
                 codeSnippets.globalEvents = {};
                 codeSnippets.timebasedEvents = oldSnippets;
+                codeSnippets.customCSS = '';
             } else {
+                //compatibility fix if no custom CSS model
+                if (!data.customCSS) {
+                    data.customCSS = '';
+                }
                 codeSnippets = data;
             }
 
@@ -426,6 +431,7 @@
             codeSnippets = {};
             codeSnippets.globalEvents = {};
             codeSnippets.timebasedEvents = [];
+            codeSnippets.customCSS = '';
 
             // call success anyway to deal with old versions (without codeSnippets.json file)
             success.call(this);

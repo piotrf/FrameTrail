@@ -137,8 +137,15 @@ function hypervideoAdd($projectID, $resourcesID, $duration = false, $name, $desc
 	$tmp = array();
 	file_put_contents($newHVdir."/links.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 	file_put_contents($newHVdir."/overlays.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-	file_put_contents($newHVdir."/codeSnippets.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 	file_put_contents($newHVdir."/annotationfiles/1.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+	$codeSnippetTemplate["globalEvents"]["onReady"] = "";
+	$codeSnippetTemplate["globalEvents"]["onPlay"] = "";
+	$codeSnippetTemplate["globalEvents"]["onPause"] = "";
+	$codeSnippetTemplate["globalEvents"]["onEnded"] = "";
+	$codeSnippetTemplate["timebasedEvents"] = $tmp;
+	$codeSnippetTemplate["customCSS"] = "";
+	file_put_contents($newHVdir."/codeSnippets.json",json_encode($codeSnippetTemplate, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
 	$return["status"] = "success";
 	$return["code"] = 0;
