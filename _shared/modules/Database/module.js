@@ -417,9 +417,13 @@
                 codeSnippets.timebasedEvents = oldSnippets;
                 codeSnippets.customCSS = '';
             } else {
-                //compatibility fix if no custom CSS model
+                // compatibility fix if no custom CSS model
                 if (!data.customCSS) {
                     data.customCSS = '';
+                }
+                // temporary type fix (Array / Object Bug in PHP)
+                if ( Array.isArray(data.globalEvents) && data.globalEvents.length == 0 ) {
+                    data.globalEvents = {};
                 }
                 codeSnippets = data;
             }
