@@ -6,7 +6,7 @@
 /**
  * I am the type definition of an Overlay.
  *
- * An Overlay displays the content of any type of {{#crossLink "Resource"}}Resource{{/crossLink}} 
+ * An Overlay displays the content of any type of {{#crossLink "Resource"}}Resource{{/crossLink}}
  * in a separate layer on top of the video.
  *
  * Overlays are managed by the {{#crossLink "OverlaysController"}}OverlaysController{{/crossLink}}.
@@ -28,6 +28,14 @@ FrameTrail.defineType(
             data.events = {};
         }
 
+        // compatibility fix
+        if ( !data.startOffset ) {
+            data.startOffset = 0;
+        }
+        if ( !data.endOffset ) {
+            data.endOffset = 0;
+        }
+
         this.data = data;
 
         this.resourceItem = FrameTrail.newObject(
@@ -39,7 +47,7 @@ FrameTrail.defineType(
         if (    this.data.type === 'video'
              && this.data.attributes.autoPlay) {
             // Note: Currently, the only synced media type is 'video', so we shortcut it
-        
+
             this.syncedMedia = true;
 
         }
@@ -70,7 +78,7 @@ FrameTrail.defineType(
          * I signal wether the time-based content of myself should be played synchronized with the main video.
          * I am set to true during construction, when my resource type is video and my data.attributes.autoPlay is also true.
          * This can be changed later in the {{#crossLink "ResourceVideo/renderPropertiesControls:method"}}ResourceVideo/renderPropertiesControls{{/crossLink}}.
-         * 
+         *
          * Se also {{#crossLink "Overlay/setSyncedMedia:method"}}Overlay/setSyncedMedia(){{/crossLink}}
          *
          * @attribute syncedMedia
@@ -125,7 +133,8 @@ FrameTrail.defineType(
             ViewVideo.OverlayTimeline.append(this.timelineElement);
             ViewVideo.OverlayContainer.append(this.overlayElement);
 
-            this.overlayElement.append( this.resourceItem.renderContent() );
+            var newOverlayContent = this.resourceItem.renderContent()
+            this.overlayElement.append(newOverlayContent);
 
             this.updateTimelineElement();
             this.updateOverlayElement();
@@ -134,6 +143,15 @@ FrameTrail.defineType(
             if (this.syncedMedia) {
                 this.setSyncedMedia(true);
             }
+
+            if (   this.syncedMedia
+                && newOverlayContent.get(0) instanceof HTMLMediaElement) {
+
+                this.prepareSyncedHTML5Video(newOverlayContent);
+
+            }
+
+
 
             this.timelineElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
             this.overlayElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
@@ -149,7 +167,7 @@ FrameTrail.defineType(
             }
 
             this.overlayElement.click({overlayObject: this}, function(evt) {
-                
+
                 var self = evt.data.overlayObject;
                 if (self.data.events.onClick && FrameTrail.getState('editMode') != 'overlays') {
                     try {
@@ -164,7 +182,49 @@ FrameTrail.defineType(
             });
 
 
+
         },
+
+
+        /**
+         * I prepare the event listeners for a synced HTML5 video used as overlay.
+         *
+         * @method prepareSyncedHTML5Video
+         * @param {jQuery} newOverlayVideo
+         */
+        prepareSyncedHTML5Video: function (newOverlayVideo) {
+
+            var self = this,
+                HypervideoController = FrameTrail.module('HypervideoController'),
+                timeout = null;
+
+            newOverlayVideo.on('waiting', checkForStall);
+
+            newOverlayVideo.attr('preload', 'auto');
+			newOverlayVideo.get(0).load();
+
+            function checkForStall() {
+
+                if (self.activeState) {
+
+        			if (newOverlayVideo.get(0).readyState > 0) {
+        				HypervideoController.playbackStalled(false, self);
+        			} else {
+                        HypervideoController.playbackStalled(true, self);
+                        if (timeout) {
+                            window.clearTimeout(timeout);
+                        }
+                        timeout = window.setTimeout(checkForStall, 1000);
+        			}
+
+        		} else {
+                    HypervideoController.playbackStalled(false, self);
+                }
+
+			}
+
+        },
+
 
         /**
          * I remove my DOM elements ({{#crossLink "Overlay/timelineElement:attribute"}}Overlay/timelineElement{{/crossLink}}
@@ -209,7 +269,7 @@ FrameTrail.defineType(
          * @method updateOverlayElement
          */
         updateOverlayElement: function () {
-            
+
             this.overlayElement.css({
                 top:    this.data.position.top + '%',
                 left:   this.data.position.left + '%',
@@ -234,7 +294,7 @@ FrameTrail.defineType(
         * @method scaleOverlayElement
         */
         scaleOverlayElement: function() {
-            
+
             if (this.data.type == 'wikipedia' || this.data.type == 'webpage' || this.data.type == 'text') {
 
                 var elementToScale = this.overlayElement.children('.resourceDetail'),
@@ -311,9 +371,9 @@ FrameTrail.defineType(
                 if (this.overlayElement.find('.resourceDetail').data().map) {
                     this.overlayElement.find('.resourceDetail').data().map.updateSize();
                 }
-                
+
             }
-            
+
             this.timelineElement.addClass('active');
 
             if (this.syncedMedia) {
@@ -370,7 +430,7 @@ FrameTrail.defineType(
          * When I "got into focus" (which happens, when I become the referenced object in the OverlaysController's
          * {{#crossLink "OverlaysController/overlayInFocus:attribute"}}overlayInFocus attribute{{/crossLink}}),
          * then this method will be called.
-         * 
+         *
          * @method gotInFocus
          */
         gotInFocus: function () {
@@ -391,7 +451,7 @@ FrameTrail.defineType(
          * {{#crossLink "OverlaysController/overlayInFocus:attribute"}}overlayInFocus attribute{{/crossLink}}),
          * is set either to null or to an other overlay than myself),
          * then this method will be called.
-         * 
+         *
          * @method removedFromFocus
          */
         removedFromFocus: function () {
@@ -464,7 +524,7 @@ FrameTrail.defineType(
         },
 
         /**
-         * When the global editMode leaves the state "overlays", I am called to 
+         * When the global editMode leaves the state "overlays", I am called to
          * stop the editing features of the overlay.
          *
          * @method stopEditing
@@ -485,9 +545,9 @@ FrameTrail.defineType(
 
         /**
          * I make my {{#crossLink "Overlay/timelineElement:attribute"}}timelineElement{{/crossLink}} draggable.
-         * 
+         *
          * The event handling changes my this.data.start and this.data.end attributes
-         * accordingly. Also it updates the control elements of my 
+         * accordingly. Also it updates the control elements of my
          * {{#crossLink "Resource/renderBasicPropertiesControls:method"}}properties control interface{{/crossLink}}.
          *
          * @method makeTimelineElementDraggable
@@ -498,14 +558,14 @@ FrameTrail.defineType(
 
 
             this.timelineElement.draggable({
-                
+
                 axis:        'x',
                 containment: 'parent',
                 snapTolerance: 10,
 
                 drag: function(event, ui) {
-                    
-                    
+
+
                     var closestGridline = FrameTrail.module('ViewVideo').closestToOffset($('.gridline'), {
                             left: ui.position.left,
                             top: ui.position.top
@@ -513,7 +573,7 @@ FrameTrail.defineType(
                         snapTolerance = $(this).draggable('option', 'snapTolerance');
 
                     if (closestGridline) {
-                        
+
                         $('.gridline').css('background-color', '#ff9900');
 
                         if ( ui.position.left - snapTolerance < closestGridline.position().left &&
@@ -525,18 +585,18 @@ FrameTrail.defineType(
 
                         }
                     }
-                    
+
                     var videoDuration = FrameTrail.module('HypervideoModel').duration,
                         leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                         widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width()),
                         newStartValue = leftPercent * (videoDuration / 100),
                         newEndValue   = (leftPercent + widthPercent) * (videoDuration / 100);
 
-                    FrameTrail.module('HypervideoController').currentTime = newStartValue;    
+                    FrameTrail.module('HypervideoController').currentTime = newStartValue;
                     FrameTrail.module('OverlaysController').updateControlsStart(newStartValue);
                     FrameTrail.module('OverlaysController').updateControlsEnd( newEndValue );
-                    
-                    
+
+
                 },
 
                 start: function(event, ui) {
@@ -544,7 +604,7 @@ FrameTrail.defineType(
                     if (!self.permanentFocusState) {
                         FrameTrail.module('OverlaysController').overlayInFocus = self;
                     }
-                    
+
                 },
 
                 stop: function(event, ui) {
@@ -552,12 +612,12 @@ FrameTrail.defineType(
                     if (!self.permanentFocusState) {
                         FrameTrail.module('OverlaysController').overlayInFocus = null;
                     }
-                    
+
 
                     var videoDuration = FrameTrail.module('HypervideoModel').duration,
                         leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                         widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width());
-                    
+
                     self.data.start = leftPercent * (videoDuration / 100);
                     self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
@@ -566,7 +626,7 @@ FrameTrail.defineType(
                     FrameTrail.module('OverlaysController').stackTimelineView();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
-                    
+
                 }
             });
 
@@ -574,9 +634,9 @@ FrameTrail.defineType(
 
         /**
          * I make my {{#crossLink "Overlay/timelineElement:attribute"}}timelineElement{{/crossLink}} resizable.
-         * 
+         *
          * The event handling changes my this.data.start and this.data.end attributes
-         * accordingly. Also it updates the control elements of my 
+         * accordingly. Also it updates the control elements of my
          * {{#crossLink "Resource/renderBasicPropertiesControls:method"}}properties control interface{{/crossLink}}.
          *
          * @method makeTimelineElementResizeable
@@ -588,12 +648,12 @@ FrameTrail.defineType(
 
 
             this.timelineElement.resizable({
-                
+
                 containment: 'parent',
                 handles:     'e, w',
 
                 resize: function(event, ui) {
-                    
+
                     var closestGridline = FrameTrail.module('ViewVideo').closestToOffset($('.gridline'), {
                             left: (endHandleGrabbed ? (ui.position.left + ui.helper.width()) : ui.position.left),
                             top: ui.position.top
@@ -601,10 +661,10 @@ FrameTrail.defineType(
                         snapTolerance = $(this).draggable('option', 'snapTolerance');
 
                     if (closestGridline) {
-                        
+
                         $('.gridline').css('background-color', '#ff9900');
 
-                        if ( !endHandleGrabbed && 
+                        if ( !endHandleGrabbed &&
                              ui.position.left - snapTolerance < closestGridline.position().left &&
                              ui.position.left + snapTolerance > closestGridline.position().left ) {
 
@@ -616,7 +676,7 @@ FrameTrail.defineType(
                         } else if ( endHandleGrabbed &&
                                     ui.position.left + ui.helper.width() - snapTolerance < closestGridline.position().left &&
                                     ui.position.left + ui.helper.width() + snapTolerance > closestGridline.position().left ) {
-                        
+
                             ui.helper.width(closestGridline.position().left - ui.position.left);
 
                             closestGridline.css('background-color', '#00ff00');
@@ -624,7 +684,7 @@ FrameTrail.defineType(
                         }
                     }
 
-                    
+
                     var videoDuration = FrameTrail.module('HypervideoModel').duration,
                         leftPercent   = 100 * (ui.position.left / ui.helper.parent().width()),
                         widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width()),
@@ -645,8 +705,8 @@ FrameTrail.defineType(
                     }
 
                     scaleOverlayElement();
-                    
-                    
+
+
                 },
 
                 start: function(event, ui) {
@@ -656,11 +716,11 @@ FrameTrail.defineType(
                     }
 
                     endHandleGrabbed = $(event.originalEvent.target).hasClass('ui-resizable-e')
-                    
+
                 },
 
                 stop: function(event, ui) {
-                    
+
                     if (!self.permanentFocusState) {
                         FrameTrail.module('OverlaysController').overlayInFocus = null;
                     }
@@ -670,7 +730,7 @@ FrameTrail.defineType(
                         leftPercent  = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                         widthPercent = 100 * (ui.helper.width() / ui.helper.parent().width());
 
-                    
+
                     self.data.start = leftPercent * (videoDuration / 100);
                     self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
@@ -679,7 +739,7 @@ FrameTrail.defineType(
                     scaleOverlayElement();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
-                    
+
                 }
             });
 
@@ -688,9 +748,9 @@ FrameTrail.defineType(
 
         /**
          * I make my {{#crossLink "Overlay/overlayElement:attribute"}}overlayElement{{/crossLink}} draggable.
-         * 
+         *
          * The event handling changes my this.data.position.[top|left|width|height] attributes
-         * accordingly. Also it updates the control elements of my 
+         * accordingly. Also it updates the control elements of my
          * {{#crossLink "Resource/renderBasicPropertiesControls:method"}}properties control interface{{/crossLink}}.
          *
          * @method makeOverlayElementDraggable
@@ -700,7 +760,7 @@ FrameTrail.defineType(
             var self = this;
 
             self.overlayElement.draggable({
-                
+
                 containment: 'parent',
 
                 drag: function(event, ui) {
@@ -721,7 +781,7 @@ FrameTrail.defineType(
                     if (!self.permanentFocusState) {
                         FrameTrail.module('OverlaysController').overlayInFocus = self;
                     }
-                    
+
                 },
 
                 stop: function(event, ui) {
@@ -729,9 +789,9 @@ FrameTrail.defineType(
                     if (!self.permanentFocusState) {
                         FrameTrail.module('OverlaysController').overlayInFocus = null;
                     }
-                    
+
                     var parent = ui.helper.parent();
-                    
+
                     self.data.position.top    = ui.helper.position().top/parent.height()*100;
                     self.data.position.left   = ui.helper.position().left/parent.width()*100;
                     self.data.position.width  = ui.helper.width()/parent.width()*100;
@@ -740,7 +800,7 @@ FrameTrail.defineType(
                     self.updateOverlayElement();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
-                    
+
                 }
             });
 
@@ -748,9 +808,9 @@ FrameTrail.defineType(
 
         /**
          * I make my {{#crossLink "Overlay/overlayElement:attribute"}}overlayElement{{/crossLink}} resizable.
-         * 
+         *
          * The event handling changes my this.data.position.[top|left|width|height] attributes
-         * accordingly. Also it updates the control elements of my 
+         * accordingly. Also it updates the control elements of my
          * {{#crossLink "Resource/renderBasicPropertiesControls:method"}}properties control interface{{/crossLink}}.
          *
          * @method makeOverlayElementResizeable
@@ -760,7 +820,7 @@ FrameTrail.defineType(
             var self = this;
 
             self.overlayElement.resizable({
-                
+
                 containment: 'parent',
                 handles: 'ne, se, sw, nw',
 
@@ -786,14 +846,14 @@ FrameTrail.defineType(
                 },
 
                 stop: function(event, ui) {
-                    
+
                     if (!self.permanentFocusState) {
                         FrameTrail.module('OverlaysController').overlayInFocus = null;
                     }
 
 
                     var parent = ui.helper.parent();
-                    
+
                     self.data.position.top    = ui.helper.position().top/parent.height()*100;
                     self.data.position.left   = ui.helper.position().left/parent.width()*100;
                     self.data.position.width  = ui.helper.width()/parent.width()*100;
@@ -802,7 +862,7 @@ FrameTrail.defineType(
                     self.updateOverlayElement();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
-                    
+
                 }
             });
 

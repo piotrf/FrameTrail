@@ -5,7 +5,7 @@
 
 /**
  * I am the type definition of a ResourceVideo. I represent a video file resource on the server.
- * 
+ *
  * Unlike other resource types, which have one or no file at all, a video resource consists of an mp4 and a webm file, plus an arbitrary amount of subtitle files.
  *
  * @class ResourceVideo
@@ -23,12 +23,10 @@ FrameTrail.defineType(
 
         this.resourceData = resourceData;
 
-
-
     },
 
     {
-        
+
         /**
          * I hold the data object of a ResourceVideo, which is stored in the {{#crossLink "Database"}}Database{{/crossLink}} and saved in the resource's _index.json.
          * @attribute resourceData
@@ -47,12 +45,12 @@ FrameTrail.defineType(
 
             return $(
                     '<video class="resourceDetail" data-type="'+ this.resourceData.type +'" controls autobuffer>'
-                +       '<source src="../_data/projects/' 
+                +       '<source src="../_data/projects/'
                 +       FrameTrail.module('RouteNavigation').projectID
                 +       '/resources/'
                 +       this.resourceData.attributes.alternateVideoFile
                 +       '" type="video/mp4">'
-                +       '<source src="../_data/projects/' 
+                +       '<source src="../_data/projects/'
                 +       FrameTrail.module('RouteNavigation').projectID
                 +       '/resources/'
                 +       this.resourceData.src
@@ -60,7 +58,7 @@ FrameTrail.defineType(
                 +    '</video>'
             );
 
-        }, 
+        },
 
         /**
          * Several modules need me to render a thumb of myself.
@@ -84,9 +82,9 @@ FrameTrail.defineType(
                 trueID = id;
             }
 
-            var thumbBackground = (this.resourceData.thumb ? 
+            var thumbBackground = (this.resourceData.thumb ?
                     'background-image: url('+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.thumb) +');' : '' );
-            
+
             var thumbElement = $('<div class="resourceThumb" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="'+ thumbBackground +'">'
                 + '                  <div class="resourceOverlay">'
                 + '                      <div class="resourceIcon"><span class="icon-play-1"></span></div>'
@@ -132,9 +130,9 @@ FrameTrail.defineType(
                               +      (!overlay.data.attributes.autoPlay ? 'checked="checked"' : '')
                               + '    ><label for="SyncedFalse">No Synchronization</label>'
                               + '</div>').buttonset();
-                                
+
                 syncedRadio.find('input[name="radio"]').on('change', function () {
-                                
+
                                 if (this.value == 'on') {
                                     overlay.data.attributes.autoPlay = true;
                                     overlay.syncedMedia = true;

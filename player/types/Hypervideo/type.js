@@ -16,17 +16,16 @@
 FrameTrail.defineType(
 
     'Hypervideo',
-    
+
 
     function(data){
 
         this.data = data;
 
-
     },
 
     {
-        
+
         /**
          * I render a thumb for the hypervideo data in my this.data attribute.
          *
@@ -45,7 +44,7 @@ FrameTrail.defineType(
                                     + '&hypervideo='
                                     + hypervideoID,
 
-                thumbBackground = (this.data.thumb ? 
+                thumbBackground = (this.data.thumb ?
                     'background-image: url('+ FrameTrail.module('RouteNavigation').getResourceURL(this.data.thumb) +');' : '' );
 
                 thumbElement    =   $('<div class="hypervideoThumb" data-hypervideoID="'+ hypervideoID +'" data-name="'+ this.data.name +'" style="'+ thumbBackground +'">'
@@ -57,10 +56,7 @@ FrameTrail.defineType(
 
             return thumbElement;
 
-
         }
-        
-
 
 
     }

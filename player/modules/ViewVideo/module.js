@@ -6,7 +6,7 @@
 /**
  * I am the ViewVideo. I am the most important user interface component. I contain
  * all the visual elements of the hypervideo player, like the main &lt;video&gt; element,
- * the containers for overlays, videolinks and annotations, their respective timelines 
+ * the containers for overlays, videolinks and annotations, their respective timelines
  * and the player control elements.
  *
  * When I am initialized, I prepare all DOM elements and set up their event listeners.
@@ -116,13 +116,13 @@ FrameTrail.defineModule('ViewVideo', function(){
 
 
         slideArea                  = domElement.children('#SlideArea'),
-        
+
         PlayerContainer            = domElement.find('#PlayerContainer'),
         HypervideoContainer        = domElement.find('#HypervideoContainer'),
         VideoContainer             = domElement.find('#VideoContainer'),
         Hypervideo                 = domElement.find('#Hypervideo'),
         CaptionContainer           = domElement.find('#CaptionContainer'),
-        
+
         VideolinkContainer         = domElement.find('#VideolinkContainer'),
         VideolinkTiles             = domElement.find('#VideolinkTiles'),
         VideolinkTileSlider        = domElement.find('#VideolinkTiles .tileSlider'),
@@ -143,7 +143,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         AnnotationSettingsButton   = domElement.find('#AnnotationSettingsButton'),
         EditingOptions             = domElement.find('#EditingOptions'),
 
-        
+
         CurrentTime                = domElement.find('#CurrentTime'),
         TotalDuration              = domElement.find('#TotalDuration'),
         PlayButton                 = domElement.find('#PlayButton'),
@@ -160,6 +160,8 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         ExpandButton               = domElement.find('#ExpandButton'),
 
+        WorkingIndicator           = VideoContainer.find('#WorkingIndicator'),
+
         shownDetails               = null,
         wasPlaying                 = false;
 
@@ -167,9 +169,9 @@ FrameTrail.defineModule('ViewVideo', function(){
     ExpandButton.click(function() {
         showDetails(false);
     });
-    
+
     Controls.find('#CaptionsButton').click(function() {
-                
+
         Controls.find('#RightControlPanel .active').not('[data-config], #CaptionsButton, #CaptionSelectContainer, .annotationSetButton').removeClass('active');
 
         if ( !$(this).children('#CaptionSelectContainer').hasClass('active') ) {
@@ -189,13 +191,13 @@ FrameTrail.defineModule('ViewVideo', function(){
     });
 
     Controls.find('.contextButton').click(function(evt) {
-        
+
         var settingsButton = $(this);
-        
+
         if ( !settingsButton.hasClass('active') ) {
-            
+
             $('body').on('mouseup', function(evt) {
-                
+
                 if ( !$(evt.target).attr('data-config') && !$(evt.target).hasClass('contextButton') ) {
                     settingsButton.removeClass('active');
                     VideoContainer.css('opacity', 1);
@@ -204,9 +206,9 @@ FrameTrail.defineModule('ViewVideo', function(){
                     evt.preventDefault();
                     evt.stopPropagation();
                 }
-                
+
             });
-            
+
             Controls.find('#RightControlPanel .active').not('[data-config], #CaptionsButton, .annotationSetButton').removeClass('active');
 
             settingsButton.addClass('active');
@@ -214,7 +216,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             domElement.find('#InfoAreaRight').css('opacity', 0.3);
 
         } else {
-            
+
             settingsButton.removeClass('active');
             VideoContainer.css('opacity', 1);
             domElement.find('#InfoAreaRight').css('opacity', 1);
@@ -233,7 +235,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             var configState = $(evt.target).hasClass('active');
 
             if ( config != 'hv_config_annotationsPosition' && config != 'hv_config_slidingMode' ) {
-            
+
                 FrameTrail.changeState(config, !configState);
 
             } else if ( config == 'hv_config_slidingMode' ) {
@@ -271,7 +273,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             FrameTrail.module('HypervideoController').muted = true;
             $(this).addClass('active');
         }
-        
+
 
     });
 
@@ -291,7 +293,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     });
 
-    document.addEventListener("fullscreenchange", toggleFullscreenState, false);      
+    document.addEventListener("fullscreenchange", toggleFullscreenState, false);
     document.addEventListener("webkitfullscreenchange", toggleFullscreenState, false);
     document.addEventListener("mozfullscreenchange", toggleFullscreenState, false);
     Controls.find('#FullscreenButton').click(toggleNativeFullscreenState);
@@ -325,15 +327,15 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @param {Boolean} opened
      */
     function toggleSidebarOpen(opened) {
-        
+
         adjustHypervideo(true);
-        
+
     };
 
 
     /**
-     * I am called when the global state "viewSize" changes (which it does after a window resize, 
-     * and one time during app start, after all create methods of interface modules have been called). 
+     * I am called when the global state "viewSize" changes (which it does after a window resize,
+     * and one time during app start, after all create methods of interface modules have been called).
      * @method changeViewSize
      * @param {Array} arrayWidthAndHeight
      */
@@ -355,13 +357,13 @@ FrameTrail.defineModule('ViewVideo', function(){
             '-webkit-transition-duration': '',
             '-o-transition-duration': ''
         });
-        
+
     };
 
 
     /**
      * I react to changes in the global state viewSizeChanged.
-     * The state changes after a window resize event 
+     * The state changes after a window resize event
      * and is meant to be used for performance-heavy operations.
      *
      * @method onViewSizeChanged
@@ -401,7 +403,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function adjustLayout() {
 
-        
+
         var editMode            = FrameTrail.getState('editMode'),
             playerMargin        = parseInt(PlayerContainer.css('marginTop')),
             editBorder          = (editMode != false) ? 20 : 0,
@@ -421,10 +423,10 @@ FrameTrail.defineModule('ViewVideo', function(){
             PlayerContainer.css({
                 'flex-grow': 0,
                 'flex-shrink': 0,
-                'flex-basis': 
-                    $('#MainContainer').height() 
-                    - ((videolinksVisible) ? (VideolinkTiles.height() + playerMargin) : 0) 
-                    - ((annotationsVisible) ? (AnnotationTiles.height() + playerMargin) : 0) 
+                'flex-basis':
+                    $('#MainContainer').height()
+                    - ((videolinksVisible) ? (VideolinkTiles.height() + playerMargin) : 0)
+                    - ((annotationsVisible) ? (AnnotationTiles.height() + playerMargin) : 0)
                     - editBorder
                     + 'px'
             });
@@ -435,30 +437,30 @@ FrameTrail.defineModule('ViewVideo', function(){
         }
 
         if ( slidePosition == 'top' ) {
-            
+
             if ( slidingMode == 'adjust' ) {
-                
+
                 slideArea.css({
                     marginTop:
-                        - ((editMode != false && editMode != 'preview') ? playerMargin : 0) 
+                        - ((editMode != false && editMode != 'preview') ? playerMargin : 0)
                         + 'px',
                     minHeight:
-                        $('#MainContainer').height() 
-                        + ((videolinksVisible && annotationsPosition == 'top') ? VideolinkContainer.height() + VideolinkTiles.height() : 0) 
-                        + ((annotationsVisible && annotationsPosition == 'bottom') ? AnnotationContainer.height() + AnnotationTiles.height() : 0) 
-                        + ((    annotationsVisible && annotationsPosition == 'top' 
+                        $('#MainContainer').height()
+                        + ((videolinksVisible && annotationsPosition == 'top') ? VideolinkContainer.height() + VideolinkTiles.height() : 0)
+                        + ((annotationsVisible && annotationsPosition == 'bottom') ? AnnotationContainer.height() + AnnotationTiles.height() : 0)
+                        + ((    annotationsVisible && annotationsPosition == 'top'
                              || videolinksVisible && annotationsPosition == 'bottom') ? playerMargin : 0)
                         - editBorder
                         + 'px'
                 });
 
             } else if ( slidingMode == 'overlay' ) {
-                
+
                 slideArea.css({
-                    marginTop: 
-                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
-                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
-                        - ((    annotationsVisible && annotationsPosition == 'top' 
+                    marginTop:
+                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0)
+                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0)
+                        - ((    annotationsVisible && annotationsPosition == 'top'
                              || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
                         + 'px'
                 });
@@ -510,32 +512,32 @@ FrameTrail.defineModule('ViewVideo', function(){
                 }
 
             }
-            
+
         } else if ( slidePosition == 'bottom' ) {
-            
+
             if ( slidingMode == 'adjust' ) {
-                
+
                 slideArea.css({
-                    marginTop: 
-                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() + VideolinkTiles.height() : 0) 
-                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() + AnnotationTiles.height() : 0) 
-                        - playerMargin 
+                    marginTop:
+                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() + VideolinkTiles.height() : 0)
+                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() + AnnotationTiles.height() : 0)
+                        - playerMargin
                         + 'px',
                     minHeight:
-                        $('#MainContainer').height() 
-                        + ((videolinksVisible && annotationsPosition == 'bottom') ? (VideolinkContainer.height() + VideolinkTiles.height()) : 0) 
-                        + ((annotationsVisible && annotationsPosition == 'top') ? (AnnotationContainer.height() + AnnotationTiles.height()) : 0) 
+                        $('#MainContainer').height()
+                        + ((videolinksVisible && annotationsPosition == 'bottom') ? (VideolinkContainer.height() + VideolinkTiles.height()) : 0)
+                        + ((annotationsVisible && annotationsPosition == 'top') ? (AnnotationContainer.height() + AnnotationTiles.height()) : 0)
                         - editBorder
                         + 'px'
                 });
 
             } else if ( slidingMode == 'overlay' ) {
-                
+
                 slideArea.css({
-                    marginTop: 
-                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
-                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
-                        - ((    annotationsVisible && annotationsPosition == 'top' 
+                    marginTop:
+                        - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0)
+                        - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0)
+                        - ((    annotationsVisible && annotationsPosition == 'top'
                              || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
                         + 'px'
                 });
@@ -544,7 +546,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
                 // slidingMode overlay bottom behaviour
                 if ( annotationsPosition == 'bottom' ) {
-                    
+
                     AnnotationContainer.css({
                         marginTop: - (targetOffset + AnnotationTiles.height() + (AnnotationContainer.height() / 2)) + 'px'
                     });
@@ -556,9 +558,9 @@ FrameTrail.defineModule('ViewVideo', function(){
                     VideolinkTiles.css({
                         marginTop: ''
                     });
-                    
+
                 } else {
-                    
+
                     VideolinkContainer.css({
                         marginTop: - (targetOffset + VideolinkTiles.height() + (VideolinkContainer.height() / 2)) + 'px'
                     });
@@ -575,22 +577,22 @@ FrameTrail.defineModule('ViewVideo', function(){
             }
 
         } else {
-            
+
             slideArea.css({
-                marginTop: 
-                    - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0) 
-                    - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0) 
-                    - ((    annotationsVisible && annotationsPosition == 'top' 
+                marginTop:
+                    - ((videolinksVisible && annotationsPosition == 'bottom') ? VideolinkContainer.height() : 0)
+                    - ((annotationsVisible && annotationsPosition == 'top') ? AnnotationContainer.height() : 0)
+                    - ((    annotationsVisible && annotationsPosition == 'top'
                          || videolinksVisible && annotationsPosition == 'bottom') ? 0 : playerMargin)
                     + 'px',
                 minHeight:
-                    $('#MainContainer').height() 
+                    $('#MainContainer').height()
                     + (videolinksVisible ? VideolinkContainer.height() : playerMargin)
                     + (annotationsVisible ? AnnotationContainer.height() : playerMargin)
                     - editBorder
                     + 'px'
             });
-                
+
             AnnotationContainer.css({
                 marginTop: ''
             });
@@ -624,12 +626,12 @@ FrameTrail.defineModule('ViewVideo', function(){
         }
 
         domElement.find('#PlayerProgress .ui-slider-handle-circle').css({
-            bottom: 
-                Controls.height() 
+            bottom:
+                Controls.height()
             +   CodeSnippetTimeline.height()
             +   ((editMode == 'codesnippets') ? 6 : OverlayTimeline.height())
-            +   ((annotationTimelineVisible && annotationsPosition == 'bottom') ? AnnotationTimeline.height() : 0) 
-            +   ((videolinkTimelineVisible && annotationsPosition == 'top') ? VideolinkTimeline.height() : 0) 
+            +   ((annotationTimelineVisible && annotationsPosition == 'bottom') ? AnnotationTimeline.height() : 0)
+            +   ((videolinkTimelineVisible && annotationsPosition == 'top') ? VideolinkTimeline.height() : 0)
         });
 
         slideArea.children('svg').css({
@@ -652,16 +654,16 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function adjustHypervideo(animate) {
 
-        
+
         var editBorder = (FrameTrail.getState('editMode') != false) ? (parseInt(domElement.css('borderTopWidth'))*2) : 0;
-            mainContainerWidth  = $(window).width() 
+            mainContainerWidth  = $(window).width()
                                     - ((FrameTrail.getState('sidebarOpen') && !FrameTrail.getState('fullscreen')) ? FrameTrail.module('Sidebar').width : 0)
                                     - editBorder,
-            mainContainerHeight = $(window).height() 
+            mainContainerHeight = $(window).height()
                                     - $('#Titlebar').height()
                                     - editBorder,
             _video              = $(Video);
-            
+
         if (animate) {
             VideoContainer.css({
                 'transition-duration': '',
@@ -723,7 +725,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                 width: videoContainerWidth + 'px'
             });
         }
-        
+
         Hypervideo.css({
             marginLeft: - _video.width()/2 + 'px',
             marginTop: - _video.height()/2 + 'px',
@@ -739,7 +741,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             FrameTrail.module('OverlaysController').rescaleOverlays();
             FrameTrail.module('AnnotationsController').rescaleAnnotations();
         }
-        
+
     };
 
 
@@ -768,7 +770,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function toogleUnsavedChanges(aBoolean) {
 
-        
+
     };
 
 
@@ -795,33 +797,33 @@ FrameTrail.defineModule('ViewVideo', function(){
      * I react to a change in the global state "editMode".
      * @method toggleEditMode
      * @param {} editMode
-     * @return 
+     * @return
      */
     function toggleEditMode(editMode) {
 
         resetEditMode();
 
         switch (editMode) {
-            case false: 
+            case false:
                 leaveEditMode();
                 break;
-            case 'preview': 
+            case 'preview':
                 leaveEditMode();
                 enterPreviewMode();
                 break;
-            case 'overlays': 
+            case 'overlays':
                 enterOverlayMode();
                 break;
-            case 'audio': 
+            case 'audio':
                 enterAudioMode();
                 break;
-            case 'links': 
+            case 'links':
                 enterLinkMode();
                 break;
             case 'codesnippets':
                 enterCodeSnippetMode();
                 break;
-            case 'annotations': 
+            case 'annotations':
                 enterAnnotationMode();
                 break;
         }
@@ -849,9 +851,9 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method initEditMode
      */
     function initEditMode() {
-        
+
         ExpandButton.hide();
-        
+
         $(VideoContainer).css({
             opacity: 1
         });
@@ -907,7 +909,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method enterPreviewMode
      */
     function enterPreviewMode() {
-        
+
     }
 
     /**
@@ -1005,17 +1007,17 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @param {String} oldState
      */
     function toggleConfig_annotationsPosition(newState, oldState) {
-        
+
         if ( FrameTrail.getState('slidePosition') != 'middle' ) {
             FrameTrail.changeState('slidePosition', 'middle');
         }
 
         if (newState == "top") {
-            
+
             PlayerContainer.before(AnnotationTiles);
             AnnotationTiles.before(AnnotationContainer);
             PlayerProgress.before(AnnotationTimeline);
-            
+
             PlayerContainer.after(VideolinkTiles);
             VideolinkTiles.after(VideolinkContainer);
             Controls.after(VideolinkTimeline);
@@ -1025,7 +1027,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                     .before(Controls.find('div[data-config="hv_config_annotationsVisible"]'));
 
         } else {
-            
+
             PlayerContainer.before(VideolinkTiles);
             VideolinkTiles.before(VideolinkContainer);
             PlayerProgress.before(VideolinkTimeline);
@@ -1116,7 +1118,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         adjustLayout();
         adjustHypervideo();
-        
+
         if (newState == 'overlay') {
 
             Controls.find('[data-config="hv_config_slidingMode"]').addClass('active');
@@ -1233,10 +1235,10 @@ FrameTrail.defineModule('ViewVideo', function(){
         }
 
         if (  ( FrameTrail.getState('hv_config_annotationsPosition') == 'bottom'
-             && newState == 'bottom' ) || 
+             && newState == 'bottom' ) ||
               ( FrameTrail.getState('hv_config_annotationsPosition') == 'top'
              && newState == 'top') ) {
-            
+
             shownDetails = 'annotations';
             AnnotationContainer.find('.resourceDetail[data-type="location"]').each(function() {
                 if ( $(this).data('map') ) {
@@ -1253,7 +1255,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         if ( newState != oldState && FrameTrail.getState('hv_config_slidingMode') == 'overlay' ) {
 
             if ( shownDetails != null ) {
-                
+
                 $(VideoContainer).animate({
                     opacity: 0.2
                 }, 500);
@@ -1269,7 +1271,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                 }, 500);
 
             } else if ( wasPlaying ) {
-                
+
                 $(VideoContainer).animate({
                     opacity: 1
                 }, 500);
@@ -1291,7 +1293,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                     opacity: 1
                 }, 500);
             }
-            
+
 
         }
     };
@@ -1302,11 +1304,11 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method slidePositionUp
      */
     function slidePositionUp() {
-        
+
         var slidePosition = FrameTrail.getState('slidePosition');
 
         if ( slidePosition == 'middle' && (
-                ( FrameTrail.getState('hv_config_annotationsPosition') == 'top' && FrameTrail.getState('hv_config_annotationsVisible') ) || 
+                ( FrameTrail.getState('hv_config_annotationsPosition') == 'top' && FrameTrail.getState('hv_config_annotationsVisible') ) ||
                 ( FrameTrail.getState('hv_config_annotationsPosition') == 'bottom' && FrameTrail.getState('hv_config_videolinksVisible') )
              )) {
 
@@ -1324,13 +1326,13 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method slidePositionDown
      */
     function slidePositionDown() {
-        
+
         var slidePosition = FrameTrail.getState('slidePosition');
 
         if ( slidePosition == 'top' ) {
             FrameTrail.changeState('slidePosition', 'middle');
         } else if ( slidePosition == 'middle' && (
-                ( FrameTrail.getState('hv_config_annotationsPosition') == 'bottom' && FrameTrail.getState('hv_config_annotationsVisible') ) || 
+                ( FrameTrail.getState('hv_config_annotationsPosition') == 'bottom' && FrameTrail.getState('hv_config_annotationsVisible') ) ||
                 ( FrameTrail.getState('hv_config_annotationsPosition') == 'top' && FrameTrail.getState('hv_config_videolinksVisible') )
              )) {
 
@@ -1350,7 +1352,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @param {String} mode
      */
     function showDetails(mode) {
-        
+
         shownDetails = mode;
 
         if (!mode) {
@@ -1368,20 +1370,20 @@ FrameTrail.defineModule('ViewVideo', function(){
                 FrameTrail.changeState('slidePosition', 'bottom');
             }
         }
-        
+
     };
 
 
     /**
-     * Toggles the visibility of a vertical grid based on the positions of all timeline items 
-     * in each category (Videolinks, Overlays, Annotations). This grid is used to allow snapping 
+     * Toggles the visibility of a vertical grid based on the positions of all timeline items
+     * in each category (Videolinks, Overlays, Annotations). This grid is used to allow snapping
      * items to positions of other timeline items.
-     * 
+     *
      * @method toggleGrid
      * @param {Boolean} visible
      */
     function toggleGrid(visible) {
-        
+
         if ( !FrameTrail.getState('editMode') || FrameTrail.getState('editMode') == 'preview' ) {
             return;
         }
@@ -1394,7 +1396,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         if ( visible ) {
 
             for (var i = 0; i < timelineItems.length; i++) { // vertical grid lines
-                
+
                 var position = $(timelineItems[i]).position();
 
                 $('<div class="gridline"></div>').css({
@@ -1424,18 +1426,16 @@ FrameTrail.defineModule('ViewVideo', function(){
             PlayerProgress.find('#GridContainer').remove();
 
         }
-        
+
     };
 
     /**
      * Toggles the visibility of the working (loading) indicator.
-     * 
+     *
      * @method toggleVideoWorking
      * @param {Boolean} working
      */
     function toggleVideoWorking(working) {
-        
-        var WorkingIndicator = VideoContainer.find('#WorkingIndicator');
 
         if ( working ) {
 
@@ -1446,12 +1446,12 @@ FrameTrail.defineModule('ViewVideo', function(){
             WorkingIndicator.hide();
 
         }
-        
+
     };
 
     /**
      * I return the closest element from a given position {top: XX, left: XX} in a collection.
-     * 
+     *
      * @method closestToOffset
      * @param {Object} collection
      * @param {Object} position
@@ -1516,11 +1516,11 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     /**
      * Toggle internal Fullscreen State
-     * 
+     *
      * @method toggleFullscreenState
      */
     function toggleFullscreenState() {
-        
+
         var element = $('#MainContainer')[0];
 
         if (element.requestFullScreen) {
@@ -1529,7 +1529,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             } else {
                 FrameTrail.changeState('fullscreen', true);
             }
-             
+
         } else if (element.mozRequestFullScreen) {
             if (!document.mozFullScreen) {
                 FrameTrail.changeState('fullscreen', false);
@@ -1550,11 +1550,11 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     }
 
-        
+
     return {
 
         onChange: {
-            
+
             viewSize:        changeViewSize,
             viewSizeChanged: onViewSizeChanged,
             fullscreen:      toggleFullscreen,
@@ -1586,7 +1586,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         slidePositionUp:         slidePositionUp,
         slidePositionDown:       slidePositionDown,
         closestToOffset:         closestToOffset,
-        
+
         /**
          * I display a (formated time) string in an area of the progress bar.
          * @attribute currentTime
@@ -1727,7 +1727,7 @@ FrameTrail.defineModule('ViewVideo', function(){
          */
         get EditPropertiesContainer() { return EditPropertiesContainer },
 
-        
+
         /**
          * This attribute controls wether the view places its visual weight on "annotations" or "videolinks", or none of the both (null).
          * @attribute shownDetails

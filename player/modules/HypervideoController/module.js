@@ -20,7 +20,7 @@
 FrameTrail.defineModule('HypervideoController', function(){
 
 
-	
+
 	var HypervideoModel        = FrameTrail.module('HypervideoModel'),
 		ViewVideo 			   = FrameTrail.module('ViewVideo'),
 
@@ -34,14 +34,16 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 
 		isPlaying              = false,
+        isStalled              = false,
+        stallRequestedBy       = [],
 		currentTime 		   = 0,
 		muted 				   = false,
 		nullVideoStartDate     = 0,
-		
-		highPriorityInterval   = 40,
-		lowPriorityInterval    = 180,
-		nullVideoInterval      = 40,
-		
+
+		highPriorityInterval   = 25,
+		lowPriorityInterval    = 150,
+		nullVideoInterval      = 25,
+
 		highPriorityIntervalID = null,
 		lowPriorityIntervalID  = null,
 		nullVideoIntervalID    = null,
@@ -61,7 +63,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * Otherwise I prepare the "Null Player", meaning a simulated playback machine, which serves as a timer for update functions.
 	 *
 	 * After the video has sufficiently loaded (or the "Null Player" is ready), I initalize the UI control (play button and progress bar).
-	 * 
+	 *
 	 * @method initController
 	 * @param {Function} callback
 	 * @param {Function} failCallback
@@ -88,9 +90,9 @@ FrameTrail.defineModule('HypervideoController', function(){
 			if ( videoElement.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/^no$/, '') || videoElement.canPlayType('video/webm; codecs="vp9"').replace(/^no$/, '') ) {
 				_video.append('<source src="../_data/projects/' + projectID + '/resources/' + HypervideoModel.sourceFiles.webm +'" type="video/webm"></source>');
 			} else {
-				_video.append('<source src="../_data/projects/' + projectID + '/resources/' + HypervideoModel.sourceFiles.mp4  +'" type="video/mp4"></source>');				
+				_video.append('<source src="../_data/projects/' + projectID + '/resources/' + HypervideoModel.sourceFiles.mp4  +'" type="video/mp4"></source>');
 			}
-			
+
 			_video.on('play',  _play);
 			_video.on('pause', _pause);
 
@@ -135,7 +137,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 					} else {
 						AnnotationsController.initController();
 					}
-					
+
 					OverlaysController.initController();
 					VideolinksController.initController();
 					CodeSnippetsController.initController();
@@ -178,7 +180,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 			} else {
 				AnnotationsController.initController();
 			}
-			
+
 			OverlaysController.initController();
 			VideolinksController.initController();
 			CodeSnippetsController.initController();
@@ -212,7 +214,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		FrameTrail.module('RouteNavigation').onHashTimeChange = function() {
 			setCurrentTime(RouteNavigation.hashTime);
 		};
-		
+
 
 	};
 
@@ -225,7 +227,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * @method initVideo
 	 * @param {Function} callback
 	 * @param {Function} failCallback
-	 * @private 
+	 * @private
 	 */
 	function initVideo(callback, failCallback) {
 
@@ -249,12 +251,12 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 					failCallback(
 							'VideoPlayer: Received no data within the time limit of '
-						+ 	Math.round(waitingInterval * 50 / 1000) 
+						+ 	Math.round(waitingInterval * 50 / 1000)
 						+	' seconds.'
 					);
-					
+
 				}
-				
+
 			}
 
 		}
@@ -268,7 +270,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * I init the UI of the play button and connect it with the play/pause functions.
 	 *
 	 * @method initPlayButton
-	 * @private 
+	 * @private
 	 */
 	function initPlayButton(){
 
@@ -288,7 +290,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 				play();
 			}
 
-		})		
+		})
 
 	};
 
@@ -302,7 +304,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * I make the DOM element a jQuery UI Slider, and attach its event listeners.
 	 *
 	 * @method initProgressBar
-	 * @private 
+	 * @private
 	 */
 	function initProgressBar() {
 
@@ -314,14 +316,14 @@ FrameTrail.defineModule('HypervideoController', function(){
 			orientation: "horizontal",
 			range: "min",
 			max: HypervideoModel.duration,
-			animate: false,					
+			animate: false,
 
 			create: function(evt, ui) {
 
 						var circle      = $('<div class="ui-slider-handle-circle"></div>'),
 							innerCircle = $('<div class="ui-slider-handle-circle-inner"></div>'),
 							_evtTarget  = $(evt.target);
-						
+
 						innerCircle.appendTo(circle);
 						_evtTarget.children('.ui-slider-handle').append(circle);
 
@@ -333,15 +335,15 @@ FrameTrail.defineModule('HypervideoController', function(){
 			slide:  function(evt, ui) {
 
 						setCurrentTime(ui.value);
-						
+
 					},
 
 			start: 	function(evt, ui) {
-						
+
 					},
 
 			stop: 	function(evt, ui) {
-						
+
 					}
 		});
 
@@ -395,7 +397,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	/**
 	 * I am the high priority update function, when there is a HTML5 video element present.
 	 *
-	 * I am called from the browser runtime environment via its window.setInterval mechanism. The interval is defined in the 
+	 * I am called from the browser runtime environment via its window.setInterval mechanism. The interval is defined in the
 	 * {{#crossLink "HypervideoController/_play:method"}}_play method{{/crossLink}}, and the interval length is set to 40 milliseconds.
 	 *
 	 * I fetch the currentTime attribute from the video element and store it in {{#crossLink "HypervideoController/currentTime:attribute"}}.
@@ -403,13 +405,15 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * I update the slider position of the progress bar.
 	 *
 	 * @method highPriorityUpdater_HTML5
-	 * @private 
+	 * @private
 	 */
 	function highPriorityUpdater_HTML5() {
 
 		currentTime = videoElement.currentTime;
 
 		ViewVideo.PlayerProgress.slider('value', currentTime);
+
+        OverlaysController.checkMediaSynchronization();
 
 
 	};
@@ -426,7 +430,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * * Call all sub-controllers ({{#crossLink "OverlaysController"}}OverlaysController{{/crossLink}}, {{#crossLink "VideosController"}}VideosController{{/crossLink}}, {{#crossLink "AnnotationsController"}}AnnotationsController{{/crossLink}}), to update the state for which they are responsible for.
 	 *
 	 * @method lowPriorityUpdater_HTML5
-	 * @private 
+	 * @private
 	 */
 	function lowPriorityUpdater_HTML5() {
 
@@ -437,7 +441,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
 		AnnotationsController.updateStatesOfAnnotations(currentTime);
 		SubtitlesController.updateStatesOfSubtitles(currentTime);
-		
+
 	};
 
 
@@ -445,13 +449,13 @@ FrameTrail.defineModule('HypervideoController', function(){
 	/**
 	 * I am the high priority update function, when there is no HTML5 video element ("Null Player").
 	 *
-	 * I am called from the browser runtime environment via its window.setInterval mechanism. The interval is defined in the 
+	 * I am called from the browser runtime environment via its window.setInterval mechanism. The interval is defined in the
 	 * {{#crossLink "HypervideoController/_play:method"}}_play method{{/crossLink}}, and the interval length is set to 40 milliseconds.
 	 *
 	 * I update the slider position of the progress bar.
 	 *
 	 * @method highPriorityUpdater_NullVideo
-	 * @private 
+	 * @private
 	 */
 	function highPriorityUpdater_NullVideo() {
 
@@ -472,7 +476,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * * Call all sub-controllers ({{#crossLink "OverlaysController"}}OverlaysController{{/crossLink}}, {{#crossLink "VideosController"}}VideosController{{/crossLink}}, {{#crossLink "AnnotationsController"}}AnnotationsController{{/crossLink}}), to update the state for which they are responsible for.
 	 *
 	 * @method lowPriorityUpdater_NullVideo
-	 * @private 
+	 * @private
 	 */
 	function lowPriorityUpdater_NullVideo() {
 
@@ -483,7 +487,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
 		AnnotationsController.updateStatesOfAnnotations(currentTime);
 		SubtitlesController.updateStatesOfSubtitles(currentTime);
-		
+
 	};
 
 
@@ -493,12 +497,12 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * When the currentTime reaches the duration of the null video, I stop playback.
 	 *
 	 * @method nullVideoUpdater
-	 * @private 
+	 * @private
 	 */
 	function nullVideoUpdater() {
 
 		currentTime = (Date.now() - nullVideoStartDate) / 1000;
-		
+
 		if (currentTime >= HypervideoModel.duration) {
 			currentTime = HypervideoModel.duration;
 			pause();
@@ -523,9 +527,14 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 */
 	function play() {
 
+        FrameTrail.changeState('videoWorking', false);
+
 		if (HypervideoModel.hasHTML5Video) {
 
-			videoElement.play();
+			var promise = videoElement.play();
+            if (promise) {
+                promise.catch(function(){});
+            }
 
 		} else {
 
@@ -539,7 +548,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 				_play();
 
 			}
-			
+
 		}
 
 		if ( !ViewVideo.VideoStartOverlay.hasClass('inactive') ) {
@@ -609,7 +618,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 
 	/**
-	 * After playback has started, we need to do several things: 
+	 * After playback has started, we need to do several things:
 	 * * Register interval functions (highPriorityUpdater and highPriorityInterval; if necessary: nullVideoUpdater)
 	 * * Change play button into a pause button
 	 * * Tell the {{#crossLink "OverlaysController/syncMedia:method"}}OverlaysController to synchronize media{{/crossLink}}.
@@ -636,7 +645,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 
 	/**
-	 * After playback has paused, we need to do several things: 
+	 * After playback has paused, we need to do several things:
 	 * * Clear the interval functions (highPriorityUpdater and highPriorityInterval; if necessary: nullVideoUpdater)
 	 * * Change pause button back into play button
 	 * * Tell the {{#crossLink "OverlaysController/syncMedia:method"}}OverlaysController to synchronize media{{/crossLink}}
@@ -661,7 +670,79 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 	};
 
-	
+    /**
+	 * Some media types may request to stall the playback of the main video (for buffering, etc.)
+	 *
+	 * @method _pause
+	 * @param {Boolean} aBoolean
+     * @param {Overlay} syncMediaRequestingStall
+	 */
+	function playbackStalled(aBoolean, syncMediaRequestingStall) {
+
+        if (aBoolean) {
+
+            if (stallRequestedBy.indexOf(syncMediaRequestingStall) < 0) {
+                stallRequestedBy.push(syncMediaRequestingStall);
+            }
+
+
+            if (!isStalled) {
+
+                FrameTrail.changeState('videoWorking', true);
+
+                if (HypervideoModel.hasHTML5Video) {
+                    videoElement.pause();
+                } else {
+                    window.clearInterval(nullVideoIntervalID);
+                }
+
+        		window.clearInterval(highPriorityIntervalID);
+        		window.clearInterval(lowPriorityIntervalID);
+
+                isStalled = aBoolean;
+
+            }
+
+        } else {
+
+            var idx = stallRequestedBy.indexOf(syncMediaRequestingStall);
+            if (idx >= 0) {
+                stallRequestedBy.splice(idx, 1);
+            }
+
+            if (stallRequestedBy.length === 0) {
+
+                FrameTrail.changeState('videoWorking', false);
+
+                if (isStalled) {
+
+                    if (HypervideoModel.hasHTML5Video) {
+            			var promise = videoElement.play();
+                        if (promise) {
+                            promise.catch(function(){ videoElement.play() });
+                        }
+            		} else {
+        				if (currentTime === HypervideoModel.duration) {
+        					currentTime = 0;
+        				}
+        				nullVideoStartDate = Date.now() - (currentTime * 1000);
+                        nullVideoIntervalID = window.setInterval(nullVideoUpdater,  nullVideoInterval);
+            		}
+
+                    highPriorityIntervalID = window.setInterval(highPriorityUpdater, highPriorityInterval);
+            		lowPriorityIntervalID  = window.setInterval(lowPriorityUpdater,  lowPriorityInterval);
+
+                }
+
+                isStalled = aBoolean;
+
+            }
+
+        }
+
+	};
+
+
 	/**
 	 * The HypervideoController stores the {{#crossLink "HypervideoController/currentTime:attribute"}}currentTime{{/crossLink}}.
 	 * When this property is being set, several things have to happen:
@@ -677,17 +758,19 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 */
 	function setCurrentTime(aNumber) {
 
-		if ( isNaN(parseFloat(aNumber)) ) {
+        var aNumberAsFloat = parseFloat(aNumber);
+
+		if ( isNaN(aNumberAsFloat) ) {
 			return;
 		}
 
 		if (HypervideoModel.hasHTML5Video) {
 
-			videoElement.currentTime = currentTime = parseFloat(aNumber);
-			
+			videoElement.currentTime = currentTime = aNumberAsFloat;
+
 		} else {
 
-			currentTime = parseFloat(aNumber);
+			currentTime = aNumberAsFloat;
 			nullVideoStartDate = Date.now() - (currentTime * 1000)
 
 		}
@@ -697,8 +780,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 		OverlaysController.syncMedia();
 
-		
-		return parseFloat(aNumber);
+
+		return aNumberAsFloat;
 
 	};
 
@@ -714,19 +797,19 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * @private
 	 */
 	function setMuted(muted) {
-		
+
 		if (HypervideoModel.hasHTML5Video) {
 
 			videoElement.muted = muted;
-			
+
 		}
 
 		OverlaysController.muteMedia(muted);
 
-		
+
 
 	};
-	
+
 
 	/**
 	 * I take a number, which represents a time in seconds,
@@ -766,7 +849,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 	 * @private
 	 */
 	function clearIntervals() {
-		
+
 		window.clearInterval(highPriorityIntervalID);
 		window.clearInterval(lowPriorityIntervalID);
 
@@ -784,6 +867,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 		play: play,
 		pause: pause,
 
+        playbackStalled: playbackStalled,
+
 		updateDescriptions: updateDescriptions,
 		clearIntervals:     clearIntervals,
 
@@ -796,7 +881,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		 * @readOnly
 		 */
 		get isPlaying()          { return isPlaying               },
-		
+
 
 
 		/**
@@ -830,8 +915,6 @@ FrameTrail.defineModule('HypervideoController', function(){
 		set muted(aBoolean) 	 { return setMuted(aBoolean)  	  }
 
 	}
-
-
 
 
 

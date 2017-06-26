@@ -15,8 +15,8 @@
 FrameTrail.defineModule('OverlaysController', function(){
 
 
-    var ViewVideo       = FrameTrail.module('ViewVideo'),
-        overlays        = FrameTrail.module('HypervideoModel').overlays,
+    var ViewVideo               = FrameTrail.module('ViewVideo'),
+        overlays                = FrameTrail.module('HypervideoModel').overlays,
 
         overlayInFocus  = null,
 
@@ -30,7 +30,7 @@ FrameTrail.defineModule('OverlaysController', function(){
 
 
     /**
-     * I tell all overlays in the 
+     * I tell all overlays in the
      * {{#crossLink "HypervideoModel/overlays:attribute"}}HypervideoModel/overlays attribute{{/crossLink}}
      * to render themselves into the DOM.
      *
@@ -71,6 +71,17 @@ FrameTrail.defineModule('OverlaysController', function(){
 
                 }
 
+                if (overlay.syncedMedia) {
+
+                    // Note: Currently, the only synced media type is 'video', so we shortcut it
+
+                    if (overlay.videoElement.currentTime > overlay.videoElement.duration - overlay.data.endOffset) {
+                        overlay.videoElement.pause();
+                    }
+
+                }
+
+
             } else {
 
                 if (overlay.activeState) {
@@ -103,24 +114,24 @@ FrameTrail.defineModule('OverlaysController', function(){
     function addSyncedMedia(overlay) {
 
         if (syncedMedia.indexOf(overlay) < 0){
-    
+
             syncedMedia.push(overlay);
             syncMedia();
-    
+
         }
-        
+
     };
 
 
     /**
      * I remove the overlay given as argument from the array of synced media.
      * See also {{#crossLink "OverlaysController/syncMedia:method"}}this.syncMedia(){{/crossLink}}
-     * 
+     *
      * @method removeSyncedMedia
      * @param {Overlay} overlay
      */
     function removeSyncedMedia(overlay) {
-        
+
         var idx = syncedMedia.indexOf(overlay);
 
         if (idx > -1) {
@@ -150,15 +161,21 @@ FrameTrail.defineModule('OverlaysController', function(){
             overlay = syncedMedia[idx];
 
             // Note: Currently, the only synced media type is 'video', so we shortcut it
-            try {
-                
-                overlay.videoElement.currentTime = currentTime - overlay.data.start;
 
-            } catch(e) {}
+            overlay.videoElement.currentTime = currentTime - overlay.data.start - overlay.data.startOffset;
+
+            if (overlay.videoElement.currentTime > overlay.videoElement.duration - overlay.data.endOffset) {
+                overlay.videoElement.pause();
+            }
 
 
             if (isPlaying) {
-                overlay.videoElement.play();
+                if (overlay.videoElement.paused) {
+                    var promise = overlay.videoElement.play();
+                    if (promise) {
+                        promise.catch(function(){});
+                    }
+                }
             } else {
                 overlay.videoElement.pause();
             }
@@ -169,6 +186,41 @@ FrameTrail.defineModule('OverlaysController', function(){
     };
 
 
+
+    /**
+     * I check for all registered synchronized media, if the time index exceeds a tolerance limit
+     * and - if needed - resynchronize "off-media" efficiently while playing.
+     *
+     * @method checkMediaSynchronization
+     */
+    function checkMediaSynchronization() {
+
+        var HypervideoController = FrameTrail.module('HypervideoController'),
+            isPlaying    = HypervideoController.isPlaying,
+            currentTime  = HypervideoController.currentTime,
+            overlay;
+
+        for (var i = 0, l = syncedMedia.length; i < l; i++) {
+            overlay = syncedMedia[i];
+
+            if (overlay.videoElement) {
+
+                // off by 0.01 seconds
+                if (overlay.videoElement.currentTime - (currentTime - overlay.data.start - overlay.data.startOffset) > 0.01) {
+
+                    //console.log('lag detected', overlay.videoElement.currentTime - (currentTime - overlay.data.start));
+                    overlay.videoElement.currentTime = currentTime - overlay.data.start - overlay.data.startOffset;
+
+                }
+
+            }
+
+        }
+
+    };
+
+
+
     /**
      * I set the muted state of all media overlays (currently only <video>).
      *
@@ -176,9 +228,8 @@ FrameTrail.defineModule('OverlaysController', function(){
      */
     function muteMedia(muted) {
 
-        
-        var HypervideoController = FrameTrail.module('HypervideoController'),
-            overlay;
+
+        var overlay;
 
         for (var idx in overlays) {
 
@@ -191,7 +242,7 @@ FrameTrail.defineModule('OverlaysController', function(){
             }
 
         }
-        
+
 
     };
 
@@ -243,7 +294,7 @@ FrameTrail.defineModule('OverlaysController', function(){
 
 
     /**
-     * I trigger the {{#crossLink "Overlay/scaleOverlayElement:method"}}scaleOverlayElement{{/crossLink}} 
+     * I trigger the {{#crossLink "Overlay/scaleOverlayElement:method"}}scaleOverlayElement{{/crossLink}}
      * method for all overlays.
      * @method rescaleOverlays
      */
@@ -252,10 +303,10 @@ FrameTrail.defineModule('OverlaysController', function(){
         for (var idx in overlays) {
             overlays[idx].scaleOverlayElement();
         }
-        
+
     };
 
-  
+
 
     /**
      * I change the behavior and appearnace of the timeline of overlays, so
@@ -263,7 +314,7 @@ FrameTrail.defineModule('OverlaysController', function(){
      * @method stackTimelineView
      */
     function stackTimelineView() {
-        
+
         ViewVideo.OverlayTimeline.CollisionDetection({spacing:0, includeVerticalMargins: true});
         ViewVideo.adjustLayout();
         ViewVideo.adjustHypervideo();
@@ -277,7 +328,7 @@ FrameTrail.defineModule('OverlaysController', function(){
      * @method resetTimelineView
      */
     function resetTimelineView() {
-        
+
         ViewVideo.OverlayTimeline.css('height', '');
         ViewVideo.OverlayTimeline.children('.timelineElement').css({
             top:    '',
@@ -292,7 +343,7 @@ FrameTrail.defineModule('OverlaysController', function(){
 
     /**
      * I make the overlay container (not the timeline, despite my name)
-     * ready to accept dropped elements. These elements are thumbnails rendered from 
+     * ready to accept dropped elements. These elements are thumbnails rendered from
      * from the respective [ResourceType]/renderThumb() method.
      *
      * Upon drop, I read the meta-data stored in the data attributes of the thumbelement,
@@ -325,10 +376,10 @@ FrameTrail.defineModule('OverlaysController', function(){
                     var resourceID      = ui.helper.attr('data-resourceID'),
                         videoDuration   = FrameTrail.module('HypervideoModel').duration,
                         startTime       = FrameTrail.module('HypervideoController').currentTime,
-                        endTime         = (startTime + 4 > videoDuration) 
+                        endTime         = (startTime + 4 > videoDuration)
                                             ? videoDuration
                                             : startTime + 4,
-                        
+
 
                         tmpOffset               = ui.helper.offset(),
                         overlayContainerOffset  = ViewVideo.OverlayContainer.offset(),
@@ -357,7 +408,7 @@ FrameTrail.defineModule('OverlaysController', function(){
                             });
 
                         } else {
-                            
+
                             newOverlay = FrameTrail.module('HypervideoModel').newOverlay({
                                 "start":        startTime,
                                 "end":          endTime,
@@ -371,21 +422,21 @@ FrameTrail.defineModule('OverlaysController', function(){
                             });
 
                         }
-                        
+
 
                     newOverlay.renderInDOM();
                     newOverlay.startEditing();
                     updateStatesOfOverlays(FrameTrail.module('HypervideoController').currentTime);
 
                     stackTimelineView();
-                    
-                    
+
+
                     ViewVideo.PlayerProgress.find('.ui-slider-handle').removeClass('highlight');
 
                 }
 
 
-            });          
+            });
 
         } else {
 
@@ -406,7 +457,7 @@ FrameTrail.defineModule('OverlaysController', function(){
     function setOverlayInFocus(overlay) {
 
         if (overlayInFocus) {
-            
+
             overlayInFocus.permanentFocusState = false;
             overlayInFocus.removedFromFocus();
 
@@ -414,7 +465,7 @@ FrameTrail.defineModule('OverlaysController', function(){
         }
 
         overlayInFocus = overlay;
-        
+
         if (overlayInFocus) {
             overlayInFocus.gotInFocus();
         }
@@ -456,13 +507,13 @@ FrameTrail.defineModule('OverlaysController', function(){
      */
     function removePropertiesControls() {
 
-        
+
         updateControlsStart      = function(){};
-        
+
         updateControlsEnd        = function(){};
-        
+
         updateControlsDimensions = function(){};
-        
+
         ViewVideo.EditPropertiesContainer.removeClass('active').empty();
 
     }
@@ -547,7 +598,7 @@ FrameTrail.defineModule('OverlaysController', function(){
                 });
                 $(event.currentTarget).addClass('dragPlaceholder');
             },
-            
+
             stop: function( event, ui ) {
                 $(event.target).removeClass('dragPlaceholder');
             }
@@ -558,7 +609,7 @@ FrameTrail.defineModule('OverlaysController', function(){
 
     };
 
-    
+
     return {
 
         onChange: {
@@ -575,6 +626,7 @@ FrameTrail.defineModule('OverlaysController', function(){
         addSyncedMedia:         addSyncedMedia,
         removeSyncedMedia:      removeSyncedMedia,
         syncMedia:              syncMedia,
+        checkMediaSynchronization: checkMediaSynchronization,
         muteMedia:              muteMedia,
 
         deleteOverlay:          deleteOverlay,
@@ -591,36 +643,36 @@ FrameTrail.defineModule('OverlaysController', function(){
         get overlayInFocus()        { return overlayInFocus             },
 
         /**
-         * I hold the callback function for start time (overlay.data.start) of the properties controls interface 
+         * I hold the callback function for start time (overlay.data.start) of the properties controls interface
          * (see {{#crossLink "OverlaysController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
          *
          * I am called from the "drag" event handler in {{#crossLink "Overlay/makeTimelineElementDraggable:method"}}Overlay/makeTimelineElementDraggable(){{/crossLink}}
          * and from the "resize" event handler in {{#crossLink "Overlay/makeTimelineElementResizeable:method"}}Overlay/makeTimelineElementResizeable(){{/crossLink}}.
-         * 
+         *
          * @attribute updateControlsStart
          * @type Function
          * @readOnly
          */
         get updateControlsStart()      {  return updateControlsStart     },
         /**
-         * I hold the callback function for end time (overlay.data.end) of the properties controls interface 
+         * I hold the callback function for end time (overlay.data.end) of the properties controls interface
          * (see {{#crossLink "OverlaysController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
          *
          * I am called from the "drag" event handler in {{#crossLink "Overlay/makeTimelineElementDraggable:method"}}Overlay/makeTimelineElementDraggable(){{/crossLink}}
          * and from the "resize" event handler in {{#crossLink "Overlay/makeTimelineElementResizeable:method"}}Overlay/makeTimelineElementResizeable(){{/crossLink}}.
-         * 
+         *
          * @attribute updateControlsEnd
          * @type Function
          * @readOnly
          */
         get updateControlsEnd()        {  return updateControlsEnd       },
         /**
-         * I hold the callback function for dimension attributes (overlay.data.position[]) of the properties controls interface 
+         * I hold the callback function for dimension attributes (overlay.data.position[]) of the properties controls interface
          * (see {{#crossLink "OverlaysController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
          *
          * I am called from the "drag" event handler in {{#crossLink "Overlay/makeOverlayElementDraggable:method"}}Overlay/makeOverlayElementDraggable(){{/crossLink}}
          * and from the "resize" event handler in {{#crossLink "Overlay/makeOverlayElementResizeable:method"}}Overlay/makeOverlayElementResizeable(){{/crossLink}}.
-         * 
+         *
          * @attribute updateControlsDimensions
          * @type Function
          * @readOnly

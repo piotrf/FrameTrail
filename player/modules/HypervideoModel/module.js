@@ -50,6 +50,7 @@
 
 
 
+
     /**
      * The data model is initialized after the {{#crossLink "Database"}}Database{{/crossLink}} is ready
      * and before the different views (like {{#crossLink "ViewVideo"}}ViewVideo{{/crossLink}}) are created.
@@ -198,7 +199,7 @@
         }
 
         events = database.codeSnippets.globalEvents;
-        
+
     };
 
     /**
@@ -418,6 +419,8 @@
                     "thumb":        resourceDatabase[protoData.resourceId].thumb,
                     "start":        protoData.start,
                     "end":          protoData.end,
+                    "startOffset":  0,
+                    "endOffset":    0,
                     "resourceId":   protoData.resourceId,
                     "attributes":   resourceDatabase[protoData.resourceId].attributes,
                     "position": {
@@ -859,7 +862,7 @@
                 if (unsavedAnnotations) saveRequests.push(function(){
                     FrameTrail.module('Database').saveAnnotations(databaseCallback);
                 });
-                
+
                 for (var i in saveRequests) {
                     saveRequests[i].call();
                 }
@@ -1001,11 +1004,11 @@
             FrameTrail.module('HypervideoController').pause();
             FrameTrail.module('HypervideoController').clearIntervals();
         }
-        
+
         //TODO: Implement proper destroy method
         $('#MainContainer #ViewVideo').remove();
         ra = false;
-        
+
         FrameTrail.module('RouteNavigation').hypervideoID = newHypervideoID;
         FrameTrail.module('RouteNavigation').hashTime = undefined;
 
@@ -1022,10 +1025,10 @@
 
                 FrameTrail.module('HypervideoController').initController(
 
-                    function(){                                        
-                        
+                    function(){
+
                         FrameTrail.changeState('viewMode', 'video');
-                        
+
                         if (restartEditMode) {
                             FrameTrail.changeState('editMode', 'preview');
                         }
@@ -1035,7 +1038,7 @@
                         window.setTimeout(function() {
                             FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
                         }, 300);
-                        
+
                     },
 
                     function(errorMsg){
@@ -1048,7 +1051,7 @@
             }, function(errorMsg) {
                 FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
             });
-            
+
 
         }, function() {
             console.log('FAIL');
