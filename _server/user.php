@@ -182,6 +182,8 @@ function userLogin($projectID, $mail, $passwd) {
 	$userDB["user"][$user["id"]]["lastLogin"] = time();
 	$file->writeClose(json_encode($userDB, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
+	$return["session_lifetime"] = $conf["server"]["session_lifetime"];
+
 	return $return;
 }
 
@@ -247,6 +249,7 @@ function userCheckLogin($projectID) {
 		$return["status"] = "success";
 		$return["code"] = 1;
 		$return["string"] = "user logged in to project #".$projectID;
+		$return["session_lifetime"] = $conf["server"]["session_lifetime"];
 
 		if ($_SESSION["ohv"]["projects"][$projectID]["user"]["active"] == 0) {
 			$return["status"] = "success";

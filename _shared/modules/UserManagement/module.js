@@ -22,6 +22,8 @@ FrameTrail.defineModule('UserManagement', function(){
 		userMail                = '',
 		userRegistrationDate    = '',
 		userColorCollection		= [],
+		userSessionLifetime		= 0,
+		userSessionTimeout		= null,
 
 		userBoxCallback 		= null,
 		userBoxCallbackCancel 	= null,
@@ -394,10 +396,11 @@ FrameTrail.defineModule('UserManagement', function(){
 		data:       { "projectID":FrameTrail.module('RouteNavigation').projectID },
 
 		success: function(response) {
-
+			console.log(response);
 			switch(response.code){
 				
 				case 0:
+					userSessionLifetime = parseInt(response.session_lifetime);
 					login(response.userdata);
 					loginBox.find('#LoginFormStatus').removeClass('active error success').text('');
 					updateView(true);
@@ -484,7 +487,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 */
 	function ensureAuthenticated(callback, callbackCancel, disallowCancel){
 
-		isLoggedIn(function(loginStatus){
+		isLoggedIn(function(loginStatus) {
 
 			if (loginStatus){
 
@@ -504,7 +507,7 @@ FrameTrail.defineModule('UserManagement', function(){
 
 			}
 
-		})
+		});
 
 
 	}
@@ -538,7 +541,6 @@ FrameTrail.defineModule('UserManagement', function(){
 			dataType: 	"json",
             data: 		"a=userCheckLogin&projectID=" + FrameTrail.module('RouteNavigation').projectID,
 			success: function(response) {
-
 				switch(response.code){
 
 					case 0:
@@ -547,6 +549,7 @@ FrameTrail.defineModule('UserManagement', function(){
 						break;
 
 					case 1:
+						userSessionLifetime = parseInt(response.session_lifetime);
 						login(response.response);
 						callback.call(window, true);
 						break;
@@ -578,6 +581,7 @@ FrameTrail.defineModule('UserManagement', function(){
 		userMail  = userData.mail;
 		userRegistrationDate = userData.registrationDate;
 
+		resetSessionTimeout();
 
 		FrameTrail.changeState('username', userData.name);
 		FrameTrail.changeState('userColor', userData.color);
@@ -775,6 +779,40 @@ FrameTrail.defineModule('UserManagement', function(){
 	function closeAdministrationBox() {
 
 		userDialog.dialog('close');
+
+	}
+
+
+	/**
+	 * I start the (PHP) session timeout counter.
+	 *
+	 * @method startSessionTimeout
+	 * @return 
+	 */
+	function startSessionTimeout() {
+
+		// session lifetime minus 30 seconds
+		var timeoutDuration = (userSessionLifetime-30) * 1000;
+		//console.log('Starting Session Timeout at: ' + Math.floor( (userSessionLifetime-30) / 60 ) + ' minutes');
+		userSessionTimeout = setTimeout(function() {
+			// Renew Session
+			//console.log('Renewing Session ...');
+			isLoggedIn(function(){});
+		}, timeoutDuration);
+
+	}
+
+
+	/**
+	 * I reset the (PHP) session timeout counter.
+	 *
+	 * @method resetSessionTimeout
+	 * @return 
+	 */
+	function resetSessionTimeout() {
+
+		clearTimeout(userSessionTimeout);
+		startSessionTimeout();
 
 	}
 

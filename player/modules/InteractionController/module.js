@@ -51,7 +51,14 @@ FrameTrail.defineModule('InteractionController', function(){
 
     	$(document).off('keydown').on('keydown', function(evt){
 
-    		if (	evt.target.tagName === 'INPUT'
+    		// Save when ctrl+s or command+s
+            if ((evt.metaKey || evt.ctrlKey) && evt.keyCode == 83) {
+                FrameTrail.module('HypervideoModel').save();
+                evt.preventDefault();
+                return false;
+            }
+
+            if (	evt.target.tagName === 'INPUT'
     			 || evt.target.tagName === 'TEXTAREA') {
 
     			return;

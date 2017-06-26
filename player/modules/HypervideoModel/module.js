@@ -37,6 +37,7 @@
 
         codeSnippets            = [],
         events                  = {},
+        customCSS               = '',
 
         annotationSets          = {},
         selectedAnnotationSet   = '',
@@ -46,6 +47,7 @@
         unsavedVideolinks       = false,
         unsavedCodeSnippets     = false,
         unsavedEvents           = false,
+        unsavedCustomCSS        = false,
         unsavedAnnotations      = false;
 
 
@@ -82,10 +84,6 @@
         created        = hypervideo.created;
         lastchanged    = hypervideo.lastchanged;
         hidden         = hypervideo.hidden;
-
-        events         = sequence.events;
-
-
 
         // Read in config of Hypervideo
         for (var key in hypervideo.config) {
@@ -199,6 +197,9 @@
         }
 
         events = database.codeSnippets.globalEvents;
+
+        customCSS = database.codeSnippets.customCSS;
+
 
     };
 
@@ -611,6 +612,52 @@
     };
 
 
+    /**
+     * Updates the {{#crossLinks "HypervideoModel/events:attribute"}}attribute events{{/crossLinks}}
+     * and the respective Database value.
+     * I am called from {{#crossLink "CodeSnippetsController/initEditOptions:method"}}CodeSnippetsController{{/crossLink}}.
+     *
+     * @method updateEvents
+     * @return Object of Events
+     * @private
+     */
+    function updateEvents(eventObject) {
+
+        var database = FrameTrail.module('Database');
+
+        database.codeSnippets.globalEvents = eventObject;
+        events = eventObject;
+
+        newUnsavedChange('events');
+
+        return events;
+
+    };
+
+
+    /**
+     * Updates the {{#crossLinks "HypervideoModel/customCSS:attribute"}}attribute customCSS{{/crossLinks}}
+     * and the respective Database value.
+     * I am called from {{#crossLink "CodeSnippetsController/initEditOptions:method"}}CodeSnippetsController{{/crossLink}}.
+     *
+     * @method updateCustomCSS
+     * @return String
+     * @private
+     */
+    function updateCustomCSS(cssString) {
+
+        var database = FrameTrail.module('Database');
+
+        database.codeSnippets.customCSS = cssString;
+        customCSS = cssString;
+
+        newUnsavedChange('customCSS');
+
+        return cssString;
+
+    };
+
+
 
     /**
      * Needed for the {{#crossLinks "HypervideoModel/annotationSets:attribute"}}annotationSets attribute{{/crossLinks}}.
@@ -799,6 +846,10 @@
 
             unsavedEvents = true;
 
+        } else if (category === 'customCSS') {
+
+            unsavedCustomCSS = true;
+
         } else if (category === 'annotations') {
 
             unsavedAnnotations = true;
@@ -855,7 +906,7 @@
                     FrameTrail.module('Database').saveLinks(databaseCallback);
                 });
 
-                if (unsavedCodeSnippets || unsavedEvents) saveRequests.push(function(){
+                if (unsavedCodeSnippets || unsavedEvents || unsavedCustomCSS) saveRequests.push(function(){
                     FrameTrail.module('Database').saveCodeSnippets(databaseCallback);
                 });
 
@@ -863,8 +914,14 @@
                     FrameTrail.module('Database').saveAnnotations(databaseCallback);
                 });
 
+
                 for (var i in saveRequests) {
                     saveRequests[i].call();
+                }
+
+                // deal with save requests without unsaved data (just satisfying ux)
+                if (saveRequests.length === 0) {
+                    saveFinished();
                 }
 
             },
@@ -897,6 +954,7 @@
             unsavedVideolinks   = false;
             unsavedCodeSnippets = false;
             unsavedEvents       = false;
+            unsavedCustomCSS    = false;
             unsavedAnnotations  = false;
             FrameTrail.changeState('unsavedChanges', false)
 
@@ -1095,14 +1153,6 @@
         get sourceFiles()       { return sourceFiles     },
 
         /**
-         * I contain the global event handlers for the hypervideo.
-         * @type Object
-         * @attribute events
-         * @readOnly
-         */
-        get events()            { return events          },
-
-        /**
          * The hypervideo's creator name
          * @type String
          * @attribute creator
@@ -1190,6 +1240,24 @@
          * @readOnly
          */
         get codeSnippets()        { return getCodeSnippets() },
+
+        /**
+         * Get or set the global event handlers for the hypervideo.
+         * @type Object
+         * @attribute events
+         * @param {Object} eventObject
+         */
+        get events()              { return events                     },
+        set events(eventObject)   { return updateEvents(eventObject)  },
+
+        /**
+         * Get or set the global custom CSS code for the hypervideo.
+         * @type String
+         * @attribute customCSS
+         * @param {String} cssString
+         */
+        get customCSS()           { return customCSS                  },
+        set customCSS(cssString)  { return updateCustomCSS(cssString) },
 
         /**
          * The annotation sets of the hypervideo (fetched via {{#crossLink "HypervideoModel/getAnnotationSets:method"}}getAnnotationSets(){{/crossLinks}}).

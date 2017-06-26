@@ -29,14 +29,16 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      */
     function initController() {
 
-        var codeSnippets = FrameTrail.module('HypervideoModel').codeSnippets;
+        var hypervideoModel = FrameTrail.module('HypervideoModel');
         
-        for (var i = 0; i < codeSnippets.length; i++) {
+        for (var i = 0; i < hypervideoModel.codeSnippets.length; i++) {
 
-            codeSnippets[i].renderTimelineInDOM();
-            codeSnippets[i].initCodeSnippetFunction();
+            hypervideoModel.codeSnippets[i].renderTimelineInDOM();
+            hypervideoModel.codeSnippets[i].initCodeSnippetFunction();
 
         }
+
+        initCustomCSS(hypervideoModel.customCSS);
 
     };
 
@@ -164,16 +166,21 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
         var hypervideos = FrameTrail.module('Database').hypervideos,
             thumb,
             events      = FrameTrail.module('HypervideoModel').events,
+            customCSS   = FrameTrail.module('HypervideoModel').customCSS,
 
             codeSnippetEditingOptions = $('<div id="CodeSnippetEditingTabs">'
                                     +   '    <ul>'
                                     +   '        <li><a href="#CodeSnippetList">Add Code Snippets</a></li>'
+                                    +   '        <li><a href="#CustomCSS">Custom CSS</a></li>'
                                     +   '        <li class="ui-tabs-right"><a href="#EventOnEnded">onEnded</a></li>'
                                     +   '        <li class="ui-tabs-right"><a href="#EventOnPause">onPause</a></li>'
                                     +   '        <li class="ui-tabs-right"><a href="#EventOnPlay">onPlay</a></li>'
                                     +   '        <li class="ui-tabs-right"><a href="#EventOnReady">onReady</a></li>'
                                     +   '        <li class="ui-tabs-right tab-label">Events: </li>'
                                     +   '    </ul>'
+                                    +   '    <div id="CustomCSS">'
+                                    +   '        <textarea id="CustomCSS" class="cssTextarea">' + (customCSS ? customCSS : '') + '</textarea>'
+                                    +   '    </div>'
                                     +   '    <div id="CodeSnippetList">'
                                     +   '    </div>'
                                     +   '    <div id="EventOnReady">'
@@ -268,12 +275,43 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                 });
             codeEditor.on('change', function(instance, changeObj) {
                 
-                var thisTextarea = $(instance.getTextArea());
+                var thisTextarea = $(instance.getTextArea()),
+                    currentEvents = FrameTrail.module('HypervideoModel').events;
                 
-                FrameTrail.module('HypervideoModel').events[thisTextarea.data('eventname')] = instance.getValue();
+                currentEvents[thisTextarea.data('eventname')] = instance.getValue();
+                FrameTrail.module('HypervideoModel').events = currentEvents;
                 thisTextarea.val(instance.getValue());
                 
-                FrameTrail.module('HypervideoModel').newUnsavedChange('events');
+            });
+            codeEditor.setSize(null, '100%');
+        }
+
+        // Init CodeMirror for Custom CSS
+
+        var cssTextareas = codeSnippetEditingOptions.find('.cssTextarea');
+
+        for (var i=0; i<cssTextareas.length; i++) {
+            var textarea = cssTextareas.eq(i),
+                codeEditor = CodeMirror.fromTextArea(textarea[0], {
+                    value: textarea[0].value,
+                    lineNumbers: true,
+                    mode:  'css',
+                    gutters: ['CodeMirror-lint-markers'],
+                    lint: true,
+                    lineWrapping: true,
+                    tabSize: 2,
+                    theme: 'hopscotch'
+                });
+            codeEditor.on('change', function(instance, changeObj) {
+                
+                var thisTextarea = $(instance.getTextArea());
+                                
+                FrameTrail.module('HypervideoModel').customCSS = instance.getValue();
+                thisTextarea.val(instance.getValue());
+                
+                updateCustomCSS(instance.getValue());
+                
+
             });
             codeEditor.setSize(null, '100%');
         }
@@ -519,6 +557,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
     }
 
+
     /**
      * I am the starting point for the process of deleting 
      * a codeSnippet. I call other necessary methods for it.
@@ -531,6 +570,31 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
         codeSnippet.removeFromDOM();
         FrameTrail.module('HypervideoModel').removeCodeSnippet(codeSnippet);
         stackTimelineView();
+
+    }
+
+
+    /**
+     * I initialize the custom CSS rules. 
+     * 
+     * @method initCustomCSS
+     * @param {String} cssString
+     */
+    function initCustomCSS(cssString) {
+
+        $('head').append('<style id="FrameTrailCustomCSS" type="text/css">'+ cssString +'</style>');
+
+    }
+
+
+    /**
+     * I dynamically update the custom CSS rules. 
+     * 
+     * @method updateCustomCSS
+     * @param {String} cssString
+     */
+    function updateCustomCSS(cssString) {
+        $('head > style#FrameTrailCustomCSS').html(cssString);
 
     }
 

@@ -191,7 +191,7 @@ FrameTrail.defineModule('Sidebar', function(){
      */
     function newUnsavedChange(category) {
 
-        if (category == 'codeSnippets' || category == 'events') {
+        if (category == 'codeSnippets' || category == 'events' || category == 'customCSS') {
             // camelCase not valid in attributes
             domElement.find('button[data-editmode="codesnippets"]').addClass('unsavedChanges');
         } else {
