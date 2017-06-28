@@ -24,7 +24,7 @@ FrameTrail.defineType(
     function(data){
 
         // compatibility fix
-        if ( !data.events ) {
+        if ( !data.events || Array.isArray(data.events) ) {
             data.events = {};
         }
 
