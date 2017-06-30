@@ -1,0 +1,18 @@
+{
+    "name": "Example Project",
+    "description": "Lorem Ipsum Dolor Sit Amet",
+    "created": 1490622150,
+    "userNeedsConfirmation": false,
+    "defaultUserRole": "admin",
+    "defaultHypervideoHidden": false,
+    "theme": null,
+    "overviewMode": null,
+    "defaultHypervideoConfig": {
+        "videolinksVisible": false,
+        "annotationsPosition": "bottom",
+        "overlaysVisible": true,
+        "annotationPreviewVisible": false,
+        "annotationsVisible": true,
+        "slidingMode": "adjust"
+    }
+}

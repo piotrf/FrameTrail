@@ -1,0 +1,47 @@
+{
+    "resources-increment": 6,
+    "resources": {
+        "4": {
+            "name": "Big Buck Bunny",
+            "creator": "test",
+            "creatorId": "2",
+            "created": 1490624515,
+            "description": null,
+            "src": "2_1490624515_big-buck-bunny.webm",
+            "attributes": {
+                "alternateVideoFile": "2_1490624515_big-buck-bunny.mp4"
+            },
+            "type": "video",
+            "thumb": "2_1490624515_thumb_big-buck-bunny.png"
+        },
+        "5": {
+            "name": "Stuttgart",
+            "creator": "test",
+            "creatorId": "2",
+            "created": 1490796884,
+            "description": null,
+            "type": "location",
+            "src": "",
+            "attributes": {
+                "lat": "48.7784485",
+                "lon": "9.1800132",
+                "boundingBox": [
+                    "48.6184485",
+                    "48.9384485",
+                    "9.0200132",
+                    "9.3400132"
+                ]
+            }
+        },
+        "6": {
+            "name": "Pfeil",
+            "creator": "test",
+            "creatorId": "2",
+            "created": 1497965787,
+            "description": null,
+            "src": "2_1497965787_pfeil.gif",
+            "type": "image",
+            "attributes": {}
+        }
+    }
+}
