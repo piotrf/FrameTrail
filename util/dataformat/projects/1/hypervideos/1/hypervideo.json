@@ -1,53 +1,142 @@
 {
-    "meta": {
-        "name": "First Example Hypervideo",
-        "description": "Lorem Ipsum Dolor Sit Amet",
-        "thumb": "2_1490624515_thumb_big-buck-bunny.png",
-        "creator": "test",
-        "creatorId": "2",
-        "created": 1490624549,
-        "lastchanged": 1490624549,
-        "hidden": false,
-        "config": {
-            "annotationsVisible": false,
-            "annotationsPosition": "bottom",
-            "annotationTimelineVisible": true,
-            "annotationPreviewVisible": false,
-            "videolinksVisible": false,
-            "videolinkTimelineVisible": true,
-            "overlaysVisible": true,
-            "slidingMode": "adjust",
-            "slidingTrigger": "key",
-            "theme": "CssClassName",
-            "autohideControls": true,
-            "captionsVisible": false
-        },
-        "mainAnnotation": "1",
-        "annotationfiles": {
-            "1": {
-                "name": "main",
-                "description": "",
-                "created": 1490624549,
-                "lastchanged": 1490624549,
-                "hidden": false,
-                "owner": "test",
-                "ownerId": "2"
-            }
-        },
-        "annotation-increment": 1,
-        "subtitles": []
-    },
-    "clips": [
-        {
-            "resourceId": "4",
-            "duration": 0,
-            "start": 0,
-            "end": 0,
-            "in": 0,
-            "out": 0
-        }
-    ],
-    "contents": {
-
-    }
+	"meta": {
+		"name": "First Example Hypervideo",
+		"description": "Lorem Ipsum Dolor Sit Amet",
+		"thumb": "2_1490624515_thumb_big-buck-bunny.png",
+		"creator": "test",
+		"creatorId": "2",
+		"created": 1490624549,
+		"lastchanged": 1490624549,
+	},
+	"config": {
+		"annotationsVisible": false,
+		"annotationsPosition": "bottom",
+		"annotationTimelineVisible": true,
+		"annotationPreviewVisible": false,
+		"videolinksVisible": false,
+		"videolinkTimelineVisible": true,
+		"overlaysVisible": true,
+		"slidingMode": "adjust",
+		"slidingTrigger": "key",
+		"theme": "CssClassName",
+		"autohideControls": true,
+		"captionsVisible": false,
+		"hidden": false,
+	},
+	"clips": [
+		{
+			"resourceId": "4",
+			"duration": 0,
+			"start": 0,
+			"end": 0,
+			"in": 0,
+			"out": 0
+		}
+	],
+	"globalEvents": {
+		"onReady": "console.log('Hypervideo VERY Ready');",
+		"onPlay": "console.log(\"Hypervideo Play Event\");",
+		"onPause": "console.log(\"Hypervideo Pause Event\");",
+		"onEnded": "console.log(\"Hypervideo Ended\");"
+	},
+	"customCSS": "#Sidebar {\n\tbackground-color: #00ff00 !important;\n}",
+	"contents": [
+		{
+			"@context": [
+				  "http://www.w3.org/ns/anno.jsonld", 
+				  {
+					  "frametrail": "http://frametrail.org/ns/"
+				  }
+			], 
+			"id": "1", 
+			"creator": {
+				"nickname": "demo", 
+				"type": "Person", 
+				"id": "2"
+			 }, 
+			"created": "2016-03-29T12:15:28.000001", 
+			"type": "Annotation, OR TYPE HERE NECESSARY?", 
+			"frametrail:type": "Overlay",
+			"target": {
+				  "type": "Video", 
+				  "source": "test.mp4", 
+				  "selector": {
+					  "conformsTo": "http://www.w3.org/TR/media-frags/", 
+					  "type": "FragmentSelector", 
+					  "value": "t=4.40789032192,7.64034322466&xywh=percent:25,25,50,50"
+				   }
+			  }, 
+			"body": {  >>SIEHE ANDERE DATEI << },
+			"frametrail:events": {
+				"onReady": "console.log(\"Overlay ready\");",
+				"onStart": "console.log(\"Start time reached\", this);",
+				"onEnd": "console.log(\"End time reached\");",
+				"onClick": "console.log(\"Overlay now clicked\", this);"
+			},
+			"frametrail:attributes": {
+				"opacity": 0.9
+			}
+		},
+		{
+			"@context": [
+				  "http://www.w3.org/ns/anno.jsonld", 
+				  {
+					  "frametrail": "http://frametrail.org/ns/"
+				  }
+			], 
+			"id": "1", 
+			"creator": {
+				"nickname": "demo", 
+				"type": "Person", 
+				"id": "2"
+			 }, 
+			"created": "2016-03-29T12:15:28.000001", 
+			"type": "Annotation, OR TYPE HERE NECESSARY?", 
+			"frametrail:type": "CodeSnippet",
+			"target": {
+				  "type": "Video", 
+				  "source": "test.mp4", 
+				  "selector": {
+					  "conformsTo": "http://www.w3.org/TR/media-frags/", 
+					  "type": "FragmentSelector", 
+					  "value": "t=4.40789032192"
+				   }
+			  }, 
+			"body": {  >>SIEHE ANDERE DATEI << },
+			"frametrail:attributes": {
+			}
+		},
+		
+		
+	],
+	"annotations": {
+		"mainAnnotation": "1",
+		 "annotationfiles": {
+			"1": {
+				"name": "main",
+				"description": "",
+				"created": 1490624549,
+				"lastchanged": 1490624549,
+				"hidden": false,
+				"owner": "test",
+				"ownerId": "2"
+			}
+		},
+		"annotation-increment": 1,
+		"subtitles": [
+			{
+				"src": "en.vtt",
+				"srclang": "en"
+			},
+			{
+				"src": "de.vtt",
+				"srclang": "de"
+			},
+			{
+				"src": "fr.vtt",
+				"srclang": "fr"
+			}
+		]
+	}
 }
+
