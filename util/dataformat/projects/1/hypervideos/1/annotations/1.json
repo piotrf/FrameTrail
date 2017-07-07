@@ -1,0 +1,29 @@
+[
+	{
+		"@context": [
+			"http://www.w3.org/ns/anno.jsonld", 
+			{
+				"frametrail": "http://frametrail.org/ns/"
+			}
+		], 
+		"creator": {
+			"nickname": "demo", 
+			"type": "Person", 
+			"id": "2"
+		}, 
+		"created": "2016-03-29T12:15:28.000001", 
+		"type": "Annotation, OR TYPE HERE NECESSARY?", 
+		"frametrail:type": "Annotation",
+		"frametrail:tags": ["shortform_tag", "shortform_test"],
+		"target": {
+			"type": "Video", 
+			"source": "test.mp4", 
+			"selector": {
+				"conformsTo": "http://www.w3.org/TR/media-frags/", 
+				"type": "FragmentSelector", 
+				"value": "t=4.40789032192,7.64034322466"
+			}
+		}, 
+		"body": {  <<SEE BODYTYPES.json <<}
+	}
+]

@@ -57,6 +57,7 @@
 			"created": "2016-03-29T12:15:28.000001", 
 			"type": "Annotation, OR TYPE HERE NECESSARY?", 
 			"frametrail:type": "Overlay",
+			"frametrail:tags": ["shortform_tag", "shortform_test"],
 			"target": {
 				  "type": "Video", 
 				  "source": "test.mp4", 
@@ -66,7 +67,7 @@
 					  "value": "t=4.40789032192,7.64034322466&xywh=percent:25,25,50,50"
 				   }
 			  }, 
-			"body": {  >>SIEHE ANDERE DATEI << },
+			"body": {  >>SEE BODYTYPES.json << },
 			"frametrail:events": {
 				"onReady": "console.log(\"Overlay ready\");",
 				"onStart": "console.log(\"Start time reached\", this);",
@@ -89,10 +90,11 @@
 				"nickname": "demo", 
 				"type": "Person", 
 				"id": "2"
-			 }, 
+			 },
 			"created": "2016-03-29T12:15:28.000001", 
 			"type": "Annotation, OR TYPE HERE NECESSARY?", 
 			"frametrail:type": "CodeSnippet",
+			"frametrail:tags": ["shortform_tag", "shortform_test"],
 			"target": {
 				  "type": "Video", 
 				  "source": "test.mp4", 
@@ -102,7 +104,7 @@
 					  "value": "t=4.40789032192"
 				   }
 			  }, 
-			"body": {  >>SIEHE ANDERE DATEI << },
+			"body": {  >>SEE BODYTYPES.json << },
 			"frametrail:attributes": {
 			}
 		},
@@ -122,21 +124,20 @@
 				"ownerId": "2"
 			}
 		},
-		"annotation-increment": 1,
-		"subtitles": [
-			{
-				"src": "en.vtt",
-				"srclang": "en"
-			},
-			{
-				"src": "de.vtt",
-				"srclang": "de"
-			},
-			{
-				"src": "fr.vtt",
-				"srclang": "fr"
-			}
-		]
-	}
+		"annotation-increment": 1
+	},
+	"subtitles": [
+		{
+			"src": "en.vtt",
+			"srclang": "en"
+		},
+		{
+			"src": "de.vtt",
+			"srclang": "de"
+		},
+		{
+			"src": "fr.vtt",
+			"srclang": "fr"
+		}
+	]
 }
-

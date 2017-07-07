@@ -1,0 +1,22 @@
+{
+	"shortform_tag": {
+		"en": {
+			"label": "Longform Tag",
+			"description": ""
+		},
+		"de": {
+			"label": "Tag Name",
+			"description": ""
+		}
+	},
+	"shortform_test": {
+		"en": {
+			"label": "Longform Test",
+			"description": ""
+		},
+		"de": {
+			"label": "Langer Tag Test",
+			"description": ""
+		}
+	}
+}
