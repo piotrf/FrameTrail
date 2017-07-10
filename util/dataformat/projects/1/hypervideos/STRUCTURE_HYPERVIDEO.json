@@ -1,8 +1,8 @@
 {
 	"meta": {
-		"name": "Big Buck Bunny Hypervideo",
+		"name": "First Example Hypervideo",
 		"description": "Lorem Ipsum Dolor Sit Amet",
-		"thumb": "2_1458909015_thumb_big-buck-bunny.png",
+		"thumb": "2_1490624515_thumb_big-buck-bunny.png",
 		"creator": "test",
 		"creatorId": "2",
 		"created": 1490624549,
@@ -56,7 +56,7 @@
 			"created": "2016-03-29T12:15:28.000001", 
 			"type": "Annotation", 
 			"frametrail:type": "Overlay",
-			"frametrail:tags": ["erster_test_tag", "shortform_test"],
+			"frametrail:tags": ["shortform_tag", "shortform_test"],
 			"target": {
 				"type": "Video", 
 				"source": "2_1458909015_big-buck-bunny.mp4", 
@@ -65,21 +65,8 @@
 					"type": "FragmentSelector", 
 					"value": "t=4.6,11.2&xywh=percent:25,25,40,30"
 				}
-			}, 
-			"body": {
-				"type": "Video",
-				"frametrail:type": "video",
-				"format" : "video/mp4",
-				"source": "2_1459152919_testvideo-green.mp4", 
-				"frametrail:name": "Testvideo Green", 
-				"frametrail:thumb": "2_1459152919_thumb_testvideo-green.png", 
-				"selector": {
-					"type": "FragmentSelector",
-					"conformsTo": "http://www.w3.org/TR/media-frags/",
-					"value": "t=4,13"
-				},
-				"frametrail:resourceId": 6
-			},
+			  }, 
+			"body": {  >>SEE STRUCTURE_BODYTYPES.json << },
 			"frametrail:events": {
 				"onReady": "console.log(\"Overlay ready\");",
 				"onStart": "console.log(\"Start time reached\", this);",
@@ -87,8 +74,7 @@
 				"onClick": "console.log(\"Overlay clicked\", this);"
 			},
 			"frametrail:attributes": {
-				"opacity": 0.6,
-				"autoPlay": true
+				"opacity": 0.6
 			}
 		},
 		{
@@ -106,7 +92,7 @@
 			"created": "2016-03-29T12:15:28.000001", 
 			"type": "Annotation", 
 			"frametrail:type": "CodeSnippet",
-			"frametrail:tags": ["shortform_tag", "shortform_test", "zweiter_test_tag"],
+			"frametrail:tags": ["shortform_tag", "shortform_test"],
 			"target": {
 				"type": "Video", 
 				"source": "2_1458909015_big-buck-bunny.mp4", 
@@ -115,16 +101,8 @@
 					"type": "FragmentSelector", 
 					"value": "t=2.46"
 				}
-			}, 
-			"body": {
-				"type": "TextualBody",
-				"frametrail:type": "codesnippet",
-				"format" : "text/javascript",
-				"value" : "console.log(\"Hello, I am a Great Code Snippet\");",
-				"frametrail:name": "Great Code Snippet",
-				"frametrail:thumb": null,
-				"frametrail:resourceId": null
-			},
+			  }, 
+			"body": {  >>SEE STRUCTURE_BODYTYPES.json << },
 			"frametrail:attributes": {}
 		},
 		

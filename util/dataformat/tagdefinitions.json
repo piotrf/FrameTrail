@@ -1,22 +1,42 @@
 {
+	"erster_test_tag": {
+		"en": {
+			"label": "First Test Tag",
+			"description": "Lorem English Dolor Sit Amet"
+		},
+		"de": {
+			"label": "Erster Test Tag",
+			"description": "Lorem Deutsch Dolor Sit Amet"
+		}
+	},
+	"zweiter_test_tag": {
+		"en": {
+			"label": "Second Test Tag",
+			"description": "Lorem English Dolor Sit Amet"
+		},
+		"de": {
+			"label": "Zweiter Test Tag",
+			"description": "Lorem Deutsch Dolor Sit Amet"
+		}
+	},
 	"shortform_tag": {
 		"en": {
 			"label": "Longform Tag",
-			"description": ""
+			"description": "Lorem English Dolor Sit Amet"
 		},
 		"de": {
 			"label": "Tag Name",
-			"description": ""
+			"description": "Lorem Deutsch Dolor Sit Amet"
 		}
 	},
 	"shortform_test": {
 		"en": {
 			"label": "Longform Test",
-			"description": ""
+			"description": "Lorem English Dolor Sit Amet"
 		},
 		"de": {
 			"label": "Langer Tag Test",
-			"description": ""
+			"description": "Lorem Deutsch Dolor Sit Amet"
 		}
 	}
 }

@@ -1,8 +1,8 @@
 {
 	"meta": {
-		"name": "Big Buck Bunny Hypervideo",
-		"description": "Lorem Ipsum Dolor Sit Amet",
-		"thumb": "2_1458909015_thumb_big-buck-bunny.png",
+		"name": "Empty Example Hypervideo",
+		"description": "Empty time container (without a video source) and a custom length of 120 seconds.",
+		"thumb": null,
 		"creator": "test",
 		"creatorId": "2",
 		"created": 1490624549,
@@ -25,8 +25,8 @@
 	},
 	"clips": [
 		{
-			"resourceId": "4",
-			"duration": 0,
+			"resourceId": null,
+			"duration": 120,
 			"start": 0,
 			"end": 0,
 			"in": 0,
@@ -53,32 +53,27 @@
 				"type": "Person", 
 				"id": "2"
 			 }, 
-			"created": "2016-03-29T12:15:28.000001", 
+			"created": "2016-03-29T12:15:28.000001",
 			"type": "Annotation", 
 			"frametrail:type": "Overlay",
-			"frametrail:tags": ["erster_test_tag", "shortform_test"],
+			"frametrail:tags": ["shortform_tag", "zweiter_test_tag"],
 			"target": {
-				"type": "Video", 
-				"source": "2_1458909015_big-buck-bunny.mp4", 
-				"selector": {
-					"conformsTo": "http://www.w3.org/TR/media-frags/", 
-					"type": "FragmentSelector", 
-					"value": "t=4.6,11.2&xywh=percent:25,25,40,30"
-				}
-			}, 
+				  "type": "Video", 
+				  "source": null, 
+				  "selector": {
+					  "conformsTo": "http://www.w3.org/TR/media-frags/", 
+					  "type": "FragmentSelector", 
+					  "value": "t=4.6,11.2&xywh=percent:10,8,30,20"
+				   }
+			  }, 
 			"body": {
-				"type": "Video",
-				"frametrail:type": "video",
-				"format" : "video/mp4",
-				"source": "2_1459152919_testvideo-green.mp4", 
-				"frametrail:name": "Testvideo Green", 
-				"frametrail:thumb": "2_1459152919_thumb_testvideo-green.png", 
-				"selector": {
-					"type": "FragmentSelector",
-					"conformsTo": "http://www.w3.org/TR/media-frags/",
-					"value": "t=4,13"
-				},
-				"frametrail:resourceId": 6
+				"type": "Image",
+				"frametrail:type": "image",
+				"format" : "image/jpg",
+				"source": "2_1459153728_sample-image-1.jpg", 
+				"frametrail:name": "Sample Image 1", 
+				"frametrail:thumb": "2_1459153728_thumb_sample-image-1.png",
+				"frametrail:resourceId": 12
 			},
 			"frametrail:events": {
 				"onReady": "console.log(\"Overlay ready\");",
@@ -87,8 +82,7 @@
 				"onClick": "console.log(\"Overlay clicked\", this);"
 			},
 			"frametrail:attributes": {
-				"opacity": 0.6,
-				"autoPlay": true
+				"opacity": 0.8
 			}
 		},
 		{
@@ -106,10 +100,10 @@
 			"created": "2016-03-29T12:15:28.000001", 
 			"type": "Annotation", 
 			"frametrail:type": "CodeSnippet",
-			"frametrail:tags": ["shortform_tag", "shortform_test", "zweiter_test_tag"],
+			"frametrail:tags": ["erster_test_tag"],
 			"target": {
 				"type": "Video", 
-				"source": "2_1458909015_big-buck-bunny.mp4", 
+				"source": null, 
 				"selector": {
 					"conformsTo": "http://www.w3.org/TR/media-frags/", 
 					"type": "FragmentSelector", 
@@ -120,8 +114,8 @@
 				"type": "TextualBody",
 				"frametrail:type": "codesnippet",
 				"format" : "text/javascript",
-				"value" : "console.log(\"Hello, I am a Great Code Snippet\");",
-				"frametrail:name": "Great Code Snippet",
+				"value" : "console.log(\"Hello, I am an awesome Code Snippet\");",
+				"frametrail:name": "Awesome Code Snippet",
 				"frametrail:thumb": null,
 				"frametrail:resourceId": null
 			},
@@ -145,18 +139,5 @@
 		},
 		"annotation-increment": 1
 	},
-	"subtitles": [
-		{
-			"src": "en.vtt",
-			"srclang": "en"
-		},
-		{
-			"src": "de.vtt",
-			"srclang": "de"
-		},
-		{
-			"src": "fr.vtt",
-			"srclang": "fr"
-		}
-	]
+	"subtitles": []
 }
