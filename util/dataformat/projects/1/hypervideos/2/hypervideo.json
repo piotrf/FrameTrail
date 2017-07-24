@@ -6,7 +6,7 @@
 		"creator": "test",
 		"creatorId": "2",
 		"created": 1490624549,
-		"lastchanged": 1490624549,
+		"lastchanged": 1490624549
 	},
 	"config": {
 		"annotationsVisible": false,
@@ -21,7 +21,7 @@
 		"theme": "CssClassName",
 		"autohideControls": true,
 		"captionsVisible": false,
-		"hidden": false,
+		"hidden": false
 	},
 	"clips": [
 		{
@@ -43,35 +43,35 @@
 	"contents": [
 		{
 			"@context": [
-				  "http://www.w3.org/ns/anno.jsonld", 
+				  "http://www.w3.org/ns/anno.jsonld",
 				  {
 					  "frametrail": "http://frametrail.org/ns/"
 				  }
-			], 
+			],
 			"creator": {
-				"nickname": "test", 
-				"type": "Person", 
+				"nickname": "test",
+				"type": "Person",
 				"id": "2"
-			 }, 
+			 },
 			"created": "2016-03-29T12:15:28.000001",
-			"type": "Annotation", 
+			"type": "Annotation",
 			"frametrail:type": "Overlay",
 			"frametrail:tags": ["shortform_tag", "zweiter_test_tag"],
 			"target": {
-				  "type": "Video", 
-				  "source": null, 
+				  "type": "Video",
+				  "source": null,
 				  "selector": {
-					  "conformsTo": "http://www.w3.org/TR/media-frags/", 
-					  "type": "FragmentSelector", 
+					  "conformsTo": "http://www.w3.org/TR/media-frags/",
+					  "type": "FragmentSelector",
 					  "value": "t=4.6,11.2&xywh=percent:10,8,30,20"
 				   }
-			  }, 
+			  },
 			"body": {
 				"type": "Image",
 				"frametrail:type": "image",
 				"format" : "image/jpg",
-				"source": "2_1459153728_sample-image-1.jpg", 
-				"frametrail:name": "Sample Image 1", 
+				"source": "2_1459153728_sample-image-1.jpg",
+				"frametrail:name": "Sample Image 1",
 				"frametrail:thumb": "2_1459153728_thumb_sample-image-1.png",
 				"frametrail:resourceId": 12
 			},
@@ -87,29 +87,29 @@
 		},
 		{
 			"@context": [
-				  "http://www.w3.org/ns/anno.jsonld", 
+				  "http://www.w3.org/ns/anno.jsonld",
 				  {
 					  "frametrail": "http://frametrail.org/ns/"
 				  }
-			], 
+			],
 			"creator": {
-				"nickname": "test", 
-				"type": "Person", 
+				"nickname": "test",
+				"type": "Person",
 				"id": "2"
 			 },
-			"created": "2016-03-29T12:15:28.000001", 
-			"type": "Annotation", 
+			"created": "2016-03-29T12:15:28.000001",
+			"type": "Annotation",
 			"frametrail:type": "CodeSnippet",
 			"frametrail:tags": ["erster_test_tag"],
 			"target": {
-				"type": "Video", 
-				"source": null, 
+				"type": "Video",
+				"source": null,
 				"selector": {
-					"conformsTo": "http://www.w3.org/TR/media-frags/", 
-					"type": "FragmentSelector", 
+					"conformsTo": "http://www.w3.org/TR/media-frags/",
+					"type": "FragmentSelector",
 					"value": "t=2.46"
 				}
-			}, 
+			},
 			"body": {
 				"type": "TextualBody",
 				"frametrail:type": "codesnippet",
@@ -120,9 +120,7 @@
 				"frametrail:resourceId": null
 			},
 			"frametrail:attributes": {}
-		},
-		
-		
+		}
 	],
 	"annotations": {
 		"mainAnnotation": "1",

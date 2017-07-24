@@ -3,7 +3,7 @@
     "resources": {
         "3": {
             "name": "Sintel",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1458908274,
             "description": null,
@@ -16,11 +16,11 @@
         },
         "4": {
             "name": "Big Buck Bunny",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1458909015,
             "description": null,
-            "src": "2_1458909015_big-buck-bunny.webm",
+            "src": "2_1458909015_big-buck-bunny.mp4",
             "attributes": {
                 "alternateVideoFile": "2_1458909015_big-buck-bunny.mp4"
             },
@@ -29,7 +29,7 @@
         },
         "5": {
             "name": "Testvideo Blue",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459152893,
             "description": null,
@@ -42,7 +42,7 @@
         },
         "6": {
             "name": "Testvideo Green",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459152919,
             "description": null,
@@ -55,7 +55,7 @@
         },
         "7": {
             "name": "Testvideo Red",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459152938,
             "description": null,
@@ -68,7 +68,7 @@
         },
         "8": {
             "name": "Berlin, Germany",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459152979,
             "description": null,
@@ -87,7 +87,7 @@
         },
         "9": {
             "name": "About Hypertext",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153070,
             "description": null,
@@ -98,7 +98,7 @@
         },
         "10": {
             "name": "Vannevar Bush",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153123,
             "description": null,
@@ -108,8 +108,8 @@
             "thumb": null
         },
         "11": {
-            "name": "Why Open Education Matters",
-            "creator": "test",
+            "name": " Why Open Education Matters",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153406,
             "description": null,
@@ -120,7 +120,7 @@
         },
         "12": {
             "name": "Sample Image 1",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153728,
             "description": null,
@@ -131,7 +131,7 @@
         },
         "13": {
             "name": "Sample Image 2",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153765,
             "description": null,
@@ -142,7 +142,7 @@
         },
         "14": {
             "name": "Sample Image 3",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153782,
             "description": null,
@@ -153,7 +153,7 @@
         },
         "15": {
             "name": "Sample Image 4",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153812,
             "description": null,
@@ -164,7 +164,7 @@
         },
         "16": {
             "name": "Sample Image 5",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153837,
             "description": null,
@@ -175,7 +175,7 @@
         },
         "17": {
             "name": "Sample Image 6",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153861,
             "description": null,
@@ -186,7 +186,7 @@
         },
         "18": {
             "name": "Sample Image 7",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153883,
             "description": null,
@@ -197,7 +197,7 @@
         },
         "19": {
             "name": "Sample Image 8",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153906,
             "description": null,
@@ -208,7 +208,7 @@
         },
         "20": {
             "name": "Sample Image 9",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153923,
             "description": null,
@@ -219,7 +219,7 @@
         },
         "21": {
             "name": "Sample Image 10",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459153945,
             "description": null,
@@ -230,7 +230,7 @@
         },
         "22": {
             "name": "Everything is a Remix 4",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459154838,
             "description": null,
@@ -243,7 +243,7 @@
         },
         "23": {
             "name": "Big Buck Bunny Info",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459246669,
             "description": null,
@@ -254,7 +254,7 @@
         },
         "24": {
             "name": "Blender Foundation",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1459246944,
             "description": null,
@@ -265,7 +265,7 @@
         },
         "31": {
             "name": "test",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1465481797,
             "description": null,
@@ -278,7 +278,7 @@
         },
         "32": {
             "name": "Test",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1465554766,
             "description": null,
@@ -289,7 +289,7 @@
         },
         "35": {
             "name": "vimeo test",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1466683413,
             "description": null,
@@ -300,7 +300,7 @@
         },
         "36": {
             "name": "Merz Akademie",
-            "creator": "test",
+            "creator": "demo",
             "creatorId": "2",
             "created": 1466771416,
             "description": null,
