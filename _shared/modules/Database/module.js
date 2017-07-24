@@ -1079,7 +1079,7 @@
             if (annotationsToSave[annotationsToSave.length-1].body['frametrail:type'] === 'location') {
                 var annotationBody = annotationsToSave[annotationsToSave.length-1].body;
                 annotationBody['frametrail:lat'] = annotationItem.attributes.lat;
-                annotationBody['frametrail:long'] = annotationItem.attributes.long;
+                annotationBody['frametrail:long'] = annotationItem.attributes.lon;
                 annotationBody['frametrail:boundingBox'] = annotationItem.attributes.boundingBox.join(',');
             }
 
