@@ -215,43 +215,55 @@
                 bufferedData = {};
 
             for (var key in data.hypervideos) {
+                (function (hypervideoID) {
 
-                $.ajax({
-                    type:   "GET",
-                    url:    ('../_data/projects/' + projectID + '/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
-                    cache:  false,
-                    dataType: "json",
-                    mimeType: "application/json"
-                }).done((function (hypervideoID) {
-                    return function(hypervideoData){
+                    $.ajax({
+                        type:   "GET",
+                        url:    ('../_data/projects/' + projectID + '/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
+                        cache:  false,
+                        dataType: "json",
+                        mimeType: "application/json"
+                    }).done(function (hypervideoData) {
 
-                        bufferedData[hypervideoID] = {
-                            "name": hypervideoData.meta.name,
-                            "description": hypervideoData.meta.description,
-                            "thumb": hypervideoData.meta.thumb,
-                            "creator": hypervideoData.meta.creator,
-                            "creatorId": hypervideoData.meta.creatorId,
-                            "created": hypervideoData.meta.created,
-                            "lastchanged": hypervideoData.meta.lastchanged,
-                            "hidden": hypervideoData.config.hidden,
-                            "config": hypervideoData.config,
-                            "mainAnnotation": hypervideoData.annotations.mainAnnotation,
-                            "annotationfiles": hypervideoData.annotations.annotationfiles,
-                            "annotation-increment": hypervideoData.annotations['annotation-increment'],
-                            "subtitles": hypervideoData.subtitles,
-                            "clips": hypervideoData.clips,
-                            "hypervideoData": hypervideoData
-                        };
+                        $.ajax({
+                            type:   "GET",
+                            url:    ('../_data/projects/' + projectID + '/hypervideos/' + data.hypervideos[key] + '/annotations/_index.json'),
+                            cache:  false,
+                            dataType: "json",
+                            mimeType: "application/json"
+                        }).done(function (annotationsIndex) {
 
-                        if (!--countdown) {
-                            next();
-                        }
+                                bufferedData[hypervideoID] = {
+                                    "name": hypervideoData.meta.name,
+                                    "description": hypervideoData.meta.description,
+                                    "thumb": hypervideoData.meta.thumb,
+                                    "creator": hypervideoData.meta.creator,
+                                    "creatorId": hypervideoData.meta.creatorId,
+                                    "created": hypervideoData.meta.created,
+                                    "lastchanged": hypervideoData.meta.lastchanged,
+                                    "hidden": hypervideoData.config.hidden,
+                                    "config": hypervideoData.config,
+                                    "mainAnnotation": annotationsIndex.mainAnnotation,
+                                    "annotationfiles": annotationsIndex.annotationfiles,
+                                    "annotation-increment": annotationsIndex['annotation-increment'],
+                                    "subtitles": hypervideoData.subtitles,
+                                    "clips": hypervideoData.clips,
+                                    "hypervideoData": hypervideoData
+                                };
 
-                    }
-                }).call(this, key)).fail(function () {
-                    fail('No hypervideo.json file.');
-                })
+                                if (!--countdown) {
+                                    next();
+                                }
 
+                            }).fail(function () {
+                                fail('No annotations index.');
+                            });
+
+                    }).fail(function () {
+                        fail('No hypervideo.json file.');
+                    });
+
+                })(key);
             }
 
 
@@ -897,11 +909,6 @@
                 }
         	    return contents;
         	})(),
-        	"annotations": {
-        		"mainAnnotation": hypervideos[hypervideoID].mainAnnotation,
-        		"annotationfiles": hypervideos[hypervideoID].annotationfiles,
-        		"annotation-increment": hypervideos[hypervideoID]['annotation-increment']
-        	},
         	"subtitles": []
         });
 
@@ -914,9 +921,7 @@
      * My success callback gets one argument, which is either
      *
      *     { success: true }
-     *
      * or
-     *
      *     { failed: 'hypervideo', error: ... }
      *
      * @method saveOverlays
