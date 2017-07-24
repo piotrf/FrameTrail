@@ -57,19 +57,19 @@ FrameTrail.defineModule('ResourceManager', function(){
      * When the onlyVideo parameter is set to true, I allow only uploads of videos (needed during creation of a new hypervideo)
 	 *
 	 * @method uploadResource
-	 * @param {Function} successCallback 
+	 * @param {Function} successCallback
      * @param {Boolean} onlyVideo
 	 *
 	 */
 	function uploadResource(successCallback, onlyVideo) {
         FrameTrail.module('UserManagement').ensureAuthenticated(function(){
-            
+
             $.ajax({
                 type:     'GET',
                 url:        '../_server/ajaxServer.php',
                 data:       {'a':'fileGetMaxUploadSize'},
                 success: function(response) {
-                    
+
                     maxUploadBytes = response.maxuploadbytes;
 
                     var projectID = FrameTrail.module('RouteNavigation').projectID,
@@ -128,7 +128,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                         + '</div>');
 
                     uploadDialog.find('input[type="file"]').on('change', function() {
-                        
+
                         if (this.files[0].size > maxUploadBytes) {
                             uploadDialog.find('#NewResourceConfirm').prop('disabled', true);
                             $('#UploadDialog').append('<div class="message active error">File size is too big. Maximum size due to server settings: '+ bytesToSize(maxUploadBytes) +'. <br>Please ask your server administrator to allow a bigger upload size, post size, memory limit and longer execution time in the PHP settings.</div>');
@@ -142,7 +142,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
                     uploadDialog.find('.resourceInputTabContainer').tabs({
                         activate: function(e,ui) {
-                            
+
                             uploadDialog.find('#nameInputContainer input[name="attributes"]').val('');
                             uploadDialog.find('#nameInputContainer input[name="type"]').val($(ui.newTab[0]).data('type'));
                             uploadDialog.find('.message.error').remove();
@@ -154,8 +154,8 @@ FrameTrail.defineModule('ResourceManager', function(){
                         	if (onlyVideo) {
 
                             	uploadDialog.find('.resourceInputTabContainer').tabs(
-                            		'option', 
-                            		'active', 
+                            		'option',
+                            		'active',
                             		uploadDialog.find('#resourceInputTabVideo').index() - 1
                             	);
 
@@ -163,17 +163,17 @@ FrameTrail.defineModule('ResourceManager', function(){
                             	uploadDialog.find('.resourceInputTabContainer').tabs('enable', '#resourceInputTabVideo');
 
                             }
-	
+
 
                         }
 
                     });
 
                     uploadDialog.find('#locationQ').keyup(function(e) {
-                        
+
                         $.getJSON('//nominatim.openstreetmap.org/search?q='+ uploadDialog.find('#locationQ').val() + '&format=json')
                             .done(function(respText) {
-                                
+
                                 uploadDialog.find('#locationSearchSuggestions').empty();
                                 uploadDialog.find('#locationSearchSuggestions').show();
 
@@ -197,7 +197,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
                     });
 
-                    
+
 
 
                     //Ajaxform
@@ -205,11 +205,11 @@ FrameTrail.defineModule('ResourceManager', function(){
                         method:     'POST',
                         url:        '../_server/ajaxServer.php',
                         beforeSerialize: function() {
-                            
+
                             uploadDialog.find('.message.error').remove();
-                            
+
                             var tmpType = uploadDialog.find('#nameInputContainer input[name="type"]').val();
-                            
+
                             if (tmpType == 'url') {
                                 tmpObj = checkResourceInput( uploadDialog.find('#resourceInput').val(), uploadDialog.find('#resourceNameInput').val() );
                                 uploadDialog.find('#nameInputContainer input[name="attributes"]').val(JSON.stringify(tmpObj));
@@ -225,7 +225,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                             }
 
                             var percentVal = '0%';
-                            
+
                             uploadDialog.find('.bar').width(percentVal);
                             uploadDialog.find('.percent').html(percentVal);
                             uploadDialog.find('.uploadStatus').html('Uploading Resource ...');
@@ -236,7 +236,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                         },
                         beforeSend: function(xhr) {
                             var tmpType = uploadDialog.find('#nameInputContainer input[name="type"]').val();
-                            
+
                             // client side pre-validation to prevent upload of one file (server checks again)
                             if (tmpType == 'video') {
                                 if( uploadDialog.find('[name="webm"]').val().length < 4 || uploadDialog.find('[name="mp4"]').val().length < 4) {
@@ -245,13 +245,13 @@ FrameTrail.defineModule('ResourceManager', function(){
                                     $('#UploadDialog').append('<div class="message active error">Please choose <b>TWO</b> video files (first WEBM, second MP4)</div>');
                                     xhr.abort();
                                 }
-    
+
                             }
-                            
+
                         },
                         data: tmpObj,
                         uploadProgress: function(event, position, total, percentComplete) {
-                            
+
                             var percentVal = percentComplete + '%';
 
                             uploadDialog.find('.bar').width(percentVal)
@@ -259,7 +259,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
                         },
                         success: function(respText) {
-                            
+
                             var percentVal = '100%';
 
                             uploadDialog.find('.bar').width(percentVal)
@@ -271,7 +271,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                     // Upload Successful
 
                                     if (respText['response']['resource']['type'] == 'video') {
-                                        
+
                                         uploadDialog.find('.uploadStatus').html('Generating Thumbnail ...');
 
                                         var tmpVideo = $('<video id="tmpVideo" style="visibility: hidden;​ height:​ 300px;​ width:​ 400px;​ position:​ absolute;​">​</video>​');
@@ -280,14 +280,14 @@ FrameTrail.defineModule('ResourceManager', function(){
                                         $('body').append(tmpCanvas);
                                         var video = document.getElementById('tmpVideo');
                                         var canvas = document.getElementById('tmpCanvas');
-                                        
-                                        if (video.canPlayType('video/webm')) {
-                                            video.src = FrameTrail.module('RouteNavigation').getResourceURL(respText['response']['resource']['src']);
-                                        } else if ((video.canPlayType('video/mp4') || (video.canPlayType('video/mpeg4')))) {
-                                            video.src = FrameTrail.module('RouteNavigation').getResourceURL(respText['response']['resource']['attributes']['alternateVideoFile']);
+
+                                        //if (video.canPlayType('video/webm')) {
+                                            video.src = FrameTrail.module('RouteNavigation').getResourceURL(respText.response.resource.src);
+                                        /*} else if ((video.canPlayType('video/mp4') || (video.canPlayType('video/mpeg4')))) {
+                                            video.src = FrameTrail.module('RouteNavigation').getResourceURL(respText['response']['resource']['attributes']['alternateVideoFile']); //not PHP!
                                         } else {
                                             alert('Video Playback Error. Thumbnail could not be generated.');
-                                        }
+                                        }*/
 
                                         video.addEventListener('loadeddata', function() {
                                             // Go to middle & Play
@@ -302,7 +302,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                             // Draw current Video-Frame on Canvas
                                             canvas.getContext('2d').drawImage(video, 0, 0, 400, 300);
                                             video.pause();
-                                            
+
                                             try {
                                                 canvas.toDataURL();
 
@@ -313,12 +313,12 @@ FrameTrail.defineModule('ResourceManager', function(){
                                                     /**
                                                      * Description
                                                      * @method success
-                                                     * @return 
+                                                     * @return
                                                      */
                                                     success: function() {
                                                         $(video).remove();
                                                         $(canvas).remove();
-                                                        
+
                                                         //addResource(respText["res"]);
                                                         FrameTrail.module('Database').loadResourceData(function() {
                                                             uploadDialog.dialog('close');
@@ -329,7 +329,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                             } catch(error) {
                                                 $(image).remove();
                                                 $(canvas).remove();
-                                                
+
                                                 FrameTrail.module('Database').loadResourceData(function() {
                                                     uploadDialog.dialog('close');
                                                     successCallback && successCallback.call();
@@ -337,9 +337,9 @@ FrameTrail.defineModule('ResourceManager', function(){
                                             }
                                         });
 
-                                    } else if (respText['response']['resource']['type'] == 'image' 
+                                    } else if (respText['response']['resource']['type'] == 'image'
                                                 && (/\.(jpg|jpeg|png)$/i.exec(respText['response']['resource']['src'])) ) {
-                                        
+
                                         uploadDialog.find('.uploadStatus').html('Generating Thumbnail ...');
 
                                         var tmpImage = $('<img id="tmpImage" style="visibility: hidden;​ height:​ 250px;​ width:​350px;​ position:​ absolute;​"/>​');
@@ -347,7 +347,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                         $('body').append(tmpImage);
                                         $('body').append(tmpCanvas);
                                         var image = document.getElementById('tmpImage');
-                                        var canvas = document.getElementById('tmpCanvas');                        
+                                        var canvas = document.getElementById('tmpCanvas');
 
                                         image.src = FrameTrail.module('RouteNavigation').getResourceURL(respText['response']['resource']['src']);
                                         image.addEventListener('load', function() {
@@ -357,7 +357,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                             //image.height = canvas.height = image.offsetHeight;
                                             // Draw current Image on Canvas
                                             canvas.getContext('2d').drawImage(image, 0, 0, 350, 250);
-                                            
+
                                             try {
                                                 canvas.toDataURL();
 
@@ -368,7 +368,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                                     success: function() {
                                                         $(image).remove();
                                                         $(canvas).remove();
-                                                        
+
                                                         //addResource(respText["res"]);
                                                         FrameTrail.module('Database').loadResourceData(function() {
                                                             uploadDialog.dialog('close');
@@ -379,18 +379,18 @@ FrameTrail.defineModule('ResourceManager', function(){
                                             } catch(error) {
                                                 $(image).remove();
                                                 $(canvas).remove();
-                                                
+
                                                 FrameTrail.module('Database').loadResourceData(function() {
                                                     uploadDialog.dialog('close');
                                                     successCallback && successCallback.call();
                                                 });
                                             }
 
-                                            
+
                                         });
 
                                     } else {
-                                        
+
                                         //addResource(respText['response']);
                                         FrameTrail.module('Database').loadResourceData(function() {
                                             uploadDialog.dialog('close');
@@ -504,7 +504,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
                 }
             });
-            
+
         });
     }
 
@@ -529,19 +529,19 @@ FrameTrail.defineModule('ResourceManager', function(){
      * @method checkResourceInput
      * @param {String} uriValue
      * @param {String} nameValue
-     * @return 
+     * @return
      */
     function checkResourceInput(uriValue, nameValue) {
-    
+
         if ( uriValue.length > 3 ) {
-            
+
             var newResource = null;
-            
+
             var checkers = [
                 function (src, name) {
                     // Wikipedia
                     var res = /wikipedia\.org\/wiki\//.exec(src);
-                    
+
                     if (res !== null) {
                         return createResource(src, "wikipedia", name);
                     }
@@ -574,7 +574,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                             async: false
                         }).success( function (data) {
                             r.thumb = data[0].thumbnail_large;
-                            
+
                             var vimeoID = data[0].id.toString();
 
                             if (!r.name || r.name == vimeoID) {
@@ -697,7 +697,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 				resourcesID: resourceID
 			}
 		}).done(function(data) {
-			
+
 			if (data.code === 0) {
 				successCallback();
 			} else {
@@ -710,7 +710,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
 
 
-	
+
 	/**
 	 * I render a list of thumbnails for either all resource items of the project,
 	 * or a narrowed down set of them.
@@ -760,15 +760,15 @@ FrameTrail.defineModule('ResourceManager', function(){
 	 * @method renderResult
 	 * @param {HTMLElement} targetElement
 	 * @param {Array} array
-	 * @private 
+	 * @private
 	 */
 	function renderResult(targetElement, array) {
 
 		for (var id in array) {
 
 			var resourceThumb = FrameTrail.newObject(
-				(	'Resource' 
-				  + array[id].type.charAt(0).toUpperCase() 
+				(	'Resource'
+				  + array[id].type.charAt(0).toUpperCase()
 				  + array[id].type.slice(1)),
 				array[id]
 			).renderThumb(id);
@@ -816,7 +816,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 			}
 
 		);
-		
+
 	}
 
 
@@ -851,7 +851,7 @@ FrameTrail.defineModule('ResourceManager', function(){
             	condition: 	condition,
             	value: 		value
             }
-        
+
         }).done(function(data){
 
         	if (data.code === 0) {
@@ -898,9 +898,9 @@ FrameTrail.defineModule('ResourceManager', function(){
 			resourceThumb;
 
 		container.find('#AddResourcesButton').click(function() {
-			
+
             FrameTrail.module('ResourceManager').uploadResource(function(){
-                
+
                 FrameTrail.module('Database').loadResourceData(function() {
                     targetElement.empty();
                     renderResourcePicker(targetElement);
@@ -913,13 +913,13 @@ FrameTrail.defineModule('ResourceManager', function(){
 		for (var i in resourceDatabase) {
 
 			resourceThumb = FrameTrail.newObject(
-				(	'Resource' 
-				  + resourceDatabase[i].type.charAt(0).toUpperCase() 
+				(	'Resource'
+				  + resourceDatabase[i].type.charAt(0).toUpperCase()
 				  + resourceDatabase[i].type.slice(1)),
 				resourceDatabase[i]
 			).renderThumb();
 
-			
+
 
 			resourceThumb.draggable({
 				containment: 	'#MainContainer',
@@ -939,7 +939,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 					});
 					$(event.currentTarget).addClass('dragPlaceholder');
 				},
-				
+
 				stop: function( event, ui ) {
 					$(event.target).removeClass('dragPlaceholder');
 				}
@@ -955,7 +955,7 @@ FrameTrail.defineModule('ResourceManager', function(){
 
 	}
 
-	
+
 	return {
 
 		renderList: 			renderList,

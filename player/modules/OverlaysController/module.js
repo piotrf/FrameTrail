@@ -73,10 +73,10 @@ FrameTrail.defineModule('OverlaysController', function(){
 
                 if (overlay.syncedMedia) {
 
-                    // Note: Currently, the only synced media type is 'video', so we shortcut it
-
+                    // endOffset
                     if (overlay.videoElement.currentTime > overlay.videoElement.duration - overlay.data.endOffset) {
                         overlay.videoElement.pause();
+                        overlay.videoElement.currentTime = overlay.videoElement.duration - overlay.data.endOffset;
                     }
 
                 }
@@ -162,14 +162,18 @@ FrameTrail.defineModule('OverlaysController', function(){
 
             // Note: Currently, the only synced media type is 'video', so we shortcut it
 
-            overlay.videoElement.currentTime = currentTime - overlay.data.start - overlay.data.startOffset;
+            overlay.videoElement.currentTime = currentTime - overlay.data.start + overlay.data.startOffset;
+
 
             if (overlay.videoElement.currentTime > overlay.videoElement.duration - overlay.data.endOffset) {
+
                 overlay.videoElement.pause();
+                overlay.videoElement.currentTime = overlay.videoElement.duration - overlay.data.endOffset;
+
             }
 
-
             if (isPlaying) {
+
                 if (overlay.videoElement.paused) {
                     var promise = overlay.videoElement.play();
                     if (promise) {
@@ -206,10 +210,10 @@ FrameTrail.defineModule('OverlaysController', function(){
             if (overlay.videoElement) {
 
                 // off by 0.01 seconds
-                if (overlay.videoElement.currentTime - (currentTime - overlay.data.start - overlay.data.startOffset) > 0.01) {
+                if (overlay.videoElement.currentTime - (currentTime - overlay.data.start + overlay.data.startOffset) > 0.01) {
 
-                    //console.log('lag detected', overlay.videoElement.currentTime - (currentTime - overlay.data.start));
-                    overlay.videoElement.currentTime = currentTime - overlay.data.start - overlay.data.startOffset;
+                    //console.log('lag detected', overlay.videoElement.currentTime - (currentTime + overlay.data.start));
+                    overlay.videoElement.currentTime = currentTime - overlay.data.start + overlay.data.startOffset;
 
                 }
 

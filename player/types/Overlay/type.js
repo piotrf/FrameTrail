@@ -28,13 +28,6 @@ FrameTrail.defineType(
             data.events = {};
         }
 
-        // compatibility fix
-        if ( !data.startOffset ) {
-            data.startOffset = 0;
-        }
-        if ( !data.endOffset ) {
-            data.endOffset = 0;
-        }
 
         this.data = data;
 

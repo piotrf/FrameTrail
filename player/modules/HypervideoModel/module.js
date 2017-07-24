@@ -16,7 +16,7 @@
     var hasHTML5Video           = true,
         duration                = 0,
         sourceFiles             = {
-                                    webm: '',
+                                    //webm: '',
                                     mp4:  ''
                                   },
 
@@ -101,8 +101,8 @@
 
         } else {
 
-            sourceFiles.webm = database.resources[videoData.resourceId].src;
-            sourceFiles.mp4  = database.resources[videoData.resourceId].attributes.alternateVideoFile;
+            //sourceFiles.webm = database.resources[videoData.resourceId].attributes.alternateVideoFile;
+            sourceFiles.mp4  = database.resources[videoData.resourceId].src;
 
         }
 
@@ -898,22 +898,18 @@
 
                 FrameTrail.module('InterfaceModal').showStatusMessage('Saving...');
 
-                if (unsavedOverlays) saveRequests.push(function(){
-                    FrameTrail.module('Database').saveOverlays(databaseCallback);
-                });
+                if (   unsavedOverlays || unsavedVideolinks || unsavedCodeSnippets
+                    || unsavedEvents   || unsavedCustomCSS) {
+                    saveRequests.push(function(){
+                        FrameTrail.module('Database').saveHypervideo(databaseCallback);
+                    });
+                }
 
-                if (unsavedVideolinks) saveRequests.push(function(){
-                    FrameTrail.module('Database').saveLinks(databaseCallback);
-                });
-
-                if (unsavedCodeSnippets || unsavedEvents || unsavedCustomCSS) saveRequests.push(function(){
-                    FrameTrail.module('Database').saveCodeSnippets(databaseCallback);
-                });
-
-                if (unsavedAnnotations) saveRequests.push(function(){
-                    FrameTrail.module('Database').saveAnnotations(databaseCallback);
-                });
-
+                if (unsavedAnnotations) {
+                    saveRequests.push(function(){
+                        FrameTrail.module('Database').saveAnnotations(databaseCallback);
+                    });
+                }
 
                 for (var i in saveRequests) {
                     saveRequests[i].call();
@@ -935,7 +931,6 @@
         );
 
         function saveFinished() {
-
 
             for (var result in callbackReturns) {
 

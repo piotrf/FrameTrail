@@ -6,7 +6,7 @@
 		"creator": "test",
 		"creatorId": "2",
 		"created": 1490624549,
-		"lastchanged": 1490624549,
+		"lastchanged": 1490624549
 	},
 	"config": {
 		"annotationsVisible": false,
@@ -21,18 +21,16 @@
 		"theme": "CssClassName",
 		"autohideControls": true,
 		"captionsVisible": false,
-		"hidden": false,
+		"hidden": false
 	},
-	"clips": [
-		{
-			"resourceId": "4",
-			"duration": 0,
-			"start": 0,
-			"end": 0,
-			"in": 0,
-			"out": 0
-		}
-	],
+	"clips": [{
+		"resourceId": "4",
+		"duration": 0,
+		"start": 0,
+		"end": 0,
+		"in": 0,
+		"out": 0
+	}],
 	"globalEvents": {
 		"onReady": "console.log('Hypervideo Ready');",
 		"onPlay": "console.log(\"Hypervideo Play Event\");",
@@ -40,39 +38,38 @@
 		"onEnded": "console.log(\"Hypervideo Ended\");"
 	},
 	"customCSS": "#Sidebar {\n\tbackground-color: #00ff00 !important;\n}",
-	"contents": [
-		{
+	"contents": [{
 			"@context": [
-				  "http://www.w3.org/ns/anno.jsonld", 
-				  {
-					  "frametrail": "http://frametrail.org/ns/"
-				  }
-			], 
+				"http://www.w3.org/ns/anno.jsonld",
+				{
+					"frametrail": "http://frametrail.org/ns/"
+				}
+			],
 			"creator": {
-				"nickname": "test", 
-				"type": "Person", 
+				"nickname": "test",
+				"type": "Person",
 				"id": "2"
-			 }, 
-			"created": "2016-03-29T12:15:28.000001", 
-			"type": "Annotation", 
+			},
+			"created": "2016-03-29T12:15:28.000001",
+			"type": "Annotation",
 			"frametrail:type": "Overlay",
 			"frametrail:tags": ["erster_test_tag", "shortform_test"],
 			"target": {
-				"type": "Video", 
-				"source": "2_1458909015_big-buck-bunny.mp4", 
+				"type": "Video",
+				"source": "2_1458909015_big-buck-bunny.mp4",
 				"selector": {
-					"conformsTo": "http://www.w3.org/TR/media-frags/", 
-					"type": "FragmentSelector", 
+					"conformsTo": "http://www.w3.org/TR/media-frags/",
+					"type": "FragmentSelector",
 					"value": "t=4.6,11.2&xywh=percent:25,25,40,30"
 				}
-			}, 
+			},
 			"body": {
 				"type": "Video",
 				"frametrail:type": "video",
-				"format" : "video/mp4",
-				"source": "2_1459152919_testvideo-green.mp4", 
-				"frametrail:name": "Testvideo Green", 
-				"frametrail:thumb": "2_1459152919_thumb_testvideo-green.png", 
+				"format": "video/mp4",
+				"source": "2_1459152919_testvideo-green.mp4",
+				"frametrail:name": "Testvideo Green",
+				"frametrail:thumb": "2_1459152919_thumb_testvideo-green.png",
 				"selector": {
 					"type": "FragmentSelector",
 					"conformsTo": "http://www.w3.org/TR/media-frags/",
@@ -93,46 +90,46 @@
 		},
 		{
 			"@context": [
-				  "http://www.w3.org/ns/anno.jsonld", 
-				  {
-					  "frametrail": "http://frametrail.org/ns/"
-				  }
-			], 
+				"http://www.w3.org/ns/anno.jsonld",
+				{
+					"frametrail": "http://frametrail.org/ns/"
+				}
+			],
 			"creator": {
-				"nickname": "test", 
-				"type": "Person", 
+				"nickname": "test",
+				"type": "Person",
 				"id": "2"
-			 },
-			"created": "2016-03-29T12:15:28.000001", 
-			"type": "Annotation", 
+			},
+			"created": "2016-03-29T12:15:28.000001",
+			"type": "Annotation",
 			"frametrail:type": "CodeSnippet",
 			"frametrail:tags": ["shortform_tag", "shortform_test", "zweiter_test_tag"],
 			"target": {
-				"type": "Video", 
-				"source": "2_1458909015_big-buck-bunny.mp4", 
+				"type": "Video",
+				"source": "2_1458909015_big-buck-bunny.mp4",
 				"selector": {
-					"conformsTo": "http://www.w3.org/TR/media-frags/", 
-					"type": "FragmentSelector", 
+					"conformsTo": "http://www.w3.org/TR/media-frags/",
+					"type": "FragmentSelector",
 					"value": "t=2.46"
 				}
-			}, 
+			},
 			"body": {
 				"type": "TextualBody",
 				"frametrail:type": "codesnippet",
-				"format" : "text/javascript",
-				"value" : "console.log(\"Hello, I am a Great Code Snippet\");",
+				"format": "text/javascript",
+				"value": "console.log(\"Hello, I am a Great Code Snippet\");",
 				"frametrail:name": "Great Code Snippet",
 				"frametrail:thumb": null,
 				"frametrail:resourceId": null
 			},
 			"frametrail:attributes": {}
-		},
-		
-		
+		}
+
+
 	],
 	"annotations": {
 		"mainAnnotation": "1",
-		 "annotationfiles": {
+		"annotationfiles": {
 			"1": {
 				"name": "main",
 				"description": "",
@@ -145,8 +142,7 @@
 		},
 		"annotation-increment": 1
 	},
-	"subtitles": [
-		{
+	"subtitles": [{
 			"src": "en.vtt",
 			"srclang": "en"
 		},

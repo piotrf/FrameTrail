@@ -6,7 +6,7 @@
 /**
  * I am the type definition of an Annotation. An annotation is a user-generated content
  * which is associated with start and end time of the main video.
- * 
+ *
  * An annotation can hold any type of {{#crossLink "Resource"}}Resource{{/crossLink}}.
  *
  * Annotations are grouped in annotation sets, which are assigned to a user. Each user can have 0 or 1 annotation set.
@@ -115,8 +115,8 @@ FrameTrail.defineType(
             var ViewVideo = FrameTrail.module('ViewVideo');
 
             ViewVideo.AnnotationTimeline.append(this.timelineElement);
-            this.updateTimelineElement();            
-        
+            this.updateTimelineElement();
+
             this.annotationElement.empty();
             this.annotationElement.append( this.resourceItem.renderContent() );
             ViewVideo.AnnotationContainer.append(this.annotationElement);
@@ -127,14 +127,14 @@ FrameTrail.defineType(
 
 
             ViewVideo.AnnotationTileSlider.append(this.tileElement);
-            
+
             this.timelineElement.unbind('hover');
             this.tileElement.unbind('hover');
             this.tileElement.unbind('click')
             this.timelineElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
             this.tileElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
-            
-            // self = this necessary as self can not be kept in anonymous handler function 
+
+            // self = this necessary as self can not be kept in anonymous handler function
             var self = this;
             this.tileElement.click(function() {
                 if ( FrameTrail.module('AnnotationsController').openedAnnotation == self ) {
@@ -170,12 +170,12 @@ FrameTrail.defineType(
 
 
         /**
-        * I scale the two annotation elements (annotationElement and previewElement) 
+        * I scale the two annotation elements (annotationElement and previewElement)
         * in case the space is too small
         * @method scaleAnnotationElements
         */
         scaleAnnotationElements: function() {
-            
+
             if (this.data.type == 'wikipedia' || this.data.type == 'webpage') {
 
                 rescale( this.annotationElement, FrameTrail.module('ViewVideo').AnnotationContainer.width() );
@@ -222,7 +222,7 @@ FrameTrail.defineType(
          * I am called when the Annotation is to be deleted.
          *
          * @method removeFromDOM
-         * @return 
+         * @return
          */
         removeFromDOM: function () {
 
@@ -285,7 +285,7 @@ FrameTrail.defineType(
             this.tileElement.addClass('active');
 
             this.previewElement.addClass('active');
-            
+
             if ( this.data.type == 'location' && this.previewElement.children('.resourceDetail').data('map') ) {
                 this.previewElement.children('.resourceDetail').data('map').updateSize();
             }
@@ -317,7 +317,7 @@ FrameTrail.defineType(
          * * I tell the {{#crossLink "AnnotationsController/openedAnnotation:attribute"}}AnnotationsController{{/crossLink}} to set me as the "openedAnnotation"
          *
          * @method openAnnotation
-         * @return 
+         * @return
          */
         openAnnotation: function () {
 
@@ -326,7 +326,7 @@ FrameTrail.defineType(
             //FrameTrail.module('HypervideoController').currentTime = this.data.start;
 
             FrameTrail.module('AnnotationsController').openedAnnotation = this;
-            
+
             this.timelineElement.addClass('open');
             this.tileElement.addClass('open');
 
@@ -376,12 +376,12 @@ FrameTrail.defineType(
                 FrameTrail.module('HypervideoController').currentTime = self.data.start;
 
             });
-            
+
 
         },
 
         /**
-         * When the global editMode leaves the state "annotations", I am called to 
+         * When the global editMode leaves the state "annotations", I am called to
          * stop the editing features of the annotations.
          *
          * @method stopEditing
@@ -399,7 +399,7 @@ FrameTrail.defineType(
 
         /**
          * I make my {{#crossLink "Overlay/timelineElement:attribute"}}timelineElement{{/crossLink}} draggable.
-         * 
+         *
          * The event handling changes my this.data.start and this.data.end attributes
          * accordingly.
          *
@@ -411,13 +411,13 @@ FrameTrail.defineType(
 
 
             this.timelineElement.draggable({
-                
+
                 axis:        'x',
                 containment: 'parent',
                 snapTolerance: 10,
 
                 drag: function(event, ui) {
-                    
+
                     var closestGridline = FrameTrail.module('ViewVideo').closestToOffset($('.gridline'), {
                             left: ui.position.left,
                             top: ui.position.top
@@ -425,7 +425,7 @@ FrameTrail.defineType(
                         snapTolerance = $(this).draggable('option', 'snapTolerance');
 
                     if (closestGridline) {
-                        
+
                         $('.gridline').css('background-color', '#ff9900');
 
                         if ( ui.position.left - snapTolerance < closestGridline.position().left &&
@@ -446,8 +446,8 @@ FrameTrail.defineType(
 
                     FrameTrail.module('HypervideoController').currentTime = newStartValue;
                     FrameTrail.module('AnnotationsController').updateControlsStart(newStartValue);
-                    FrameTrail.module('AnnotationsController').updateControlsEnd( newEndValue );  
-                    
+                    FrameTrail.module('AnnotationsController').updateControlsEnd( newEndValue );
+
                 },
 
                 start: function(event, ui) {
@@ -455,7 +455,7 @@ FrameTrail.defineType(
                     if (!self.permanentFocusState) {
                         FrameTrail.module('AnnotationsController').annotationInFocus = self;
                     }
-                    
+
                 },
 
                 stop: function(event, ui) {
@@ -463,12 +463,12 @@ FrameTrail.defineType(
                     if (!self.permanentFocusState) {
                         FrameTrail.module('AnnotationsController').annotationInFocus = null;
                     }
-                    
+
 
                     var videoDuration = FrameTrail.module('HypervideoModel').duration,
                         leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                         widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width());
-                    
+
                     self.data.start = leftPercent * (videoDuration / 100);
                     self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
@@ -477,7 +477,7 @@ FrameTrail.defineType(
                     FrameTrail.module('AnnotationsController').stackTimelineView();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
-                    
+
                 }
             });
 
@@ -485,12 +485,12 @@ FrameTrail.defineType(
 
         /**
          * I make my {{#crossLink "Annotation/timelineElement:attribute"}}timelineElement{{/crossLink}} resizable.
-         * 
+         *
          * The event handling changes my this.data.start and this.data.end attributes
          * accordingly.
          *
          * @method makeTimelineElementResizeable
-         * @return 
+         * @return
          */
         makeTimelineElementResizeable: function () {
 
@@ -499,12 +499,12 @@ FrameTrail.defineType(
 
 
             this.timelineElement.resizable({
-                
+
                 containment: 'parent',
                 handles:     'e, w',
 
                 resize: function(event, ui) {
-                    
+
                     var closestGridline = FrameTrail.module('ViewVideo').closestToOffset($('.gridline'), {
                             left: (endHandleGrabbed ? (ui.position.left + ui.helper.width()) : ui.position.left),
                             top: ui.position.top
@@ -512,10 +512,10 @@ FrameTrail.defineType(
                         snapTolerance = $(this).draggable('option', 'snapTolerance');
 
                     if (closestGridline) {
-                        
+
                         $('.gridline').css('background-color', '#ff9900');
 
-                        if ( !endHandleGrabbed && 
+                        if ( !endHandleGrabbed &&
                              ui.position.left - snapTolerance < closestGridline.position().left &&
                              ui.position.left + snapTolerance > closestGridline.position().left ) {
 
@@ -527,7 +527,7 @@ FrameTrail.defineType(
                         } else if ( endHandleGrabbed &&
                                     ui.position.left + ui.helper.width() - snapTolerance < closestGridline.position().left &&
                                     ui.position.left + ui.helper.width() + snapTolerance > closestGridline.position().left ) {
-                        
+
                             ui.helper.width(closestGridline.position().left - ui.position.left);
 
                             closestGridline.css('background-color', '#00ff00');
@@ -554,7 +554,7 @@ FrameTrail.defineType(
                         FrameTrail.module('AnnotationsController').updateControlsStart(newValue);
 
                     }
-                    
+
                 },
 
                 start: function(event, ui) {
@@ -564,11 +564,11 @@ FrameTrail.defineType(
                     }
 
                     endHandleGrabbed = $(event.originalEvent.target).hasClass('ui-resizable-e')
-                    
+
                 },
 
                 stop: function(event, ui) {
-                    
+
                     if (!self.permanentFocusState) {
                         FrameTrail.module('AnnotationsController').annotationInFocus = null;
                     }
@@ -578,14 +578,14 @@ FrameTrail.defineType(
                         leftPercent  = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                         widthPercent = 100 * (ui.helper.width() / ui.helper.parent().width());
 
-                    
+
                     self.data.start = leftPercent * (videoDuration / 100);
                     self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
                     FrameTrail.module('AnnotationsController').stackTimelineView();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
-                    
+
                 }
             });
 
@@ -596,7 +596,7 @@ FrameTrail.defineType(
          * When I "got into focus" (which happens, when I become the referenced object in the AnnotationsController's
          * {{#crossLink "AnnotationsController/annotationInFocus:attribute"}}annotationInFocus attribute{{/crossLink}}),
          * then this method will be called.
-         * 
+         *
          * @method gotInFocus
          */
         gotInFocus: function () {
@@ -636,7 +636,7 @@ FrameTrail.defineType(
          *
          * For this purpose, I create a special, jquery-enabled HTMLElement, which carries
          * all the necessary information to create a new annotation in its data attributes. The
-         * returned element is draggable, and ready to be 
+         * returned element is draggable, and ready to be
          * {{#crossLink "AnnotationsController:makeTimelineDroppable:method"}}dropped onto the annotation timeline{{/crossLink}}.
          *
          * @method renderCompareTimelineItem
@@ -686,7 +686,7 @@ FrameTrail.defineType(
                         backgroundColor: $(event.currentTarget).css('background-color')
                     });
                 },
-                
+
                 drag: function( event, ui ) {
                     ui.helper.css({
                         top: ui.position.top + ($('#SlideArea').css('margin-top')*2) + "px"

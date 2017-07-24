@@ -45,7 +45,7 @@
 
 
 
-    
+
     /**
      * I load the project index data (../_data/projects/_index.json) from the server
      * and save the data for my projectID (from {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}})
@@ -60,7 +60,6 @@
     function loadProjectData(success, fail) {
 
         $.ajax({
-
             type:   "GET",
             url:    '../_data/projects/_index.json',
             cache:  false,
@@ -68,13 +67,20 @@
             mimeType: "application/json"
         }).done(function(data){
 
-            project = data.projects[projectID];
+            $.ajax({
+                type:   "GET",
+                url:    '../_data/projects/' + data.projects[projectID] + '/project.json',
+                cache:  false,
+                dataType: "json",
+                mimeType: "application/json"
+            }).done(function (projectData) {
+                project = projectData;
+                //console.log('project', project);
+                success.call(this);
+            }).fail(function () {
+                fail('No project.json file.');
+            });
 
-            if(!project){
-                return fail('This project does not exist.');
-            }
-
-            success.call(this);
 
         }).fail(function(){
 
@@ -107,7 +113,7 @@
         }).done(function(data){
 
             resources = data.resources;
-
+            //console.log('resources', resources);
             success.call(this);
 
         }).fail(function(){
@@ -141,7 +147,7 @@
             }).done(function(data){
 
                 users = data.user;
-
+                //console.log('users', users);
                 success.call(this);
 
             }).fail(function(){
@@ -168,7 +174,7 @@
             }).done(function(data){
 
                 users = data.response.user;
-
+                //console.log('users', users);
                 success.call(this);
 
             }).fail(function(){
@@ -205,9 +211,57 @@
             mimeType: "application/json"
         }).done(function(data){
 
-            hypervideos = data.hypervideos;
+            var countdown = Object.keys(data.hypervideos).length,
+                bufferedData = {};
 
-            success.call(this);
+            for (var key in data.hypervideos) {
+
+                $.ajax({
+                    type:   "GET",
+                    url:    ('../_data/projects/' + projectID + '/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
+                    cache:  false,
+                    dataType: "json",
+                    mimeType: "application/json"
+                }).done((function (hypervideoID) {
+                    return function(hypervideoData){
+
+                        bufferedData[hypervideoID] = {
+                            "name": hypervideoData.meta.name,
+                            "description": hypervideoData.meta.description,
+                            "thumb": hypervideoData.meta.thumb,
+                            "creator": hypervideoData.meta.creator,
+                            "creatorId": hypervideoData.meta.creatorId,
+                            "created": hypervideoData.meta.created,
+                            "lastchanged": hypervideoData.meta.lastchanged,
+                            "hidden": hypervideoData.config.hidden,
+                            "config": hypervideoData.config,
+                            "mainAnnotation": hypervideoData.annotations.mainAnnotation,
+                            "annotationfiles": hypervideoData.annotations.annotationfiles,
+                            "annotation-increment": hypervideoData.annotations['annotation-increment'],
+                            "subtitles": hypervideoData.subtitles,
+                            "clips": hypervideoData.clips,
+                            "hypervideoData": hypervideoData
+                        };
+
+                        if (!--countdown) {
+                            next();
+                        }
+
+                    }
+                }).call(this, key)).fail(function () {
+                    fail('No hypervideo.json file.');
+                })
+
+            }
+
+
+            function next() {
+
+                hypervideos = bufferedData;
+                //console.log('hypervideo', hypervideos[hypervideoID]);
+                success.call(this);
+
+            }
 
         }).fail(function(){
 
@@ -232,96 +286,102 @@
      */
     function loadSequenceData(success, fail) {
 
-        $.ajax({
-
-            type: "GET",
-            url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/hypervideo.json'),
-            cache: false,
-            dataType: "json",
-            mimeType: "application/json"
-        }).done(function(data){
-
-            sequence = data;
-
-            success.call(this);
-
-        }).fail(function() {
-
-            fail('No hypervideo data.');
-
-        });
-
-
+        sequence = {
+            clips: hypervideos[hypervideoID].clips
+        }
+        //console.log('sequence', sequence);
+        success();
     };
 
 
     /**
-     * I load the overlay data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}}
-     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
-     * and save the data in my attribute {{#crossLink "Database/overlays:attribute"}}Database/overlays{{/crossLink}}.
+     * I load the content data from the hypervideo.json
+     * and save the data in my attribute {{#crossLink "Database/overlays:attribute"}}Database/overlays{{/crossLink}} and  {{#crossLink "Database/codeSnippets:attribute"}}Database/codeSnippets{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
-     * @method loadOverlayData
+     * @method loadContentData
      * @param {Function} success
      * @param {Function} fail
      * @private
      */
-    function loadOverlayData(success, fail) {
+    function loadContentData(success, fail) {
 
-        $.ajax({
+        try {
 
-            type: "GET",
-            url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/overlays.json'),
-            cache: false,
-            dataType: "json",
-            mimeType: "application/json"
-        }).done(function(data){
+            overlays = [];
+            codeSnippets.timebasedEvents = [];
 
-            overlays = data;
-            success.call(this);
+            for (var key in hypervideos[hypervideoID].hypervideoData.contents) {
 
-        }).fail(function() {
+                var contentItem = hypervideos[hypervideoID].hypervideoData.contents[key];
+                //console.log('contentItem', contentItem);
+                switch (contentItem['frametrail:type']) {
+                    case 'Overlay':
+                        overlays.push({
+                            "name": contentItem.body['frametrail:name'],
+                            "creator": contentItem.creator.nickname,
+                            "creatorId": contentItem.creator.id,
+                            "created": (new Date(contentItem.created)).getTime(),
+                            "type": contentItem.body['frametrail:type'],
+                            "src": contentItem.body.source,
+                            "start": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[1]),
+                            "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[2]),
+                            "startOffset": (contentItem.body.selector)
+                                            ? parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.body.selector.value)[1])
+                                            : 0,
+                            "endOffset": (contentItem.body.selector)
+                                            ? parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.body.selector.value)[2])
+                                            : 0,
+                            "attributes": contentItem["frametrail:attributes"],
+                            "position": (function () {
+                                if (!contentItem.target.selector) { return {}; }
+                                var match = /xywh=percent:(\d+\.?\d*),(\d+\.?\d*),(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value);
+                                return {
+                                    "top": parseFloat(match[2]),
+                                    "left": parseFloat(match[1]),
+                                    "width": parseFloat(match[3]),
+                                    "height": parseFloat(match[4])
+                                };
+                            })(),
+                            "events": contentItem["frametrail:events"],
+                            "tags": contentItem["frametrail:tags"]
+                        });
+                        if (overlays[overlays.length-1].type === 'location') {
+                            var locationAttributes = overlays[overlays.length-1].attributes;
+                            locationAttributes.lat = parseFloat(contentItem.body['frametrail:lat']);
+                            locationAttributes.lon = parseFloat(contentItem.body['frametrail:long']);
+                            locationAttributes.boundingBox = contentItem.body['frametrail:boundingBox'].split(',').map(parseFloat);
+                        }
+                        break;
+                    case 'CodeSnippet':
+                        codeSnippets.timebasedEvents.push({
+                            "name": contentItem.body['frametrail:name'],
+                            "creator": contentItem.creator.nickname,
+                            "creatorId": contentItem.creator.id,
+                            "created": (new Date(contentItem.created)).getTime(),
+                            "snippet": contentItem.body.value,
+                            "start": parseInt(/t=(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[1]),
+                            "attributes": contentItem['frametrail:attributes'],
+                            "tags": contentItem['frametrail:tags']
+                        });
+                        break;
+                }
 
-            fail('No Overlay data.');
+            }
 
-        });
+            codeSnippets.globalEvents = hypervideos[hypervideoID].hypervideoData.globalEvents;
+            codeSnippets.customCSS = hypervideos[hypervideoID].hypervideoData.customCSS;
+
+        } catch (e) {
+            console.log(e);
+            return fail('Could not load content data');
+        }
+        console.log('oberlays', overlays);
+        //console.log('codeSnippets', codeSnippets);
+        success();
 
     };
 
-
-
-    /**
-     * I load the video link data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}}
-     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
-     * and save the data in my attribute {{#crossLink "Database/links:attribute"}}Database/links{{/crossLink}}.
-     * I call my success or fail callback respectively.
-     *
-     * @method loadLinksData
-     * @param {Function} success
-     * @param {Function} fail
-     * @private
-     */
-    function loadLinksData(success, fail) {
-
-        $.ajax({
-
-            type: "GET",
-            url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/links.json'),
-            cache: false,
-            dataType: "json",
-            mimeType: "application/json"
-        }).done(function(data){
-
-            links = data;
-            success.call(this);
-
-        }).fail(function() {
-
-            fail('No Links data.');
-
-        });
-
-    };
 
 
     /**
@@ -335,12 +395,12 @@
      *
      * @method loadAnnotationData
      * @param {Function} success
-     * @param {Function} fail
+     * @param {Function} failannotationData
      * @private
      */
     function loadAnnotationData(success, fail) {
 
-        var annotationsCount = 0;
+        var annotationsCount = Object.keys(hypervideo.annotationfiles).length;
 
         // clear previous data
         annotationfileIDs = {};
@@ -348,23 +408,55 @@
 
 
         for (var id in hypervideo.annotationfiles) {
-            annotationsCount ++;
-        }
-
-        for (var id in hypervideo.annotationfiles) {
 
             (function(id){
 
                 $.ajax({
                     type: "GET",
-                    url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/annotationfiles/' + id + '.json'),
+                    url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/annotations/' + id + '.json'),
                     cache: false,
                     dataType: "json",
                     mimeType: "application/json"
                 }).done(function(data){
 
+                    var annotationData = [];
 
-                    annotations[hypervideo.annotationfiles[id].ownerId]       = data;
+                    for (var i in data) {
+
+                        annotationData.push({
+                            "name": data[i].body['frametrail:name'],
+                            "creator": data[i].creator.nickname,
+                            "creatorId": data[i].creator.id,
+                            "created": (new Date(data[i].created)).getTime(),
+                            "type": data[i].body['frametrail:type'],
+                            "src": (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( data[i].body["frametrail:type"] ) >= 0)
+                                        ? data[i].body.value
+                                        : data[i].body.source,
+                            "thumb": data[i].body['frametrail:thumb'],
+                            "start": parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].target.selector.value)[1]),
+                            "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(data[i].target.selector.value)[2]),
+                            "resourceId": data[i].body["frametrail:resourceId"],
+                            "attributes": data[i]['frametrail:attributes'] || {},
+                            "tags": data[i]['frametrail:tags']
+                        });
+
+                        if (annotationData[annotationData.length-1].type === 'location') {
+                            var locationAttributes = annotationData[annotationData.length-1].attributes;
+                            locationAttributes.lat = parseFloat(data[i].body['frametrail:lat']);
+                            locationAttributes.lon = parseFloat(data[i].body['frametrail:long']);
+                            locationAttributes.boundingBox = data[i].body['frametrail:boundingBox'].split(',').map(parseFloat);
+                        }
+
+                        if (annotationData[annotationData.length-1].type === 'video') {
+                            var annotationItem = annotationData[annotationData.length-1];
+                            annotationItem.startOffset = parseFloat(/t=(\d+)/g.exec(data[i].body.selector.value)[1]);
+                            annotationItem.endOffset = parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].body.selector.value)[2]);
+                        }
+
+                    }
+
+                    //console.log('annotation', id, annotationData);
+                    annotations[hypervideo.annotationfiles[id].ownerId]       = annotationData;
                     annotationfileIDs[hypervideo.annotationfiles[id].ownerId] = id;
 
                     annotationsCount--;
@@ -389,65 +481,6 @@
 
     };
 
-
-    /**
-     * I load the Code Snippet data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}}
-     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /codeSnippets.json) from the server
-     * and save the data in my attribute {{#crossLink "Database/codesnippets:attribute"}}Database/codesnippets{{/crossLink}}.
-     * I call my success or fail callback respectively.
-     *
-     * @method loadCodeSnippetData
-     * @param {Function} success
-     * @param {Function} fail
-     * @private
-     */
-    function loadCodeSnippetData(success, fail) {
-
-        $.ajax({
-
-            type: "GET",
-            url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/codeSnippets.json'),
-            cache: false,
-            dataType: "json",
-            mimeType: "application/json"
-        }).done(function(data){
-
-            // compatibility fix
-            if ( Array.isArray(data) ) {
-                var oldSnippets = data;
-                codeSnippets = {};
-                codeSnippets.globalEvents = {};
-                codeSnippets.timebasedEvents = oldSnippets;
-                codeSnippets.customCSS = '';
-            } else {
-                // compatibility fix if no custom CSS model
-                if (!data.customCSS) {
-                    data.customCSS = '';
-                }
-                // temporary type fix (Array / Object Bug in PHP)
-                if ( Array.isArray(data.globalEvents) && data.globalEvents.length == 0 ) {
-                    data.globalEvents = {};
-                }
-                codeSnippets = data;
-            }
-
-            success.call(this);
-
-        }).fail(function() {
-
-            codeSnippets = {};
-            codeSnippets.globalEvents = {};
-            codeSnippets.timebasedEvents = [];
-            codeSnippets.customCSS = '';
-
-            // call success anyway to deal with old versions (without codeSnippets.json file)
-            success.call(this);
-
-            //fail('No Code data.');
-
-        });
-
-    };
 
 
     /**
@@ -627,19 +660,11 @@
 
                             loadSubtitleData(function(){
 
-                                loadOverlayData(function(){
+                                loadContentData(function(){
 
-                                    loadLinksData(function(){
+                                    loadAnnotationData(function(){
 
-                                        loadAnnotationData(function(){
-
-                                            loadCodeSnippetData(function(){
-
-                                                success.call();
-
-                                            }, fail);
-
-                                        }, fail);
+                                        success.call();
 
                                     }, fail);
 
@@ -689,19 +714,11 @@
 
                 loadSubtitleData(function(){
 
-                    loadOverlayData(function(){
+                    loadContentData(function(){
 
-                        loadLinksData(function(){
+                        loadAnnotationData(function(){
 
-                            loadAnnotationData(function(){
-
-                                loadCodeSnippetData(function(){
-
-                                    success.call();
-
-                                }, fail);
-
-                            }, fail);
+                            success.call();
 
                         }, fail);
 
@@ -717,10 +734,182 @@
     };
 
 
+    /**
+     * I generate the JSON for hypervideo.json
+     *
+     * @method convertToDatabaseFormat
+     * @return {Object}
+     */
+    function convertToDatabaseFormat () {
+
+        return ({
+        	"meta": {
+        		"name": hypervideos[hypervideoID].name,
+        		"description": hypervideos[hypervideoID].description,
+        		"thumb": hypervideos[hypervideoID].thumb,
+        		"creator": hypervideos[hypervideoID].creator,
+        		"creatorId": hypervideos[hypervideoID].creatorId,
+        		"created": hypervideos[hypervideoID].created,
+        		"lastchanged": hypervideos[hypervideoID].lastchanged
+        	},
+        	"config": {
+        		"annotationsVisible": hypervideos[hypervideoID].config.annotationsVisible,
+        		"annotationsPosition": hypervideos[hypervideoID].config.annotationsPosition,
+        		"annotationTimelineVisible": hypervideos[hypervideoID].config.annotationTimelineVisible,
+        		"annotationPreviewVisible": hypervideos[hypervideoID].config.annotationPreviewVisible,
+        		"videolinksVisible": hypervideos[hypervideoID].config.videolinksVisible,
+        		"videolinkTimelineVisible": hypervideos[hypervideoID].config.videolinkTimelineVisible,
+        		"overlaysVisible": hypervideos[hypervideoID].config.overlaysVisible,
+        		"slidingMode": hypervideos[hypervideoID].config.slidingMode,
+        		"slidingTrigger": hypervideos[hypervideoID].config.slidingTrigger,
+        		"theme": hypervideos[hypervideoID].config.theme,
+        		"autohideControls": hypervideos[hypervideoID].config.autohideControls,
+        		"captionsVisible": hypervideos[hypervideoID].config.captionsVisible,
+        		"hidden": hypervideos[hypervideoID].hidden
+        	},
+        	"clips": sequence.clips,
+        	"globalEvents": codeSnippets.globalEvents,
+        	"customCSS": codeSnippets.customCSS,
+        	"contents": (function () {
+                var contents = [];
+                for (var i in overlays) {
+                    //console.log(overlays[i].src, /\.(.+)$/g.exec(overlays[i].src));
+                    contents.push({
+            			"@context": [
+            				"http://www.w3.org/ns/anno.jsonld",
+            				{
+            					"frametrail": "http://frametrail.org/ns/"
+            				}
+            			],
+            			"creator": {
+            				"nickname": overlays[i].creator,
+            				"type": "Person",
+            				"id": overlays[i].creatorId
+            			},
+            			"created": (new Date(overlays[i].created)).toString(),
+            			"type": "Annotation",
+            			"frametrail:type": "Overlay",
+            			"frametrail:tags": overlays[i].tags,
+            			"target": {
+            				"type": "Video",
+            				"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
+            				"selector": {
+            					"conformsTo": "http://www.w3.org/TR/media-frags/",
+            					"type": "FragmentSelector",
+            					"value":
+                                    "t=" + overlays[i].start + "," + overlays[i].end
+                                    + "&xywh=percent:"
+                                    + overlays[i].position.left + ","
+                                    + overlays[i].position.top + ","
+                                    + overlays[i].position.width + ","
+                                    + overlays[i].position.height
+            				}
+            			},
+            			"body": {
+            				"type": ({
+                                'image': 'Image',
+                                'video': 'Video',
+                                'location': 'Dataset',
+                                'wikipedia': 'Text',
+                                'text': 'TextualBody',
+                                'vimeo': 'Video',
+                                'webpage': 'Text',
+                                'youtube': 'Video'
+                            })[overlays[i].type],
+            				"frametrail:type": overlays[i].type,
+            				"format": ({
+                                'image': 'image/' + (/\.(.+)$/g.exec(overlays[i].src)[1]),
+                                'video': 'video/mp4',
+                                'location': 'application/x-frametrail-location',
+                                'wikipedia': 'text/html',
+                                'text': 'text/html',
+                                'vimeo': 'text/html',
+                                'webpage': 'text/html',
+                                'youtube': 'text/html'
+                            })[overlays[i].type],
+            				"source": overlays[i].src,
+                            "value": overlays[i].value,
+            				"frametrail:name": overlays[i].name,
+            				"frametrail:thumb": overlays[i].thumb,
+            				"selector": (function () {
+            				    if (['video', 'vimeo', 'youtube'].indexOf(overlays[i].type) >= 0) {
+                                    return {
+                    					"type": "FragmentSelector",
+                    					"conformsTo": "http://www.w3.org/TR/media-frags/",
+                    					"value": (overlays[i].startOffset && overlays[i].endOffset)
+                                                    ? "t=" + overlays[i].startOffset + "," + overlays[i].endOffset
+                                                    : ''
+                    				}
+                                } else {
+                                    return undefined;
+                                }
+            				})(),
+            				"frametrail:resourceId": overlays[i].resourceId
+            			},
+            			"frametrail:events": overlays[i].events,
+            			"frametrail:attributes": overlays[i].attributes
+                    });
+                    if (contents[contents.length-1].body['frametrail:type'] === location) {
+                        var contentItem = contents[contents.length-1];
+                        contentItem.body['frametrail:lat'] = overlays[i].attributes.lat;
+                        contentItem.body['frametrail:long'] = overlays[i].attributes.long;
+                        contentItem.body['frametrail:boundingBox'] = overlays[i].attributes.boundingBox.join(',');
+                    }
+                }
+                for (var i in codeSnippets.timebasedEvents) {
+                    var codeSnippetItem = codeSnippets.timebasedEvents[i];
+                    contents.push({
+                        "@context": [
+            				  "http://www.w3.org/ns/anno.jsonld",
+            				  {
+            					  "frametrail": "http://frametrail.org/ns/"
+            				  }
+            			],
+            			"creator": {
+            				"nickname": codeSnippetItem.creator,
+            				"type": "Person",
+            				"id": codeSnippetItem.creatorId
+            			 },
+            			"created": (new Date(codeSnippetItem.created)).toString(),
+            			"type": "Annotation",
+            			"frametrail:type": "CodeSnippet",
+            			"frametrail:tags": codeSnippetItem.tags,
+            			"target": {
+            				"type": "Video",
+            				"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
+            				"selector": {
+            					"conformsTo": "http://www.w3.org/TR/media-frags/",
+            					"type": "FragmentSelector",
+            					"value": "t=" + codeSnippetItem.start
+            				}
+            			  },
+            			"body": {
+                        	"type": "TextualBody",
+                        	"frametrail:type": "codesnippet",
+                        	"format" : "text/javascript",
+                        	"value" : codeSnippetItem.snippet,
+                        	"frametrail:name": codeSnippetItem.name,
+                        	"frametrail:thumb": null,
+                        	"frametrail:resourceId": null
+                        },
+            			"frametrail:attributes": codeSnippetItem.attributes
+                    });
+                }
+        	    return contents;
+        	})(),
+        	"annotations": {
+        		"mainAnnotation": hypervideos[hypervideoID].mainAnnotation,
+        		"annotationfiles": hypervideos[hypervideoID].annotationfiles,
+        		"annotation-increment": hypervideos[hypervideoID]['annotation-increment']
+        	},
+        	"subtitles": []
+        });
+
+    }
 
 
     /**
-     * I save the overlay data back to the server.
+     * I save the complete hypervideo data back to the server.
      *
      * My success callback gets one argument, which is either
      *
@@ -728,12 +917,15 @@
      *
      * or
      *
-     *     { failed: 'overlays', error: ... }
+     *     { failed: 'hypervideo', error: ... }
      *
      * @method saveOverlays
      * @param {Function} callback
      */
-    function saveOverlays(callback) {
+    function saveHypervideo (callback) {
+
+        var saveData = convertToDatabaseFormat();
+        console.log(saveData);
 
         $.ajax({
             type:   'POST',
@@ -741,14 +933,11 @@
             cache:  false,
 
             data: {
-
                 a:              'hypervideoChangeFile',
                 projectID:      projectID,
                 hypervideoID:   hypervideoID,
-                type:           'overlays',
-
-                src:            JSON.stringify(overlays)
-
+                type:           'hypervideo',
+                src:            JSON.stringify(saveData)
             }
 
         }).done(function(data) {
@@ -760,7 +949,7 @@
             } else {
 
                 callback.call(window, {
-                    failed: 'overlays',
+                    failed: 'hypervideo',
                     error: 'ServerError',
                     code: data.code
                 });
@@ -770,7 +959,7 @@
         }).fail(function(error){
 
             callback.call(window, {
-                failed: 'overlays',
+                failed: 'hypervideo',
                 error: error
             });
 
@@ -778,127 +967,6 @@
 
     };
 
-
-    /**
-     * I save the video link data back to the server.
-     *
-     * My success callback gets one argument, which is either
-     *
-     *     { success: true }
-     *
-     * or
-     *
-     *     { failed: 'links', error: ... }
-     *
-     * @method saveLinks
-     * @param {} callback
-     */
-    function saveLinks(callback) {
-
-        $.ajax({
-            type:   'POST',
-            url:    '../_server/ajaxServer.php',
-            cache:  false,
-
-            data: {
-
-                a:              'hypervideoChangeFile',
-                projectID:      projectID,
-                hypervideoID:   hypervideoID,
-                type:           'links',
-
-                src:            JSON.stringify(links)
-
-            }
-
-        }).done(function(data) {
-
-            if (data.code === 0) {
-
-                callback.call(window, { success: true });
-
-            } else {
-
-                callback.call(window, {
-                    failed: 'links',
-                    error: 'ServerError',
-                    code: data.code
-                });
-
-            }
-
-        }).fail(function(error){
-
-            callback.call(window, {
-                failed: 'links',
-                error: error
-            });
-
-        });
-
-
-    };
-
-
-    /**
-     * I save the code snippet data back to the server.
-     *
-     * My success callback gets one argument, which is either
-     *
-     *     { success: true }
-     *
-     * or
-     *
-     *     { failed: 'codesnippets', error: ... }
-     *
-     * @method saveCodeSnippets
-     * @param {} callback
-     */
-    function saveCodeSnippets(callback) {
-
-        $.ajax({
-            type:   'POST',
-            url:    '../_server/ajaxServer.php',
-            cache:  false,
-
-            data: {
-
-                a:              'hypervideoChangeFile',
-                projectID:      projectID,
-                hypervideoID:   hypervideoID,
-                type:           'codeSnippets',
-
-                src:            JSON.stringify(codeSnippets)
-
-            }
-
-        }).done(function(data) {
-
-            if (data.code === 0) {
-
-                callback.call(window, { success: true });
-
-            } else {
-
-                callback.call(window, {
-                    failed: 'codeSnippets',
-                    error: 'ServerError',
-                    code: data.code
-                });
-
-            }
-
-        }).fail(function(error){
-
-            callback.call(window, {
-                failed: 'codeSnippets',
-                error: error
-            });
-
-        });
-
-
-    };
 
 
     /**
@@ -931,7 +999,81 @@
             description         = FrameTrail.getState('username') + '\'s annotations',
             hidden              = false;
 
+            annotationsToSave   = [];
 
+
+        for (var i in annotations[userID]) {
+            var annotationItem = annotations[userID][i];
+            annotationsToSave.push({
+        		"@context": [
+        			"http://www.w3.org/ns/anno.jsonld",
+        			{
+        				"frametrail": "http://frametrail.org/ns/"
+        			}
+        		],
+        		"creator": {
+        			"nickname": annotationItem.creator,
+        			"type": "Person",
+        			"id": annotationItem.creatorId
+        		},
+        		"created": (new Date(annotationItem.created)).toString(),
+        		"type": "Annotation",
+        		"frametrail:type": "Annotation",
+        		"frametrail:tags": annotationItem.tags,
+        		"target": {
+        			"type": "Video",
+        			"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
+        			"selector": {
+        				"conformsTo": "http://www.w3.org/TR/media-frags/",
+        				"type": "FragmentSelector",
+        				"value": "t=" + annotationItem.start + "," + annotationItem.end
+        			}
+        		},
+        		"body": {
+                    "type": ({
+                        'image': 'Image',
+                        'video': 'Video',
+                        'location': 'Dataset',
+                        'wikipedia': 'Text',
+                        'text': 'TextualBody',
+                        'vimeo': 'Video',
+                        'webpage': 'Text',
+                        'youtube': 'Video'
+                    })[annotationItem.type],
+                    "frametrail:type": annotationItem.type,
+                    "format": ({
+                        'image': 'image/' + (annotationItem.src ? /\.(.+)$/g.exec(annotationItem.src)[1] : '*'),
+                        'video': 'video/mp4',
+                        'location': 'application/x-frametrail-location',
+                        'wikipedia': 'text/html',
+                        'text': 'text/html',
+                        'vimeo': 'text/html',
+                        'webpage': 'text/html',
+                        'youtube': 'text/html'
+                    })[annotationItem.type],
+                    "source": annotationItem.src,
+                    "value": annotationItem.value,
+                    "frametrail:name": annotationItem.name,
+                    "frametrail:thumb": annotationItem.thumb,
+                    "selector": (function () {
+                        if (['video', 'vimeo', 'youtube'].indexOf(annotationItem.type) >= 0) {
+                            return {
+                                "type": "FragmentSelector",
+                                "conformsTo": "http://www.w3.org/TR/media-frags/",
+                                "value": (annotationItem.startOffset && annotationItem.endOffset)
+                                            ? "t=" + annotationItem.startOffset + "," + annotationItem.endOffset
+                                            : ''
+                            }
+                        } else {
+                            return undefined;
+                        }
+                    })(),
+                    "frametrail:resourceId": annotationItem.resourceId
+        		}
+            });
+        }
+
+        console.log(annotationsToSave);
 
         $.ajax({
             type:   'POST',
@@ -949,7 +1091,7 @@
                 description:      description,
                 hidden:           hidden,
 
-                src:              JSON.stringify(annotations[userID])
+                src:              JSON.stringify(annotationsToSave)
 
             }
 
@@ -1139,9 +1281,7 @@
         loadSequenceData:      loadSequenceData,
         loadSubtitleData:      loadSubtitleData,
 
-        saveOverlays:          saveOverlays,
-        saveLinks:             saveLinks,
-        saveCodeSnippets:      saveCodeSnippets,
+        saveHypervideo:        saveHypervideo,
         saveAnnotations:       saveAnnotations
 
     }

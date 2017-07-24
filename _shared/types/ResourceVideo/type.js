@@ -48,13 +48,8 @@ FrameTrail.defineType(
                 +       '<source src="../_data/projects/'
                 +       FrameTrail.module('RouteNavigation').projectID
                 +       '/resources/'
-                +       this.resourceData.attributes.alternateVideoFile
-                +       '" type="video/mp4">'
-                +       '<source src="../_data/projects/'
-                +       FrameTrail.module('RouteNavigation').projectID
-                +       '/resources/'
                 +       this.resourceData.src
-                +       '" type="video/webm">'
+                +       '" type="video/mp4">'
                 +    '</video>'
             );
 

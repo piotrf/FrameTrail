@@ -27,7 +27,7 @@ FrameTrail.defineType(
     },
 
     {
-        
+
         /**
          * I hold the data object of a ResourceWikipedia, which is stored in the {{#crossLink "Database"}}Database{{/crossLink}} and saved in the resource's _index.json.
          * @attribute resourceData
@@ -60,7 +60,7 @@ FrameTrail.defineType(
 
             return resourceDetail
 
-        }, 
+        },
 
         /**
          * Several modules need me to render a thumb of myself.
@@ -84,7 +84,7 @@ FrameTrail.defineType(
                 trueID = id;
             }
 
-            var thumbBackground = (this.resourceData.thumb ? 
+            var thumbBackground = (this.resourceData.thumb ?
                     'background-image: url('+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.thumb) +');' : '' );
 
             var thumbElement = $('<div class="resourceThumb" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="'+ thumbBackground +'">'

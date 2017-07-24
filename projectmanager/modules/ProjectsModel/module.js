@@ -4,7 +4,7 @@
 
 /**
  * I am the ProjectsModel. I hold the data of all projects stored on the server.
- * 
+ *
  * @class ProjectsModel
  * @static
  * @main
@@ -12,7 +12,7 @@
 
  FrameTrail.defineModule('ProjectsModel', function(){
 
- 	var projectsIndex,
+ 	var projectsIndex = {},
  		projects = {},
         defaultConfig = {};
 
@@ -35,7 +35,7 @@
             url:    '../_data/config.json',
             cache:  false,
             dataType: "json",
-            mimeType: "application/json" 
+            mimeType: "application/json"
         }).done(function(data){
 
             defaultConfig = data;
@@ -54,7 +54,7 @@
     /**
      * I fetch the _index.json of all projects from the server. On success, I also create instances of
      * {{crossLink "Project"}}Project{{/crossLink}} and store them.
-     * 
+     *
      * @method loadProjectsIndex
      * @param {Function} success
      * @param {Function} fail
@@ -66,22 +66,40 @@
             type:   "GET",
             url:    '../_data/projects/_index.json',
             cache:  false
-        
+
         }).done(function(data){
 
-            projectsIndex = data.projects;
+            var countdown = Object.keys(data.projects).length;
 
-            for (var id in projectsIndex) {
-                
-            	projects[id] = FrameTrail.newObject('Project', projectsIndex[id], id);
+            for (var id in data.projects) {
+                (function (id) {
 
+                    $.ajax({
+                        type:   "GET",
+                        url:    '../_data/projects/' + data.projects[id] + '/project.json',
+                        cache:  false,
+                        dataType: "json",
+                        mimeType: "application/json"
+                    }).done(function (projectData) {
+
+
+                        projectsIndex[id] = projectData;
+                        projects[id] = FrameTrail.newObject('Project', projectData, id);
+
+                        if (!--countdown) {
+                            success.call();
+                        }
+
+                    }).fail(function () {
+                        fail('No project.json file.')
+                    });
+
+                })(id);
             }
-
-            success.call();
 
         }).fail(function(){
 
-            fail.call();
+            fail('No project index file.');
 
         });
 
@@ -91,7 +109,7 @@
 
     /**
      * I delete a project from the server
-     * 
+     *
      * @method deleteProject
      * @param {String} id
      * @param {Function} successCallback
@@ -109,7 +127,7 @@
                            + '    </form>'
                            + '</div>');
 
-        
+
         deleteDialog.find('#DeleteProjectForm').ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
@@ -117,7 +135,7 @@
             thisID: id,
             data: {a: 'projectsDelete', projectID: id},
             success: function(data) {
-                
+
                 switch (data.code) {
 
                     case 0:
@@ -133,7 +151,7 @@
                 }
             }
         });
-        
+
         deleteDialog.dialog({
                 modal: true,
                 resizable: false,
@@ -163,7 +181,7 @@
 
     /**
      * I reload the data from the server.
-     * 
+     *
      * @method updateModel
      * @param {Function} success
      * @param {Function} fail
@@ -175,7 +193,7 @@
 
     }
 
-    
+
     return {
 
     	loadDefaultConfig: loadDefaultConfig,
