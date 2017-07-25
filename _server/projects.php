@@ -8,10 +8,12 @@ function superUserLogin($password = false) {
 	include_once($conf["dir"]["data"]."/masterpassword.php");
 
 	if (($password) && ($password == $masterpassword)) {
+
 		$return["status"] = "success";
 		$return["code"] = 0;
 		$return["string"] = "login success";
 		$_SESSION["masterpassword"] = $password;
+
 	} elseif ($_SESSION["masterpassword"] == $masterpassword) {
 		$return["status"] = "success";
 		$return["code"] = 0;
