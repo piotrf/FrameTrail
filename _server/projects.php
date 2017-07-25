@@ -94,6 +94,9 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 	}
 
 	$projects["project-increment"]++;
+	$projects["projects"][$projects["project-increment"]] = "./".$projects["project-increment"];
+	$projectsJSON = json_encode($projects, $conf["settings"]["json_flags"]);
+	$file->writeClose($projectsJSON);
 
 	mkdir($conf["dir"]["projects"]."/".$projects["project-increment"]);
 	mkdir($conf["dir"]["projects"]."/".$projects["project-increment"]."/hypervideos");
@@ -102,14 +105,14 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 	file_put_contents($conf["dir"]["projects"]."/".$projects["project-increment"]."/hypervideos/_index.json", json_encode(array("hypervideo-increment"=>1,"hypervideos"=>array())),$conf["settings"]["json_flags"]);
 	file_put_contents($conf["dir"]["projects"]."/".$projects["project-increment"]."/resources/_index.json", json_encode(array("resources-increment"=>1,"resources"=>array())),$conf["settings"]["json_flags"]);
 
-	$projects["projects"][$projects["project-increment"]]["name"] = $name;
-	$projects["projects"][$projects["project-increment"]]["description"] = $description;
-	$projects["projects"][$projects["project-increment"]]["created"] = time();
-	$projects["projects"][$projects["project-increment"]]["userNeedsConfirmation"] = filter_var($userNeedsConfirmation, FILTER_VALIDATE_BOOLEAN);
-	$projects["projects"][$projects["project-increment"]]["defaultUserRole"] = $defaultUserRole;
-	$projects["projects"][$projects["project-increment"]]["defaultHypervideoHidden"] = filter_var($defaultHypervideoHidden, FILTER_VALIDATE_BOOLEAN);
-	$projects["projects"][$projects["project-increment"]]["theme"] = $theme;
-	$projects["projects"][$projects["project-increment"]]["overviewMode"] = $overviewMode;
+	$project["name"] = $name;
+	$project["description"] = $description;
+	$project["created"] = time();
+	$project["userNeedsConfirmation"] = filter_var($userNeedsConfirmation, FILTER_VALIDATE_BOOLEAN);
+	$project["defaultUserRole"] = $defaultUserRole;
+	$project["defaultHypervideoHidden"] = filter_var($defaultHypervideoHidden, FILTER_VALIDATE_BOOLEAN);
+	$project["theme"] = $theme;
+	$project["overviewMode"] = $overviewMode;
 
 	foreach ($config as $k=>$v) {
 		if (($v == "true") || ($v == "false")) {
@@ -117,9 +120,9 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 		}
 	}
 
-	$projects["projects"][$projects["project-increment"]]["defaultHypervideoConfig"] = $config;
-	$projects = json_encode($projects, $conf["settings"]["json_flags"]);
-	$file->writeClose($projects);
+	$project["defaultHypervideoConfig"] = $config;
+	file_put_contents($conf["dir"]["projects"]."/".$projects["project-increment"]."/project.json", json_encode($project,$conf["settings"]["json_flags"]));
+
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Project has been created";
@@ -161,32 +164,37 @@ function projectsEdit($projectID, $name, $description, $config, $userNeedsConfir
 		$return["string"] = "Please enter a description with at least 3 characters";
 		$file->close();
 		return $return;
-	} elseif (!is_array($projects["projects"][$projectID])) {
+	} elseif (!array_key_exists($projectID,$projects["projects"]) || (!is_dir(realpath($conf["dir"]["projects"]."/".$projects["projects"][$projectID])))) {
 		$return["status"] = "fail";
 		$return["code"] = 3;
-		$return["string"] = "ProjectID has not been found";
+		$return["string"] = "ProjectID or Project Directory has not been found";
 		$file->close();
 		return $return;
 	}
+	$file->close();
 
-	$projects["projects"][$projectID]["name"] = $name;
-	$projects["projects"][$projectID]["description"] = $description;
-	$projects["projects"][$projectID]["userNeedsConfirmation"] = filter_var($userNeedsConfirmation, FILTER_VALIDATE_BOOLEAN);
-	$projects["projects"][$projectID]["defaultUserRole"] = $defaultUserRole;
-	$projects["projects"][$projectID]["defaultHypervideoHidden"] = filter_var($defaultHypervideoHidden, FILTER_VALIDATE_BOOLEAN);
-	$projects["projects"][$projectID]["theme"] = $theme;
-	$projects["projects"][$projectID]["overviewMode"] = $overviewMode;
+	$file = new sharedFile($conf["dir"]["projects"]."/".$projects["projects"][$projectID]."/project.json");
+	$project = $file->read();
+	$project = json_decode($project,true);
+
+	$project["name"] = $name;
+	$project["description"] = $description;
+	$project["userNeedsConfirmation"] = filter_var($userNeedsConfirmation, FILTER_VALIDATE_BOOLEAN);
+	$project["defaultUserRole"] = $defaultUserRole;
+	$project["defaultHypervideoHidden"] = filter_var($defaultHypervideoHidden, FILTER_VALIDATE_BOOLEAN);
+	$project["theme"] = $theme;
+	$project["overviewMode"] = $overviewMode;
 	foreach ($config as $k=>$v) {
 		if (($v == "true") || ($v == "false")) {
 			$config[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
 		}
 	}
 
-	$projects["projects"][$projectID]["defaultHypervideoConfig"] = $config;
+	$project["defaultHypervideoConfig"] = $config;
 
 
-	$projects = json_encode($projects, $conf["settings"]["json_flags"]);
-	$file->writeClose($projects);
+	$project = json_encode($project, $conf["settings"]["json_flags"]);
+	$file->writeClose($project);
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Project has been saved";
@@ -208,21 +216,31 @@ function projectsDelete($projectID, $name) {
 	$projects = $file->read();
 	$projects = json_decode($projects,true);
 
-	if ($name != $projects["projects"][$projectID]["name"]) {
+	// TODO: Validate Key has been found in $projects, dir exists, projectfile exists
+
+	$file2 = new sharedFile($conf["dir"]["projects"]."/".$projects["projects"][$projectID]."/project.json");
+	$project = $file2->read();
+	$project = json_decode($project,true);
+
+	if ($name != $project["name"]) {
 		$return["status"] = "fail";
 		$return["code"] = 1;
-		$return["string"] = "ProjectName was not correct";
+		$return["string"] = "Project Name was not correct";
 		$file->close();
+		$file2->close();
 		return $return;
 	} if (!is_numeric($projectID)) {
 		$return["status"] = "fail";
 		$return["code"] = 2;
 		$return["string"] = "ProjectID is not nummeric";
 		$file->close();
+		$file2->close();
 		return $return;
 	}
 
-	rrmdir($conf["dir"]["projects"]."/".$projectID);
+	$file2->close();
+
+	rrmdir($conf["dir"]["projects"]."/".$projects["projects"][$projectID]);
 	unset($projects["projects"][$projectID]);
 
 	$projects = json_encode($projects, $conf["settings"]["json_flags"]);
