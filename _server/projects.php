@@ -15,14 +15,18 @@ function superUserLogin($password = false) {
 		$_SESSION["masterpassword"] = $password;
 
 	} elseif ($_SESSION["masterpassword"] == $masterpassword) {
+
 		$return["status"] = "success";
 		$return["code"] = 0;
 		$return["string"] = "login success";
+
 	} else {
+
 		$return["status"] = "fail";
 		$return["code"] = 3;
 		$return["string"] = "Masterpassword not correct";
 		unset($_SESSION["masterpassword"]);
+
 	}
 	return $return;
 }
