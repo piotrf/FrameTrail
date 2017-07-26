@@ -105,7 +105,7 @@ switch($_REQUEST["a"]) {
 
 	case "hypervideoClone":
 		include_once("hypervideos.php");
-		$return = hypervideoClone($_REQUEST["projectID"],$_REQUEST["hypervideoID"],$_REQUEST["name"],$_REQUEST["description"]);
+		$return = hypervideoClone($_REQUEST["projectID"],$_REQUEST["hypervideoID"],$_REQUEST["src"]);
 		break;
 
 	case "hypervideoDelete":
