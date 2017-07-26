@@ -802,11 +802,11 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     }
 
 
-                                    FrameTrail.module('Database').hypervideo.subtitles.splice(0, FrameTrail.module('Database').hypervideo.subtitles.length);
+                                    FrameTrail.module('Database').hypervideos[thisID].subtitles.splice(0, FrameTrail.module('Database').hypervideos[thisID].subtitles.length);
 
                                     $('#EditHypervideoForm').find('.existingSubtitlesItem').each(function () {
                                         var lang = $(this).find('.subtitlesDelete').attr('data-lang');
-                                        FrameTrail.module('Database').hypervideo.subtitles.push({
+                                        FrameTrail.module('Database').hypervideos[thisID].subtitles.push({
                                             "src": lang +".vtt",
                                             "srclang": lang
                                         });
@@ -817,7 +817,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                         var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
                                         console.log(match);
                                         if (match) {
-                                            FrameTrail.module('Database').hypervideo.subtitles.push({
+                                            FrameTrail.module('Database').hypervideos[thisID].subtitles.push({
                                                 "src": match[1] +".vtt",
                                                 "srclang": match[1]
                                             });
