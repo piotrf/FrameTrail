@@ -87,7 +87,7 @@ function hypervideoAdd($projectID, $src, $subtitles = false) {
 		}
 	}
 
-	file_put_contents($newHVdir."/hypervideo.json", json_encode($src, $conf["settings"]["json_flags"]));
+	file_put_contents($newHVdir."/hypervideo.json", json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
 
 
 	$return["status"] = "success";
@@ -228,6 +228,7 @@ function hypervideoClone($projectID, $hypervideoID, $src) {
 
 
 	$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
+	//$file->writeClose($src);
 	/* TODO: How to handle annotation/overlay/links files? */
 
 	$return["status"] = "success";
