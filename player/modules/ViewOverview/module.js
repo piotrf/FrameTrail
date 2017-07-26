@@ -146,7 +146,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                         }
 
                         if ( !newDialog.find('.hypervideoLayout input[name="config['+$(this).attr('data-config')+']"]').length ) {
-                            newDialog.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" value="'+tmpVal+'">');
+                            newDialog.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" data-configkey="'+ $(this).attr('data-config') +'" value="'+tmpVal+'">');
                         }
 
                         if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
@@ -269,6 +269,86 @@ FrameTrail.defineModule('ViewOverview', function(){
                     newDialog.find('#NewHypervideoForm').ajaxForm({
                         method:     'POST',
                         url:        '../_server/ajaxServer.php',
+                        beforeSubmit: function (array, form, options) {
+                            
+                            var selectedResourcesID = $('#NewHypervideoForm').find('input[name="resourcesID"]').val();
+                            console.log(FrameTrail.module('Database').resources[parseInt(selectedResourcesID)]);
+
+                            var hypervideoData = {
+                                "meta": {
+                                    "name": $('#NewHypervideoForm').find('input[name="name"]').val(),
+                                    "description": $('#NewHypervideoForm').find('textarea[name="description"]').val(),
+                                    "thumb": (selectedResourcesID.length > 0) ? FrameTrail.module('Database').resources[parseInt(selectedResourcesID)].thumb : null,
+                                    "creator": FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name,
+                                    "creatorId": FrameTrail.module('UserManagement').userID,
+                                    "created": Date.now(),
+                                    "lastchanged": Date.now()
+                                },
+                                "config": {
+                                    "annotationsVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsVisible'],
+                                    "annotationsPosition": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'],
+                                    "annotationTimelineVisible": true,
+                                    "annotationPreviewVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationPreviewVisible'],
+                                    "videolinksVisible": false,
+                                    "videolinkTimelineVisible": true,
+                                    "overlaysVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'],
+                                    "slidingMode": FrameTrail.module('Database').project.defaultHypervideoConfig['slidingMode'],
+                                    "slidingTrigger": "key",
+                                    "theme": "CssClassName",
+                                    "autohideControls": true,
+                                    "captionsVisible": false,
+                                    "hidden": $('#NewHypervideoForm').find('input[name="hidden"]').is(':checked')
+                                },
+                                "clips": [
+                                    {
+                                        "resourceId": (selectedResourcesID.length > 0) ? selectedResourcesID : null,
+                                        "duration": ($('#NewHypervideoForm').find('input[name="duration"]').val().length > 0) ? parseFloat($('#NewHypervideoForm').find('input[name="duration"]').val()) : 0,
+                                        "start": 0,
+                                        "end": 0,
+                                        "in": 0,
+                                        "out": 0
+                                    }
+                                ],
+                                "globalEvents": {
+                                    "onReady": "",
+                                    "onPlay": "",
+                                    "onPause": "",
+                                    "onEnded": ""
+                                },
+                                "customCSS": "",
+                                "contents": [],
+                                "subtitles": []
+                            };
+
+                            for (var configKey in hypervideoData.config) {
+                                var newConfigVal = $('#NewHypervideoForm').find('input[data-configkey=' + configKey + ']').val();
+                                newConfigVal = (newConfigVal === 'true')
+                                                ? true
+                                                : (newConfigVal === 'false')
+                                                    ? false
+                                                    : (newConfigVal === undefined)
+                                                        ? hypervideoData.config[configKey]
+                                                        : newConfigVal;
+                                hypervideoData.config[configKey] = newConfigVal;
+                            }
+
+                            $('#NewHypervideoForm').find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
+                                
+                                var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
+                                
+                                if (match) {
+                                    hypervideoData.subtitles.push({
+                                        "src": match[1] +".vtt",
+                                        "srclang": match[1]
+                                    });
+                                }
+                            });
+
+                            //console.log(hypervideoData);
+                            
+                            array.push({ name: 'src', value: JSON.stringify(hypervideoData, null, 4) });
+
+                        },
                         beforeSerialize: function() {
 
                             // Subtitles Validation
