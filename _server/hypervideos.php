@@ -302,7 +302,7 @@ function hypervideoDelete($projectID,$hypervideoID,$hypervideoName) {
 
 	$hv = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideos"][$hypervideoID]."/hypervideo.json"),true);
 
-	if (strtolower($hv["meta"][$hypervideoID]["name"]) != strtolower($hypervideoName)) {
+	if (strtolower($hv["meta"]["name"]) != strtolower($hypervideoName)) {
 		$return["status"] = "fail";
 		$return["code"] = 5;
 		$return["string"] = "Hypervideo Name is not correct.";
