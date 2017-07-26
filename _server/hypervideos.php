@@ -4,22 +4,18 @@ require_once("./config.php");
 
 /**
  * @param $projectID
- * @param $resourcesID
- * @param $name
- * @param $description
- * @param $config
+ * @param $src
+ * @param $subtitles
  * @return mixed
  *
 Returning Code:
 0		=	Success. Hypervideo has been added. Returning new Object in response
 1		=	failed. User not logged in
 2		=	failed. User not active
-3		=	failed. Could not find the projects resources folder
 4		=	failed. Name (min 3 chars) or Description have not been submitted.
-5		=	failed. resourcesID is not found or no video
  *
  */
-function hypervideoAdd($projectID, $resourcesID, $duration = false, $name, $description, $hidden, $start = 0, $end = 0, $in = 0, $out = 0, $config, $subtitles) {
+function hypervideoAdd($projectID, $src, $subtitles = false) {
 
 	global $conf;
 
@@ -49,109 +45,56 @@ function hypervideoAdd($projectID, $resourcesID, $duration = false, $name, $desc
 		return $return;
 	}
 
-	if ((!$description) || (!$name) || (strlen($name) <3)) {
+	$newHV = json_decode($src, true);
+
+	if ((!$newHV["meta"]["description"]) || (!$newHV["meta"]["name"]) || (strlen($newHV["meta"]["name"]) <3)) {
 		$return["status"] = "fail";
 		$return["code"] = 4;
 		$return["string"] = "Name (min 3 chars) or Description have not been submitted.";
 		return $return;
 	}
 
-	$json = file_get_contents($conf["dir"]["projects"]."/".$projectID."/resources/_index.json");
-	$res = json_decode($json,true);
-
-	if (((!$resourcesID) || (!$res["resources"][$resourcesID]) || ($res["resources"][$resourcesID]["type"] != "video")) && (!$duration)) {
-		$return["status"] = "fail";
-		$return["code"] = 5;
-		$return["string"] = "resourcesID is not found or no video and duration is not set";
-		return $return;
-	}
 	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/_index.json");
 	$json = $file->read();
-	$hv = json_decode($json,true);
-	$hv["hypervideo-increment"]++;
-	$newHVdir = $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"];
+	$hvi = json_decode($json,true);
+	$hvi["hypervideo-increment"]++;
+	$hvi["hypervideos"][$hvi["hypervideo-increment"]] = "./".$hvi["hypervideo-increment"];
+	$file->writeClose(json_encode($hvi, $conf["settings"]["json_flags"]));
+	$newHVdir = $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"];
+
 	mkdir($newHVdir);
-	mkdir($newHVdir."/annotationfiles");
+	mkdir($newHVdir."/annotations");
 	mkdir($newHVdir."/subtitles");
-	if (!is_array($config)) {
-		$config = Array();
-	}
-	$projectConfig = file_get_contents($conf["dir"]["projects"]."/_index.json");
-	$projectConfig = json_decode($projectConfig,true);
-	$projectConfig = $projectConfig["projects"][$projectID];
+
 	$time = time();
-	$newHV["name"] = $name;
-	$newHV["description"] = $description;
-	$newHV["thumb"] = $res["resources"][$resourcesID]["thumb"];
-	$newHV["creator"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
-	$newHV["creatorId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
-	$newHV["created"] = $time;
-	$newHV["lastchanged"] = $time;
-	$newHV["hidden"] = (boolean)$hidden;
-	$newHV["config"]["annotationsVisible"] = true;
-	$newHV["config"]["annotationsPosition"] = "bottom";
-	$newHV["config"]["annotationTimelineVisible"] = true;
-	$newHV["config"]["annotationPreviewVisible"] = false;
-	$newHV["config"]["videolinksVisible"] = false;
-	$newHV["config"]["videolinkTimelineVisible"] = true;
-	$newHV["config"]["overlaysVisible"] = true;
-	$newHV["config"]["slidingMode"] = "adjust";
-	$newHV["config"]["slidingTrigger"] = "key";
-	$newHV["config"]["theme"] = "CssClassName";
-	$newHV["config"]["autohideControls"] = true;
-	$newHV["config"]["captionsVisible"] = false;
-	$newHV["config"] = array_replace_recursive($newHV["config"], $projectConfig["defaultHypervideoConfig"], $config);
-	foreach ($newHV["config"] as $k=>$v) {
-		if (($v == "true") || ($v == "false")) {
-			$newHV["config"][$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
-		}
-	}
-	$newHV["mainAnnotation"] = "1";
-	$newHV["annotationfiles"]["1"]["name"] = "main";
-	$newHV["annotationfiles"]["1"]["description"] = "";
-	$newHV["annotationfiles"]["1"]["created"] = $time;
-	$newHV["annotationfiles"]["1"]["lastchanged"] = $time;
-	$newHV["annotationfiles"]["1"]["hidden"] = false;
-	$newHV["annotationfiles"]["1"]["owner"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
-	$newHV["annotationfiles"]["1"]["ownerId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
+
+	$newAi["mainAnnotation"] = "1";
+	$newAi["annotationfiles"]["1"]["name"] = "main";
+	$newAi["annotationfiles"]["1"]["description"] = "";
+	$newAi["annotationfiles"]["1"]["created"] = $time;
+	$newAi["annotationfiles"]["1"]["lastchanged"] = $time;
+	$newAi["annotationfiles"]["1"]["hidden"] = false;
+	$newAi["annotationfiles"]["1"]["owner"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
+	$newAi["annotationfiles"]["1"]["ownerId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
 	$newHV["annotation-increment"] = 1;
-	$newHV["subtitles"] = [];
+
+	file_put_contents($newHVdir."/annotations/_index.json",json_encode($newAi,$conf["settings"]["json_flags"]));
+	file_put_contents($newHVdir."/annotations/1.json","[]");
+
 	if ($subtitles) {
 		foreach ($subtitles["name"] as $subtitleKey=>$subtitleName) {
-			$tmpObj["src"] = $subtitleKey.".vtt";
-			$tmpObj["srclang"] = $subtitleKey;
-			$newHV["subtitles"][] = $tmpObj;
 			move_uploaded_file($subtitles["tmp_name"][$subtitleKey], $newHVdir."/subtitles/".$subtitleKey.".vtt");
 		}
 	}
-	$hv["hypervideos"][$hv["hypervideo-increment"]] = $newHV;
-	$file->writeClose(json_encode($hv, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
-	$hvf["clips"][0]["resourceId"] = $resourcesID;
-	$hvf["clips"][0]["duration"] = (int)$duration;
-	$hvf["clips"][0]["start"] = (int)$start;
-	$hvf["clips"][0]["end"] = (int)$end;
-	$hvf["clips"][0]["in"] = (int)$in;
-	$hvf["clips"][0]["out"] = (int)$out;
-	file_put_contents($newHVdir."/hypervideo.json",json_encode($hvf, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-	$tmp = array();
-	file_put_contents($newHVdir."/links.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-	file_put_contents($newHVdir."/overlays.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-	file_put_contents($newHVdir."/annotationfiles/1.json",json_encode($tmp, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	file_put_contents($newHVdir."/hypervideo.json", json_encode($src, $conf["settings"]["json_flags"]));
 
-	$codeSnippetTemplate["globalEvents"]["onReady"] = "";
-	$codeSnippetTemplate["globalEvents"]["onPlay"] = "";
-	$codeSnippetTemplate["globalEvents"]["onPause"] = "";
-	$codeSnippetTemplate["globalEvents"]["onEnded"] = "";
-	$codeSnippetTemplate["timebasedEvents"] = $tmp;
-	$codeSnippetTemplate["customCSS"] = "";
-	file_put_contents($newHVdir."/codeSnippets.json",json_encode($codeSnippetTemplate, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Hypervideo has been added. look at response";
-	$return["response"] = $newHV;
-	$return["newHypervideoID"] = $hv["hypervideo-increment"];
+	$return["response"] = $src;
+	$return["newHypervideoID"] = $hvi["hypervideo-increment"];
 	return $return;
 }
 

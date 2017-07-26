@@ -98,9 +98,8 @@ switch($_REQUEST["a"]) {
 	 ############ Hypervideo Handling
 	 #########################################*/
 	case "hypervideoAdd":
-		exit;
 		include_once("hypervideos.php");
-		$return = hypervideoAdd($_REQUEST["projectID"],$_REQUEST["resourcesID"],$_REQUEST["duration"],$_REQUEST["name"],$_REQUEST["description"], $_REQUEST["hidden"], $_REQUEST["start"], $_REQUEST["end"], $_REQUEST["in"], $_REQUEST["out"],$_REQUEST["config"], $_FILES["subtitles"]);
+		$return = hypervideoAdd($_REQUEST["projectID"],$_REQUEST["src"], $_FILES["subtitles"]);
 		break;
 
 	case "hypervideoClone":
