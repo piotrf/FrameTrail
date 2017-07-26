@@ -209,25 +209,32 @@ function hypervideoClone($projectID, $hypervideoID, $name, $description) {
 
 	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/_index.json");
 	$json = $file->read();
-	$hv = json_decode($json,true);
-	if (!is_array($hv["hypervideos"][$hypervideoID])) {
+	$hvi = json_decode($json,true);
+	if (!array_key_exists($hypervideoID,$hvi["hypervideos"])) {
 		$return["status"] = "fail";
 		$return["code"] = 5;
 		$return["string"] = "hypervideoID seems to be wrong.";
 		$file->close();
 		return $return;
 	}
-	$hv["hypervideo-increment"]++;
-	mkdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"]);
-	copyr($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID, $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"]);
+	$hvi["hypervideo-increment"]++;
+	mkdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]);
+	copyr($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideos"][$hypervideoID], $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]);
+	$hvi["hypervideos"][$hvi["hypervideo-increment"]] = "./".$hvi["hypervideo-increment"];
+	$file->writeClose(json_encode($hvi, $conf["settings"]["json_flags"]));
+
+	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/hypervideo.json");
+	$json = $file->read();
+	$hv = json_decode($json,true);
+
 	$time = time();
-	$newHV = $hv["hypervideos"][$hypervideoID];
-	$newHV["name"] = $name;
-	$newHV["description"] = $description;
-	$newHV["creator"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
-	$newHV["creatorId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
-	$newHV["created"] = $time;
-	$newHV["lastchanged"] = $time;
+
+	$hv["meta"]["name"] = $name;
+	$hv["meta"]["description"] = $description;
+	$hv["meta"]["creator"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
+	$hv["meta"]["creatorId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
+	$hv["meta"]["created"] = $time;
+	$hv["meta"]["lastchanged"] = $time;
 
 	if ($newHV["annotationfiles"]["1"]["ownerId"] != $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) {
 		$tmpFound = 0;
@@ -334,32 +341,37 @@ function hypervideoDelete($projectID,$hypervideoID,$hypervideoName) {
 	}
 	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/_index.json");
 	$json = $file->read();
-	$hv = json_decode($json,true);
+	$hvi = json_decode($json,true);
 
-	if (!is_array($hv["hypervideos"][$hypervideoID])) {
+	if (!array_key_exists($hypervideoID,$hvi["hypervideos"])) {
 		$return["status"] = "fail";
 		$return["code"] = 4;
 		$return["string"] = "hypervideoID could not be found in database.";
 		$file->close();
 		return $return;
 	}
-	if (strtolower($hv["hypervideos"][$hypervideoID]["name"]) != strtolower($hypervideoName)) {
+
+	$hv = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideos"][$hypervideoID]."/hypervideo.json"),true);
+
+	if (strtolower($hv["meta"][$hypervideoID]["name"]) != strtolower($hypervideoName)) {
 		$return["status"] = "fail";
 		$return["code"] = 5;
-		$return["string"] = "hypervideoName is not correct.";
+		$return["string"] = "Hypervideo Name is not correct.";
 		$file->close();
 		return $return;
 	}
+
 	if (($_SESSION["ohv"]["projects"][$projectID]["user"]["role"] != "admin") && ($_SESSION["ohv"]["projects"][$projectID]["user"]["id"] != $hv["hypervideos"][$hypervideoID]["creatorId"])) {
 		$return["status"] = "fail";
 		$return["code"] = 6;
-		$return["string"] = "permission denied! The User is not an admin, nor is it his own hypervideo.";
+		$return["string"] = "Permission denied! The User is not an admin, nor is it his own hypervideo.";
 		$file->close();
 		return $return;
 	}
-	rrmdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID);
-	unset($hv["hypervideos"][$hypervideoID]);
-	$file->writeClose(json_encode($hv, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
+	rrmdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideos"][$hypervideoID]);
+	unset($hvi["hypervideos"][$hypervideoID]);
+	$file->writeClose(json_encode($hvi, $conf["settings"]["json_flags"]));
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Hypervideo deleted.";
@@ -367,141 +379,13 @@ function hypervideoDelete($projectID,$hypervideoID,$hypervideoName) {
 }
 
 
-/**
- * @param $projectID
- * @param $hypervideoID
- * @param bool $name
- * @param bool $description
- * @param string $hidden
- * @param bool $config
- * @return mixed
- *
-
- *
- */
-function hypervideoChange($projectID, $hypervideoID, $name = false, $description = false, $hidden = "", $config = false, $subtitlesToDelete = false, $subtitles = false) {
-	global $conf;
-
-	if ($_SESSION["ohv"]["projects"][$projectID]["login"] != 1) {
-		$return["status"] = "fail";
-		$return["code"] = 1;
-		$return["string"] = "Not logged in to the projectID.";
-		return $return;
-	} else {
-		$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/users.json");
-		$json = $file->read();
-		$file->close();
-		$u = json_decode($json,true);
-		$_SESSION["ohv"]["projects"][$projectID]["user"] = array_replace_recursive($_SESSION["ohv"]["projects"][$projectID]["user"], $u["user"][$_SESSION["ohv"]["projects"][$projectID]["user"]["id"]]);
-	}
-
-	if ($_SESSION["ohv"]["projects"][$projectID]["user"]["active"] != 1) {
-		$return["status"] = "fail";
-		$return["code"] = 2;
-		$return["string"] = "User not activated.";
-		return $return;
-	}
-
-	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/_index.json");
-	$json = $file->read();
-	$hv = json_decode($json,true);
-
-	if (!is_array($hv["hypervideos"][$hypervideoID])) {
-		$return["status"] = "fail";
-		$return["code"] = 3;
-		$return["string"] = "HypervideoID not found.";
-		$file->close();
-		return $return;
-	}
-
-	if (($hv["hypervideos"][$hypervideoID]["creatorId"] != $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) && ($_SESSION["ohv"]["projects"][$projectID]["user"]["role"] != "admin")) {
-		$return["status"] = "fail";
-		$return["code"] = 4;
-		$return["string"] = "permission denied! The User is not an admin, nor is it his own hypervideo.";
-		$file->close();
-		return $return;
-	}
-	if ( (($name) && (strlen($name) < 3)) || !($name) ) {
-		$return["status"] = "fail";
-		$return["code"] = 5;
-		$return["string"] = "You tried to change the name but it has to be min. 3 characters.";
-		$file->close();
-		return $return;
-	}
-
-	if ($name) {
-		$hv["hypervideos"][$hypervideoID]["name"] = $name;
-	}
-	if ($description) {
-		$hv["hypervideos"][$hypervideoID]["description"] = $description;
-	}
-	if ($hidden !== "") {
-		$hv["hypervideos"][$hypervideoID]["hidden"] = (boolean)$hidden;
-	}
-	if (is_array($config)) {
-		
-		if ($config["captionsVisible"] == "") {
-			$config["captionsVisible"] = false;
-		}
-		
-		foreach ($config as $k=>$v) {
-			if (($v == "true") || ($v == "false")) {
-				$config[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
-			}
-		}
-
-		$hv["hypervideos"][$hypervideoID]["config"] = array_replace_recursive($hv["hypervideos"][$hypervideoID]["config"], $config);
-	}
-	if ($subtitlesToDelete) {
-		foreach($subtitlesToDelete as $sd) {
-			foreach ($hv["hypervideos"][$hypervideoID]["subtitles"] as $sk=>$s) {
-				if ($sd == $s["srclang"]) {
-					unlink($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles/".$s["src"]);
-					unset($hv["hypervideos"][$hypervideoID]["subtitles"][$sk]);
-				}
-			}
-		}
-		$hv["hypervideos"][$hypervideoID]["subtitles"] = array_values($hv["hypervideos"][$hypervideoID]["subtitles"]);
-	}
-	if ($subtitles) {
-		if (!is_dir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles")) {
-			mkdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles");
-		}
-		if (!$hv["hypervideos"][$hypervideoID]["subtitles"]) {
-			$hv["hypervideos"][$hypervideoID]["subtitles"] = [];
-		}
-		//$subtitles = $subtitles["subtitles"];
-		foreach ($subtitles["name"] as $subtitleKey=>$subtitleName) {
-			$tmpFound = 0;
-			foreach($hv["hypervideos"][$hypervideoID]["subtitles"] as $k=>$v) {
-				if ($v["srclang"] == $subtitleKey) {
-					$tmpFound++;
-				}
-			}
-			if ($tmpFound === 0) {
-				$tmpObj["src"] = $subtitleKey.".vtt";
-				$tmpObj["srclang"] = $subtitleKey;
-				$hv["hypervideos"][$hypervideoID]["subtitles"][] = $tmpObj;
-			}
-			move_uploaded_file($subtitles["tmp_name"][$subtitleKey], $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles/".$subtitleKey.".vtt");
-		}
-	}
-	$file->writeClose(json_encode($hv, $conf["settings"]["json_flags"]));
-	$return["status"] = "success";
-	$return["code"] = 0;
-	$return["string"] = "Hypervideo has been updated.";
-	$return["response"] = $hv["hypervideos"][$hypervideoID];
-	return $return;
-}
-
-
-
 
 /**
  * @param $projectID
  * @param $hypervideoID
- * @param $type
- * @param $src
+ * @param $src:json
+ * @param $subtitlesToDelete:array
+ * @param $subtitles:file
  * @return mixed
  *
 Returning Code:
@@ -511,9 +395,11 @@ Returning Code:
 3		=	failed. type not correct. ("overlays", "links")
 4		=	failed. HypervideoID not found.
 5		=	failed. permission denied! The User is not an admin, nor is it his own hypervideo.
+6		=	failed. $src too short (10)
  *
  */
-function hypervideoChangeFile($projectID,$hypervideoID,$type,$src) {
+function hypervideoChange($projectID, $hypervideoID, $src, $subtitlesToDelete = false, $subtitles = false) {
+
 	global $conf;
 
 	if ($_SESSION["ohv"]["projects"][$projectID]["login"] != 1) {
@@ -536,41 +422,69 @@ function hypervideoChangeFile($projectID,$hypervideoID,$type,$src) {
 		return $return;
 	}
 
-	if (($type != "links") && ($type != "overlays") && ($type != "codeSnippets")) {
+	if (strlen($src) < 10) {
 		$return["status"] = "fail";
-		$return["code"] = 3;
-		$return["string"] = "type not correct.";
+		$return["code"] = 6;
+		$return["string"] = "Hypervideo JSON has not been send.";
 		return $return;
 	}
 
 	$json = file_get_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/_index.json");
-	$hv = json_decode($json,true);
+	$hvi = json_decode($json,true);
 
-	if (!is_array($hv["hypervideos"][$hypervideoID])) {
+	if ((!array_key_exists($hypervideoID,$hvi["hypervideos"])) || (!is_dir(realpath($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideos"][$hypervideoID])))) {
 		$return["status"] = "fail";
 		$return["code"] = 4;
 		$return["string"] = "HypervideoID not found.";
 		return $return;
 	}
 
-	if (($hv["hypervideos"][$hypervideoID]["creatorId"] != $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) && ($_SESSION["ohv"]["projects"][$projectID]["user"]["role"] != "admin")) {
+	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideos"][$hypervideoID]."/hypervideo.json");
+	$json = $file->read();
+	$hv = json_decode($json,true);
+
+	if (($hv["meta"]["creatorId"] != $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) && ($_SESSION["ohv"]["projects"][$projectID]["user"]["role"] != "admin")) {
 		$return["status"] = "fail";
 		$return["code"] = 5;
-		$return["string"] = "permission denied! The User is not an admin, nor is it his own hypervideo.";
+		$return["string"] = "Permission denied! The User is not an admin, nor is it his own hypervideo.";
 		return $return;
 	}
 
-	if (!file_exists($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/".$type.".json")) {
-		file_put_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/".$type.".json","");
+	if ($subtitlesToDelete) {
+		foreach($subtitlesToDelete as $sd) {
+			unlink($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles/".$sd.".vtt");
+			/*foreach ($hv["subtitles"] as $sk=>$s) {
+				if ($sd == $s["srclang"]) {
+					unlink($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles/".$s["src"]);
+				}
+			} */
+		}
+	}
+	if ($subtitles) {
+		if (!is_dir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles")) {
+			mkdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles");
+		}
+
+		foreach ($subtitles["name"] as $subtitleKey=>$subtitleName) {
+			/*$tmpFound = 0;
+			foreach($hv["subtitles"] as $k=>$v) {
+				if ($v["srclang"] == $subtitleKey) {
+					$tmpFound++;
+				}
+			}
+			if ($tmpFound === 0) {
+				$tmpObj["src"] = $subtitleKey.".vtt";
+				$tmpObj["srclang"] = $subtitleKey;
+				$hv["subtitles"][] = $tmpObj;
+			}*/
+			move_uploaded_file($subtitles["tmp_name"][$subtitleKey], $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/subtitles/".$subtitleKey.".vtt");
+		}
 	}
 
-	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/".$type.".json");
-	$src = json_decode($src,true);
-	$src = json_encode($src, $conf["settings"]["json_flags"]);
 	$file->writeClose($src);
 	$return["status"] = "success";
 	$return["code"] = 0;
-	$return["string"] = $type." has been changed.";
+	$return["string"] = "Hypervideo #".$hypervideoID." has been changed.";
 	return $return;
 }
 ?>

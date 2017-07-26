@@ -737,7 +737,9 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     if (err > 0) {
                                         return false;
                                     }
-
+									// TODO: Send $src param which is JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat);
+									// TODO: Make sure new subtitles are included in $src
+									// TODO: Make sure deleted subtitles are away in $src
                                 },
                                 dataType:   'json',
                                 thisID: thisID,

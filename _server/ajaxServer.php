@@ -98,6 +98,7 @@ switch($_REQUEST["a"]) {
 	 ############ Hypervideo Handling
 	 #########################################*/
 	case "hypervideoAdd":
+		exit;
 		include_once("hypervideos.php");
 		$return = hypervideoAdd($_REQUEST["projectID"],$_REQUEST["resourcesID"],$_REQUEST["duration"],$_REQUEST["name"],$_REQUEST["description"], $_REQUEST["hidden"], $_REQUEST["start"], $_REQUEST["end"], $_REQUEST["in"], $_REQUEST["out"],$_REQUEST["config"], $_FILES["subtitles"]);
 		break;
@@ -113,13 +114,10 @@ switch($_REQUEST["a"]) {
 		break;
 
 	case "hypervideoChange":
-		include_once("hypervideos.php");
-		$return = hypervideoChange($_REQUEST["projectID"],$_REQUEST["hypervideoID"],$_REQUEST["name"],$_REQUEST["description"],$_REQUEST["hidden"],$_REQUEST["config"],$_REQUEST["SubtitlesToDelete"], $_FILES["subtitles"]);
-		break;
-
 	case "hypervideoChangeFile":
+
 		include_once("hypervideos.php");
-		$return = hypervideoChangeFile($_REQUEST["projectID"],$_REQUEST["hypervideoID"],$_REQUEST["type"],$_REQUEST["src"]);
+		$return = hypervideoChange($_REQUEST["projectID"], $_REQUEST["hypervideoID"], $_REQUEST["src"], $_REQUEST["SubtitlesToDelete"], $_FILES["subtitles"]);
 		break;
 
 
