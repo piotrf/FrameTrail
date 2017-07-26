@@ -250,6 +250,7 @@
                                     "clips": hypervideoData.clips,
                                     "hypervideoData": hypervideoData
                                 };
+                                delete bufferedData[hypervideoID].config.hidden;
 
                                 if (!--countdown) {
                                     next();
@@ -388,7 +389,7 @@
             console.log(e);
             return fail('Could not load content data');
         }
-        console.log('oberlays', overlays);
+        //console.log('oberlays', overlays);
         //console.log('codeSnippets', codeSnippets);
         success();
 
@@ -752,32 +753,34 @@
      * @method convertToDatabaseFormat
      * @return {Object}
      */
-    function convertToDatabaseFormat () {
+    function convertToDatabaseFormat (thisHypervideoID) {
+
+        thisHypervideoID = thisHypervideoID || hypervideoID;
 
         return ({
         	"meta": {
-        		"name": hypervideos[hypervideoID].name,
-        		"description": hypervideos[hypervideoID].description,
-        		"thumb": hypervideos[hypervideoID].thumb,
-        		"creator": hypervideos[hypervideoID].creator,
-        		"creatorId": hypervideos[hypervideoID].creatorId,
-        		"created": hypervideos[hypervideoID].created,
-        		"lastchanged": hypervideos[hypervideoID].lastchanged
+        		"name": hypervideos[thisHypervideoID].name,
+        		"description": hypervideos[thisHypervideoID].description,
+        		"thumb": hypervideos[thisHypervideoID].thumb,
+        		"creator": hypervideos[thisHypervideoID].creator,
+        		"creatorId": hypervideos[thisHypervideoID].creatorId,
+        		"created": hypervideos[thisHypervideoID].created,
+        		"lastchanged": Date.now()
         	},
         	"config": {
-        		"annotationsVisible": hypervideos[hypervideoID].config.annotationsVisible,
-        		"annotationsPosition": hypervideos[hypervideoID].config.annotationsPosition,
-        		"annotationTimelineVisible": hypervideos[hypervideoID].config.annotationTimelineVisible,
-        		"annotationPreviewVisible": hypervideos[hypervideoID].config.annotationPreviewVisible,
-        		"videolinksVisible": hypervideos[hypervideoID].config.videolinksVisible,
-        		"videolinkTimelineVisible": hypervideos[hypervideoID].config.videolinkTimelineVisible,
-        		"overlaysVisible": hypervideos[hypervideoID].config.overlaysVisible,
-        		"slidingMode": hypervideos[hypervideoID].config.slidingMode,
-        		"slidingTrigger": hypervideos[hypervideoID].config.slidingTrigger,
-        		"theme": hypervideos[hypervideoID].config.theme,
-        		"autohideControls": hypervideos[hypervideoID].config.autohideControls,
-        		"captionsVisible": hypervideos[hypervideoID].config.captionsVisible,
-        		"hidden": hypervideos[hypervideoID].hidden
+        		"annotationsVisible": hypervideos[thisHypervideoID].config.annotationsVisible,
+        		"annotationsPosition": hypervideos[thisHypervideoID].config.annotationsPosition,
+        		"annotationTimelineVisible": hypervideos[thisHypervideoID].config.annotationTimelineVisible,
+        		"annotationPreviewVisible": hypervideos[thisHypervideoID].config.annotationPreviewVisible,
+        		"videolinksVisible": hypervideos[thisHypervideoID].config.videolinksVisible,
+        		"videolinkTimelineVisible": hypervideos[thisHypervideoID].config.videolinkTimelineVisible,
+        		"overlaysVisible": hypervideos[thisHypervideoID].config.overlaysVisible,
+        		"slidingMode": hypervideos[thisHypervideoID].config.slidingMode,
+        		"slidingTrigger": hypervideos[thisHypervideoID].config.slidingTrigger,
+        		"theme": hypervideos[thisHypervideoID].config.theme,
+        		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
+        		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
+        		"hidden": hypervideos[thisHypervideoID].hidden
         	},
         	"clips": sequence.clips,
         	"globalEvents": codeSnippets.globalEvents,
@@ -785,7 +788,6 @@
         	"contents": (function () {
                 var contents = [];
                 for (var i in overlays) {
-                    //console.log(overlays[i].src, /\.(.+)$/g.exec(overlays[i].src));
                     contents.push({
             			"@context": [
             				"http://www.w3.org/ns/anno.jsonld",
@@ -909,7 +911,7 @@
                 }
         	    return contents;
         	})(),
-        	"subtitles": []
+        	"subtitles": hypervideos[thisHypervideoID].subtitles
         });
 
     }
@@ -927,9 +929,11 @@
      * @method saveOverlays
      * @param {Function} callback
      */
-    function saveHypervideo (callback) {
+    function saveHypervideo (callback, thisHypervideoID) {
 
-        var saveData = convertToDatabaseFormat();
+        thisHypervideoID = thisHypervideoID || hypervideoID;
+
+        var saveData = convertToDatabaseFormat(thisHypervideoID);
         console.log(saveData);
 
         $.ajax({
@@ -938,11 +942,10 @@
             cache:  false,
 
             data: {
-                a:              'hypervideoChangeFile',
+                a:              'hypervideoChange',
                 projectID:      projectID,
-                hypervideoID:   hypervideoID,
-                type:           'hypervideo',
-                src:            JSON.stringify(saveData)
+                hypervideoID:   thisHypervideoID,
+                src:            JSON.stringify(saveData, null, 4)
             }
 
         }).done(function(data) {
@@ -1294,7 +1297,10 @@
         loadSubtitleData:      loadSubtitleData,
 
         saveHypervideo:        saveHypervideo,
-        saveAnnotations:       saveAnnotations
+        saveAnnotations:       saveAnnotations,
+
+        //TODO only shortcut for now
+        convertToDatabaseFormat: convertToDatabaseFormat
 
     }
 
