@@ -702,8 +702,50 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 method:     'POST',
                                 url:        '../_server/ajaxServer.php',
                                 beforeSubmit: function (array, form, options) {
+                                    
+                                    //TODO NO AJAX FORM but set directly the values in FrameTrail.module('Database').hypervideos[thisID]
+                                    var DatabaseEntry = FrameTrail.module('Database').hypervideos[thisID];
+
+                                    DatabaseEntry.name = $('#EditHypervideoForm').find('input[name="name"]').val();
+                                    DatabaseEntry.description = $('#EditHypervideoForm').find('textarea[name="description"]').val();
+                                    DatabaseEntry.hidden = $('#EditHypervideoForm').find('input[name="hidden"]').is(':checked');
+                                    for (var configKey in DatabaseEntry.config) {
+                                        var newConfigVal = $('#EditHypervideoForm').find('input[data-configkey=' + configKey + ']').val();
+                                        newConfigVal = (newConfigVal === 'true')
+                                                        ? true
+                                                        : (newConfigVal === 'false')
+                                                            ? false
+                                                            : (newConfigVal === undefined)
+                                                                ? DatabaseEntry.config[configKey]
+                                                                : newConfigVal;
+                                        DatabaseEntry.config[configKey] = newConfigVal;
+                                    }
+
+
+                                    FrameTrail.module('Database').hypervideo.subtitles.splice(0, FrameTrail.module('Database').hypervideo.subtitles.length);
+
+                                    $('#EditHypervideoForm').find('.existingSubtitlesItem').each(function () {
+                                        var lang = $(this).find('.subtitlesDelete').attr('data-lang');
+                                        FrameTrail.module('Database').hypervideo.subtitles.push({
+                                            "src": lang +".vtt",
+                                            "srclang": lang
+                                        });
+                                    })
+
+                                    $('#EditHypervideoForm').find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
+                                        console.log(this);
+                                        var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
+                                        console.log(match);
+                                        if (match) {
+                                            FrameTrail.module('Database').hypervideo.subtitles.push({
+                                                "src": match[1] +".vtt",
+                                                "srclang": match[1]
+                                            });
+                                        }
+                                    });
+
                                     array.push({ name: 'src', value:  JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat(thisID), null, 4) });
-                                    //console.log(array);
+                                    
                                 },
                                 beforeSerialize: function(form, options) {
 
@@ -831,50 +873,8 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     { text: 'Save changes',
                                         click: function() {
 
-
-                                            //TODO NO AJAX FORM but set directly the values in FrameTrail.module('Database').hypervideos[thisID]
-                                            var DatabaseEntry = FrameTrail.module('Database').hypervideos[thisID];
-
-                                            DatabaseEntry.name = $('#EditHypervideoForm').find('input[name="name"]').val();
-                                            DatabaseEntry.description = $('#EditHypervideoForm').find('textarea[name="description"]').val();
-                                            DatabaseEntry.hidden = $('#EditHypervideoForm').find('input[name="hidden"]').is(':checked');
-                                            for (var configKey in DatabaseEntry.config) {
-                                                var newConfigVal = $('#EditHypervideoForm').find('input[data-configkey=' + configKey + ']').val();
-                                                newConfigVal = (newConfigVal === 'true')
-                                                                ? true
-                                                                : (newConfigVal === 'false')
-                                                                    ? false
-                                                                    : (newConfigVal === undefined)
-                                                                        ? DatabaseEntry.config[configKey]
-                                                                        : newConfigVal;
-                                                DatabaseEntry.config[configKey] = newConfigVal;
-                                            }
-
-
-                                            FrameTrail.module('Database').hypervideo.subtitles.splice(0, FrameTrail.module('Database').hypervideo.subtitles.length);
-
-                                            $('#EditHypervideoForm').find('.existingSubtitlesItem').each(function () {
-                                                var lang = $(this).find('.subtitlesDelete').attr('data-lang');
-                                                FrameTrail.module('Database').hypervideo.subtitles.push({
-                                                    "src": lang +".vtt",
-                                                    "srclang": lang
-                                                });
-                                            })
-
-                                            $('#EditHypervideoForm').find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
-                                                console.log(this);
-                                                var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
-                                                console.log(match);
-                                                if (match) {
-                                                    FrameTrail.module('Database').hypervideo.subtitles.push({
-                                                        "src": match[1] +".vtt",
-                                                        "srclang": match[1]
-                                                    });
-                                                }
-                                            });
-
-
                                             $('#EditHypervideoForm').submit();
+
                                         }
                                     },
                                     { text: 'Cancel',
@@ -929,7 +929,6 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 data: {'a': 'hypervideoClone', 'projectID': projectID, 'hypervideoID': thisID},
                                 beforeSubmit: function (array, form, options) {
                                     
-
                                     var currentData = FrameTrail.module("Database").convertToDatabaseFormat(thisID);
 
                                     currentData.meta.name = $('#ForkHypervideoForm').find('input[name="name"]').val();
@@ -937,9 +936,8 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     currentData.meta.creator = FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name;
                                     currentData.meta.creatorId = FrameTrail.module('UserManagement').userID;
                                     
-                                    //console.log(currentData);
                                     array.push({ name: 'src', value: JSON.stringify(currentData, null, 4) });
-                                    //console.log(array);
+
                                 },
                                 success: function(response) {
                                     switch(response['code']) {
