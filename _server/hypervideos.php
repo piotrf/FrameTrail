@@ -227,7 +227,7 @@ function hypervideoClone($projectID, $hypervideoID, $src) {
 	$fileA->writeClose(json_encode($tmpAnnotation, $conf["settings"]["json_flags"]));
 
 
-	$file->writeClose(json_encode($newHV, $conf["settings"]["json_flags"]));
+	$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
 	/* TODO: How to handle annotation/overlay/links files? */
 
 	$return["status"] = "success";
