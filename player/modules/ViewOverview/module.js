@@ -703,7 +703,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 url:        '../_server/ajaxServer.php',
                                 beforeSubmit: function (array, form, options) {
                                     array.push({ name: 'src', value:  JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat(thisID), null, 4) });
-                                    console.log(array);
+                                    //console.log(array);
                                 },
                                 beforeSerialize: function(form, options) {
 
@@ -926,7 +926,21 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 url:        '../_server/ajaxServer.php',
                                 dataType:   'json',
                                 thisID: thisID,
-                                data: {'a': 'hypervideoClone', 'projectID':projectID, 'hypervideoID': thisID},
+                                data: {'a': 'hypervideoClone', 'projectID': projectID, 'hypervideoID': thisID},
+                                beforeSubmit: function (array, form, options) {
+                                    
+
+                                    var currentData = FrameTrail.module("Database").convertToDatabaseFormat(thisID);
+
+                                    currentData.meta.name = $('#ForkHypervideoForm').find('input[name="name"]').val();
+                                    currentData.meta.description = $('#ForkHypervideoForm').find('textarea[name="description"]').val();
+                                    currentData.meta.creator = FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name;
+                                    currentData.meta.creatorId = FrameTrail.module('UserManagement').userID;
+                                    
+                                    //console.log(currentData);
+                                    array.push({ name: 'src', value: JSON.stringify(currentData, null, 4) });
+                                    //console.log(array);
+                                },
                                 success: function(response) {
                                     switch(response['code']) {
                                         case 0:
@@ -959,7 +973,9 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 buttons: [
                                     { text: 'Fork Hypervideo',
                                         click: function() {
+                                            
                                             $('#ForkHypervideoForm').submit();
+
                                         }
                                     },
                                     { text: 'Cancel',
