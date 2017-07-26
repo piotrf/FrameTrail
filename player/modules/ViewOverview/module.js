@@ -28,7 +28,7 @@ FrameTrail.defineModule('ViewOverview', function(){
     /**
      * Description
      * @method create
-     * @return 
+     * @return
      */
     function create() {
 
@@ -45,11 +45,11 @@ FrameTrail.defineModule('ViewOverview', function(){
 
     };
 
-    
+
     /**
      * Description
      * @method showControls
-     * @return 
+     * @return
      */
     function showControls() {
 
@@ -117,30 +117,30 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     + '        <div class="message error"></div>'
                                     + '    </form>'
                                     + '</div>');
-                    
-                    
+
+
                     newDialog.find('.hypervideoLayout [data-config]').each(function() {
-                                
+
                         var tmpVal = '';
 
                         if ( $(this).hasClass('active') ) {
-                            
+
                             if ( $(this).attr('data-config') == 'slidingMode' ) {
                                 tmpVal = 'overlay';
                             } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
                                 tmpVal = 'bottom'
                             } else {
-                                tmpVal = 'true';    
+                                tmpVal = 'true';
                             }
 
                         } else {
-                            
+
                             if ( $(this).attr('data-config') == 'slidingMode' ) {
                                 tmpVal = 'adjust';
                             } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
                                 tmpVal = 'top'
                             } else {
-                                tmpVal = 'false';    
+                                tmpVal = 'false';
                             }
 
                         }
@@ -150,7 +150,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                         }
 
                         if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
-                            
+
                             newDialog.find('.hypervideoLayout .playerWrapper')
                                 .after(newDialog.find('div[data-config="videolinksVisible"]'))
                                 .before(newDialog.find('div[data-config="annotationsVisible"]'));
@@ -165,18 +165,18 @@ FrameTrail.defineModule('ViewOverview', function(){
                             configValue = (configState ? 'false': 'true');
 
                         if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
-                        
+
                             newDialog.find('[name="config['+config+']"]').val(configValue);
                             $(evt.target).toggleClass('active');
 
                         } else if ( config == 'slidingMode' ) {
 
                             if ( configState ) {
-                                
+
                                 newDialog.find('[name="config['+config+']"]').val('adjust');
 
                             } else {
-                                
+
                                 newDialog.find('[name="config['+config+']"]').val('overlay');
 
                             }
@@ -186,7 +186,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                         } else if ( config == 'annotationsPosition' ) {
 
                             if ( configState ) {
-                                
+
                                 newDialog.find('[name="config['+config+']"]').val('top');
 
                                 newDialog.find('.hypervideoLayout .playerWrapper')
@@ -194,7 +194,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     .before(newDialog.find('div[data-config="annotationsVisible"]'));
 
                             } else {
-                                
+
                                 newDialog.find('[name="config['+config+']"]').val('bottom');
 
                                 newDialog.find('.hypervideoLayout .playerWrapper')
@@ -211,7 +211,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                         evt.stopPropagation();
                     });
 
-                    
+
                     // Manage Subtitles
                     newDialog.find('#SubtitlesPlus').on('click', function() {
                         var langOptions, languageSelect;
@@ -219,12 +219,12 @@ FrameTrail.defineModule('ViewOverview', function(){
                         for (var lang in FrameTrail.module('Database').subtitlesLangMapping) {
                             langOptions += '<option value="'+ lang +'">'+ FrameTrail.module('Database').subtitlesLangMapping[lang] +'</option>';
                         }
-                        
+
                         languageSelect =  '<select class="subtitlesTmpKeySetter">'
                                         + '    <option value="" disabled selected style="display:none;">Language</option>'
                                         + langOptions
                                         + '</select>';
-                                        
+
                         newDialog.find('#NewSubtitlesContainer').append('<span class="subtitlesItem">'+ languageSelect +'<input type="file" name="subtitles[]"><button class="subtitlesRemove" type="button">x</button><br></span>');
                     });
 
@@ -265,12 +265,12 @@ FrameTrail.defineModule('ViewOverview', function(){
                             }
                         }
                     });
-                    
+
                     newDialog.find('#NewHypervideoForm').ajaxForm({
                         method:     'POST',
                         url:        '../_server/ajaxServer.php',
                         beforeSerialize: function() {
-                            
+
                             // Subtitles Validation
                             newDialog.dialog('widget').find('.message.error').removeClass('active').html('');
 
@@ -323,7 +323,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                     newDialog.find('#UploadNewVideoResource').click(function(){
 
                         FrameTrail.module('ResourceManager').uploadResource(function(){
-                            
+
                             var NewHypervideoDialogResources = newDialog.find('#NewHypervideoDialogResources');
                             NewHypervideoDialogResources.empty();
 
@@ -367,7 +367,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                     });
 
                 }),
-            
+
             manageResourcesButton = $('<button id="ManageResourcesButton" class="resourceManagerIcon" data-tooltip-left-left="Manage Resources"><span class="icon-folder-open"></span></button>')
                     .click(function() {
                         FrameTrail.module('ViewResources').open();
@@ -384,7 +384,7 @@ FrameTrail.defineModule('ViewOverview', function(){
     /**
      * Description
      * @method initList
-     * @return 
+     * @return
      */
     function initList() {
 
@@ -403,14 +403,14 @@ FrameTrail.defineModule('ViewOverview', function(){
 
             owner = hypervideos[id].creatorId === FrameTrail.module('UserManagement').userID;
 
-            
+
             if ( !hypervideos[id].hidden || owner || admin ) {
 
                 hypervideo = FrameTrail.newObject('Hypervideo', hypervideos[id])
 
                 thumb = hypervideo.renderThumb();
 
-                
+
                 if ( (admin || owner) && editMode ) {
 
                     var hypervideoOptions = $('<div class="hypervideoOptions"></div>');
@@ -419,7 +419,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     var deleteButton = $('<button class="deleteButton" data-tooltip-bottom-right="Delete Hypervideo"><span class="icon-trash"></span></button>')
                         .click(function(evt) {
-                            
+
                             evt.preventDefault();
                             evt.stopPropagation();
 
@@ -435,7 +435,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                                + '    </form>'
                                                + '</div>');
 
-                            
+
                             deleteDialog.find('#DeleteHypervideoForm').ajaxForm({
                                 method:     'POST',
                                 url:        '../_server/ajaxServer.php',
@@ -448,7 +448,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                             // TODO: find a nice way to remove Element of deleted Hypervideo from Overview List
                                             deleteDialog.dialog('close');
                                             $('#OverviewList div[data-hypervideoid="'+thisID+'"]').remove();
-                                            
+
                                             // Redirect to Overview when current Hypervideo has been deleted
                                             if ( thisID == FrameTrail.module('RouteNavigation').hypervideoID ) {
                                                 alert('You deleted the current Hypervideo and will be redirected to the Overview.')
@@ -478,7 +478,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     }
                                 }
                             });
-                            
+
                             deleteDialog.dialog({
                                     modal: true,
                                     resizable: false,
@@ -511,7 +511,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     var optionButton = $('<button class="optionButton" data-tooltip-bottom-right="Hypervideo Options"><span class="icon-cog"></span></button>')
                         .click(function(evt) {
-                            
+
                             evt.preventDefault();
                             evt.stopPropagation();
 
@@ -561,10 +561,10 @@ FrameTrail.defineModule('ViewOverview', function(){
                                              + '        <div class="message error"></div>'
                                              + '    </form>'
                                              + '</div>');
-                            
-                            
+
+
                             if ( hypervideos[thisID].subtitles ) {
-                                
+
                                 var langMapping = FrameTrail.module('Database').subtitlesLangMapping;
 
                                 for (var i=0; i < hypervideos[thisID].subtitles.length; i++) {
@@ -576,33 +576,33 @@ FrameTrail.defineModule('ViewOverview', function(){
                                         $(this).parent().remove();
                                         optionDialog.find('.subtitlesSettingsWrapper').append('<input type="hidden" name="SubtitlesToDelete[]" value="'+ $(this).attr('data-lang') +'">');
                                     }).appendTo(existingSubtitlesItem);
-                                    
+
                                     optionDialog.find('#ExistingSubtitlesContainer').append(existingSubtitlesItem);
                                 }
                             }
 
                             optionDialog.find('.hypervideoLayout [data-config]').each(function() {
-                                
+
                                 var tmpVal = '';
 
                                 if ( $(this).hasClass('active') ) {
-                                    
+
                                     if ( $(this).attr('data-config') == 'slidingMode' ) {
                                         tmpVal = 'overlay';
                                     } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
                                         tmpVal = 'bottom'
                                     } else {
-                                        tmpVal = 'true';    
+                                        tmpVal = 'true';
                                     }
 
                                 } else {
-                                    
+
                                     if ( $(this).attr('data-config') == 'slidingMode' ) {
                                         tmpVal = 'adjust';
                                     } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
                                         tmpVal = 'top'
                                     } else {
-                                        tmpVal = 'false';    
+                                        tmpVal = 'false';
                                     }
 
                                 }
@@ -612,7 +612,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 }
 
                                 if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
-                                    
+
                                     optionDialog.find('.hypervideoLayout .playerWrapper')
                                         .after(optionDialog.find('div[data-config="videolinksVisible"]'))
                                         .before(optionDialog.find('div[data-config="annotationsVisible"]'));
@@ -627,20 +627,20 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     configValue = (configState ? 'false': 'true');
 
                                 if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
-                                
+
                                     optionDialog.find('[name="config['+config+']"]').val(configValue);
                                     $(evt.target).toggleClass('active');
-                                    
+
                                 } else if ( config == 'slidingMode' ) {
 
                                     if ( configState ) {
-                                        
+
                                         optionDialog.find('[name="config['+config+']"]').val('adjust');
-                                        
+
                                     } else {
-                                        
+
                                         optionDialog.find('[name="config['+config+']"]').val('overlay');
-                                        
+
                                     }
 
                                     $(evt.target).toggleClass('active');
@@ -648,7 +648,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 } else if ( config == 'annotationsPosition' ) {
 
                                     if ( configState ) {
-                                        
+
                                         optionDialog.find('[name="config['+config+']"]').val('top');
 
                                         optionDialog.find('.hypervideoLayout .playerWrapper')
@@ -656,7 +656,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                             .before(optionDialog.find('div[data-config="annotationsVisible"]'));
 
                                     } else {
-                                        
+
                                         optionDialog.find('[name="config['+config+']"]').val('bottom');
 
                                         optionDialog.find('.hypervideoLayout .playerWrapper')
@@ -680,7 +680,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 for (var lang in FrameTrail.module('Database').subtitlesLangMapping) {
                                     langOptions += '<option value="'+ lang +'">'+ FrameTrail.module('Database').subtitlesLangMapping[lang] +'</option>';
                                 }
-                                
+
                                 languageSelect =  '<select class="subtitlesTmpKeySetter">'
                                                 + '    <option value="" disabled selected style="display:none;">Language</option>'
                                                 + langOptions
@@ -701,14 +701,12 @@ FrameTrail.defineModule('ViewOverview', function(){
                             optionDialog.find('#EditHypervideoForm').ajaxForm({
                                 method:     'POST',
                                 url:        '../_server/ajaxServer.php',
-                                /*
-                                beforeSubmit: function(data) {
-                                    console.log(data);
-                                    return false;
+                                beforeSubmit: function (array, form, options) {
+                                    array.push({ name: 'src', value:  JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat(thisID), null, 4) });
+                                    console.log(array);
                                 },
-                                */
                                 beforeSerialize: function(form, options) {
-                                    
+
                                     // Subtitles Validation
 
                                     optionDialog.find('.message.error').removeClass('active').html('');
@@ -717,7 +715,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     optionDialog.find('.subtitlesItem').each(function() {
                                         $(this).css({'outline': ''});
 
-                                        if (($(this).find('input[type="file"]:first').attr('name') == 'subtitles[]') || ($(this).find('.subtitlesTmpKeySetter').first().val() == '') 
+                                        if (($(this).find('input[type="file"]:first').attr('name') == 'subtitles[]') || ($(this).find('.subtitlesTmpKeySetter').first().val() == '')
                                                 || ($(this).find('input[type="file"]:first').val().length == 0)) {
                                             $(this).css({'outline': '1px solid #cd0a0a'});
                                             optionDialog.find('.message.error').addClass('active').html('Subtitles Error: Please fill in all fields.');
@@ -728,7 +726,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                             err++;
                                         }
 
-                                        if (optionDialog.find('.subtitlesItem input[type="file"][name="subtitles['+ $(this).find('.subtitlesTmpKeySetter:first').val() +']"]').length > 1 
+                                        if (optionDialog.find('.subtitlesItem input[type="file"][name="subtitles['+ $(this).find('.subtitlesTmpKeySetter:first').val() +']"]').length > 1
                                                 || (optionDialog.find('.existingSubtitlesItem .subtitlesDelete[data-lang="'+ $(this).find('.subtitlesTmpKeySetter:first').val() +'"]').length > 0 ) ) {
                                             optionDialog.find('.message.error').addClass('active').html('Subtitles Error: Please make sure you assign languages only once.');
                                             return false;
@@ -737,32 +735,35 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     if (err > 0) {
                                         return false;
                                     }
-									// TODO: Send $src param which is JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat);
-									// TODO: Make sure new subtitles are included in $src
-									// TODO: Make sure deleted subtitles are away in $src
+
+
                                 },
-                                dataType:   'json',
+                                dataType: 'json',
                                 thisID: thisID,
-                                data: {'a': 'hypervideoChange', 'projectID':projectID, 'hypervideoID': thisID},
+                                data: {
+                                    'a': 'hypervideoChange',
+                                    'projectID': projectID,
+                                    'hypervideoID': thisID,
+                                },
                                 success: function(response) {
-                                    
+
                                     switch(response['code']) {
                                         case 0:
-                                            
+
                                             //TODO: Put in separate method
                                             FrameTrail.module('Database').loadHypervideoData(
                                                 function(){
 
                                                     if ( thisID == FrameTrail.module('RouteNavigation').hypervideoID ) {
-                                                        
+
                                                         FrameTrail.module('Database').hypervideo = FrameTrail.module('Database').hypervideos[thisID];
 
                                                         // if current hypervideo is edited, adjust states
                                                         optionDialog.find('.hypervideoLayout input').each(function() {
-                                                            
+
                                                             var state = 'hv_config_'+ $(this).attr('data-configkey'),
                                                                 val   = $(this).val();
-                                                            
+
                                                             if ( val == 'true' ) {
                                                                 val = true;
                                                             } else if ( val == 'false' ) {
@@ -784,7 +785,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                                         // re-init subtitles
                                                         FrameTrail.module('Database').loadSubtitleData(
                                                             function() {
-                                                                
+
                                                                 initList();
 
                                                                 FrameTrail.module('HypervideoModel').subtitleFiles = FrameTrail.module('Database').hypervideo.subtitles;
@@ -803,13 +804,13 @@ FrameTrail.defineModule('ViewOverview', function(){
                                                         initList();
                                                         optionDialog.dialog('close');
                                                     }
-                                                    
+
                                                 },
                                                 function(){
                                                     optionDialog.find('.message.error').addClass('active').html('Error while updating hypervideo data');
                                                 }
                                             );
-                                            
+
                                             break;
                                         default:
                                             optionDialog.find('.message.error').addClass('active').html('Error: '+ response['string']);
@@ -829,6 +830,50 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 buttons: [
                                     { text: 'Save changes',
                                         click: function() {
+
+
+                                            //TODO NO AJAX FORM but set directly the values in FrameTrail.module('Database').hypervideos[thisID]
+                                            var DatabaseEntry = FrameTrail.module('Database').hypervideos[thisID];
+
+                                            DatabaseEntry.name = $('#EditHypervideoForm').find('input[name="name"]').val();
+                                            DatabaseEntry.description = $('#EditHypervideoForm').find('textarea[name="description"]').val();
+                                            DatabaseEntry.hidden = $('#EditHypervideoForm').find('input[name="hidden"]').is(':checked');
+                                            for (var configKey in DatabaseEntry.config) {
+                                                var newConfigVal = $('#EditHypervideoForm').find('input[data-configkey=' + configKey + ']').val();
+                                                newConfigVal = (newConfigVal === 'true')
+                                                                ? true
+                                                                : (newConfigVal === 'false')
+                                                                    ? false
+                                                                    : (newConfigVal === undefined)
+                                                                        ? DatabaseEntry.config[configKey]
+                                                                        : newConfigVal;
+                                                DatabaseEntry.config[configKey] = newConfigVal;
+                                            }
+
+
+                                            FrameTrail.module('Database').hypervideo.subtitles.splice(0, FrameTrail.module('Database').hypervideo.subtitles.length);
+
+                                            $('#EditHypervideoForm').find('.existingSubtitlesItem').each(function () {
+                                                var lang = $(this).find('.subtitlesDelete').attr('data-lang');
+                                                FrameTrail.module('Database').hypervideo.subtitles.push({
+                                                    "src": lang +".vtt",
+                                                    "srclang": lang
+                                                });
+                                            })
+
+                                            $('#EditHypervideoForm').find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
+                                                console.log(this);
+                                                var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
+                                                console.log(match);
+                                                if (match) {
+                                                    FrameTrail.module('Database').hypervideo.subtitles.push({
+                                                        "src": match[1] +".vtt",
+                                                        "srclang": match[1]
+                                                    });
+                                                }
+                                            });
+
+
                                             $('#EditHypervideoForm').submit();
                                         }
                                     },
@@ -849,7 +894,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     var editButton = $('<button class="editButton" data-tooltip-bottom-right="Edit Hypervideo"><span class="icon-pencil"></span></button>')
                         .click(function(evt) {
-                            
+
                             thumb.click();
 
                         });
@@ -861,7 +906,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                     var forkButton = $('<button class="forkButton" data-tooltip-bottom-right="Fork Hypervideo"><span class="icon-hypervideo-fork"></span></button>')
                         .click(function(evt) {
-                            
+
                             evt.preventDefault();
                             evt.stopPropagation();
 
@@ -894,7 +939,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                                 },
                                                 function(){}
                                             );
-                                            
+
                                             break;
                                         default:
                                             //TODO: push nice error texts into error box.
@@ -933,10 +978,10 @@ FrameTrail.defineModule('ViewOverview', function(){
                     thumb.append(hypervideoOptions);
 
                 }
-                
+
                 /*
                 if (owner && editMode ) {
-                    
+
                     thumb.addClass('owner').css('border-color', '#' + userColor);
 
                 }
@@ -945,7 +990,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                 if ( thumb.attr('data-hypervideoid') == FrameTrail.module('RouteNavigation').hypervideoID ) {
                     thumb.addClass('activeHypervideo');
                 }
-                
+
                 thumb.css('transition-duration', '0ms');
 
                 // open hypervideo without reloading the page
@@ -959,7 +1004,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                         update = (FrameTrail.module('RouteNavigation').hypervideoID == undefined) ? false : true;
 
 
-                    //TODO: PUT IN SEPARATE FUNCTION 
+                    //TODO: PUT IN SEPARATE FUNCTION
 
                     if ( FrameTrail.module('RouteNavigation').hypervideoID == newHypervideoID ) {
 
@@ -986,11 +1031,11 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     // TODO: Show saving indicator in dialog
 
                                     FrameTrail.module('HypervideoModel').save(function(){
-                                        
+
                                         history.pushState({
                                             editMode: FrameTrail.getState('editMode')
                                         }, "", "?project=" + FrameTrail.module('RouteNavigation').projectID + "&hypervideo=" + newHypervideoID);
-                                        
+
                                         FrameTrail.changeState('editMode', false);
 
                                         confirmDialog.dialog('close');
@@ -1006,7 +1051,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                 'No, discard': function() {
 
                                     FrameTrail.changeState('unsavedChanges', false);
-                                    
+
                                     confirmDialog.dialog('close');
 
                                     // TODO: Reload new hypervideo
@@ -1029,30 +1074,30 @@ FrameTrail.defineModule('ViewOverview', function(){
                             history.pushState({
                                 editMode: FrameTrail.getState('editMode')
                             }, "", "?project=" + FrameTrail.module('RouteNavigation').projectID + "&hypervideo=" + newHypervideoID);
-                            
+
                             if ( FrameTrail.getState('editMode') ) {
-                                
+
                                 FrameTrail.changeState('editMode', false);
-                                
+
                                 FrameTrail.module('HypervideoModel').updateHypervideo(newHypervideoID, true, update);
 
                             } else {
-                                
+
                                 FrameTrail.module('HypervideoModel').updateHypervideo(newHypervideoID, false, update);
-                                
+
                             }
 
                         }
 
-                        
+
 
                     }
 
-                    
+
                     //TODO END
 
 
-                    
+
 
                 });
 
@@ -1068,13 +1113,13 @@ FrameTrail.defineModule('ViewOverview', function(){
         OverviewList.find('.hypervideoThumb').css('transition-duration', '');
 
     }
-    
+
 
     /**
      * Description
      * @method toggleSidebarOpen
      * @param {} opened
-     * @return 
+     * @return
      */
     function toggleSidebarOpen(opened) {
 
@@ -1089,7 +1134,7 @@ FrameTrail.defineModule('ViewOverview', function(){
      * Description
      * @method changeViewSize
      * @param {} arrayWidthAndHeight
-     * @return 
+     * @return
      */
     function changeViewSize(arrayWidthAndHeight) {
 
@@ -1103,7 +1148,7 @@ FrameTrail.defineModule('ViewOverview', function(){
         OverviewList.height( overviewListHeight );
 
         if ( overviewListWidth >= 1400 && listWidthState != 1400 ) {
-            
+
             listWidthState = 1400;
 
             OverviewList.find('.hypervideoThumb').css({
@@ -1113,7 +1158,7 @@ FrameTrail.defineModule('ViewOverview', function(){
             });
 
         } else if ( overviewListWidth >= 1220 && overviewListWidth < 1400 && listWidthState != 1220 ) {
-            
+
             listWidthState = 1220;
 
             OverviewList.find('.hypervideoThumb').css({
@@ -1133,7 +1178,7 @@ FrameTrail.defineModule('ViewOverview', function(){
             });
 
         } else if ( overviewListWidth >= 900 && overviewListWidth < 1010 && listWidthState != 900 ) {
-            
+
             listWidthState = 900;
 
             OverviewList.find('.hypervideoThumb').css({
@@ -1143,7 +1188,7 @@ FrameTrail.defineModule('ViewOverview', function(){
             });
 
         } else if ( overviewListWidth >= 720 && overviewListWidth < 900 && listWidthState != 720 ) {
-            
+
             listWidthState = 720;
 
             OverviewList.find('.hypervideoThumb').css({
@@ -1153,7 +1198,7 @@ FrameTrail.defineModule('ViewOverview', function(){
             });
 
         } else if ( overviewListWidth >= 620 && overviewListWidth < 720 && listWidthState != 620 ) {
-            
+
             listWidthState = 620;
 
             OverviewList.find('.hypervideoThumb').css({
@@ -1163,7 +1208,7 @@ FrameTrail.defineModule('ViewOverview', function(){
             });
 
         } else if ( overviewListWidth <= 620 && listWidthState != 400 ) {
-            
+
             listWidthState = 400;
 
             OverviewList.find('.hypervideoThumb').css({
@@ -1183,7 +1228,7 @@ FrameTrail.defineModule('ViewOverview', function(){
      * Description
      * @method toggleFullscreen
      * @param {} aBoolean
-     * @return 
+     * @return
      */
     function toggleFullscreen(aBoolean) {
 
@@ -1195,11 +1240,11 @@ FrameTrail.defineModule('ViewOverview', function(){
      * Description
      * @method toogleUnsavedChanges
      * @param {} aBoolean
-     * @return 
+     * @return
      */
     function toogleUnsavedChanges(aBoolean) {
 
-        
+
     };
 
 
@@ -1207,7 +1252,7 @@ FrameTrail.defineModule('ViewOverview', function(){
      * Description
      * @method toggleViewMode
      * @param {} viewMode
-     * @return 
+     * @return
      */
     function toggleViewMode(viewMode) {
 
@@ -1227,7 +1272,7 @@ FrameTrail.defineModule('ViewOverview', function(){
      * Description
      * @method toggleEditMode
      * @param {} editMode
-     * @return 
+     * @return
      */
     function toggleEditMode(editMode) {
 
@@ -1245,7 +1290,7 @@ FrameTrail.defineModule('ViewOverview', function(){
     /**
      * Description
      * @method updateUserLogin
-     * @return 
+     * @return
      */
     function updateUserLogin(){
 
@@ -1253,7 +1298,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
     }
 
-        
+
     return {
 
         onChange: {
