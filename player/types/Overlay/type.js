@@ -697,7 +697,7 @@ FrameTrail.defineType(
 
                     }
 
-                    scaleOverlayElement();
+                    self.scaleOverlayElement();
 
 
                 },
@@ -729,7 +729,7 @@ FrameTrail.defineType(
 
                     FrameTrail.module('OverlaysController').stackTimelineView();
 
-                    scaleOverlayElement();
+                    self.scaleOverlayElement();
 
                     FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
 
