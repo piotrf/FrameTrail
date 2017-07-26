@@ -87,7 +87,8 @@ function hypervideoAdd($projectID, $src, $subtitles = false) {
 		}
 	}
 
-	file_put_contents($newHVdir."/hypervideo.json", json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
+	//file_put_contents($newHVdir."/hypervideo.json", json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
+	file_put_contents($newHVdir."/hypervideo.json", $src);
 
 
 	$return["status"] = "success";
@@ -227,8 +228,8 @@ function hypervideoClone($projectID, $hypervideoID, $src) {
 	$fileA->writeClose(json_encode($tmpAnnotation, $conf["settings"]["json_flags"]));
 
 
-	$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
-	//$file->writeClose($src);
+	//$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
+	$file->writeClose($src);
 	/* TODO: How to handle annotation/overlay/links files? */
 
 	$return["status"] = "success";
@@ -431,7 +432,9 @@ function hypervideoChange($projectID, $hypervideoID, $src, $subtitlesToDelete = 
 		}
 	}
 
-	$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
+	//$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
+	$file->writeClose($src);
+
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Hypervideo #".$hypervideoID." has been changed.";
