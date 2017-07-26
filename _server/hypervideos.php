@@ -158,8 +158,7 @@ function hypervideoAdd($projectID, $resourcesID, $duration = false, $name, $desc
 /**
  * @param $projectID
  * @param $hypervideoID
- * @param $name
- * @param $description
+ * @param $src:json
  * @return mixed
  *
 Returning Code:
@@ -170,7 +169,7 @@ Returning Code:
 4		=	failed. Name (min 3 chars) or Description have not been submitted.
 5		=	failed. hypervideoID has not been found
  */
-function hypervideoClone($projectID, $hypervideoID, $name, $description) {
+function hypervideoClone($projectID, $hypervideoID, $src) {
 
 	global $conf;
 
@@ -200,7 +199,9 @@ function hypervideoClone($projectID, $hypervideoID, $name, $description) {
 		return $return;
 	}
 
-	if ((!$description) || (!$name) || (strlen($name) <3)) {
+	$newHV = json_decode($src,true);
+
+	if ((!$newHV["meta"]["description"]) || (!$newHV["meta"]["name"]) || (strlen($newHV["meta"]["name"]) <3)) {
 		$return["status"] = "fail";
 		$return["code"] = 4;
 		$return["string"] = "Name (min 3 chars) or Description have not been submitted.";
@@ -225,35 +226,38 @@ function hypervideoClone($projectID, $hypervideoID, $name, $description) {
 
 	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/hypervideo.json");
 	$json = $file->read();
-	$hv = json_decode($json,true);
+	$newHV = json_decode($json,true);
 
 	$time = time();
 
-	$hv["meta"]["name"] = $name;
-	$hv["meta"]["description"] = $description;
-	$hv["meta"]["creator"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
-	$hv["meta"]["creatorId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
-	$hv["meta"]["created"] = $time;
-	$hv["meta"]["lastchanged"] = $time;
+	/*
+	$newHV["meta"]["creator"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
+	$newHV["meta"]["creatorId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
+	$newHV["meta"]["created"] = $time;
+	$newHV["meta"]["lastchanged"] = $time;
+	*/
 
-	if ($newHV["annotationfiles"]["1"]["ownerId"] != $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) {
+	$fileA = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/annotations/_index.json");
+	$jsonA = $fileA->read();
+	$annotationfiles = json_decode($jsonA,true);
+
+	if ($annotationfiles["annotationfiles"]["1"]["ownerId"] != $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) {
 		$tmpFound = 0;
-		//$newAnnotations = array();
-		$oldAnnotationfiles = $newHV["annotationfiles"];
+		$oldAnnotationfiles = $annotationfiles["annotationfiles"];
 		$newAnnotationfile = array();
 		foreach ($oldAnnotationfiles as $k=>$v) {
 			if ($v["ownerId"] == $_SESSION["ohv"]["projects"][$projectID]["user"]["id"]) {
 				$tmpFound = 1;
 				$newAnnotationfile["1"] = $v;
-				rename($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"]."/annotationfiles/".$k.".json", $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"]."/annotationfiles/1.json");
+				rename($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/annotations/".$k.".json", $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/annotations/1.json");
 			} elseif ($k != 1) {
-				unlink($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"]."/annotationfiles/".$k.".json");
+				unlink($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/annotations/".$k.".json");
 			}
 		}
 		if ($tmpFound == 0) {
-			file_put_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hv["hypervideo-increment"]."/annotationfiles/1.json", "[]");
-			$newAnnotationfile["1"]["name"] = $name;
-			$newAnnotationfile["1"]["description"] = $description;
+			file_put_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvi["hypervideo-increment"]."/annotatios/1.json", "[]");
+			$newAnnotationfile["1"]["name"] = $newHV["meta"]["name"];
+			$newAnnotationfile["1"]["description"] = $newHV["meta"]["description"];
 			$newAnnotationfile["1"]["hidden"] = false;
 			$newAnnotationfile["1"]["owner"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
 			$newAnnotationfile["1"]["ownerId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
@@ -262,30 +266,32 @@ function hypervideoClone($projectID, $hypervideoID, $name, $description) {
 
 		foreach ($newHV["annotationfiles"] as $k=>$v) {
 			if ($k != 1) {
-				unlink($conf["dir"]["projects"] . "/" . $projectID . "/hypervideos/" . $hv["hypervideo-increment"] . "/annotationfiles/" . $k . ".json");
+				unlink($conf["dir"]["projects"] . "/" . $projectID . "/hypervideos/" . $hvi["hypervideo-increment"] . "/annotations/" . $k . ".json");
 			}
 		}
-		$newAnnotationfile["1"]["name"] = $name;
-		$newAnnotationfile["1"]["description"] = $description;
+		$newAnnotationfile["1"]["name"] = $newHV["meta"]["name"];
+		$newAnnotationfile["1"]["description"] = $newHV["meta"]["description"];
 		$newAnnotationfile["1"]["hidden"] = false;
 		$newAnnotationfile["1"]["owner"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
 		$newAnnotationfile["1"]["ownerId"] = (string)$_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
 	}
-	$newHV["mainAnnotation"] = "1";
-	$newHV["annotation-increment"] = 1;
-	$newHV["annotationfiles"] = $newAnnotationfile;
-	$newHV["annotationfiles"]["1"]["created"] = $time;
-	$newHV["annotationfiles"]["1"]["lastchanged"] = $time;
 
-	$hv["hypervideos"][$hv["hypervideo-increment"]] = $newHV;
-	$file->writeClose(json_encode($hv, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	$tmpAnnotation["mainAnnotation"] = "1";
+	$tmpAnnotation["annotation-increment"] = 1;
+	$tmpAnnotation["annotationfiles"] = $newAnnotationfile;
+	$tmpAnnotation["annotationfiles"]["1"]["created"] = $time;
+	$tmpAnnotation["annotationfiles"]["1"]["lastchanged"] = $time;
+	$fileA->writeClose(json_encode($tmpAnnotation, $conf["settings"]["json_flags"]));
+
+
+	$file->writeClose(json_encode($newHV, $conf["settings"]["json_flags"]));
 	/* TODO: How to handle annotation/overlay/links files? */
 
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Hypervideo has been cloned. look at response";
-	$return["response"] = $hv["hypervideos"][$hv["hypervideo-increment"]];
-	$return["newHypervideoID"] = $hv["hypervideo-increment"];
+	$return["response"] = $newHV;
+	$return["newHypervideoID"] = $hvi["hypervideo-increment"];
 	$return["clonedFrom"] = $hypervideoID;
 	return $return;
 }
@@ -481,7 +487,7 @@ function hypervideoChange($projectID, $hypervideoID, $src, $subtitlesToDelete = 
 		}
 	}
 
-	$file->writeClose($src);
+	$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Hypervideo #".$hypervideoID." has been changed.";
