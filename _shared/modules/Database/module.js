@@ -756,7 +756,7 @@
     function convertToDatabaseFormat (thisHypervideoID) {
 
         thisHypervideoID = thisHypervideoID || hypervideoID;
-
+        //console.log(sequence);
         return ({
         	"meta": {
         		"name": hypervideos[thisHypervideoID].name,
@@ -782,9 +782,9 @@
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
         		"hidden": hypervideos[thisHypervideoID].hidden
         	},
-        	"clips": sequence.clips,
-        	"globalEvents": codeSnippets.globalEvents,
-        	"customCSS": codeSnippets.customCSS,
+        	"clips": hypervideos[thisHypervideoID].clips,
+        	"globalEvents": (codeSnippets.globalEvents) ? codeSnippets.globalEvents : {},
+        	"customCSS": (codeSnippets.customCSS) ? codeSnippets.customCSS : "",
         	"contents": (function () {
                 var contents = [];
                 for (var i in overlays) {

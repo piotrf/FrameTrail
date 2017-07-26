@@ -1011,6 +1011,7 @@ FrameTrail.defineModule('ViewOverview', function(){
                                     
                                     var currentData = FrameTrail.module("Database").convertToDatabaseFormat(thisID);
 
+                                    //console.log(currentData);
                                     currentData.meta.name = $('#ForkHypervideoForm').find('input[name="name"]').val();
                                     currentData.meta.description = $('#ForkHypervideoForm').find('textarea[name="description"]').val();
                                     currentData.meta.creator = FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name;
