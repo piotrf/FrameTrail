@@ -126,6 +126,12 @@
 	pointer-events: none;
 }
 
+#Titlebar #HypervideoActionButtonContainer {
+	position: absolute;
+	top: 0px;
+	left: 160px;
+}
+
 #Titlebar #TitlebarTitle {
 	position: absolute;
 	top: 0px;
@@ -145,7 +151,7 @@
 	float: right;
 }
 
-#Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
+#Titlebar #TitlebarActionButtonContainer #ManageResourcesButton, #Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
 	float: left;
 }
 

@@ -137,7 +137,7 @@
 	/*border-bottom: 1px solid #a8a8a8;*/
 }
 
-#SidebarContainer .viewmodeControls .viewModeActionButtonContainer button {
+#SidebarContainer .viewmodeControls .viewModeActionButtonContainer button, #HypervideoDeleteButton {
 	float: left;
 	height: 40px;
     margin-right: 8px;
@@ -147,7 +147,7 @@
 	background-color: transparent;
 }
 
-#Sidebar.editActive #SidebarContainer .viewmodeControls .viewModeActionButtonContainer button {
+#Sidebar.editActive #SidebarContainer .viewmodeControls .viewModeActionButtonContainer button, #HypervideoDeleteButton {
 	border-color: var(--primary-bg-color);
 }
 
@@ -164,4 +164,16 @@
 
 #SidebarContainer .viewmodeControls .exportButton {
 	display: none;
+}
+
+#SidebarContainer #HypervideoDeleteButton {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+}
+
+#SidebarContainer #HypervideoDeleteButton .icon-trash::before {
+	font-size: 20px;
+	margin-left: 2px;
+	margin-top: 2px;
 }
