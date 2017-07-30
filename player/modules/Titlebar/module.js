@@ -23,11 +23,9 @@ FrameTrail.defineModule('Titlebar', function(){
                             + '      <button data-viewmode="overview" data-tooltip-bottom-left="Overview"><span class="icon-overview"></span></button>'
                             + '      <button data-viewmode="video"><span class="icon-hypervideo"></span></button>'
                             + '  </div>'
-                            + '  <div id="HypervideoActionButtonContainer">'
-                            + '      <button id="NewHypervideoButton" data-tooltip-bottom-left="New Hypervideo"><span class="icon-hypervideo-add"></span></button>'
-                            + '  </div>'
                             + '  <div id="TitlebarTitle"></div>'
                             + '  <div id="TitlebarActionButtonContainer">'
+                            + '      <button id="NewHypervideoButton" data-tooltip-bottom-left="New Hypervideo"><span class="icon-hypervideo-add"></span></button>'
                             + '      <button id="ManageResourcesButton" class="resourceManagerIcon" data-tooltip-bottom-left="Manage Resources"><span class="icon-folder-open"></span></button>'
                             + '      <button class="startEditButton" data-tooltip-bottom-left="Edit"><span class="icon-edit"></span></button>'
                             + '      <button class="leaveEditModeButton" data-tooltip-bottom-left="Stop Editing"><span class="icon-edit-circled"></span></button>'
@@ -38,7 +36,6 @@ FrameTrail.defineModule('Titlebar', function(){
                             + '</div>'
                           ),
     TitlebarViewMode        = domElement.find('#TitlebarViewMode'),
-    HypervideoActionButtons = domElement.find('#HypervideoActionButtonContainer')
     NewHypervideoButton     = domElement.find('#NewHypervideoButton'),
     ManageResourcesButton   = domElement.find('#ManageResourcesButton'),
     StartEditButton         = domElement.find('.startEditButton'),
@@ -642,7 +639,7 @@ FrameTrail.defineModule('Titlebar', function(){
 
             if (oldEditMode === false) {
 
-                HypervideoActionButtons.show();
+                NewHypervideoButton.show();
                 StartEditButton.hide();
                 LeaveEditModeButton.show();
                 ManageResourcesButton.show();
@@ -654,7 +651,7 @@ FrameTrail.defineModule('Titlebar', function(){
 
             domElement.removeClass('editActive');
 
-            HypervideoActionButtons.hide();
+            NewHypervideoButton.hide();
             StartEditButton.show();
 
             // Hide Edit Button when not in a server environment

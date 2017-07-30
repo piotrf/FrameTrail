@@ -151,7 +151,7 @@
 	float: right;
 }
 
-#Titlebar #TitlebarActionButtonContainer #ManageResourcesButton, #Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
+#Titlebar #TitlebarActionButtonContainer #NewHypervideoButton, #Titlebar #TitlebarActionButtonContainer #ManageResourcesButton, #Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
 	float: left;
 }
 
