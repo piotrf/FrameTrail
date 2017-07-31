@@ -387,6 +387,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 													);
 
+		FrameTrail.module('Titlebar').title = HypervideoModel.hypervideoName;
+
 
 	};
 

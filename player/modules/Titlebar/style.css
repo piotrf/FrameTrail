@@ -155,6 +155,16 @@
 	float: left;
 }
 
+#NewHypervideoDialog .message.error {
+	position: absolute;
+}
+
+#NewHypervideoDialog #UploadNewVideoResource {
+	position: absolute;
+	right: 0px;
+	top: 6px;
+}
+
 #ShareDialog input[type="text"], #ShareDialog textarea {
 	box-sizing: border-box;
     display: block;

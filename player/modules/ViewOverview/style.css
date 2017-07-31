@@ -30,30 +30,6 @@
 	transition-property: all;
 }
 
-.hypervideoData {
-	float: left;
-	width: 200px;
-}
-
-.hypervideoLayout {
-	float: left;
-	width: 328px;
-}
-
-#NewHypervideoDialog .message.error {
-	position: absolute;
-}
-
-#NewHypervideoDialog #UploadNewVideoResource {
-	position: absolute;
-	right: 0px;
-	top: 6px;
-}
-
-#EditHypervideoDialog .message {
-	margin-top: 10px;
-}
-
 /* Subtitles Settings */
 
 .subtitlesSettingsWrapper {

@@ -43,6 +43,7 @@
         selectedAnnotationSet   = '',
         mainAnnotationSet       = '',
 
+        unsavedSettings         = false;
         unsavedOverlays         = false,
         unsavedVideolinks       = false,
         unsavedCodeSnippets     = false,
@@ -830,7 +831,11 @@
      */
     function newUnsavedChange(category) {
 
-        if (category === 'overlays') {
+        if (category === 'settings') {
+
+            unsavedSettings = true;
+
+        } else if (category === 'overlays') {
 
             unsavedOverlays = true;
 
@@ -898,8 +903,13 @@
 
                 FrameTrail.module('InterfaceModal').showStatusMessage('Saving...');
 
-                if (   unsavedOverlays || unsavedVideolinks || unsavedCodeSnippets
-                    || unsavedEvents   || unsavedCustomCSS) {
+                if ( unsavedSettings ) {
+                    
+                    //TODO: avoid this by adding a subtitles dialog to the settings tab
+                    $('#EditHypervideoForm').submit();
+
+                } else if ( unsavedOverlays || unsavedVideolinks || unsavedCodeSnippets
+                    || unsavedEvents || unsavedCustomCSS) {
                     saveRequests.push(function(){
                         FrameTrail.module('Database').saveHypervideo(databaseCallback);
                     });
@@ -945,6 +955,7 @@
             FrameTrail.module('InterfaceModal').showSuccessMessage('Changes have been saved.');
             FrameTrail.module('InterfaceModal').hideMessage(2000);
 
+            unsavedSettings     = false;
             unsavedOverlays     = false;
             unsavedVideolinks   = false;
             unsavedCodeSnippets = false;
@@ -1113,6 +1124,396 @@
     }
 
 
+    /**
+     * Initialize Hypervideo Settings 
+     * (triggered when global state editMode changes to 'settings')
+     *
+     * @method initHypervideoSettings
+     */
+    function initHypervideoSettings() {
+
+        var HypervideoSettingsContainer = FrameTrail.module('ViewVideo').HypervideoSettingsContainer;
+
+        if ( HypervideoSettingsContainer.find('#EditHypervideoForm').length != 0 ) {
+            return;
+        }
+
+        var database   = FrameTrail.module('Database'),
+            hypervideo = database.hypervideo,
+            thisID     = FrameTrail.module('RouteNavigation').hypervideoID,
+            projectID  = FrameTrail.module('RouteNavigation').projectID,
+            EditHypervideoForm = $('<form method="POST" id="EditHypervideoForm">'
+                                  +'    <div class="message saveReminder">Please save you settings right now to update the subtitle settings.</div>'
+                                  +'    <div class="hypervideoData">'
+                                  +'        <div>Hypervideo Settings:</div>'
+                                  +'        <input type="text" name="name" placeholder="Name of Hypervideo" value="'+ hypervideoName +'"><br>'
+                                  +'        <textarea name="description" placeholder="Description for Hypervideo">'+ description +'</textarea><br>'
+                                  +'        <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((hidden.toString() == "true") ? "checked" : "")+'>'
+                                  +'        <label for="hypervideo_hidden">Hidden from other users?</label>'
+                                  +'    </div>'
+                                  +'    <div class="hypervideoLayout">'
+                                  +'        <div>Player Layout:</div>'
+                                  +'        <div class="settingsContainer">'
+                                  +'            <div class="layoutSettingsWrapper">'
+                                  +'                <div data-config="videolinksVisible" class="'+ ((hypervideo.config.videolinksVisible.toString() == 'true') ? 'active' : '') +'">Videolinks'
+                                  +'                    <div data-config="annotationsPosition" class="'+ ((hypervideo.config.annotationsPosition.toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
+                                  +'                </div>'
+                                  +'                <div class="playerWrapper">'
+                                  +'                    <div data-config="overlaysVisible" class="'+ ((hypervideo.config.overlaysVisible.toString() == 'true') ? 'active' : '') +'">Overlays</div>'
+                                  +'                    <div data-config="annotationPreviewVisible" class="'+ ((hypervideo.config.annotationPreviewVisible.toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
+                                  +'                </div>'
+                                  +'                <div data-config="annotationsVisible" class="'+ ((hypervideo.config.annotationsVisible.toString() == 'true') ? 'active' : '') +'">Annotations'
+                                  +'                    <div data-config="annotationsPosition" class="'+ ((hypervideo.config.annotationsPosition.toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
+                                  +'                </div>'
+                                  +'            </div>'
+                                  +'            <div class="genericSettingsWrapper">Layout Mode'
+                                  +'                <div data-config="slidingMode" class="'+ ((hypervideo.config.slidingMode.toString() == 'overlay') ? 'active' : '') +'">'
+                                  +'                    <div class="slidingMode" data-value="adjust">Adjust</div>'
+                                  +'                    <div class="slidingMode" data-value="overlay">Overlay</div>'
+                                  +'                </div>'
+                                  +'            </div>'
+                                  +'        </div>'
+                                  +'        <div class="subtitlesSettingsWrapper">'
+                                  +'            <span>Subtitles</span>'
+                                  +'            <button id="SubtitlesPlus" type="button">Add +</button>'
+                                  +'            <input type="checkbox" name="config[captionsVisible]" id="captionsVisible" value="true" '+((hypervideo.config.captionsVisible && hypervideo.config.captionsVisible.toString() == 'true') ? "checked" : "")+'>'
+                                  +'            <label for="captionsVisible">Show by default (if present)</label>'
+                                  +'            <div id="ExistingSubtitlesContainer"></div>'
+                                  +'            <div id="NewSubtitlesContainer"></div>'
+                                  +'        </div>'
+                                  +'    </div>'
+                                  +'    <div style="clear: both;"></div>'
+                                  +'    <div class="message error"></div>'
+                                  +'</form>');
+        
+        HypervideoSettingsContainer.append(EditHypervideoForm);
+
+        if ( hypervideo.subtitles ) {
+
+            var langMapping = database.subtitlesLangMapping;
+
+            for (var i=0; i < hypervideo.subtitles.length; i++) {
+                var currentSubtitles = hypervideo.subtitles[i],
+                    existingSubtitlesItem = $('<div class="existingSubtitlesItem"><span>'+ langMapping[hypervideo.subtitles[i].srclang] +'</span></div>'),
+                    existingSubtitlesDelete = $('<button class="subtitlesDelete" type="button" data-lang="'+ hypervideo.subtitles[i].srclang +'">Delete</button>');
+
+                existingSubtitlesDelete.click(function(evt) {
+                    $(this).parent().remove();
+                    EditHypervideoForm.find('.subtitlesSettingsWrapper').append('<input type="hidden" name="SubtitlesToDelete[]" value="'+ $(this).attr('data-lang') +'">');
+                    
+                    updateDatabaseFromForm();
+                }).appendTo(existingSubtitlesItem);
+
+                EditHypervideoForm.find('#ExistingSubtitlesContainer').append(existingSubtitlesItem);
+            }
+        }
+
+        EditHypervideoForm.find('.hypervideoLayout [data-config]').each(function() {
+
+            var tmpVal = '';
+
+            if ( $(this).hasClass('active') ) {
+
+                if ( $(this).attr('data-config') == 'slidingMode' ) {
+                    tmpVal = 'overlay';
+                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
+                    tmpVal = 'bottom'
+                } else {
+                    tmpVal = 'true';
+                }
+
+            } else {
+
+                if ( $(this).attr('data-config') == 'slidingMode' ) {
+                    tmpVal = 'adjust';
+                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
+                    tmpVal = 'top'
+                } else {
+                    tmpVal = 'false';
+                }
+
+            }
+
+            if ( !EditHypervideoForm.find('.hypervideoLayout input[name="config['+$(this).attr('data-config')+']"]').length ) {
+                EditHypervideoForm.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" data-configkey="'+ $(this).attr('data-config') +'" value="'+tmpVal+'">');
+            }
+
+            if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
+
+                EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
+                    .after(EditHypervideoForm.find('div[data-config="videolinksVisible"]'))
+                    .before(EditHypervideoForm.find('div[data-config="annotationsVisible"]'));
+
+            }
+
+        }).click(function(evt) {
+
+
+            var config      = $(evt.target).attr('data-config'),
+                configState = $(evt.target).hasClass('active'),
+                configValue = (configState ? 'false': 'true');
+
+            if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
+
+                EditHypervideoForm.find('[name="config['+config+']"]').val(configValue);
+                $(evt.target).toggleClass('active');
+
+            } else if ( config == 'slidingMode' ) {
+
+                if ( configState ) {
+
+                    EditHypervideoForm.find('[name="config['+config+']"]').val('adjust');
+
+                } else {
+
+                    EditHypervideoForm.find('[name="config['+config+']"]').val('overlay');
+
+                }
+
+                $(evt.target).toggleClass('active');
+
+            } else if ( config == 'annotationsPosition' ) {
+
+                if ( configState ) {
+
+                    EditHypervideoForm.find('[name="config['+config+']"]').val('top');
+
+                    EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
+                        .after(EditHypervideoForm.find('div[data-config="videolinksVisible"]'))
+                        .before(EditHypervideoForm.find('div[data-config="annotationsVisible"]'));
+
+                } else {
+
+                    EditHypervideoForm.find('[name="config['+config+']"]').val('bottom');
+
+                    EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
+                        .before(EditHypervideoForm.find('div[data-config="videolinksVisible"]'))
+                        .after(EditHypervideoForm.find('div[data-config="annotationsVisible"]'));
+
+                }
+
+                EditHypervideoForm.find('.hypervideoLayout [data-config="annotationsPosition"]').toggleClass('active');
+
+            }
+
+            updateDatabaseFromForm();
+
+            evt.preventDefault();
+            evt.stopPropagation();
+        });
+
+        // Manage Subtitles
+        EditHypervideoForm.find('#SubtitlesPlus').on('click', function() {
+            var langOptions, languageSelect;
+
+            for (var lang in FrameTrail.module('Database').subtitlesLangMapping) {
+                langOptions += '<option value="'+ lang +'">'+ FrameTrail.module('Database').subtitlesLangMapping[lang] +'</option>';
+            }
+
+            languageSelect =  '<select class="subtitlesTmpKeySetter">'
+                            + '    <option value="" disabled selected style="display:none;">Language</option>'
+                            + langOptions
+                            + '</select>';
+
+            EditHypervideoForm.find('#NewSubtitlesContainer').append('<span class="subtitlesItem">'+ languageSelect +'<input type="file" name="subtitles[]"><button class="subtitlesRemove" type="button">x</button><br></span>');
+
+            updateDatabaseFromForm();
+        });
+
+        EditHypervideoForm.find('#NewSubtitlesContainer').on('click', '.subtitlesRemove', function(evt) {
+            $(this).parent().remove();
+            updateDatabaseFromForm();
+        });
+
+        EditHypervideoForm.find('#NewSubtitlesContainer').on('change', '.subtitlesTmpKeySetter', function() {
+            $(this).parent().find('input[type="file"]').attr('name', 'subtitles['+$(this).val()+']');
+            updateDatabaseFromForm();
+        });
+
+        EditHypervideoForm.find('input, textarea').on('change', function() {
+            updateDatabaseFromForm();
+        });
+
+        function updateDatabaseFromForm() {
+            var DatabaseEntry = FrameTrail.module('Database').hypervideos[thisID];
+
+            DatabaseEntry.name = EditHypervideoForm.find('input[name="name"]').val();
+            DatabaseEntry.description = EditHypervideoForm.find('textarea[name="description"]').val();
+            DatabaseEntry.hidden = EditHypervideoForm.find('input[name="hidden"]').is(':checked');
+            for (var configKey in DatabaseEntry.config) {
+                var newConfigVal = EditHypervideoForm.find('input[data-configkey=' + configKey + ']').val();
+                newConfigVal = (newConfigVal === 'true')
+                                ? true
+                                : (newConfigVal === 'false')
+                                    ? false
+                                    : (newConfigVal === undefined)
+                                        ? DatabaseEntry.config[configKey]
+                                        : newConfigVal;
+                DatabaseEntry.config[configKey] = newConfigVal;
+            }
+
+
+            FrameTrail.module('Database').hypervideos[thisID].subtitles.splice(0, FrameTrail.module('Database').hypervideos[thisID].subtitles.length);
+
+            EditHypervideoForm.find('.existingSubtitlesItem').each(function () {
+                var lang = $(this).find('.subtitlesDelete').attr('data-lang');
+                FrameTrail.module('Database').hypervideos[thisID].subtitles.push({
+                    "src": lang +".vtt",
+                    "srclang": lang
+                });
+            });
+
+            EditHypervideoForm.find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
+                var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
+                console.log(match);
+                if (match) {
+                    FrameTrail.module('Database').hypervideos[thisID].subtitles.push({
+                        "src": match[1] +".vtt",
+                        "srclang": match[1]
+                    });
+                }
+            });
+
+            EditHypervideoForm.find('.message.saveReminder').addClass('active');
+            newUnsavedChange('settings');
+        }
+        
+        EditHypervideoForm.ajaxForm({
+            method:     'POST',
+            url:        '../_server/ajaxServer.php',
+            beforeSubmit: function (array, form, options) {
+                
+                updateDatabaseFromForm();
+                array.push({ name: 'src', value:  JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat(thisID), null, 4) });
+                
+            },
+            beforeSerialize: function(form, options) {
+
+                // Subtitles Validation
+
+                EditHypervideoForm.find('.message.error').removeClass('active').html('');
+
+                var err = 0;
+                EditHypervideoForm.find('.subtitlesItem').each(function() {
+                    $(this).css({'outline': ''});
+
+                    if (($(this).find('input[type="file"]:first').attr('name') == 'subtitles[]') || ($(this).find('.subtitlesTmpKeySetter').first().val() == '')
+                            || ($(this).find('input[type="file"]:first').val().length == 0)) {
+                        $(this).css({'outline': '1px solid #cd0a0a'});
+                        EditHypervideoForm.find('.message.error').addClass('active').html('Subtitles Error: Please fill in all fields.');
+                        err++;
+                    } else if ( !(new RegExp('(' + ['.vtt'].join('|').replace(/\./g, '\\.') + ')$')).test($(this).find('input[type="file"]:first').val()) ) {
+                        $(this).css({'outline': '1px solid #cd0a0a'});
+                        EditHypervideoForm.find('.message.error').addClass('active').html('Subtitles Error: Wrong format. Please add only .vtt files.');
+                        err++;
+                    }
+
+                    if (EditHypervideoForm.find('.subtitlesItem input[type="file"][name="subtitles['+ $(this).find('.subtitlesTmpKeySetter:first').val() +']"]').length > 1
+                            || (EditHypervideoForm.find('.existingSubtitlesItem .subtitlesDelete[data-lang="'+ $(this).find('.subtitlesTmpKeySetter:first').val() +'"]').length > 0 ) ) {
+                        EditHypervideoForm.find('.message.error').addClass('active').html('Subtitles Error: Please make sure you assign languages only once.');
+                        return false;
+                    }
+                });
+                if (err > 0) {
+                    return false;
+                }
+
+
+            },
+            dataType: 'json',
+            thisID: thisID,
+            data: {
+                'a': 'hypervideoChange',
+                'projectID': projectID,
+                'hypervideoID': thisID,
+            },
+            success: function(response) {
+
+                
+                switch(response['code']) {
+                    case 0:
+
+                        //TODO: Put in separate method
+                        FrameTrail.module('Database').loadHypervideoData(
+                            function(){
+
+                                if ( thisID == FrameTrail.module('RouteNavigation').hypervideoID ) {
+
+                                    FrameTrail.module('Database').hypervideo = FrameTrail.module('Database').hypervideos[thisID];
+
+                                    // if current hypervideo is edited, adjust states
+                                    EditHypervideoForm.find('.hypervideoLayout input').each(function() {
+
+                                        var state = 'hv_config_'+ $(this).attr('data-configkey'),
+                                            val   = $(this).val();
+
+                                        if ( val == 'true' ) {
+                                            val = true;
+                                        } else if ( val == 'false' ) {
+                                            val = false;
+                                        }
+
+                                        FrameTrail.changeState(state, val);
+
+                                    });
+
+                                    var name = EditHypervideoForm.find('input[name="name"]').val(),
+                                        description = EditHypervideoForm.find('textarea[name="description"]').val();
+
+                                    FrameTrail.module('HypervideoModel').hypervideoName = name;
+                                    FrameTrail.module('HypervideoModel').description = description;
+
+                                    FrameTrail.module('HypervideoController').updateDescriptions();
+
+                                    // re-init subtitles
+                                    FrameTrail.module('Database').loadSubtitleData(
+                                        function() {
+
+                                            FrameTrail.module('ViewOverview').refreshList();
+
+                                            FrameTrail.module('HypervideoModel').subtitleFiles = FrameTrail.module('Database').hypervideo.subtitles;
+                                            FrameTrail.module('HypervideoModel').initModelOfSubtitles(FrameTrail.module('Database'));
+                                            FrameTrail.module('SubtitlesController').initController();
+                                            FrameTrail.changeState('hv_config_captionsVisible', false);
+
+                                            EditHypervideoForm.find('.message.saveReminder').removeClass('active');
+                                            //EditHypervideoForm.dialog('close');
+
+
+                                        },
+                                        function() {}
+                                    );
+
+                                    HypervideoSettingsContainer.empty();
+                                    initHypervideoSettings();
+
+                                } else {
+                                    initList();
+
+                                    HypervideoSettingsContainer.empty();
+                                    initHypervideoSettings();
+                                    //EditHypervideoForm.dialog('close');
+                                }
+
+                            },
+                            function(){
+                                EditHypervideoForm.find('.message.error').addClass('active').html('Error while updating hypervideo data');
+                            }
+                        );
+
+                        break;
+                    default:
+                        EditHypervideoForm.find('.message.error').addClass('active').html('Error: '+ response['string']);
+                        break;
+                }
+            }
+        });
+
+
+    }
+
+
+    
     /**
      * YET TO IMPLEMENT
      *
@@ -1319,29 +1720,30 @@
 
 
 
-        initModel:             initModel,
+        initModel:              initModel,
 
-        removeOverlay:         removeOverlay,
-        newOverlay:            newOverlay,
+        removeOverlay:          removeOverlay,
+        newOverlay:             newOverlay,
 
-        removeVideolink:       removeVideolink,
-        newVideolink:          newVideolink,
+        removeVideolink:        removeVideolink,
+        newVideolink:           newVideolink,
 
-        removeCodeSnippet:     removeCodeSnippet,
-        newCodeSnippet:        newCodeSnippet,
+        removeCodeSnippet:      removeCodeSnippet,
+        newCodeSnippet:         newCodeSnippet,
 
-        removeAnnotation:      removeAnnotation,
-        newAnnotation:         newAnnotation,
+        removeAnnotation:       removeAnnotation,
+        newAnnotation:          newAnnotation,
 
         // Exception: this is exported to be able to update the subtitles on the fly
-        initModelOfSubtitles:  initModelOfSubtitles,
+        initModelOfSubtitles:   initModelOfSubtitles,
 
-        newUnsavedChange:      newUnsavedChange,
+        newUnsavedChange:       newUnsavedChange,
 
-        save:                  save,
-        leaveEditMode:         leaveEditMode,
-        updateHypervideo:      updateHypervideo,
-        exportIt:              exportIt
+        save:                   save,
+        leaveEditMode:          leaveEditMode,
+        updateHypervideo:       updateHypervideo,
+        initHypervideoSettings: initHypervideoSettings,
+        exportIt:               exportIt
 
     }
 

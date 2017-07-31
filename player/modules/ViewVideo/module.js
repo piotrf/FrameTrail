@@ -112,58 +112,60 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '        </div>'
                         + '    </div>'
                         + '    <div id="EditingOptions"></div>'
+                        + '    <div id="HypervideoSettingsContainer"></div>'
                         + '</div>'),
 
 
-        slideArea                  = domElement.children('#SlideArea'),
+        slideArea                   = domElement.children('#SlideArea'),
 
-        PlayerContainer            = domElement.find('#PlayerContainer'),
-        HypervideoContainer        = domElement.find('#HypervideoContainer'),
-        VideoContainer             = domElement.find('#VideoContainer'),
-        Hypervideo                 = domElement.find('#Hypervideo'),
-        CaptionContainer           = domElement.find('#CaptionContainer'),
+        PlayerContainer             = domElement.find('#PlayerContainer'),
+        HypervideoContainer         = domElement.find('#HypervideoContainer'),
+        VideoContainer              = domElement.find('#VideoContainer'),
+        Hypervideo                  = domElement.find('#Hypervideo'),
+        CaptionContainer            = domElement.find('#CaptionContainer'),
 
-        VideolinkContainer         = domElement.find('#VideolinkContainer'),
-        VideolinkTiles             = domElement.find('#VideolinkTiles'),
-        VideolinkTileSlider        = domElement.find('#VideolinkTiles .tileSlider'),
-        VideolinkTimeline          = domElement.find('#VideolinkTimeline'),
+        VideolinkContainer          = domElement.find('#VideolinkContainer'),
+        VideolinkTiles              = domElement.find('#VideolinkTiles'),
+        VideolinkTileSlider         = domElement.find('#VideolinkTiles .tileSlider'),
+        VideolinkTimeline           = domElement.find('#VideolinkTimeline'),
 
-        AnnotationTimeline         = domElement.find('#AnnotationTimeline'),
-        AnnotationContainer        = domElement.find('#AnnotationContainer'),
-        AnnotationTiles            = domElement.find('#AnnotationTiles'),
-        AnnotationTileSlider       = domElement.find('#AnnotationTiles .tileSlider'),
-        AnnotationSlider           = domElement.find('#AnnotationSlider'),
+        AnnotationTimeline          = domElement.find('#AnnotationTimeline'),
+        AnnotationContainer         = domElement.find('#AnnotationContainer'),
+        AnnotationTiles             = domElement.find('#AnnotationTiles'),
+        AnnotationTileSlider        = domElement.find('#AnnotationTiles .tileSlider'),
+        AnnotationSlider            = domElement.find('#AnnotationSlider'),
 
-        OverlayTimeline            = domElement.find('#OverlayTimeline'),
-        OverlayContainer           = domElement.find('#OverlayContainer'),
+        OverlayTimeline             = domElement.find('#OverlayTimeline'),
+        OverlayContainer            = domElement.find('#OverlayContainer'),
 
-        CodeSnippetTimeline        = domElement.find('#CodeSnippetTimeline'),
+        CodeSnippetTimeline         = domElement.find('#CodeSnippetTimeline'),
 
-        Controls                   = domElement.find('#Controls'),
-        AnnotationSettingsButton   = domElement.find('#AnnotationSettingsButton'),
-        EditingOptions             = domElement.find('#EditingOptions'),
+        Controls                    = domElement.find('#Controls'),
+        AnnotationSettingsButton    = domElement.find('#AnnotationSettingsButton'),
+        EditingOptions              = domElement.find('#EditingOptions'),
+        HypervideoSettingsContainer = domElement.find('#HypervideoSettingsContainer'),
 
 
-        CurrentTime                = domElement.find('#CurrentTime'),
-        TotalDuration              = domElement.find('#TotalDuration'),
-        PlayButton                 = domElement.find('#PlayButton'),
-        VideoStartOverlay          = domElement.find('#VideoStartOverlay'),
-        VolumeButton               = domElement.find('#VolumeButton'),
-        FullscreenButton           = domElement.find('#FullscreenButton'),
+        CurrentTime                 = domElement.find('#CurrentTime'),
+        TotalDuration               = domElement.find('#TotalDuration'),
+        PlayButton                  = domElement.find('#PlayButton'),
+        VideoStartOverlay           = domElement.find('#VideoStartOverlay'),
+        VolumeButton                = domElement.find('#VolumeButton'),
+        FullscreenButton            = domElement.find('#FullscreenButton'),
 
-        PlayerProgress             = domElement.find('#PlayerProgress'),
+        PlayerProgress              = domElement.find('#PlayerProgress'),
 
-        Video                      = domElement.find('#Video')[0],
+        Video                       = domElement.find('#Video')[0],
 
-        EditPropertiesContainer    = domElement.find('#EditPropertiesContainer'),
-        AnnotationPreviewContainer = domElement.find('#AnnotationPreviewContainer'),
+        EditPropertiesContainer     = domElement.find('#EditPropertiesContainer'),
+        AnnotationPreviewContainer  = domElement.find('#AnnotationPreviewContainer'),
 
-        ExpandButton               = domElement.find('#ExpandButton'),
+        ExpandButton                = domElement.find('#ExpandButton'),
 
-        WorkingIndicator           = VideoContainer.find('#WorkingIndicator'),
+        WorkingIndicator            = VideoContainer.find('#WorkingIndicator'),
 
-        shownDetails               = null,
-        wasPlaying                 = false;
+        shownDetails                = null,
+        wasPlaying                  = false;
 
 
     ExpandButton.click(function() {
@@ -805,11 +807,15 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         switch (editMode) {
             case false:
+                HypervideoSettingsContainer.empty();
                 leaveEditMode();
                 break;
             case 'preview':
                 leaveEditMode();
                 enterPreviewMode();
+                break;
+            case 'settings':
+                enterSettingsMode();
                 break;
             case 'overlays':
                 enterOverlayMode();
@@ -844,6 +850,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function resetEditMode() {
         domElement.find('.timeline').removeClass('editable').css('flex-basis', '');
+        HypervideoSettingsContainer.removeClass('active');
     }
 
     /**
@@ -888,6 +895,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function leaveEditMode() {
         EditingOptions.removeClass('active');
+        HypervideoSettingsContainer.removeClass('active');
         EditPropertiesContainer.removeAttr('data-editmode').hide();
 
         toggleConfig_annotationsVisible(FrameTrail.getState('hv_config_annotationsVisible'));
@@ -910,6 +918,15 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function enterPreviewMode() {
 
+    }
+
+    /**
+     * I am called when the app enters the editMode "settings"
+     * @method enterSettingsMode
+     */
+    function enterSettingsMode() {
+        FrameTrail.module('HypervideoModel').initHypervideoSettings();
+        HypervideoSettingsContainer.addClass('active');
     }
 
     /**
@@ -1643,7 +1660,12 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get EditingOptions()    { return EditingOptions },
-
+        /**
+         * I contain the HypervideoSettingsContainer element.
+         * @attribute HypervideoSettingsContainer
+         * @type HTMLElement
+         */
+        get HypervideoSettingsContainer()    { return HypervideoSettingsContainer },
         /**
          * I contain the OverlayContainer element.
          * @attribute OverlayContainer
