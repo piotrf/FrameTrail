@@ -462,8 +462,12 @@
 
                         if (annotationData[annotationData.length-1].type === 'video') {
                             var annotationItem = annotationData[annotationData.length-1];
-                            annotationItem.startOffset = parseFloat(/t=(\d+)/g.exec(data[i].body.selector.value)[1]);
-                            annotationItem.endOffset = parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].body.selector.value)[2]);
+                            annotationItem.startOffset = (data[i].body.selector.value)
+                                                         ? parseFloat(/t=(\d+)/g.exec(data[i].body.selector.value)[1])
+                                                         : 0;
+                            annotationItem.endOffset = (data[i].body.selector.value)
+                                                        ? parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].body.selector.value)[2])
+                                                        : 0;
                         }
 
                     }
