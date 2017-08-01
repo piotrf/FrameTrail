@@ -8,11 +8,11 @@
     "theme": null,
     "overviewMode": null,
     "defaultHypervideoConfig": {
-        "videolinksVisible": false,
-        "annotationsPosition": "bottom",
+        "areaTopVisible": false,
+        "areaBottomVisible": true,
+        "areaLeftVisible": false,
+        "areaRightVisible": false,
         "overlaysVisible": true,
-        "annotationPreviewVisible": false,
-        "annotationsVisible": true,
         "slidingMode": "adjust"
     }
 }
