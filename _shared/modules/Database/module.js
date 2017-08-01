@@ -768,16 +768,13 @@
         		"lastchanged": Date.now()
         	},
         	"config": {
-        		"annotationsVisible": hypervideos[thisHypervideoID].config.annotationsVisible,
-        		"annotationsPosition": hypervideos[thisHypervideoID].config.annotationsPosition,
-        		"annotationTimelineVisible": hypervideos[thisHypervideoID].config.annotationTimelineVisible,
-        		"annotationPreviewVisible": hypervideos[thisHypervideoID].config.annotationPreviewVisible,
-        		"videolinksVisible": hypervideos[thisHypervideoID].config.videolinksVisible,
-        		"videolinkTimelineVisible": hypervideos[thisHypervideoID].config.videolinkTimelineVisible,
+        		"areaTopVisible": hypervideos[thisHypervideoID].config.areaTopVisible,
+        		"areaBottomVisible": hypervideos[thisHypervideoID].config.areaBottomVisible,
+        		"areaLeftVisible": hypervideos[thisHypervideoID].config.areaLeftVisible,
+        		"areaRightVisible": hypervideos[thisHypervideoID].config.areaRightVisible,
         		"overlaysVisible": hypervideos[thisHypervideoID].config.overlaysVisible,
         		"slidingMode": hypervideos[thisHypervideoID].config.slidingMode,
         		"slidingTrigger": hypervideos[thisHypervideoID].config.slidingTrigger,
-        		"theme": hypervideos[thisHypervideoID].config.theme,
         		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
         		"hidden": hypervideos[thisHypervideoID].hidden

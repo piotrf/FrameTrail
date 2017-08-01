@@ -148,16 +148,12 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '            <div>Player Layout:</div>'
                         + '            <div class="settingsContainer">'
                         + '                <div class="layoutSettingsWrapper">'
-                        + '                    <div data-config="videolinksVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['videolinksVisible'].toString() == 'true') ? 'active' : '') +'">Videolinks'
-                        + '                        <div data-config="annotationsPosition" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
-                        + '                    </div>'
+                        + '                    <div data-config="areaTopVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['areaTopVisible'].toString() == 'true') ? 'active' : '') +'">LayoutArea Top</div>'
                         + '                    <div class="playerWrapper">'
                         + '                        <div data-config="overlaysVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'].toString() == 'true') ? 'active' : '') +'">Overlays</div>'
-                        + '                        <div data-config="annotationPreviewVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationPreviewVisible'].toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
+                        + '                        <div data-config="areaRightVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['areaRightVisible'].toString() == 'true') ? 'active' : '') +'">LayoutArea Right</div>'
                         + '                    </div>'
-                        + '                    <div data-config="annotationsVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsVisible'].toString() == 'true') ? 'active' : '') +'">Annotations'
-                        + '                        <div data-config="annotationsPosition" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
-                        + '                    </div>'
+                        + '                    <div data-config="areaBottomVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['areaBottomVisible'].toString() == 'true') ? 'active' : '') +'">LayoutArea Bottom</div>'
                         + '                </div>'
                         + '                <div class="genericSettingsWrapper">Layout Mode'
                         + '                    <div data-config="slidingMode" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['slidingMode'].toString() == 'overlay') ? 'active' : '') +'">'
@@ -228,8 +224,8 @@ FrameTrail.defineModule('Titlebar', function(){
             if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
 
                 newDialog.find('.hypervideoLayout .playerWrapper')
-                    .after(newDialog.find('div[data-config="videolinksVisible"]'))
-                    .before(newDialog.find('div[data-config="annotationsVisible"]'));
+                    .after(newDialog.find('div[data-config="areaTopVisible"]'))
+                    .before(newDialog.find('div[data-config="areaBottomVisible"]'));
 
             }
 
@@ -266,16 +262,16 @@ FrameTrail.defineModule('Titlebar', function(){
                     newDialog.find('[name="config['+config+']"]').val('top');
 
                     newDialog.find('.hypervideoLayout .playerWrapper')
-                        .after(newDialog.find('div[data-config="videolinksVisible"]'))
-                        .before(newDialog.find('div[data-config="annotationsVisible"]'));
+                        .after(newDialog.find('div[data-config="areaTopVisible"]'))
+                        .before(newDialog.find('div[data-config="areaBottomVisible"]'));
 
                 } else {
 
                     newDialog.find('[name="config['+config+']"]').val('bottom');
 
                     newDialog.find('.hypervideoLayout .playerWrapper')
-                        .before(newDialog.find('div[data-config="videolinksVisible"]'))
-                        .after(newDialog.find('div[data-config="annotationsVisible"]'));
+                        .before(newDialog.find('div[data-config="areaTopVisible"]'))
+                        .after(newDialog.find('div[data-config="areaBottomVisible"]'));
 
                 }
 
@@ -361,11 +357,11 @@ FrameTrail.defineModule('Titlebar', function(){
                         "lastchanged": Date.now()
                     },
                     "config": {
-                        "annotationsVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsVisible'],
+                        "areaBottomVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaBottomVisible'],
                         "annotationsPosition": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'],
                         "annotationTimelineVisible": true,
-                        "annotationPreviewVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationPreviewVisible'],
-                        "videolinksVisible": false,
+                        "areaRightVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaRightVisible'],
+                        "areaTopVisible": false,
                         "videolinkTimelineVisible": true,
                         "overlaysVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'],
                         "slidingMode": FrameTrail.module('Database').project.defaultHypervideoConfig['slidingMode'],

@@ -1155,16 +1155,12 @@
                                   +'        <div>Player Layout:</div>'
                                   +'        <div class="settingsContainer">'
                                   +'            <div class="layoutSettingsWrapper">'
-                                  +'                <div data-config="videolinksVisible" class="'+ ((hypervideo.config.videolinksVisible.toString() == 'true') ? 'active' : '') +'">Videolinks'
-                                  +'                    <div data-config="annotationsPosition" class="'+ ((hypervideo.config.annotationsPosition.toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
-                                  +'                </div>'
+                                  +'                <div data-config="areaTopVisible" class="'+ ((hypervideo.config.areaTopVisible.toString() == 'true') ? 'active' : '') +'">LayoutArea Top</div>'
                                   +'                <div class="playerWrapper">'
                                   +'                    <div data-config="overlaysVisible" class="'+ ((hypervideo.config.overlaysVisible.toString() == 'true') ? 'active' : '') +'">Overlays</div>'
-                                  +'                    <div data-config="annotationPreviewVisible" class="'+ ((hypervideo.config.annotationPreviewVisible.toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
+                                  +'                    <div data-config="areaRightVisible" class="'+ ((hypervideo.config.areaRightVisible.toString() == 'true') ? 'active' : '') +'">LayoutArea Right</div>'
                                   +'                </div>'
-                                  +'                <div data-config="annotationsVisible" class="'+ ((hypervideo.config.annotationsVisible.toString() == 'true') ? 'active' : '') +'">Annotations'
-                                  +'                    <div data-config="annotationsPosition" class="'+ ((hypervideo.config.annotationsPosition.toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
-                                  +'                </div>'
+                                  +'                <div data-config="areaBottomVisible" class="'+ ((hypervideo.config.areaBottomVisible.toString() == 'true') ? 'active' : '') +'">LayoutArea Bottom</div>'
                                   +'            </div>'
                                   +'            <div class="genericSettingsWrapper">Layout Mode'
                                   +'                <div data-config="slidingMode" class="'+ ((hypervideo.config.slidingMode.toString() == 'overlay') ? 'active' : '') +'">'
@@ -1241,8 +1237,8 @@
             if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
 
                 EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
-                    .after(EditHypervideoForm.find('div[data-config="videolinksVisible"]'))
-                    .before(EditHypervideoForm.find('div[data-config="annotationsVisible"]'));
+                    .after(EditHypervideoForm.find('div[data-config="areaTopVisible"]'))
+                    .before(EditHypervideoForm.find('div[data-config="areaBottomVisible"]'));
 
             }
 
@@ -1279,16 +1275,16 @@
                     EditHypervideoForm.find('[name="config['+config+']"]').val('top');
 
                     EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
-                        .after(EditHypervideoForm.find('div[data-config="videolinksVisible"]'))
-                        .before(EditHypervideoForm.find('div[data-config="annotationsVisible"]'));
+                        .after(EditHypervideoForm.find('div[data-config="areaTopVisible"]'))
+                        .before(EditHypervideoForm.find('div[data-config="areaBottomVisible"]'));
 
                 } else {
 
                     EditHypervideoForm.find('[name="config['+config+']"]').val('bottom');
 
                     EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
-                        .before(EditHypervideoForm.find('div[data-config="videolinksVisible"]'))
-                        .after(EditHypervideoForm.find('div[data-config="annotationsVisible"]'));
+                        .before(EditHypervideoForm.find('div[data-config="areaTopVisible"]'))
+                        .after(EditHypervideoForm.find('div[data-config="areaBottomVisible"]'));
 
                 }
 

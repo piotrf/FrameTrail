@@ -175,9 +175,9 @@
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
         
-        ViewVideo.AnnotationContainer.empty();
-        ViewVideo.AnnotationTileSlider.empty();
-        ViewVideo.AnnotationTimeline.empty();
+        ViewVideo.AreaBottomContainer.empty();
+        ViewVideo.AreaBottomTileSlider.empty();
+        ViewVideo.AreaBottomTimeline.empty();
         ViewVideo.AnnotationPreviewContainer.empty();
 
 
@@ -208,8 +208,8 @@
 
         var annotations         = FrameTrail.module('HypervideoModel').annotations,
             videoDuration       = FrameTrail.module('HypervideoModel').duration,
-            sliderParent        = ViewVideo.AnnotationTiles,
-            containerElement    = ViewVideo.AnnotationTileSlider,
+            sliderParent        = ViewVideo.AreaBottomTiles,
+            containerElement    = ViewVideo.AreaBottomTileSlider,
             groupCnt            = 0,
             gap                 = 3,
             thisTileElement,
@@ -532,7 +532,7 @@
             widthOfSlider += annotations[idx].annotationElement.width() + gap;
         }
 
-        ViewVideo.AnnotationContainer.width(widthOfSlider);
+        ViewVideo.AreaBottomContainer.width(widthOfSlider);
 
     }
 
@@ -625,7 +625,7 @@
      */
     function stackTimelineView() {
         
-        ViewVideo.AnnotationTimeline.CollisionDetection({spacing:0, includeVerticalMargins:true});
+        ViewVideo.AreaBottomTimeline.CollisionDetection({spacing:0, includeVerticalMargins:true});
         ViewVideo.adjustLayout();
         ViewVideo.adjustHypervideo();
 
@@ -642,8 +642,8 @@
      */
     function resetTimelineView() {
         
-        ViewVideo.AnnotationTimeline.css('height', '');
-        ViewVideo.AnnotationTimeline.children('.timelineElement').css({
+        ViewVideo.AreaBottomTimeline.css('height', '');
+        ViewVideo.AreaBottomTimeline.children('.timelineElement').css({
             top:    '',
             right:  '',
             bottom: '',
@@ -735,7 +735,7 @@
 
             updateAnnotationSlider();
 
-            ViewVideo.shownDetails = 'annotations';
+            ViewVideo.shownDetails = 'bottom';
 
             if ( annotation.data.type == 'location' && annotation.annotationElement.children('.resourceDetail').data('map') ) {
                 annotation.annotationElement.children('.resourceDetail').data('map').updateSize();
@@ -817,11 +817,11 @@
             
             var leftOffset = -1 * (     itemPosition.left 
                                       - 1 
-                                      - ViewVideo.AnnotationContainer.parent().innerWidth() / 2
+                                      - ViewVideo.AreaBottomContainer.parent().innerWidth() / 2
                                       + openedAnnotation.annotationElement.width() / 2
                             );
 
-            ViewVideo.AnnotationContainer.css('left', leftOffset);
+            ViewVideo.AreaBottomContainer.css('left', leftOffset);
 
         }
 
@@ -1078,7 +1078,7 @@
 
         if (droppable) {
 
-            ViewVideo.AnnotationTimeline.droppable({
+            ViewVideo.AreaBottomTimeline.droppable({
                 accept:         '.resourceThumb, .compareTimelineElement',
                 activeClass:    'droppableActive',
                 hoverClass:     'droppableHover',
@@ -1136,7 +1136,7 @@
 
         } else {
 
-            ViewVideo.AnnotationTimeline.droppable('destroy');
+            ViewVideo.AreaBottomTimeline.droppable('destroy');
 
         }
 

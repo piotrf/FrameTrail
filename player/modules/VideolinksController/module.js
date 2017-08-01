@@ -61,8 +61,8 @@ FrameTrail.defineModule('VideolinksController', function(){
 
         var videolinks = FrameTrail.module('HypervideoModel').videolinks;
         
-        ViewVideo.VideolinkTileSlider.empty();
-        ViewVideo.VideolinkContainer.empty();
+        ViewVideo.AreaTopTileSlider.empty();
+        ViewVideo.AreaTopContainer.empty();
 
         for (var i = 0; i < videolinks.length; i++) {
 
@@ -134,8 +134,8 @@ FrameTrail.defineModule('VideolinksController', function(){
 
         var videolinks          = FrameTrail.module('HypervideoModel').videolinks,
             videoDuration       = FrameTrail.module('HypervideoModel').duration,
-            sliderParent        = ViewVideo.VideolinkTiles,
-            containerElement    = ViewVideo.VideolinkTileSlider,
+            sliderParent        = ViewVideo.AreaTopTiles,
+            containerElement    = ViewVideo.AreaTopTileSlider,
             groupCnt            = 0,
             gap                 = 3,
             thisTileElement,
@@ -449,7 +449,7 @@ FrameTrail.defineModule('VideolinksController', function(){
      */
     function stackTimelineView() {
         
-        ViewVideo.VideolinkTimeline.CollisionDetection({spacing:0, includeVerticalMargins:true});
+        ViewVideo.AreaTopTimeline.CollisionDetection({spacing:0, includeVerticalMargins:true});
         ViewVideo.adjustLayout();
         ViewVideo.adjustHypervideo();
 
@@ -466,8 +466,8 @@ FrameTrail.defineModule('VideolinksController', function(){
      */
     function resetTimelineView() {
         
-        ViewVideo.VideolinkTimeline.css('height', '');
-        ViewVideo.VideolinkTimeline.children('.timelineElement').css({
+        ViewVideo.AreaTopTimeline.css('height', '');
+        ViewVideo.AreaTopTimeline.children('.timelineElement').css({
             top:    '',
             right:  '',
             bottom: '',
@@ -600,7 +600,7 @@ FrameTrail.defineModule('VideolinksController', function(){
 
         if (active) {
 
-            ViewVideo.VideolinkTimeline.droppable({
+            ViewVideo.AreaTopTimeline.droppable({
                 accept:         '.hypervideoThumb',
                 activeClass:    'droppableActive',
                 hoverClass:     'droppableHover',
@@ -654,7 +654,7 @@ FrameTrail.defineModule('VideolinksController', function(){
         } else {
 
 
-            ViewVideo.VideolinkTimeline.droppable('destroy');
+            ViewVideo.AreaTopTimeline.droppable('destroy');
 
         }
 
@@ -826,7 +826,7 @@ FrameTrail.defineModule('VideolinksController', function(){
 
             videolink.videolinkElement.addClass('open');
             videolink.tileElement.addClass('open');
-            ViewVideo.shownDetails = 'videolinks';
+            ViewVideo.shownDetails = 'top';
 
         } else {
 

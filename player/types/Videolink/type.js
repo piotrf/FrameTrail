@@ -100,7 +100,7 @@ FrameTrail.defineType(
             this.timelineElement.unbind('hover');
             this.timelineElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
 
-            ViewVideo.VideolinkTimeline.append(this.timelineElement);
+            ViewVideo.AreaTopTimeline.append(this.timelineElement);
             this.updateTimelineElement();
             
             
@@ -125,8 +125,8 @@ FrameTrail.defineType(
             this.videolinkElement.empty();
             this.videolinkElement.append(iFrame, linkElem);
 
-            ViewVideo.VideolinkTileSlider.append(this.tileElement);
-            ViewVideo.VideolinkContainer.append(this.videolinkElement);
+            ViewVideo.AreaTopTileSlider.append(this.tileElement);
+            ViewVideo.AreaTopContainer.append(this.videolinkElement);
 
             this.tileElement.unbind('hover');
             this.tileElement.unbind('click')
