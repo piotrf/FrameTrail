@@ -136,6 +136,47 @@ function tagDelete($projectID,$tagName) {
 
 	$t = json_decode($json,true);
 
+	$tagFound["count"] = 0;
+
+	$hvi = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/_index.json"),true);
+	foreach ($hvi["hypervideos"] as $hvd) {
+		$hv = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvd."/hypervideo.json"),true);
+		foreach($hv["contents"] as $hvc) {
+			if (in_array($tagName, $hvc["frametrail:tags"])) {
+				$tagFound["count"]++;
+				$tagFoundTmp["hypervideo"] = $hvd;
+				$tagFoundTmp["where"] = "overlay";
+				$tagFoundTmp["type"] = $hvc["frametrail:type"];
+				$tagFoundTmp["owner"] = $hvc["creator"];
+				$tagFound["matches"][] = $tagFoundTmp;
+			}
+		}
+		$ani = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvd."/annotations/_index.json"),true);
+		foreach($ani["annotationfiles"] as $anifk=>$anif) {
+			$anifc = json_decode(file_get_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hvd."/annotations/".$anifk.".json"),true);
+			foreach ($anifc as $anifck=>$anifcv) {
+				if (in_array($tagName, $anifcv["frametrail:tags"])) {
+					$tagFound["count"]++;
+					$tagFoundTmp["hypervideo"] = $hvd;
+					$tagFoundTmp["where"] = "annotation";
+					$tagFoundTmp["type"] = $anifcv["frametrail:type"];
+					$tagFoundTmp["owner"] = $anifcv["creator"];
+					$tagFoundTmp["content"] = $anifcv;
+					$tagFound["matches"][] = $tagFoundTmp;
+				}
+			}
+		}
+	}
+
+	if ($tagFound["count"] > 0) {
+		$return["status"] = "fail";
+		$return["code"] = 5;
+		$return["string"] = "tagName is in use";
+		$return["response"] = $tagFound;
+		return $return;
+	}
+
+
 	unset($t[$tagName]);
 
 	$t = json_encode($t, $conf["settings"]["json_flags"]);
