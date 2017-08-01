@@ -65,7 +65,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                        <span class="icon-annotations"></span>'
                         + '                        <div id="AnnotationSettingsContainer" class="contextButtonContainer">'
                         + '                            <div>Annotations</div>'
-                        + '                            <div id="SelectAreaBottomContainer"></div>'
+                        + '                            <div id="SelectAnnotationContainer"></div>'
                         + '                        </div>'
                         + '                    </div>'
                         + '                    <div class="playerControl contextButton" id="SettingsButton">'

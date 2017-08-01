@@ -94,7 +94,7 @@
             
                 var noAnnotationsButton = $('<div class="annotationSetButton none">None</div>');
                 noAnnotationsButton.click(function() {
-                    FrameTrail.changeState('hv_config_annotationsVisible', false);
+                    FrameTrail.changeState('hv_config_areaBottomVisible', false);
                     FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
                 }).appendTo(SelectAnnotationContainer);
 
@@ -116,7 +116,7 @@
 
                         initAnnotations();
 
-                        FrameTrail.changeState('hv_config_annotationsVisible', true);
+                        FrameTrail.changeState('hv_config_areaBottomVisible', true);
                         FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
 
                     });
@@ -126,7 +126,7 @@
                 }
 
                 var activeSet;
-                if ( !FrameTrail.getState('hv_config_annotationsVisible') ) {
+                if ( !FrameTrail.getState('hv_config_areaBottomVisible') ) {
                     activeSet = SelectAnnotationContainer.find('.annotationSetButton.none');
                 } else {
                     activeSet = SelectAnnotationContainer.find('.annotationSetButton[data-annotationset-id="'+ HypervideoModel.annotationSet +'"]');
@@ -175,7 +175,7 @@
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
         
-        ViewVideo.AreaBottomContainer.empty();
+        ViewVideo.AreaBottomContainer.find('#AnnotationSlider').empty();
         ViewVideo.AreaBottomTileSlider.empty();
         ViewVideo.AreaBottomTimeline.empty();
         ViewVideo.AnnotationPreviewContainer.empty();
@@ -532,7 +532,7 @@
             widthOfSlider += annotations[idx].annotationElement.width() + gap;
         }
 
-        ViewVideo.AreaBottomContainer.width(widthOfSlider);
+        ViewVideo.AreaBottomContainer.find('#AnnotationSlider').width(widthOfSlider);
 
     }
 
@@ -821,7 +821,7 @@
                                       + openedAnnotation.annotationElement.width() / 2
                             );
 
-            ViewVideo.AreaBottomContainer.css('left', leftOffset);
+            ViewVideo.AreaBottomContainer.find('#AnnotationSlider').css('left', leftOffset);
 
         }
 
@@ -922,7 +922,7 @@
             
 
 
-        if ( editMode === false && oldEditMode !== false && FrameTrail.getState('hv_config_annotationsVisible') ) {
+        if ( editMode === false && oldEditMode !== false && FrameTrail.getState('hv_config_areaBottomVisible') ) {
 
             refreshAnnotationSelectmenu(true);
 
@@ -936,7 +936,7 @@
                 initAnnotations();
             }, 300);
 
-        } else if ( editMode === false && FrameTrail.getState('hv_config_annotationsVisible') ) {
+        } else if ( editMode === false && FrameTrail.getState('hv_config_areaBottomVisible') ) {
 
             refreshAnnotationSelectmenu(true);
             
@@ -1207,15 +1207,15 @@
 
 
     /**
-     * I am called when the global state "hv_config_annotationsVisible" changes.
+     * I am called when the global state "hv_config_areaBottomVisible" changes.
      *
      * This is a configuration option (saved in the hypervideo's index.json entry).
      *
-     * @method toggleConfig_annotationsVisible
+     * @method toggleConfig_areaBottomVisible
      * @param {Boolean} newState
      * @param {Boolean} oldState
      */
-    function toggleConfig_annotationsVisible(newState, oldState) {
+    function toggleConfig_areaBottomVisible(newState, oldState) {
         refreshAnnotationSelectmenu(true);
     }
 
@@ -1230,7 +1230,7 @@
             viewMode:        toggleViewMode,
             userColor:       changeUserColor,
 
-            hv_config_annotationsVisible: toggleConfig_annotationsVisible,
+            hv_config_areaBottomVisible: toggleConfig_areaBottomVisible,
         },
 
         initController:             initController,

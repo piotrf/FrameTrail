@@ -226,7 +226,7 @@ path {
     -o-transition-duration: 500ms;
 }
 
-#AreaBottomContainer #AreaBottomSlider {
+#AreaBottomContainer #AnnotationSlider {
     position: absolute;
     top: 0;
     left: 0;
@@ -419,27 +419,27 @@ path {
     width: 200px;
 }
 
-#PlayerContainer #Controls #SelectAreaBottomContainer [class^="icon-"]::before, #PlayerContainer #Controls #SelectAreaBottomContainer [class*=" icon-"]::before {
+#PlayerContainer #Controls #SelectAnnotationContainer [class^="icon-"]::before, #PlayerContainer #Controls #SelectAnnotationContainer [class*=" icon-"]::before {
     font-size: 16px;
     width: 16px;
     margin-right: 7px;
     line-height: 25px;
 }
 
-#PlayerContainer #Controls #SelectAreaBottomContainer .annotationSetButton {
+#PlayerContainer #Controls #SelectAnnotationContainer .annotationSetButton {
     padding-left: 5px;
     line-height: 25px;
     background-color: #C0C0C0;
     color: var(--primary-bg-color);
 }
 
-#PlayerContainer #Controls #SelectAreaBottomContainer .annotationSetButton:hover {
+#PlayerContainer #Controls #SelectAnnotationContainer .annotationSetButton:hover {
     cursor: pointer;
     padding-left: 7px;
     background-color: #D0D0D0;
 }
 
-#PlayerContainer #Controls #SelectAreaBottomContainer .annotationSetButton.active {
+#PlayerContainer #Controls #SelectAnnotationContainer .annotationSetButton.active {
     background-color: #F8F8F8;
 }
 
@@ -990,7 +990,7 @@ path {
         flex-basis: 600px;
     }
 
-    #AreaBottomContainer #AreaBottomSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 800px;
     }
 
@@ -1004,7 +1004,7 @@ path {
         flex-basis: 500px;
     }
 
-    #AreaBottomContainer #AreaBottomSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 700px;
     }
 
@@ -1018,7 +1018,7 @@ path {
         flex-basis: 400px;
     }
 
-    #AreaBottomContainer #AreaBottomSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 600px;
     }
 
@@ -1032,7 +1032,7 @@ path {
         flex-basis: 260px;
     }
 
-    #AreaBottomContainer #AreaBottomSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 500px;
     }
 
@@ -1046,7 +1046,7 @@ path {
         flex-basis: 220px;
     }
 
-    #AreaBottomContainer #AreaBottomSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 400px;
     }
 
@@ -1060,7 +1060,7 @@ path {
         flex-basis: 200px;
     }
 
-    #AreaBottomContainer #AreaBottomSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 300px;
     }
 

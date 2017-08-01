@@ -119,7 +119,7 @@ FrameTrail.defineType(
 
             this.annotationElement.empty();
             this.annotationElement.append( this.resourceItem.renderContent() );
-            ViewVideo.AreaBottomContainer.append(this.annotationElement);
+            ViewVideo.AreaBottomContainer.find('#AnnotationSlider').append(this.annotationElement);
 
             this.previewElement.empty();
             this.previewElement.append( this.resourceItem.renderContent() );
