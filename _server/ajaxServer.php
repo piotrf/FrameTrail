@@ -140,6 +140,27 @@ switch($_REQUEST["a"]) {
 
 
 
+
+	/*#########################################
+	 ############ Tag Handling
+	 #########################################*/
+
+	case "tagSet":
+		include_once("tags.php");
+		$return = tagSet($_REQUEST["projectID"],$_REQUEST["tagName"],$_REQUEST["lang"],$_REQUEST["label"],$_REQUEST["description"]);
+		break;
+
+	case "tagDelete":
+		include_once("tags.php");
+		$return = tagDelete($_REQUEST["projectID"],$_REQUEST["tagName"]);
+		break;
+
+	case "tagLangDelete":
+		include_once("tags.php");
+		$return = tagLangDelete($_REQUEST["projectID"],$_REQUEST["lang"]);
+		break;
+
+
 	/*#########################################
 	 ############ Project Handling
 	 #########################################*/
