@@ -48,12 +48,12 @@ function annotationfileSave($projectID, $hypervideoID, $annotationfileID, $actio
 		$return["string"] = "User not activated";
 		return $return;
 	}
-	if (!is_dir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotationfiles")) {
+	/*if (!is_dir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations")) {
 		$return["status"] = "fail";
 		$return["code"] = 3;
 		$return["string"] = "Could not find the annotations folder";
 		return $return;
-	}
+	}*/
 
 	if (($action != "save") && ($action != "saveAs")) {
 		$return["status"] = "fail";
@@ -77,11 +77,22 @@ function annotationfileSave($projectID, $hypervideoID, $annotationfileID, $actio
 		return $return;
 	}*/
 
-	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/_index.json");
-	$json = $file->read();
-	$hv = json_decode($json,true);
+	if (!is_dir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/")) {
+		mkdir($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/");
+	}
+	if (!file_exists($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/_index.json")) {
+		$tmp["mainAnnotation"] = "1";
+		$tmp["annotationfiles"] = (object)array();
+		$tmp["annotation-increment"] = 1;
+		$annotationfileID = "1";
+		file_put_contents($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/_index.json", json_encode($tmp,$conf["settings"]["json_flags"]));
+	}
 
-	if (($action == "save") && ((!is_array($hv["hypervideos"][$hypervideoID]["annotationfiles"][$annotationfileID])) || (!file_exists($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotationfiles/".$annotationfileID.".json")))) {
+	$file = new sharedFile($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/_index.json");
+	$json = $file->read();
+	$an = json_decode($json,true);
+
+	if (($action == "save") && ((!is_array($an["annotationfiles"][$annotationfileID])) || (!file_exists($conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/".$annotationfileID.".json")))) {
 		$return["status"] = "fail";
 		$return["code"] = 6;
 		$return["string"] = "Annotation with id=".$annotationfileID." has not been found.";
@@ -89,7 +100,7 @@ function annotationfileSave($projectID, $hypervideoID, $annotationfileID, $actio
 		return $return;
 	}
 
-	if (($action == "save") && (($_SESSION["ohv"]["projects"][$projectID]["user"]["id"] != $hv["hypervideos"][$hypervideoID]["annotationfiles"][$annotationfileID]["ownerId"]) && ($_SESSION["ohv"]["projects"][$projectID]["user"]["role"] != "admin"))) {
+	if (($action == "save") && (($_SESSION["ohv"]["projects"][$projectID]["user"]["id"] != $an["annotationfiles"][$annotationfileID]["ownerId"]) && ($_SESSION["ohv"]["projects"][$projectID]["user"]["role"] != "admin"))) {
 		$return["status"] = "fail";
 		$return["code"] = 7;
 		$return["string"] = "Permission denied. You are not the annotations owner and no administrator!";
@@ -106,30 +117,31 @@ function annotationfileSave($projectID, $hypervideoID, $annotationfileID, $actio
 
 	if ($action == "save") {
 		$anID = $annotationfileID;
-		$created = $hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["created"];
+		$created = $an["annotationfiles"][$anID]["created"];
 	} else {
-		$hv["hypervideos"][$hypervideoID]["annotation-increment"]++;
-		$anID = $hv["hypervideos"][$hypervideoID]["annotation-increment"];
+		$an["annotation-increment"]++;
+		$anID = $an["annotation-increment"];
 		$created = $time;
 	}
 
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["name"] = ($name) ? $name : $hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["name"];
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["description"] = ($description) ? $description : $hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["description"];
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["created"] = $created;
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["lastchanged"] = $time;
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["owner"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["ownerId"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
-	$hv["hypervideos"][$hypervideoID]["annotationfiles"][$anID]["hidden"] = $hidden;
+	$an["annotationfiles"][$anID]["name"] = ($name) ? $name : $an["annotationfiles"][$anID]["name"];
+	$an["annotationfiles"][$anID]["description"] = ($description) ? $description : $an["annotationfiles"][$anID]["description"];
+	$an["annotationfiles"][$anID]["created"] = $created;
+	$an["annotationfiles"][$anID]["lastchanged"] = $time;
+	$an["annotationfiles"][$anID]["owner"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["name"];
+	$an["annotationfiles"][$anID]["ownerId"] = $_SESSION["ohv"]["projects"][$projectID]["user"]["id"];
+	$an["annotationfiles"][$anID]["hidden"] = $hidden;
 
-	$file->writeClose(json_encode($hv, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+	$file->writeClose(json_encode($an, $conf["settings"]["json_flags"]));
 
-	$fileStr = $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotationfiles/".$anID.".json";
+	$fileStr = $conf["dir"]["projects"]."/".$projectID."/hypervideos/".$hypervideoID."/annotations/".$anID.".json";
 	if (($action == "saveAs") && (!file_exists($fileStr))) {
 		file_put_contents($fileStr, "");
 	}
 	$file = new sharedFile($fileStr);
-	$src = json_decode($src,true);
+	/*$src = json_decode($src,true);
 	$src = json_encode($src, $conf["settings"]["json_flags"]);
+	*/
 	$file->writeClose($src);
 	$return["status"] = "success";
 	$return["code"] = 0;
