@@ -339,10 +339,10 @@
                             "src": contentItem.body.source,
                             "start": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[1]),
                             "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[2]),
-                            "startOffset": (contentItem.body.selector)
+                            "startOffset": (contentItem.body.selector.value)
                                             ? parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.body.selector.value)[1])
                                             : 0,
-                            "endOffset": (contentItem.body.selector)
+                            "endOffset": (contentItem.body.selector.value)
                                             ? parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.body.selector.value)[2])
                                             : 0,
                             "attributes": contentItem["frametrail:attributes"],
