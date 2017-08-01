@@ -114,19 +114,19 @@ FrameTrail.defineType(
 
             var ViewVideo = FrameTrail.module('ViewVideo');
 
-            ViewVideo.AnnotationTimeline.append(this.timelineElement);
+            ViewVideo.AreaBottomTimeline.append(this.timelineElement);
             this.updateTimelineElement();
 
             this.annotationElement.empty();
             this.annotationElement.append( this.resourceItem.renderContent() );
-            ViewVideo.AnnotationContainer.append(this.annotationElement);
+            ViewVideo.AreaBottomContainer.append(this.annotationElement);
 
             this.previewElement.empty();
             this.previewElement.append( this.resourceItem.renderContent() );
             ViewVideo.AnnotationPreviewContainer.append(this.previewElement);
 
 
-            ViewVideo.AnnotationTileSlider.append(this.tileElement);
+            ViewVideo.AreaBottomTileSlider.append(this.tileElement);
 
             this.timelineElement.unbind('hover');
             this.tileElement.unbind('hover');
@@ -178,7 +178,7 @@ FrameTrail.defineType(
 
             if (this.data.type == 'wikipedia' || this.data.type == 'webpage') {
 
-                rescale( this.annotationElement, FrameTrail.module('ViewVideo').AnnotationContainer.width() );
+                rescale( this.annotationElement, FrameTrail.module('ViewVideo').AreaBottomContainer.width() );
                 rescale( this.previewElement, FrameTrail.module('ViewVideo').AnnotationPreviewContainer.width() );
 
             }

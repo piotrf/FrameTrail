@@ -126,6 +126,12 @@
 	pointer-events: none;
 }
 
+#Titlebar #HypervideoActionButtonContainer {
+	position: absolute;
+	top: 0px;
+	left: 160px;
+}
+
 #Titlebar #TitlebarTitle {
 	position: absolute;
 	top: 0px;
@@ -145,8 +151,18 @@
 	float: right;
 }
 
-#Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
+#Titlebar #TitlebarActionButtonContainer #NewHypervideoButton, #Titlebar #TitlebarActionButtonContainer #ManageResourcesButton, #Titlebar #TitlebarActionButtonContainer .startEditButton, #Titlebar #TitlebarActionButtonContainer .leaveEditModeButton, #Titlebar #TitlebarActionButtonContainer .userSettingsButton {
 	float: left;
+}
+
+#NewHypervideoDialog .message.error {
+	position: absolute;
+}
+
+#NewHypervideoDialog #UploadNewVideoResource {
+	position: absolute;
+	right: 0px;
+	top: 6px;
 }
 
 #ShareDialog input[type="text"], #ShareDialog textarea {

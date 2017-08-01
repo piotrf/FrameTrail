@@ -662,7 +662,7 @@ input[readonly], textarea[readonly] {
     background-color: #F8F8F8;
 }
 
-.hypervideoLayout .settingsContainer [data-config="videolinksVisible"] {
+.hypervideoLayout .settingsContainer [data-config="areaTopVisible"] {
     clear: both;
     height: 22px;
 }
@@ -679,42 +679,15 @@ input[readonly], textarea[readonly] {
     margin-right: 5px;
 }
 
-.hypervideoLayout .settingsContainer .playerWrapper [data-config="annotationPreviewVisible"] {
+.hypervideoLayout .settingsContainer .playerWrapper [data-config="areaRightVisible"] {
     float: left;
     height: 75px;
     width: 65px;
 }
 
-.hypervideoLayout .settingsContainer [data-config="annotationsVisible"] {
+.hypervideoLayout .settingsContainer [data-config="areaBottomVisible"] {
     clear: both;
     height: 22px;
-}
-
-.hypervideoLayout .settingsContainer [data-config="annotationsPosition"], .hypervideoLayout .settingsContainer [data-config="annotationsPosition"].active {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    height: 16px;
-    width: 15px;
-    padding-top: 0px;
-    background-color: #555;
-}
-
-.hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class^="icon-"], .hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class*=" icon-"] {
-    pointer-events: none;
-}
-
-.hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class^="icon-"]::before, .hypervideoLayout .settingsContainer [data-config="annotationsPosition"] [class*=" icon-"]::before {
-    font-size: 16px;
-    line-height: 16px;
-    margin: 0px;
-    width: 15px;
-    color: #ffffff;
-    pointer-events: none;
-}
-
-.hypervideoLayout .settingsContainer [data-config="annotationsPosition"]:hover {
-    background-color: #333;
 }
 
 .hypervideoLayout .settingsContainer .genericSettingsWrapper {

@@ -1,6 +1,6 @@
 /* Timeline Element */
 
-#VideolinkTimeline .timelineElement {
+#AreaTopTimeline .timelineElement {
 	position: absolute;
 	height: 100%;
 	background: var(--semi-transparent-fg-color);
@@ -15,32 +15,32 @@
     transition-property: bottom;
 }
 
-#VideolinkTimeline .timelineElement.active {
+#AreaTopTimeline .timelineElement.active {
 	background: var(--primary-fg-color);
 }
 
-#VideolinkTimeline .timelineElement.highlighted {
+#AreaTopTimeline .timelineElement.highlighted {
 	background: var(--primary-fg-color) !important;
 	z-index: 100000;
 }
 
-#VideolinkTimeline.editable .timelineElement {
+#AreaTopTimeline.editable .timelineElement {
 	background-color: var(--secondary-fg-color);
 }
 
-#VideolinkTimeline .timelineElement.brushed {
+#AreaTopTimeline .timelineElement.brushed {
 	background: var(--semi-transparent-fg-highlight-color);
 }
 
-#VideolinkTimeline .timelineElement.brushed.active, #VideolinkTimeline.editable .timelineElement.brushed {
+#AreaTopTimeline .timelineElement.brushed.active, #AreaTopTimeline.editable .timelineElement.brushed {
 	background-color: var(--primary-fg-color);
 }
 
-#VideolinkTimeline .timelineElement.ui-draggable:hover {
+#AreaTopTimeline .timelineElement.ui-draggable:hover {
 	cursor: move;
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle {
+#AreaTopTimeline .timelineElement.ui-resizable .ui-resizable-handle {
 	position: absolute;
 	top: -2px;
 	width: 3px;
@@ -51,41 +51,41 @@
 	display: none;
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
+#AreaTopTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
 	background-color: var(--primary-fg-color);
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
+#AreaTopTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
 	top: -2px;
 	right: -2px;
 	cursor: ne-resize;
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-nw {
+#AreaTopTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-nw {
 	top: -2px;
 	left: -2px;
 	cursor: nw-resize;
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-se {
+#AreaTopTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-se {
 	bottom: -2px;
 	right: -2px;
 	cursor: se-resize;
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-sw {
+#AreaTopTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-sw {
 	bottom: -2px;
 	left: -2px;
 	cursor: sw-resize;
 }
 
-#VideolinkTimeline .timelineElement.ui-resizable:hover .ui-resizable-handle {
+#AreaTopTimeline .timelineElement.ui-resizable:hover .ui-resizable-handle {
 	display: block;
 }
 
 /* Tile Element */
 
-#VideolinkTiles .tileElement {
+#AreaTopTiles .tileElement {
 	float: left;
 	position: relative;
 	width: 44px;
@@ -94,7 +94,7 @@
 	background-color: var(--semi-transparent-fg-color);
 }
 
-#VideolinkTiles .tileElement [class^="icon-"]::before, #VideolinkTiles .tileElement [class*=" icon-"]::before {
+#AreaTopTiles .tileElement [class^="icon-"]::before, #AreaTopTiles .tileElement [class*=" icon-"]::before {
 	font-size: 19px;
 	width: 100%;
 	margin: 0;
@@ -102,21 +102,21 @@
 	line-height: 30px;
 }
 
-#VideolinkTiles .tileElement:hover, #VideolinkTiles .tileElement.brushed {
+#AreaTopTiles .tileElement:hover, #AreaTopTiles .tileElement.brushed {
 	background-color: var(--semi-transparent-fg-highlight-color);
 }
 
-#VideolinkTiles .tileElement.active {
+#AreaTopTiles .tileElement.active {
 	background-color: var(--semi-transparent-fg-active-color);
 }
 
-#VideolinkTiles .tileElement.open {
+#AreaTopTiles .tileElement.open {
 	background-color: var(--primary-fg-color);
 }
 
 /* Content Element */
 
-#VideolinkContainer .videolinkElement {
+#AreaTopContainer .videolinkElement {
 	background: var(--primary-bg-color);
     border: 1px solid var(--primary-fg-color);
     opacity: 1;
@@ -137,17 +137,17 @@
 }
 
 
-#VideolinkContainer .videolinkElement.open {
+#AreaTopContainer .videolinkElement.open {
 	opacity: 1;
 	z-index: 2;
 }
 
-#VideolinkContainer .videolinkElement iframe {
+#AreaTopContainer .videolinkElement iframe {
 	width: 100%;
 	height: 100%;
 }
 
-#VideolinkContainer .videolinkElement .videolinkAnchor {
+#AreaTopContainer .videolinkElement .videolinkAnchor {
 	position: absolute;
 	top: 0px;
 	right: 0px;
@@ -159,7 +159,7 @@
 	text-decoration: none;
 }
 
-#VideolinkContainer .videolinkElement .videolinkAnchor:hover {
+#AreaTopContainer .videolinkElement .videolinkAnchor:hover {
 	text-decoration: underline;
 }
 

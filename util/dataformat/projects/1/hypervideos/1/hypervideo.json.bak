@@ -6,16 +6,19 @@
         "creator": "test",
         "creatorId": "2",
         "created": 1490624549,
-        "lastchanged": 1501577478943
+        "lastchanged": 1501570221746
     },
     "config": {
-        "areaTopVisible": false,
-        "areaBottomVisible": true,
-        "areaLeftVisible": false,
-        "areaRightVisible": false,
+        "annotationsVisible": false,
+        "annotationsPosition": "bottom",
+        "annotationTimelineVisible": true,
+        "annotationPreviewVisible": false,
+        "videolinksVisible": false,
+        "videolinkTimelineVisible": true,
         "overlaysVisible": true,
         "slidingMode": "adjust",
         "slidingTrigger": "key",
+        "theme": "CssClassName",
         "autohideControls": true,
         "captionsVisible": false,
         "hidden": false

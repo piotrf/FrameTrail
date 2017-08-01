@@ -1,6 +1,6 @@
 /* Timeline Element */
 
-#AnnotationTimeline .timelineElement {
+#AreaBottomTimeline .timelineElement {
 	position: absolute;
 	height: 100%;
 	background: var(--semi-transparent-fg-color);
@@ -15,32 +15,32 @@
     transition-property: bottom;
 }
 
-#AnnotationTimeline .timelineElement.active {
+#AreaBottomTimeline .timelineElement.active {
 	background: var(--primary-fg-color);
 }
 
-#AnnotationTimeline .timelineElement.highlighted {
+#AreaBottomTimeline .timelineElement.highlighted {
 	background: var(--primary-fg-color) !important;
 	z-index: 100000;
 }
 
-#AnnotationTimeline.editable .timelineElement {
+#AreaBottomTimeline.editable .timelineElement {
 	background-color: var(--secondary-fg-color);
 }
 
-#AnnotationTimeline .timelineElement.brushed {
+#AreaBottomTimeline .timelineElement.brushed {
 	background: var(--semi-transparent-fg-highlight-color);
 }
 
-#AnnotationTimeline .timelineElement.brushed.active, #AnnotationTimeline.editable .timelineElement.brushed {
+#AreaBottomTimeline .timelineElement.brushed.active, #AreaBottomTimeline.editable .timelineElement.brushed {
 	background-color: var(--primary-fg-color);
 }
 
-#AnnotationTimeline .timelineElement.ui-draggable:hover {
+#AreaBottomTimeline .timelineElement.ui-draggable:hover {
 	cursor: move;
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle {
+#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle {
 	position: absolute;
 	top: -2px;
 	width: 3px;
@@ -51,41 +51,41 @@
 	display: none;
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
+#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
 	background-color: var(--primary-fg-color);
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
+#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
 	top: -2px;
 	right: -2px;
 	cursor: ne-resize;
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-nw {
+#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-nw {
 	top: -2px;
 	left: -2px;
 	cursor: nw-resize;
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-se {
+#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-se {
 	bottom: -2px;
 	right: -2px;
 	cursor: se-resize;
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-sw {
+#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-sw {
 	bottom: -2px;
 	left: -2px;
 	cursor: sw-resize;
 }
 
-#AnnotationTimeline .timelineElement.ui-resizable:hover .ui-resizable-handle {
+#AreaBottomTimeline .timelineElement.ui-resizable:hover .ui-resizable-handle {
 	display: block;
 }
 
 /* Tile Element */
 
-#AnnotationTiles .tileElement {
+#AreaBottomTiles .tileElement {
 	float: left;
 	position: relative;
 	width: 34px;
@@ -94,7 +94,7 @@
 	background-color: var(--semi-transparent-fg-color);
 }
 
-#AnnotationTiles .tileElement [class^="icon-"]::before, #AnnotationTiles .tileElement [class*=" icon-"]::before {
+#AreaBottomTiles .tileElement [class^="icon-"]::before, #AreaBottomTiles .tileElement [class*=" icon-"]::before {
 	font-size: 18px;
 	margin: 0px;
 	color: var(--primary-bg-color);
@@ -102,21 +102,21 @@
 	line-height: 29px;
 }
 
-#AnnotationTiles .tileElement:hover, #VideolinkTiles .tileElement.brushed {
+#AreaBottomTiles .tileElement:hover, #AreaTopTiles .tileElement.brushed {
 	background-color: var(--semi-transparent-fg-highlight-color);
 }
 
-#AnnotationTiles .tileElement.active {
+#AreaBottomTiles .tileElement.active {
 	background-color: var(--semi-transparent-fg-active-color);
 }
 
-#AnnotationTiles .tileElement.open {
+#AreaBottomTiles .tileElement.open {
 	background-color: var(--primary-fg-color) !important;
 }
 
 /* Content Element */
 
-#AnnotationContainer #AnnotationSlider .annotationElement {
+#AreaBottomContainer #AnnotationSlider .annotationElement {
 	float: left;
 	position: relative;
 	top: 0;
@@ -135,12 +135,12 @@
 	-o-transition-duration: 500ms;
 }
 
-#AnnotationContainer #AnnotationSlider .annotationElement.previous, #AnnotationContainer #AnnotationSlider .annotationElement.next {
+#AreaBottomContainer #AnnotationSlider .annotationElement.previous, #AreaBottomContainer #AnnotationSlider .annotationElement.next {
 	opacity: .1;
 	pointer-events: none;
 }
 
-#AnnotationContainer #AnnotationSlider .annotationElement.open {
+#AreaBottomContainer #AnnotationSlider .annotationElement.open {
 	opacity: 1;
 	outline: 2px solid var(--primary-fg-color);
 }

@@ -17,35 +17,6 @@
 	box-sizing: border-box;
 }
 
-#ViewOverview #OverviewControls {
-	width: 100%;
-	height: 55px;
-	background: #f8f8f8;
-	box-shadow: 0 0 1px 2px #000;
-	/*border-top: 1px solid #999;*/
-}
-
-#ViewOverview #OverviewControls button {
-	float: left;
-	margin: 4px 14px 14px 14px;
-	background-color: transparent;
-    border: 2px solid var(--primary-bg-color);
-    border-radius: 50%;
-    height: 40px;
-    width: 40px;
-}
-
-#ViewOverview #OverviewControls button#ManageResourcesButton {
-	margin-left: 0px;
-}
-
-#ViewOverview #OverviewControls button [class^="icon-"]::before, #ViewOverview #OverviewControls button [class*=" icon-"]::before {
-	font-size: 18px;
-	margin-left: 2px;
-	margin-top: 2px;
-	width: 22px;
-}
-
 #ViewOverview #OverviewList {
 	position: relative;
 	overflow: hidden;
@@ -57,30 +28,6 @@
 	-moz-transition-property: all;
 	-o-transition-property: all;
 	transition-property: all;
-}
-
-.hypervideoData {
-	float: left;
-	width: 200px;
-}
-
-.hypervideoLayout {
-	float: left;
-	width: 328px;
-}
-
-#NewHypervideoDialog .message.error {
-	position: absolute;
-}
-
-#NewHypervideoDialog #UploadNewVideoResource {
-	position: absolute;
-	right: 0px;
-	top: 6px;
-}
-
-#EditHypervideoDialog .message {
-	margin-top: 10px;
 }
 
 /* Subtitles Settings */
