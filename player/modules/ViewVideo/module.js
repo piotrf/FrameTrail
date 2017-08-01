@@ -112,6 +112,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '        </div>'
                         + '    </div>'
                         + '    <div id="EditingOptions"></div>'
+                        + '    <div id="HypervideoLayoutContainer"></div>'
                         + '    <div id="HypervideoSettingsContainer"></div>'
                         + '</div>'),
 
@@ -144,6 +145,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         AnnotationSettingsButton    = domElement.find('#AnnotationSettingsButton'),
         EditingOptions              = domElement.find('#EditingOptions'),
         HypervideoSettingsContainer = domElement.find('#HypervideoSettingsContainer'),
+        HypervideoLayoutContainer   = domElement.find('#HypervideoLayoutContainer'),
 
 
         CurrentTime                 = domElement.find('#CurrentTime'),
@@ -808,6 +810,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         switch (editMode) {
             case false:
                 HypervideoSettingsContainer.empty();
+                HypervideoLayoutContainer.empty();
                 leaveEditMode();
                 break;
             case 'preview':
@@ -816,6 +819,9 @@ FrameTrail.defineModule('ViewVideo', function(){
                 break;
             case 'settings':
                 enterSettingsMode();
+                break;
+            case 'layout':
+                enterLayoutMode();
                 break;
             case 'overlays':
                 enterOverlayMode();
@@ -851,6 +857,7 @@ FrameTrail.defineModule('ViewVideo', function(){
     function resetEditMode() {
         domElement.find('.timeline').removeClass('editable').css('flex-basis', '');
         HypervideoSettingsContainer.removeClass('active');
+        HypervideoLayoutContainer.removeClass('active');
     }
 
     /**
@@ -896,6 +903,7 @@ FrameTrail.defineModule('ViewVideo', function(){
     function leaveEditMode() {
         EditingOptions.removeClass('active');
         HypervideoSettingsContainer.removeClass('active');
+        HypervideoLayoutContainer.removeClass('active');
         EditPropertiesContainer.removeAttr('data-editmode').hide();
 
         toggleConfig_annotationsVisible(FrameTrail.getState('hv_config_annotationsVisible'));
@@ -927,6 +935,15 @@ FrameTrail.defineModule('ViewVideo', function(){
     function enterSettingsMode() {
         FrameTrail.module('HypervideoModel').initHypervideoSettings();
         HypervideoSettingsContainer.addClass('active');
+    }
+
+    /**
+     * I am called when the app enters the editMode "layout"
+     * @method enterLayoutMode
+     */
+    function enterLayoutMode() {
+        console.log('INIT VIEWLAYOUT / LAYOUT MANAGER');
+        HypervideoLayoutContainer.addClass('active');
     }
 
     /**
@@ -1666,6 +1683,12 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get HypervideoSettingsContainer()    { return HypervideoSettingsContainer },
+        /**
+         * I contain the HypervideoLayoutContainer element.
+         * @attribute HypervideoLayoutContainer
+         * @type HTMLElement
+         */
+        get HypervideoLayoutContainer()    { return HypervideoLayoutContainer },
         /**
          * I contain the OverlayContainer element.
          * @attribute OverlayContainer

@@ -984,7 +984,7 @@ path {
     background-color: #eaeaef;
 }
 
-#HypervideoSettingsContainer {
+#HypervideoSettingsContainer, #HypervideoLayoutContainer {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -995,7 +995,7 @@ path {
     display: none;
 }
 
-#HypervideoSettingsContainer.active {
+#HypervideoSettingsContainer.active, #HypervideoLayoutContainer.active {
     display: block;
 }
 

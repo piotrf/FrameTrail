@@ -446,12 +446,14 @@ FrameTrail.defineModule('Sidebar', function(){
         if (loggedIn) {
 
             if ( FrameTrail.module('RouteNavigation').hypervideoID ) {
-                if (FrameTrail.module('HypervideoModel').creatorId === FrameTrail.module('UserManagement').userID) {
+                if (FrameTrail.module('UserManagement').userRole == 'admin') {
 
                     videoContainerControls.find('.editMode').removeClass('disabled');
 
                 } else {
 
+                    videoContainerControls.find('.editMode[data-editmode="settings"]').addClass('disabled');
+                    videoContainerControls.find('.editMode[data-editmode="layout"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="overlays"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="links"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="codesnippets"]').addClass('disabled');
