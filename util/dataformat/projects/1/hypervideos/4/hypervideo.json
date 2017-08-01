@@ -1,0 +1,137 @@
+{
+    "meta": {
+        "name": "bigBuck333",
+        "description": "bbbbb",
+        "thumb": "2_1458909015_thumb_big-buck-bunny.png",
+        "creator": "test",
+        "creatorId": "2",
+        "created": 1490624549,
+        "lastchanged": 1501162782571
+    },
+    "config": {
+        "annotationsVisible": true,
+        "annotationsPosition": "bottom",
+        "annotationTimelineVisible": true,
+        "annotationPreviewVisible": false,
+        "videolinksVisible": false,
+        "videolinkTimelineVisible": true,
+        "overlaysVisible": true,
+        "slidingMode": "adjust",
+        "slidingTrigger": "key",
+        "theme": "CssClassName",
+        "autohideControls": true,
+        "captionsVisible": false,
+        "hidden": true
+    },
+    "clips": [
+        {
+            "resourceId": "4",
+            "duration": 0,
+            "start": 0,
+            "end": 0,
+            "in": 0,
+            "out": 0
+        }
+    ],
+    "globalEvents": {
+        "onReady": "console.log('Hypervideo Ready');",
+        "onPlay": "console.log(\"Hypervideo Play Event\");",
+        "onPause": "console.log(\"Hypervideo Pause Event\");",
+        "onEnded": "console.log(\"Hypervideo Ended\");"
+    },
+    "customCSS": "#Sidebar {\n\tbackground-color: #00ff00 !important;\n}",
+    "contents": [
+        {
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                {
+                    "frametrail": "http://frametrail.org/ns/"
+                }
+            ],
+            "creator": {
+                "nickname": "test",
+                "type": "Person",
+                "id": "2"
+            },
+            "created": "Thu Jul 27 2017 15:27:52 GMT+0200 (CEST)",
+            "type": "Annotation",
+            "frametrail:type": "Overlay",
+            "target": {
+                "type": "Video",
+                "source": "2_1458909015_big-buck-bunny.mp4",
+                "selector": {
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "type": "FragmentSelector",
+                    "value": "t=6.533595501592356,10.533501293789808&xywh=percent:32.33532934131736,25.200908939755028,35.588198602794414,37.79859225184282"
+                }
+            },
+            "body": {
+                "type": "Video",
+                "frametrail:type": "video",
+                "format": "video/mp4",
+                "source": "2_1459152893_testvideo-blue.webm",
+                "frametrail:name": "Testvideo Blue",
+                "selector": {
+                    "type": "FragmentSelector",
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "value": ""
+                }
+            },
+            "frametrail:events": {},
+            "frametrail:attributes": {
+                "alternateVideoFile": "2_1459152893_testvideo-blue.mp4",
+                "autoPlay": true
+            }
+        },
+        {
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                {
+                    "frametrail": "http://frametrail.org/ns/"
+                }
+            ],
+            "creator": {
+                "nickname": "test",
+                "type": "Person",
+                "id": "2"
+            },
+            "created": "Tue Mar 29 2016 14:15:28 GMT+0200 (CEST)",
+            "type": "Annotation",
+            "frametrail:type": "CodeSnippet",
+            "frametrail:tags": [
+                "shortform_tag",
+                "shortform_test",
+                "zweiter_test_tag"
+            ],
+            "target": {
+                "type": "Video",
+                "source": "2_1458909015_big-buck-bunny.mp4",
+                "selector": {
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "type": "FragmentSelector",
+                    "value": "t=2"
+                }
+            },
+            "body": {
+                "type": "TextualBody",
+                "frametrail:type": "codesnippet",
+                "format": "text/javascript",
+                "value": "console.log(\"Hello, I am a Great Code Snippet\");",
+                "frametrail:name": "Great Code Snippet",
+                "frametrail:thumb": null,
+                "frametrail:resourceId": null
+            },
+            "frametrail:attributes": []
+        }
+    ],
+    "subtitles": [
+        {
+            "src": "de.vtt",
+            "srclang": "de"
+        },
+        {
+            "src": "fr.vtt",
+            "srclang": "fr"
+        }
+    ]
+}

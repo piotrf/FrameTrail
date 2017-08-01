@@ -1107,7 +1107,7 @@
                 description:      description,
                 hidden:           hidden,
 
-                src:              JSON.stringify(annotationsToSave)
+                src:              JSON.stringify(annotationsToSave, null, 4)
 
             }
 
