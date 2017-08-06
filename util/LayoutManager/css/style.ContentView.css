@@ -1,0 +1,90 @@
+/*******************
+* ContentView
+*******************/
+
+#LayoutManager .layoutArea .contentViewPreview {
+	position: absolute;
+	top: 48px;
+	width: calc(100% - 20px);
+	height: calc(100% - 58px);
+	display: none;
+}
+
+#LayoutManager .layoutArea .contentViewPreview.active {
+	display: block;
+}
+
+#LayoutManager .layoutArea .contentViewPreview, .contentViewAnimationDiv {
+	background: var(--secondary-bg-color);
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.contentViewAnimationDiv {
+	border: 2px solid var(--primary-bg-color);
+	color: var(--primary-fg-color);
+}
+
+#LayoutManager .layoutArea .layoutAreaTabs {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 2;
+}
+
+#LayoutManager .layoutArea .layoutAreaTabs .contentViewTab {
+	float: right;
+	margin-left: 4px;
+	background: var(--secondary-bg-color);
+	height: 34px;
+	cursor: pointer;
+	transition-property: all;
+	transition-duration: 100ms;
+}
+
+#LayoutManager .layoutArea .layoutAreaTabs .contentViewTab.active {
+	height: 38px;
+	padding: 3px;
+	cursor: default;
+}
+
+#LayoutManager .layoutArea .layoutAreaTabs .contentViewTab .contentViewTabName {
+	float: left;
+	font-size: 14px;
+	text-align: left;
+	padding: 6px 8px;
+
+}
+
+#LayoutManager .layoutArea .layoutAreaTabs .contentViewTab .contentViewTabOptions {
+	float: left;
+	display: none;
+}
+
+#LayoutManager .layoutArea .layoutAreaTabs .contentViewTab.active .contentViewTabOptions {
+	display: block;
+}
+
+/*******************
+* Media Queries
+*******************/
+
+@media (min-width: 1220px) and (max-width: 2000px) {
+	
+}
+
+@media (min-width: 1010px) and (max-width: 1220px) {
+	
+}
+
+@media (min-width: 650px) and (max-width: 1010px) {
+	
+}
+
+@media (max-width: 650px) {
+
+}
+
+@media screen and (max-width: 480px) {
+	
+}
