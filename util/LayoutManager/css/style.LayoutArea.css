@@ -39,9 +39,12 @@
 	top: 50%;
 	left: 50%;
 	margin-left: -34px;
-	margin-top: -46px;
-	font-size: 60px;
+	margin-top: -36px;
 	color: var(--secondary-fg-color);
+}
+
+#LayoutManager .playerWrapper .playerArea .icon-play-1::before {
+	font-size: 60px !important;
 }
 
 #LayoutManager .layoutArea .layoutAreaContent {

@@ -25,11 +25,25 @@ var domElement = $('<div id="LayoutManagerContainer">'
 				+  '        </div>'
 				+  '    </div>'
 				+  '    <div id="LayoutManagerOptions">'
-				+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="small">TimedContent Small</div>'
-				+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="medium">TimedContent Medium</div>'
-				+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="large">TimedContent Large</div>'
-				+  '        <div class="contentViewTemplate" data-type="CustomHTML">CustomHTML</div>'
-				+  '        <div class="contentViewTemplate" data-type="Transcript">Transcript</div>'
+				+  '        <div class="message active">Drag and Drop Content Views into Layout Areas</div>'
+				+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="small">'
+				+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Tile)</span></div>'
+				+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
+				+  '        </div>'
+				+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="medium">'
+				+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Preview)</span></div>'
+				+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
+				+  '        </div>'
+				+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="large">'
+				+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Full)</span></div>'
+				+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
+				+  '        </div>'
+				+  '        <div class="contentViewTemplate" data-type="CustomHTML">'
+				+  '            <div class="contentViewTemplateType"><span class="icon-file-code">Custom HTML</span></div>'
+				+  '        </div>'
+				+  '        <div class="contentViewTemplate" data-type="Transcript">'
+				+  '            <div class="contentViewTemplateType"><span class="icon-doc-text">Text Transcript</span></div>'
+				+  '        </div>'
 				+  '    </div>'
 				+  '</div>'),
 	
@@ -78,7 +92,7 @@ function initView() {
 		accept: '.contentViewTemplate, .contentViewPreview',
 		activeClass: 'droppableActive',
 		hoverClass: 'droppableHover',
-		tolerance: 'touch',
+		tolerance: 'intersect',
 		over: function( event, ui ) {
 			
 		},

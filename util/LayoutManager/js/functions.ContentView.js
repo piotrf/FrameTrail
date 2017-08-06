@@ -43,38 +43,10 @@ function renderContentViewTab(contentViewData) {
                     +   'data-fakeid="'+ fakeID +'" '
                     +   '>'
                     +   '    <div class="contentViewTabName">'+ contentViewData.name +'</div>'
-                    +   '    <div class="contentViewTabOptions">'
-                    +   '        <button class="editContentView"><span class="icon-pencil"></span></button>'
-                    +   '        <button class="deleteContentView"><span class="icon-trash"></span></button>'
-                    +   '    </div>'
                     +   '</div>');
 
     tabItem.find('.contentViewTabName').click(function() {
         activateContentView( $(this).parents('.layoutArea').attr('data-area'), $(this).parents('.contentViewTab').attr('data-fakeid') );
-    });
-
-    tabItem.find('.editContentView').click(function() {
-        
-        var contentViewPreviewItem = $('.contentViewPreview[data-fakeid="'+ $(this).parents('.contentViewTab').attr('data-fakeid') +'"]');
-        
-        console.log('Edit Item: ', contentViewPreviewItem);
-        editContentView(contentViewPreviewItem);
-
-
-    });
-
-    tabItem.find('.deleteContentView').click(function() {
-        
-        var contentViewPreviewItem = $('.contentViewPreview[data-fakeid="'+ $(this).parents('.contentViewTab').attr('data-fakeid') +'"]');
-
-        var area = $(this).parents('.layoutArea').attr('data-area');
-
-        console.log('Delete Item: ', contentViewPreviewItem);
-        $(this).parents('.contentViewTab').remove();
-        contentViewPreviewItem.remove();
-
-        activateContentView( area, $('.layoutArea[data-area="'+ area +'"] .contentViewTab').eq(0).attr('data-fakeid') );
-
     });
 
     return tabItem;
@@ -95,8 +67,36 @@ function renderContentViewPreview(contentViewData) {
                     +   'data-type="'+ contentViewData.type +'" '
                     +   'data-fakeid="'+ fakeID +'" '
                     +   '>'
+                    +   '    <div class="contentViewOptions">'
+                    +   '        <button class="editContentView"><span class="icon-pencil"></span></button>'
+                    +   '        <button class="deleteContentView"><span class="icon-trash"></span></button>'
+                    +   '    </div>'
                     +   '    <div class="contentViewPreviewDescription">'+ contentViewData.name +'</div>'
                     +   '</div>');
+
+    previewItem.find('.editContentView').click(function() {
+        
+        var contentViewPreviewItem = $(this).parents('.contentViewPreview');
+        
+        console.log('Edit Item: ', contentViewPreviewItem);
+        editContentView(contentViewPreviewItem);
+
+
+    });
+
+    previewItem.find('.deleteContentView').click(function() {
+        
+        var contentViewTabItem = $('.contentViewTab[data-fakeid="'+ $(this).parents('.contentViewPreview').attr('data-fakeid') +'"]');
+
+        var area = $(this).parents('.layoutArea').attr('data-area');
+
+        console.log('Delete Item: ', $(this).parents('.contentViewPreview'));
+        $(this).parents('.contentViewPreview').remove();
+        contentViewTabItem.remove();
+
+        activateContentView( area, $('.layoutArea[data-area="'+ area +'"] .contentViewTab').eq(0).attr('data-fakeid') );
+
+    });
 
     fakeID++;
 
