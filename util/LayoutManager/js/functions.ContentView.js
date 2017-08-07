@@ -71,7 +71,7 @@ function renderContentViewPreview(contentViewData) {
                     +   '        <button class="editContentView"><span class="icon-pencil"></span></button>'
                     +   '        <button class="deleteContentView"><span class="icon-trash"></span></button>'
                     +   '    </div>'
-                    +   '    <div class="contentViewPreviewDescription">'+ contentViewData.name +'</div>'
+                    +   '    <div class="contentViewPreviewDescription">'+ contentViewData.name +' '+ contentViewData.contentSize +'</div>'
                     +   '</div>');
 
     previewItem.find('.editContentView').click(function() {
@@ -114,12 +114,22 @@ function renderContentViewPreview(contentViewData) {
  */
 function activateContentView(area, fakeID) {
 
-    console.log(area, fakeID);
+    if ($('.layoutArea[data-area="'+ area +'"] .contentViewPreview[data-fakeid="'+ fakeID +'"]').length == 0) {
+        resizeLayoutArea(area, 'empty');
+        return;
+    }
+
     $('.layoutArea[data-area="'+ area +'"] .contentViewTab').removeClass('active');
     $('.layoutArea[data-area="'+ area +'"] .contentViewTab[data-fakeid="'+ fakeID +'"]').addClass('active');
 
     $('.layoutArea[data-area="'+ area +'"] .contentViewPreview').removeClass('active');
     $('.layoutArea[data-area="'+ area +'"] .contentViewPreview[data-fakeid="'+ fakeID +'"]').addClass('active');
+
+    
+    var currentSize = $('.layoutArea[data-area="'+ area +'"] .contentViewPreview[data-fakeid="'+ fakeID +'"]').attr('data-size');
+    
+    resizeLayoutArea(area, currentSize);
+    
 
 }
 

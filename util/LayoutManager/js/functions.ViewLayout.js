@@ -38,10 +38,10 @@ var domElement = $('<div id="LayoutManagerContainer">'
 				+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Full)</span></div>'
 				+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
 				+  '        </div>'
-				+  '        <div class="contentViewTemplate" data-type="CustomHTML">'
+				+  '        <div class="contentViewTemplate" data-type="CustomHTML" data-size="medium">'
 				+  '            <div class="contentViewTemplateType"><span class="icon-file-code">Custom HTML</span></div>'
 				+  '        </div>'
-				+  '        <div class="contentViewTemplate" data-type="Transcript">'
+				+  '        <div class="contentViewTemplate" data-type="Transcript" data-size="large">'
 				+  '            <div class="contentViewTemplateType"><span class="icon-doc-text">Text Transcript</span></div>'
 				+  '        </div>'
 				+  '    </div>'
@@ -92,7 +92,7 @@ function initView() {
 		accept: '.contentViewTemplate, .contentViewPreview',
 		activeClass: 'droppableActive',
 		hoverClass: 'droppableHover',
-		tolerance: 'intersect',
+		tolerance: 'pointer',
 		over: function( event, ui ) {
 			
 		},

@@ -22,3 +22,33 @@ function initLayoutArea(layoutArea, contentViews) {
     }
     
 }
+
+/**
+ * I resize a LayoutArea based on a given size 
+ * ('small', 'medium', 'large') derived from a ContentView size.
+ *
+ * @method resizeLayoutArea
+ * @param {String} size
+ */
+function resizeLayoutArea(layoutArea, size) {
+    var areaContainer = $('.layoutArea[data-area="'+ layoutArea +'"]');
+
+    switch(size) {
+        case 'empty':
+            areaContainer.removeAttr('data-size');
+            break;
+        case 'small':
+            areaContainer.attr('data-size', 'small');
+            break;
+        case 'medium':
+            areaContainer.attr('data-size', 'medium');
+            break;
+        case 'large':
+            areaContainer.attr('data-size', 'large');
+            break;
+        default:
+            areaContainer.attr('data-size', 'medium');
+            break;
+    }
+    
+}

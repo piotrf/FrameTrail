@@ -22,6 +22,15 @@
 }
 
 #LayoutManager {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-content: stretch;
+	align-items: flex-start;
+	order: 0;
+	flex: 1 1 auto;
+	align-self: auto;
 	width: 100%;
 	height: 100%;
 	padding-right: 10px;
