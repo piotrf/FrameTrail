@@ -1,6 +1,6 @@
 /* Timeline Element */
 
-#AreaBottomTimeline .timelineElement {
+#AnnotationTimeline .timelineElement {
 	position: absolute;
 	height: 100%;
 	background: var(--semi-transparent-fg-color);
@@ -15,32 +15,32 @@
     transition-property: bottom;
 }
 
-#AreaBottomTimeline .timelineElement.active {
+#AnnotationTimeline .timelineElement.active {
 	background: var(--primary-fg-color);
 }
 
-#AreaBottomTimeline .timelineElement.highlighted {
+#AnnotationTimeline .timelineElement.highlighted {
 	background: var(--primary-fg-color) !important;
 	z-index: 100000;
 }
 
-#AreaBottomTimeline.editable .timelineElement {
+#AnnotationTimeline.editable .timelineElement {
 	background-color: var(--secondary-fg-color);
 }
 
-#AreaBottomTimeline .timelineElement.brushed {
+#AnnotationTimeline .timelineElement.brushed {
 	background: var(--semi-transparent-fg-highlight-color);
 }
 
-#AreaBottomTimeline .timelineElement.brushed.active, #AreaBottomTimeline.editable .timelineElement.brushed {
+#AnnotationTimeline .timelineElement.brushed.active, #AnnotationTimeline.editable .timelineElement.brushed {
 	background-color: var(--primary-fg-color);
 }
 
-#AreaBottomTimeline .timelineElement.ui-draggable:hover {
+#AnnotationTimeline .timelineElement.ui-draggable:hover {
 	cursor: move;
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle {
+#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle {
 	position: absolute;
 	top: -2px;
 	width: 3px;
@@ -51,35 +51,35 @@
 	display: none;
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
+#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle:hover {
 	background-color: var(--primary-fg-color);
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
+#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-ne {
 	top: -2px;
 	right: -2px;
 	cursor: ne-resize;
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-nw {
+#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-nw {
 	top: -2px;
 	left: -2px;
 	cursor: nw-resize;
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-se {
+#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-se {
 	bottom: -2px;
 	right: -2px;
 	cursor: se-resize;
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-sw {
+#AnnotationTimeline .timelineElement.ui-resizable .ui-resizable-handle.ui-resizable-sw {
 	bottom: -2px;
 	left: -2px;
 	cursor: sw-resize;
 }
 
-#AreaBottomTimeline .timelineElement.ui-resizable:hover .ui-resizable-handle {
+#AnnotationTimeline .timelineElement.ui-resizable:hover .ui-resizable-handle {
 	display: block;
 }
 

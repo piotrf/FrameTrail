@@ -45,6 +45,12 @@ path {
     margin-top: 0px;
     transition-property: all;
     transition-duration: 200ms;
+    -moz-transition-property: all;
+    -moz-transition-duration: 200ms;
+    -webkit-transition-property: all;
+    -webkit-transition-duration: 200ms;
+    -o-transition-property: all;
+    -o-transition-duration: 200ms;
 }
 
 #MainContainer.editActive #ViewVideo #SlideArea svg {
@@ -175,15 +181,15 @@ path {
     background: var(--primary-fg-color);
 }
 
-/* LayoutArea Top and LayoutArea Bottom */
+/* Annotations */
 
-#AreaTopContainer, #AreaBottomContainer {
-    position: relative;
-    width: 100%;
+#AreaBottomTiles {
     order: 0;
     flex: 0 1 auto;
     min-height: 35px;
     align-self: auto;
+    position: relative;
+    width: 100%;
     background: var(--secondary-bg-color);
     transition-property: margin-top;
     transition-duration: 500ms;
@@ -195,7 +201,13 @@ path {
     -o-transition-duration: 500ms;
 }
 
-#AreaTopDetails, #AreaBottomDetails {
+#AreaBottomTiles .message {
+    margin: 0 20px;
+    position: relative !important;
+    top: 2px;
+}
+
+#AreaBottomContainer {
     position: relative;
     width: 100%;
     order: 0;
@@ -214,7 +226,7 @@ path {
     -o-transition-duration: 500ms;
 }
 
-#AreaBottomDetails #AnnotationSlider {
+#AreaBottomContainer #AnnotationSlider {
     position: absolute;
     top: 0;
     left: 0;
@@ -234,16 +246,61 @@ path {
     -o-transition-duration: 500ms;
 }
 
-/* Annotations */
-
-#PlayerContainer #AnnotationTimeline {
+#PlayerContainer #AreaBottomTimeline {
     position: relative;
     width: 100%;
     height: 6px;
     background: var(--secondary-bg-color);
     z-index: 2;
     pointer-events: none;
-    display: none;
+}
+
+/* Videolinks */
+
+#AreaTopTiles {
+    position: relative;
+    width: 100%;
+    order: 0;
+    flex: 0 1 auto;
+    min-height: 35px;
+    align-self: auto;
+    background: var(--secondary-bg-color);
+    transition-property: margin-top;
+    transition-duration: 500ms;
+    -moz-transition-property: margin-top;
+    -moz-transition-duration: 500ms;
+    -webkit-transition-property: margin-top;
+    -webkit-transition-duration: 500ms;
+    -o-transition-property: margin-top;
+    -o-transition-duration: 500ms;
+}
+
+#AreaTopContainer {
+    position: relative;
+    width: 100%;
+    order: 0;
+    flex: 0 1 200px;
+    min-height: 200px;
+    align-self: auto;
+    background: transparent;
+    z-index: 2;
+    transition-property: margin-top;
+    transition-duration: 500ms;
+    -moz-transition-property: margin-top;
+    -moz-transition-duration: 500ms;
+    -webkit-transition-property: margin-top;
+    -webkit-transition-duration: 500ms;
+    -o-transition-property: margin-top;
+    -o-transition-duration: 500ms;
+}
+
+#PlayerContainer #AreaTopTimeline {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: var(--secondary-bg-color);
+    z-index: 2;
+    pointer-events: none;
 }
 
 /* Overlays */
@@ -556,22 +613,12 @@ path {
     z-index: 2;
 }
 
-#HypervideoContainer #AreaLeftContainer, #HypervideoContainer #AreaRightContainer {
-    position: relative;
-    order: 0;
-    flex: 0 0 400px;
-    min-width: 400px;
-    align-self: stretch;
-    background: var(--secondary-bg-color);
-}
-
 #HypervideoContainer #InfoAreaRight {
     position: relative;
     order: 0;
     flex: 0 0 400px;
     min-width: 400px;
     align-self: stretch;
-    display: none;
 }
 
 .editActive[data-edit-mode="links"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="overlays"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="codesnippets"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="annotations"] #HypervideoContainer #InfoAreaRight {
@@ -821,7 +868,7 @@ path {
 
 /* EDITING UI */
 
-#PlayerContainer #AnnotationTimeline.editable, #PlayerContainer #OverlayTimeline.editable, #PlayerContainer #CodeSnippetTimeline.editable, #PlayerContainer #AudioTimeline.editable {
+#PlayerContainer #AreaBottomTimeline.editable, #PlayerContainer #AreaTopTimeline.editable, #PlayerContainer #OverlayTimeline.editable, #PlayerContainer #CodeSnippetTimeline.editable, #PlayerContainer #AudioTimeline.editable {
     min-height: 20px;
     height: 40px;
     background-color: transparent;
@@ -939,11 +986,11 @@ path {
 }
 
 @media (min-height: 920px) {
-    #AreaBottomDetails, #AreaTopDetails {
+    #AreaBottomContainer, #AreaTopContainer {
         flex-basis: 600px;
     }
 
-    #AreaBottomDetails #AnnotationSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 800px;
     }
 
@@ -953,11 +1000,11 @@ path {
 }
 
 @media (min-height: 820px) and (max-height: 920px) {
-    #AreaBottomDetails, #AreaTopDetails {
+    #AreaBottomContainer, #AreaTopContainer {
         flex-basis: 500px;
     }
 
-    #AreaBottomDetails #AnnotationSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 700px;
     }
 
@@ -967,11 +1014,11 @@ path {
 }
 
 @media (min-height: 680px) and (max-height: 820px) {
-    #AreaBottomDetails, #AreaTopDetails {
+    #AreaBottomContainer, #AreaTopContainer {
         flex-basis: 400px;
     }
 
-    #AreaBottomDetails #AnnotationSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 600px;
     }
 
@@ -981,11 +1028,11 @@ path {
 }
 
 @media (min-height: 540px) and (max-height: 680px) {
-    #AreaBottomDetails, #AreaTopDetails {
+    #AreaBottomContainer, #AreaTopContainer {
         flex-basis: 260px;
     }
 
-    #AreaBottomDetails #AnnotationSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 500px;
     }
 
@@ -995,11 +1042,11 @@ path {
 }
 
 @media (min-height: 400px) and (max-height: 540px) {
-    #AreaBottomDetails, #AreaTopDetails {
+    #AreaBottomContainer, #AreaTopContainer {
         flex-basis: 220px;
     }
 
-    #AreaBottomDetails #AnnotationSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 400px;
     }
 
@@ -1009,11 +1056,11 @@ path {
 }
 
 @media (max-height: 400px) {
-    #AreaBottomDetails, #AreaTopDetails {
+    #AreaBottomContainer, #AreaTopContainer {
         flex-basis: 200px;
     }
 
-    #AreaBottomDetails #AnnotationSlider .annotationElement {
+    #AreaBottomContainer #AnnotationSlider .annotationElement {
         width: 300px;
     }
 

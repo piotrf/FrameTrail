@@ -114,12 +114,12 @@ FrameTrail.defineType(
 
             var ViewVideo = FrameTrail.module('ViewVideo');
 
-            ViewVideo.AreaBottomTimeline.append(this.timelineElement);
+            ViewVideo.AnnotationTimeline.append(this.timelineElement);
             this.updateTimelineElement();
 
             this.annotationElement.empty();
             this.annotationElement.append( this.resourceItem.renderContent() );
-            ViewVideo.AreaBottomContainer.find('#AnnotationSlider').append(this.annotationElement);
+            ViewVideo.AreaBottomDetails.find('#AnnotationSlider').append(this.annotationElement);
 
             this.previewElement.empty();
             this.previewElement.append( this.resourceItem.renderContent() );
@@ -178,7 +178,7 @@ FrameTrail.defineType(
 
             if (this.data.type == 'wikipedia' || this.data.type == 'webpage') {
 
-                rescale( this.annotationElement, FrameTrail.module('ViewVideo').AreaBottomContainer.width() );
+                rescale( this.annotationElement, FrameTrail.module('ViewVideo').AreaBottomDetails.width() );
                 rescale( this.previewElement, FrameTrail.module('ViewVideo').AnnotationPreviewContainer.width() );
 
             }

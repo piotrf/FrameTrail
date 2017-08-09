@@ -21,12 +21,14 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     var domElement  = $(  '<div id="ViewVideo">'
                         + '    <div id="SlideArea">'
-                        + '        <div id="AreaTopDetails"></div>'
                         + '        <div id="AreaTopContainer"></div>'
+                        + '        <div id="AreaTopTiles">'
+                        + '            <div class="tileSlider"></div>'
+                        + '        </div>'
                         + '        <div id="PlayerContainer">'
+                        + '            <div id="AreaTopTimeline" class="timeline"></div>'
                         + '            <div id="PlayerProgress"></div>'
                         + '            <div id="HypervideoContainer">'
-                        + '                <div id="AreaLeftContainer"></div>'
                         + '                <div id="VideoContainer">'
                         + '                    <div id="Hypervideo">'
                         + '                        <video id="Video"></video>'
@@ -43,8 +45,8 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                        <div class="workingSpinner"></div>'
                         + '                    </div>'
                         + '                </div>'
-                        + '                <div id="AreaRightContainer"></div>'
                         + '                <div id="InfoAreaRight">'
+                        + '                    <div id="AnnotationPreviewContainer"></div>'
                         + '                    <div id="EditPropertiesContainer"></div>'
                         + '                </div>'
                         + '            </div>'
@@ -96,10 +98,14 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                    <div class="playerControl" id="FullscreenButton"><span class="icon-resize-full-alt"></span></div>'
                         + '                </div>'
                         + '            </div>'
-                        + '            <div id="AnnotationTimeline" class="timeline"></div>'
+                        + '            <div id="AreaBottomTimeline" class="timeline"></div>'
                         + '        </div>'
-                        + '        <div id="AreaBottomContainer"></div>'
-                        + '        <div id="AreaBottomDetails"></div>'
+                        + '        <div id="AreaBottomTiles">'
+                        + '            <div class="tileSlider"></div>'
+                        + '        </div>'
+                        + '        <div id="AreaBottomContainer">'
+                        + '            <div id="AnnotationSlider"></div>'
+                        + '        </div>'
                         + '    </div>'
                         + '    <div id="EditingOptions"></div>'
                         + '    <div id="HypervideoLayoutContainer"></div>'
@@ -115,19 +121,16 @@ FrameTrail.defineModule('ViewVideo', function(){
         Hypervideo                  = domElement.find('#Hypervideo'),
         CaptionContainer            = domElement.find('#CaptionContainer'),
 
-        AreaTopDetails              = domElement.find('#AreaTopDetails'),
-        AreaTopContainer            = domElement.find('#AreaTopContainer'),
-        AreaTopTileSlider           = domElement.find('#AreaTopContainer .tileSlider'),
+        AreaTopContainer          = domElement.find('#AreaTopContainer'),
+        AreaTopTiles              = domElement.find('#AreaTopTiles'),
+        AreaTopTileSlider         = domElement.find('#AreaTopTiles .tileSlider'),
+        AreaTopTimeline           = domElement.find('#AreaTopTimeline'),
 
-        AreaBottomDetails           = domElement.find('#AreaBottomDetails'),
+        AreaBottomTimeline          = domElement.find('#AreaBottomTimeline'),
         AreaBottomContainer         = domElement.find('#AreaBottomContainer'),
-        AreaBottomTileSlider        = domElement.find('#AreaBottomContainer .tileSlider'),
+        AreaBottomTiles             = domElement.find('#AreaBottomTiles'),
+        AreaBottomTileSlider        = domElement.find('#AreaBottomTiles .tileSlider'),
         AnnotationSlider            = domElement.find('#AnnotationSlider'),
-
-        AreaLeftContainer           = domElement.find('#AreaLeftContainer'),
-        AreaRightContainer          = domElement.find('#AreaRightContainer'),
-
-        AnnotationTimeline          = domElement.find('#AnnotationTimeline'),
 
         OverlayTimeline             = domElement.find('#OverlayTimeline'),
         OverlayContainer            = domElement.find('#OverlayContainer'),
@@ -174,11 +177,11 @@ FrameTrail.defineModule('ViewVideo', function(){
         if ( !$(this).children('#CaptionSelectContainer').hasClass('active') ) {
             $(this).children('#CaptionSelectContainer').addClass('active');
             VideoContainer.css('opacity', 0.3);
-            domElement.find('#AreaLeftContainer, #AreaRightContainer').css('opacity', 0.3);
+            domElement.find('#InfoAreaRight').css('opacity', 0.3);
         } else {
             $(this).children('#CaptionSelectContainer').removeClass('active');
             VideoContainer.css('opacity', 1);
-            domElement.find('#AreaLeftContainer, #AreaRightContainer').css('opacity', 1);
+            domElement.find('#InfoAreaRight').css('opacity', 1);
         }
 
     });
@@ -198,7 +201,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                 if ( !$(evt.target).attr('data-config') && !$(evt.target).hasClass('contextButton') ) {
                     settingsButton.removeClass('active');
                     VideoContainer.css('opacity', 1);
-                    domElement.find('#AreaLeftContainer, #AreaRightContainer').css('opacity', 1);
+                    domElement.find('#InfoAreaRight').css('opacity', 1);
                     $('body').off('mouseup');
                     evt.preventDefault();
                     evt.stopPropagation();
@@ -210,13 +213,13 @@ FrameTrail.defineModule('ViewVideo', function(){
 
             settingsButton.addClass('active');
             VideoContainer.css('opacity', 0.3);
-            domElement.find('#AreaLeftContainer, #AreaRightContainer').css('opacity', 0.3);
+            domElement.find('#InfoAreaRight').css('opacity', 0.3);
 
         } else {
 
             settingsButton.removeClass('active');
             VideoContainer.css('opacity', 1);
-            domElement.find('#AreaLeftContainer, #AreaRightContainer').css('opacity', 1);
+            domElement.find('#InfoAreaRight').css('opacity', 1);
 
         }
 
@@ -274,17 +277,17 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     });
 
-    AreaTopContainer.click(function(evt) {
+    AreaTopTiles.click(function(evt) {
 
-        if ( FrameTrail.module('VideolinksController').openedLink && $(evt.target).attr('id') == 'AreaTopContainer' ) {
+        if ( FrameTrail.module('VideolinksController').openedLink && $(evt.target).attr('id') == 'AreaTopTiles' ) {
             FrameTrail.module('VideolinksController').openedLink = null;
         }
 
     });
 
-    AreaBottomContainer.click(function(evt) {
+    AreaBottomTiles.click(function(evt) {
 
-        if ( FrameTrail.module('AnnotationsController').openedAnnotation && $(evt.target).attr('id') == 'AreaBottomContainer' ) {
+        if ( FrameTrail.module('AnnotationsController').openedAnnotation && $(evt.target).attr('id') == 'AreaBottomTiles' ) {
             FrameTrail.module('AnnotationsController').openedAnnotation = null;
         }
 
@@ -410,8 +413,11 @@ FrameTrail.defineModule('ViewVideo', function(){
 
             areaTopVisible      = ( (editMode != false && editMode != 'preview') ? false : FrameTrail.getState('hv_config_areaTopVisible') ),
             areaBottomVisible   = ( (editMode != false && editMode != 'preview') ? false : FrameTrail.getState('hv_config_areaBottomVisible') ),
-            areaLeftVisible     = ( (editMode != false && editMode != 'preview') ? false : FrameTrail.getState('hv_config_areaLeftVisible') ),
-            areaRightVisible    = ( (editMode != false && editMode != 'preview') ? false : FrameTrail.getState('hv_config_areaRightVisible') );
+            overlaysVisible     = ( (editMode == 'overlays') ? true : FrameTrail.getState('hv_config_overlaysVisible') ),
+
+            areaTopTimelineVisible       = ( (editMode != false && editMode != 'preview') ? true : FrameTrail.getState('hv_config_areaTopVisible') ),
+            areaBottomTimelineVisible    = ( (editMode != false && editMode != 'preview') ? true : FrameTrail.getState('hv_config_areaBottomVisible') );
+            
 
         if (slidingMode == 'overlay') {
             PlayerContainer.css({
@@ -419,8 +425,8 @@ FrameTrail.defineModule('ViewVideo', function(){
                 'flex-shrink': 0,
                 'flex-basis':
                     $('#MainContainer').height()
-                    - ((areaTopVisible) ? (AreaTopContainer.height() + playerMargin) : 0)
-                    - ((areaBottomVisible) ? (AreaBottomContainer.height() + playerMargin) : 0)
+                    - ((areaTopVisible) ? (AreaTopTiles.height() + playerMargin) : 0)
+                    - ((areaBottomVisible) ? (AreaBottomTiles.height() + playerMargin) : 0)
                     - editBorder
                     + 'px'
             });
@@ -440,8 +446,8 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + 'px',
                     minHeight:
                         $('#MainContainer').height()
-                        + (areaBottomVisible ? AreaBottomDetails.height() + AreaBottomContainer.height() : 0)
-                        + playerMargin
+                        + (areaTopVisible ? AreaTopContainer.height() + AreaTopTiles.height() : 0)
+                        + (areaBottomVisible ? AreaBottomContainer.height() + AreaBottomTiles.height() : 0)
                         - editBorder
                         + 'px'
                 });
@@ -450,8 +456,8 @@ FrameTrail.defineModule('ViewVideo', function(){
 
                 slideArea.css({
                     marginTop:
-                        - (areaTopVisible ? AreaTopDetails.height() : 0)
-                        - (areaBottomVisible ? AreaBottomDetails.height() : 0)
+                        - (areaTopVisible ? AreaTopContainer.height() : 0)
+                        - (areaBottomVisible ? AreaBottomContainer.height() : 0)
                         - playerMargin
                         + 'px'
                 });
@@ -460,21 +466,21 @@ FrameTrail.defineModule('ViewVideo', function(){
                 var targetOffset = playerMargin + ( (PlayerContainer.height() - Controls.height())/2 ),
                     thisOffset;
 
-                thisOffset = AreaBottomDetails.height() + AreaBottomContainer.height() + targetOffset - (AreaBottomDetails.height() / 2);
+                thisOffset = AreaBottomContainer.height() + AreaBottomTiles.height() + targetOffset - (AreaBottomContainer.height() / 2);
 
-                AreaBottomDetails.css({
+                AreaBottomContainer.css({
                     marginTop: thisOffset + 'px'
                 });
 
-                AreaBottomContainer.css({
+                AreaBottomTiles.css({
                     marginTop: - thisOffset + 'px'
                 });
 
-                AreaTopDetails.css({
+                AreaTopContainer.css({
                     marginTop: ''
                 });
 
-                AreaTopContainer.css({
+                AreaTopTiles.css({
                     marginTop: ''
                 });
 
@@ -486,12 +492,12 @@ FrameTrail.defineModule('ViewVideo', function(){
 
                 slideArea.css({
                     marginTop:
-                        - (areaTopVisible ? AreaTopDetails.height() + AreaTopContainer.height() : 0)
+                        - (areaTopVisible ? AreaTopContainer.height() + AreaTopTiles.height() : 0)
                         - playerMargin
                         + 'px',
                     minHeight:
                         $('#MainContainer').height()
-                        + (areaTopVisible ? AreaTopDetails.height() + AreaTopContainer.height() : 0)
+                        + (areaTopVisible ? AreaTopContainer.height() + AreaTopTiles.height() : 0)
                         - editBorder
                         + 'px'
                 });
@@ -500,7 +506,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
                 slideArea.css({
                     marginTop:
-                        - (areaTopVisible ? AreaTopDetails.height() : 0)
+                        - (areaTopVisible ? AreaTopContainer.height() : 0)
                         - playerMargin
                         + 'px'
                 });
@@ -508,15 +514,15 @@ FrameTrail.defineModule('ViewVideo', function(){
                 var targetOffset = playerMargin + (PlayerContainer.height()/2) + (OverlayTimeline.height()*2) + (Controls.height()/2);
 
                 // slidingMode overlay bottom behaviour
-                AreaBottomDetails.css({
-                    marginTop: - (targetOffset + AreaBottomContainer.height() + (AreaBottomDetails.height() / 2)) + 'px'
-                });
-
-                AreaTopDetails.css({
-                    marginTop: ''
+                AreaBottomContainer.css({
+                    marginTop: - (targetOffset + AreaBottomTiles.height() + (AreaBottomContainer.height() / 2)) + 'px'
                 });
 
                 AreaTopContainer.css({
+                    marginTop: ''
+                });
+
+                AreaTopTiles.css({
                     marginTop: ''
                 });
 
@@ -526,29 +532,30 @@ FrameTrail.defineModule('ViewVideo', function(){
 
             slideArea.css({
                 marginTop:
-                    - (areaTopVisible ? AreaTopDetails.height() : playerMargin)
+                    - (areaTopVisible ? AreaTopContainer.height() : 0)
+                    - playerMargin
                     + 'px',
                 minHeight:
                     $('#MainContainer').height()
-                    + (areaTopVisible ? AreaTopDetails.height() : playerMargin)
-                    + (areaBottomVisible ? AreaBottomDetails.height() : playerMargin)
+                    + (areaTopVisible ? AreaTopContainer.height() : playerMargin)
+                    + (areaBottomVisible ? AreaBottomContainer.height() : playerMargin)
                     - editBorder
                     + 'px'
-            });
-
-            AreaBottomDetails.css({
-                marginTop: ''
             });
 
             AreaBottomContainer.css({
                 marginTop: ''
             });
 
-            AreaTopDetails.css({
+            AreaBottomTiles.css({
                 marginTop: ''
             });
 
             AreaTopContainer.css({
+                marginTop: ''
+            });
+
+            AreaTopTiles.css({
                 marginTop: ''
             });
 
@@ -572,8 +579,8 @@ FrameTrail.defineModule('ViewVideo', function(){
             bottom:
                 Controls.height()
             +   CodeSnippetTimeline.height()
-            +   ((editMode == 'codesnippets') ? CodeSnippetTimeline.height() : OverlayTimeline.height())
-            +   ((editMode == 'annotations') ? AnnotationTimeline.height() : 0)
+            +   ((editMode == 'codesnippets') ? 6 : OverlayTimeline.height())
+            +   (areaBottomTimelineVisible ? AreaBottomTimeline.height() : 0)
         });
 
         slideArea.children('svg').css({
@@ -639,12 +646,10 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         var videoContainerWidth;
 
-        if ( ( FrameTrail.getState('editMode') != false && FrameTrail.getState('editMode') != 'preview' ) ) {
+        if ( FrameTrail.getState('hv_config_areaRightVisible') || ( FrameTrail.getState('editMode') != false && FrameTrail.getState('editMode') != 'preview' ) ) {
             videoContainerWidth = mainContainerWidth - domElement.find('#InfoAreaRight').outerWidth();
         } else {
-            videoContainerWidth = mainContainerWidth
-            - (FrameTrail.getState('hv_config_areaLeftVisible') ? AreaLeftContainer.outerWidth() : 0) 
-            - (FrameTrail.getState('hv_config_areaRightVisible') ? AreaRightContainer.outerWidth() : 0);
+            videoContainerWidth = mainContainerWidth;
         }
 
         VideoContainer.width(videoContainerWidth);
@@ -796,7 +801,6 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function resetEditMode() {
         domElement.find('.timeline').removeClass('editable').css('flex-basis', '');
-        domElement.find('#InfoAreaRight').hide();
         HypervideoSettingsContainer.removeClass('active');
         HypervideoLayoutContainer.removeClass('active');
     }
@@ -817,12 +821,12 @@ FrameTrail.defineModule('ViewVideo', function(){
             opacity: 1
         });
 
+        AreaBottomTiles.hide();
         AreaBottomContainer.hide();
-        AreaBottomDetails.hide();
+        AreaTopTiles.hide();
         AreaTopContainer.hide();
-        AreaTopDetails.hide();
 
-        domElement.find('.timeline').not('#CodeSnippetTimeline, #AnnotationTimeline').show();
+        domElement.find('.timeline').not('#CodeSnippetTimeline').show();
 
         EditingOptions.addClass('active');
 
@@ -915,6 +919,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function enterLinkMode() {
         initEditMode();
+        AreaTopTimeline.addClass('editable');
 
         EditPropertiesContainer
             .html('<span class="icon-videolinks"></span><div class="message active">Add video links by dragging hypervideos into the active timeline or entering a link manually.</div>')
@@ -940,7 +945,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function enterAnnotationMode() {
         initEditMode();
-        AnnotationTimeline.show().addClass('editable');
+        AreaBottomTimeline.addClass('editable');
 
         EditPropertiesContainer
             .html('<span class="icon-annotations"></span><div class="message active">Add annotations by dragging resources into the active timeline.</div>')
@@ -958,10 +963,10 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function toggleConfig_areaTopVisible(newState, oldState) {
         if (newState == true) {
-            domElement.find('#AreaTopContainer, #AreaTopDetails').show();
+            domElement.find('#AreaTopTiles, #AreaTopContainer, #AreaTopTimeline').show();
             Controls.find('[data-config="hv_config_areaTopVisible"]').addClass('active');
         } else {
-            domElement.find('#AreaTopContainer, #AreaTopDetails').hide();
+            domElement.find('#AreaTopTiles, #AreaTopContainer, #AreaTopTimeline').hide();
             Controls.find('[data-config="hv_config_areaTopVisible"]').removeClass('active');
         }
         if ( FrameTrail.getState('slidePosition') != 'middle' ) {
@@ -980,10 +985,10 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function toggleConfig_areaBottomVisible(newState, oldState) {
         if (newState == true) {
-            domElement.find('#AreaBottomContainer, #AreaBottomDetails').show();
+            domElement.find('#AreaBottomTiles, #AreaBottomContainer, #AreaBottomTimeline').show();
             Controls.find('[data-config="hv_config_areaBottomVisible"]').addClass('active');
         } else {
-            domElement.find('#AreaBottomContainer, #AreaBottomDetails').hide();
+            domElement.find('#AreaBottomTiles, #AreaBottomContainer, #AreaBottomTimeline').hide();
             Controls.find('[data-config="hv_config_areaBottomVisible"]').removeClass('active');
         }
         if ( FrameTrail.getState('slidePosition') != 'middle' ) {
@@ -1002,11 +1007,11 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function toggleConfig_areaLeftVisible(newState, oldState) {
         if (newState == true) {
-            AreaLeftContainer.show();
+            console.log('LayoutArea left visible');
             Controls.find('[data-config="hv_config_areaLeftVisible"]').addClass('active');
 
         } else {
-            AreaLeftContainer.hide();
+            console.log('LayoutArea left hidden');
             Controls.find('[data-config="hv_config_areaLeftVisible"]').removeClass('active');
         }
     };
@@ -1022,12 +1027,12 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function toggleConfig_areaRightVisible(newState, oldState) {
         if (newState == true) {
-            AreaRightContainer.show();
+            HypervideoContainer.find('#InfoAreaRight').show();
             HypervideoContainer.find('#AnnotationPreviewContainer').show();
             Controls.find('[data-config="hv_config_areaRightVisible"]').addClass('active');
 
         } else {
-            AreaRightContainer.hide();
+            domElement.find('#InfoAreaRight').hide();
             HypervideoContainer.find('#AnnotationPreviewContainer').hide();
             Controls.find('[data-config="hv_config_areaRightVisible"]').removeClass('active');
         }
@@ -1051,6 +1056,54 @@ FrameTrail.defineModule('ViewVideo', function(){
             Controls.find('[data-config="hv_config_overlaysVisible"]').removeClass('active');
         }
     };
+
+    /**
+     * I am called when the global state "hv_config_annotationsPosition" changes.
+     *
+     * This is a configuration option (saved in the hypervideo's index.json entry).
+     *
+     * @method toggleConfig_annotationsPosition
+     * @param {String} newState
+     * @param {String} oldState
+     */
+    /*
+    function toggleConfig_annotationsPosition(newState, oldState) {
+
+        if ( FrameTrail.getState('slidePosition') != 'middle' ) {
+            FrameTrail.changeState('slidePosition', 'middle');
+        }
+
+        if (newState == "top") {
+
+            PlayerContainer.before(AreaBottomTiles);
+            AreaBottomTiles.before(AreaBottomContainer);
+            PlayerProgress.before(areaBottomTimeline);
+
+            PlayerContainer.after(AreaTopTiles);
+            AreaTopTiles.after(AreaTopContainer);
+            Controls.after(areaTopTimeline);
+
+            Controls.find('#SettingsContainer #PlayerWrapper')
+                    .after(Controls.find('div[data-config="hv_config_areaTopVisible"]'))
+                    .before(Controls.find('div[data-config="hv_config_areaBottomVisible"]'));
+
+        } else {
+
+            PlayerContainer.before(AreaTopTiles);
+            AreaTopTiles.before(AreaTopContainer);
+            PlayerProgress.before(areaTopTimeline);
+
+            PlayerContainer.after(AreaBottomTiles);
+            AreaBottomTiles.after(AreaBottomContainer);
+            Controls.after(areaBottomTimeline);
+
+            Controls.find('#SettingsContainer #PlayerWrapper')
+                    .before(Controls.find('div[data-config="hv_config_areaTopVisible"]'))
+                    .after(Controls.find('div[data-config="hv_config_areaBottomVisible"]'));
+
+        }
+    };
+    */
 
     /**
      * I am called when the global state "hv_config_autohideControls" changes.
@@ -1168,7 +1221,7 @@ FrameTrail.defineModule('ViewVideo', function(){
              && newState == 'top') ) {
 
             shownDetails = 'annotations';
-            AreaBottomDetails.find('.resourceDetail[data-type="location"]').each(function() {
+            AreaBottomContainer.find('.resourceDetail[data-type="location"]').each(function() {
                 if ( $(this).data('map') ) {
                     $(this).data('map').updateSize();
                 }
@@ -1188,11 +1241,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                     opacity: 0.2
                 }, 500);
 
-                AreaLeftContainer.animate({
-                    opacity: 0.2
-                }, 500);
-
-                AreaRightContainer.animate({
+                domElement.find('#InfoAreaRight').animate({
                     opacity: 0.2
                 }, 500);
 
@@ -1208,11 +1257,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                     opacity: 1
                 }, 500);
 
-                AreaLeftContainer.animate({
-                    opacity: 1
-                }, 500);
-
-                AreaRightContainer.animate({
+                domElement.find('#InfoAreaRight').animate({
                     opacity: 1
                 }, 500);
 
@@ -1225,11 +1270,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                     opacity: 1
                 }, 500);
 
-                AreaLeftContainer.animate({
-                    opacity: 1
-                }, 500);
-
-                AreaRightContainer.animate({
+                domElement.find('#InfoAreaRight').animate({
                     opacity: 1
                 }, 500);
             }
@@ -1595,69 +1636,59 @@ FrameTrail.defineModule('ViewVideo', function(){
         get CodeSnippetTimeline()  { return CodeSnippetTimeline  },
 
         /**
-         * I contain the AreaTopDetails element.
-         * @attribute AreaTopDetails
-         * @type HTMLElement
-         */
-        get AreaTopDetails() { return AreaTopDetails },
-        /**
          * I contain the AreaTopContainer element.
          * @attribute AreaTopContainer
          * @type HTMLElement
          */
-        get AreaTopContainer()     { return AreaTopContainer     },
+        get AreaTopContainer() { return AreaTopContainer },
+        /**
+         * I contain the AreaTopTiles element.
+         * @attribute AreaTopTiles
+         * @type HTMLElement
+         */
+        get AreaTopTiles()     { return AreaTopTiles     },
         /**
          * I contain the AreaTopTileSlider element.
          * @attribute AreaTopTileSlider
          * @type HTMLElement
          */
         get AreaTopTileSlider()     { return AreaTopTileSlider },
-
         /**
-         * I contain the AreaBottomDetails element.
-         * @attribute AreaBottomDetails
+         * I contain the areaTopTimeline element.
+         * @attribute areaTopTimeline
          * @type HTMLElement
          */
-        get AreaBottomDetails() { return AreaBottomDetails    },
+        get AreaTopTimeline()  { return AreaTopTimeline  },
+
         /**
          * I contain the AreaBottomContainer element.
          * @attribute AreaBottomContainer
          * @type HTMLElement
          */
-        get AreaBottomContainer()     { return AreaBottomContainer     },
+        get AreaBottomContainer() { return AreaBottomContainer    },
+        /**
+         * I contain the AreaBottomTiles element.
+         * @attribute AreaBottomTiles
+         * @type HTMLElement
+         */
+        get AreaBottomTiles()     { return AreaBottomTiles     },
         /**
          * I contain the AreaBottomTileSlider element.
          * @attribute AreaBottomTileSlider
          * @type HTMLElement
          */
         get AreaBottomTileSlider()  { return AreaBottomTileSlider     },
-        
         /**
-         * I contain the AreaLeftContainer element.
-         * @attribute AreaLeftContainer
+         * I contain the AreaBottomTimeline element.
+         * @attribute AreaBottomTimeline
          * @type HTMLElement
          */
-        get AreaLeftContainer()     { return AreaLeftContainer     },
-
-        /**
-         * I contain the AreaRightContainer element.
-         * @attribute AreaRightContainer
-         * @type HTMLElement
-         */
-        get AreaRightContainer()     { return AreaRightContainer     },
-
-        /**
-         * I contain the AnnotationTimeline element.
-         * @attribute AnnotationTimeline
-         * @type HTMLElement
-         */
-        get AnnotationTimeline()  { return AnnotationTimeline  },
+        get AreaBottomTimeline()  { return AreaBottomTimeline  },
         /**
          * I contain the AnnotationPreviewContainer element.
          * @attribute AnnotationPreviewContainer
          * @type HTMLElement
          */
-
         get AnnotationPreviewContainer()  { return AnnotationPreviewContainer  },
 
         /**

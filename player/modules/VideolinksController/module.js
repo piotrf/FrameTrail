@@ -62,7 +62,7 @@ FrameTrail.defineModule('VideolinksController', function(){
         var videolinks = FrameTrail.module('HypervideoModel').videolinks;
         
         ViewVideo.AreaTopTileSlider.empty();
-        ViewVideo.AreaTopContainer.empty();
+        ViewVideo.AreaTopDetails.empty();
 
         for (var i = 0; i < videolinks.length; i++) {
 
@@ -134,7 +134,7 @@ FrameTrail.defineModule('VideolinksController', function(){
 
         var videolinks          = FrameTrail.module('HypervideoModel').videolinks,
             videoDuration       = FrameTrail.module('HypervideoModel').duration,
-            sliderParent        = ViewVideo.AreaTopTiles,
+            sliderParent        = ViewVideo.AreaTopContainer,
             containerElement    = ViewVideo.AreaTopTileSlider,
             groupCnt            = 0,
             gap                 = 3,
