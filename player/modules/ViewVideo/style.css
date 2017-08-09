@@ -175,14 +175,13 @@ path {
     background: var(--primary-fg-color);
 }
 
-/* LayoutArea Top and LayoutArea Bottom */
+/* LayoutAreas (Top, Bottom, Left, Right) */
 
 #AreaTopContainer, #AreaBottomContainer {
     position: relative;
     width: 100%;
     order: 0;
     flex: 0 1 auto;
-    min-height: 35px;
     align-self: auto;
     background: var(--secondary-bg-color);
     transition-property: margin-top;
@@ -193,6 +192,13 @@ path {
     -webkit-transition-duration: 500ms;
     -o-transition-property: margin-top;
     -o-transition-duration: 500ms;
+}
+
+#AreaLeftContainer, #AreaRightContainer {
+    position: relative;
+    order: 0;
+    align-self: stretch;
+    background: var(--secondary-bg-color);
 }
 
 #AreaTopDetails, #AreaBottomDetails {
@@ -232,6 +238,44 @@ path {
     -webkit-transition-duration: 500ms;
     -o-transition-property: left;
     -o-transition-duration: 500ms;
+}
+
+/* LayoutArea Sizes */
+
+#AreaTopContainer, #AreaBottomContainer {
+    min-height: 120px;
+}
+
+#AreaTopContainer[data-size="small"], #AreaBottomContainer[data-size="small"] {
+    min-height: 40px;
+}
+
+#AreaTopContainer[data-size="medium"], #AreaBottomContainer[data-size="medium"] {
+    min-height: 120px;
+}
+
+#AreaTopContainer[data-size="large"], #AreaBottomContainer[data-size="large"] {
+    min-height: 300px;
+}
+
+#AreaLeftContainer, #AreaRightContainer {
+    flex: 0 0 400px;
+    min-width: 400px;
+}
+
+#AreaLeftContainer[data-size="small"], #AreaRightContainer[data-size="small"] {
+    flex: 0 0 300px;
+    min-width: 300px;
+}
+
+#AreaLeftContainer[data-size="medium"], #AreaRightContainer[data-size="medium"] {
+    flex: 0 0 400px;
+    min-width: 400px;
+}
+
+#AreaLeftContainer[data-size="large"], #AreaRightContainer[data-size="large"] {
+    flex: 0 0 500px;
+    min-width: 500px;
 }
 
 /* Annotations */
@@ -554,15 +598,6 @@ path {
     align-self: auto;
     background: #000;
     z-index: 2;
-}
-
-#HypervideoContainer #AreaLeftContainer, #HypervideoContainer #AreaRightContainer {
-    position: relative;
-    order: 0;
-    flex: 0 0 400px;
-    min-width: 400px;
-    align-self: stretch;
-    background: var(--secondary-bg-color);
 }
 
 #HypervideoContainer #InfoAreaRight {
