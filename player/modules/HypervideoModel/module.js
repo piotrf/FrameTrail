@@ -1178,9 +1178,12 @@
                                   +'    </div>'
                                   +'    <div style="clear: both;"></div>'
                                   +'    <div class="message error"></div>'
-                                  +'</form>');
+                                  +'    <hr>'
+                                  +'</form>'),
+            CSSVariablesEditingUI = $('<div id="CSSVariablesEditingUI">'
+                                    + '</div>');
         
-        HypervideoSettingsContainer.append(EditHypervideoForm);
+        HypervideoSettingsContainer.append(EditHypervideoForm, CSSVariablesEditingUI);
 
         if ( hypervideo.subtitles ) {
 
