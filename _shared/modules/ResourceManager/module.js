@@ -91,8 +91,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                         + '                <input type="file" name="image">'
                                         + '            </div>'
                                         + '            <div id="resourceInputTabVideo">'
-                                        + '                <div id="videoInputMessage" class="message active">Add video files in the <u>two</u> formats <b>webm</b> & <b>mp4</b>. Maximum File Size: <b>'+ bytesToSize(maxUploadBytes) +'</b>.<br>For more info on video conversion see http://www.mirovideoconverter.com.</div>'
-                                        + '                <input type="file" name="webm"> .webm<br>'
+                                        + '                <div id="videoInputMessage" class="message active">Add video file in <b>mp4</b> format. Maximum File Size: <b>'+ bytesToSize(maxUploadBytes) +'</b>.<br>For more info on video conversion see http://www.mirovideoconverter.com.</div>'
                                         + '                <input type="file" name="mp4"> .mp4'
                                         + '            </div>'
                                         + '            <div id="resourceInputTabMap">'
@@ -239,10 +238,10 @@ FrameTrail.defineModule('ResourceManager', function(){
 
                             // client side pre-validation to prevent upload of one file (server checks again)
                             if (tmpType == 'video') {
-                                if( uploadDialog.find('[name="webm"]').val().length < 4 || uploadDialog.find('[name="mp4"]').val().length < 4) {
+                                if( uploadDialog.find('[name="mp4"]').val().length < 4) {
                                     uploadDialog.find('.progress').hide();
                                     uploadDialog.find('#NewResourceConfirm').prop('disabled', false);
-                                    $('#UploadDialog').append('<div class="message active error">Please choose <b>TWO</b> video files (first WEBM, second MP4)</div>');
+                                    $('#UploadDialog').append('<div class="message active error">Please choose a video file.</div>');
                                     xhr.abort();
                                 }
 
@@ -281,13 +280,11 @@ FrameTrail.defineModule('ResourceManager', function(){
                                         var video = document.getElementById('tmpVideo');
                                         var canvas = document.getElementById('tmpCanvas');
 
-                                        //if (video.canPlayType('video/webm')) {
+                                        if ( (video.canPlayType('video/mp4') || (video.canPlayType('video/mpeg4'))) ) {
                                             video.src = FrameTrail.module('RouteNavigation').getResourceURL(respText.response.resource.src);
-                                        /*} else if ((video.canPlayType('video/mp4') || (video.canPlayType('video/mpeg4')))) {
-                                            video.src = FrameTrail.module('RouteNavigation').getResourceURL(respText['response']['resource']['attributes']['alternateVideoFile']); //not PHP!
                                         } else {
-                                            alert('Video Playback Error. Thumbnail could not be generated.');
-                                        }*/
+                                            console.log('Video Playback Error. Thumbnail could not be generated.');
+                                        }
 
                                         video.addEventListener('loadeddata', function() {
                                             // Go to middle & Play
@@ -422,12 +419,12 @@ FrameTrail.defineModule('ResourceManager', function(){
                                 case 5:
                                     uploadDialog.find('.progress').hide();
                                     uploadDialog.find('#NewResourceConfirm').prop('disabled', false);
-                                    $('#UploadDialog').append('<div class="message active error">Please choose <b>TWO</b> video files</div>');
+                                    $('#UploadDialog').append('<div class="message active error">Please choose a video file</div>');
                                     break;
                                 case 6:
                                     uploadDialog.find('.progress').hide();
                                     uploadDialog.find('#NewResourceConfirm').prop('disabled', false);
-                                    $('#UploadDialog').append('<div class="message active error">Please make sure you choose the right video format (.webm & .mp4)</div>');
+                                    $('#UploadDialog').append('<div class="message active error">Please make sure you choose the right video format (.mp4)</div>');
                                     break;
                                 case 7:
                                     uploadDialog.find('.progress').hide();

@@ -153,13 +153,13 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 				return $return;
 				exit;
 			}
-			if ((!$_FILES["webm"]) || (!$_FILES["webm"]["size"]) || (!$_FILES["mp4"]) || (!$_FILES["mp4"]["size"])) {
+			if ( (!$_FILES["mp4"]) || (!$_FILES["mp4"]["size"]) ) {
 				$return["status"] = "fail";
 				$return["code"] = 5;
 				$return["string"] = "Not enough video sources";
 				return $return;
 				exit;
-			} else if ( (($_FILES["webm"]["type"] != "video/webm") && ($_FILES["webm"]["type"] != "application/octet-stream")) || (!in_array($_FILES["mp4"]["type"], array("video/mp4", "video/mpeg4"))) ) {
+			} else if ( (!in_array($_FILES["mp4"]["type"], array("video/mp4", "video/mpeg4"))) ) {
 				$return["status"] = "fail";
 				$return["code"] = 6;
 				$return["string"] = "Wrong video file format";
@@ -169,7 +169,7 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 
 			/* TODO: Check file size correctly */
 			/*
-			if ( $_FILES["webm"]["size"] >= $upload_mb || $_FILES["mp4"]["size"] >= $upload_mb ) {
+			if ( $_FILES["mp4"]["size"] >= $upload_mb ) {
 				$return["status"] = "fail";
 				$return["code"] = 10;
 				$return["string"] = "File too big";
@@ -180,11 +180,9 @@ function fileUpload($projectID, $type, $name, $description="", $attributes, $fil
 
 
 			$filename = substr($_SESSION["ohv"]["projects"][$projectID]["user"]["id"]."_".$cTime."_".sanitize($name),0,90);
-			move_uploaded_file($files["webm"]["tmp_name"], $conf["dir"]["projects"]."/".$projectID."/resources/".$filename.".webm");
 			move_uploaded_file($files["mp4"]["tmp_name"], $conf["dir"]["projects"]."/".$projectID."/resources/".$filename.".mp4");
-			$newResource["src"] = $filename.".webm";
+			$newResource["src"] = $filename.".mp4";
 			$newResource["attributes"] = ($attributes) ? $attributes : Array();
-			$newResource["attributes"]["alternateVideoFile"] = $filename.".mp4";
 			foreach ($files["subtitles"]["name"] as $k=>$v) {
 				$filetype = array_pop(preg_split("/\./", $v));
 				$filename = substr($_SESSION["ohv"]["projects"][$projectID]["user"]["id"]."_".$cTime."_".sanitize($name),0,90)."_sub_".$k.".".$filetype;
@@ -454,9 +452,6 @@ function fileDelete($projectID,$resourcesID) {
 	}
 
 	if ($res["resources"][$resourcesID]["type"] == "video") {
-		if (file_exists($conf["dir"]["projects"]."/".$projectID."/resources/".$res["resources"][$resourcesID]["attributes"]["alternateVideoFile"])) {
-			unlink($conf["dir"]["projects"]."/".$projectID."/resources/".$res["resources"][$resourcesID]["attributes"]["alternateVideoFile"]);
-		}
 		if (file_exists($conf["dir"]["projects"]."/".$projectID."/resources/".$res["resources"][$resourcesID]["src"])) {
 			unlink($conf["dir"]["projects"]."/".$projectID."/resources/".$res["resources"][$resourcesID]["src"]);
 		}
