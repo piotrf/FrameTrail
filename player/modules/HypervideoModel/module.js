@@ -16,7 +16,6 @@
     var hasHTML5Video           = true,
         duration                = 0,
         sourceFiles             = {
-                                    //webm: '',
                                     mp4:  ''
                                   },
 
@@ -61,7 +60,7 @@
      * I do the following jobs:
      * * I read in the {{#crossLink "Database/hypervideo:attribute"}}hypervideo metadata{{/crossLink}}, and store them in my attributes (like name, description, creator)
      * * I read in the {{#crossLink "Database/hypervideo:attribute"}}configuration of the hypervideo{{/crossLink}} (hypervideo.config) and set the key-value-pairs as global state (FrameTrail.changeState())
-     * * I read in the sequence data of the hypervideo, and set the video source file (webm and mp4), or – when their is no resourceId for a video – I set the {{#crossLink "HypervideoModel/duration:attribute"}}duration{{/crossLink}} attribute for a "null video".
+     * * I read in the sequence data of the hypervideo, and set the video source file (mp4), or – when their is no resourceId for a video – I set the {{#crossLink "HypervideoModel/duration:attribute"}}duration{{/crossLink}} attribute for a "null video".
      * * I call {{#crossLink "HypervideoModel/initModelOfOverlays:method"}}initModelOfOverlays{{/crossLink}}, {{#crossLink "HypervideoModel/initModelOfVideolinks:method"}}initModelOfVideolinks{{/crossLink}}, {{#crossLink "HypervideoModel/initModelOfCodeSnippets:method"}}initModelOfCodeSnippets{{/crossLink}} and {{#crossLink "HypervideoModel/initModelOfAnnotations:method"}}initModelOfAnnotations{{/crossLink}}.
      * * I return control to the callback.
      *
@@ -102,7 +101,6 @@
 
         } else {
 
-            //sourceFiles.webm = database.resources[videoData.resourceId].attributes.alternateVideoFile;
             sourceFiles.mp4  = database.resources[videoData.resourceId].src;
 
         }
@@ -1537,7 +1535,7 @@
 
 
         /**
-         * I contain a map to the .mp4 and .webm source's filenames.
+         * I contain a map to the .mp4 source filename.
          * @attribute sourceFiles
          * @readOnly
          * @type {}
