@@ -116,6 +116,59 @@
 	padding: 6px 8px;
 }
 
+/* Editing UI */
+
+.contentViewEditingUI .formColumn {
+	float: left;
+}
+
+.contentViewEditingUI .formColumn.column1 {
+	width: 25%;
+}
+
+.contentViewEditingUI .formColumn.column2 {
+	width: 50%;
+}
+
+.contentViewEditingUI .formColumn.column3 {
+	width: 75%;
+}
+
+.contentViewEditingUI .formColumn.column4 {
+	width: 100%;
+}
+
+.contentViewEditingUI label {
+	display: block;
+}
+
+.contentViewEditingUI input[type="text"] {
+	box-sizing: border-box;
+	height: 42px;
+}
+.contentViewEditingUI textarea {
+	display: block;
+	box-sizing: border-box;
+	width: 96%;
+	height: 42px;
+}
+.contentViewEditingUI .typeSpecific {
+	display: none;
+}
+
+.contentViewEditingUI .typeSpecific.active {
+	display: block;
+}
+
+.contentViewEditingUI .contentViewData > div[data-value] {
+	display: inline-block;
+	cursor: pointer;
+}
+
+.contentViewEditingUI .contentViewData > div[data-value].active {
+	font-weight: bold;
+}
+
 /*******************
 * Media Queries
 *******************/
