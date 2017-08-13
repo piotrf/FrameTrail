@@ -572,7 +572,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             bottom:
                 Controls.height()
             +   CodeSnippetTimeline.height()
-            +   ((editMode == 'codesnippets') ? CodeSnippetTimeline.height() : OverlayTimeline.height())
+            +   ((editMode == 'codesnippets') ? 6 : OverlayTimeline.height())
             +   ((editMode == 'annotations') ? AnnotationTimeline.height() : 0)
         });
 
@@ -796,6 +796,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function resetEditMode() {
         domElement.find('.timeline').removeClass('editable').css('flex-basis', '');
+        AnnotationTimeline.hide();
         domElement.find('#InfoAreaRight').hide();
         HypervideoSettingsContainer.removeClass('active');
         HypervideoLayoutContainer.removeClass('active');
@@ -817,10 +818,12 @@ FrameTrail.defineModule('ViewVideo', function(){
             opacity: 1
         });
 
-        AreaBottomContainer.hide();
-        AreaBottomDetails.hide();
         AreaTopContainer.hide();
         AreaTopDetails.hide();
+        AreaBottomContainer.hide();
+        AreaBottomDetails.hide();
+        AreaLeftContainer.hide();
+        AreaRightContainer.hide();
 
         domElement.find('.timeline').not('#CodeSnippetTimeline, #AnnotationTimeline').show();
 
@@ -847,10 +850,10 @@ FrameTrail.defineModule('ViewVideo', function(){
         HypervideoLayoutContainer.removeClass('active');
         EditPropertiesContainer.removeAttr('data-editmode').hide();
 
-        toggleConfig_areaBottomVisible(FrameTrail.getState('hv_config_areaBottomVisible'));
         toggleConfig_areaTopVisible(FrameTrail.getState('hv_config_areaTopVisible'));
-
-        //toggleConfig_areaRightVisible(FrameTrail.getState('hv_config_areaRightVisible'));
+        toggleConfig_areaBottomVisible(FrameTrail.getState('hv_config_areaBottomVisible'));
+        toggleConfig_areaLeftVisible(FrameTrail.getState('hv_config_areaLeftVisible'));
+        toggleConfig_areaRightVisible(FrameTrail.getState('hv_config_areaRightVisible'));
 
         toggleConfig_overlaysVisible(FrameTrail.getState('hv_config_overlaysVisible'));
 
