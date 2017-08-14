@@ -89,6 +89,8 @@
         // Read in config of Hypervideo
         for (var key in hypervideo.config) {
 
+            if (key === 'layoutArea') { continue; }
+
             FrameTrail.changeState('hv_config_' + key, hypervideo.config[key]);
 
         }
@@ -904,7 +906,7 @@
                 FrameTrail.module('InterfaceModal').showStatusMessage('Saving...');
 
                 if ( unsavedSettings ) {
-                    
+
                     //TODO: avoid this by adding a subtitles dialog to the settings tab
                     $('#EditHypervideoForm').submit();
 
@@ -1125,7 +1127,7 @@
 
 
     /**
-     * Initialize Hypervideo Settings 
+     * Initialize Hypervideo Settings
      * (triggered when global state editMode changes to 'settings')
      *
      * @method initHypervideoSettings
@@ -1181,7 +1183,7 @@
                                   +'    <div style="clear: both;"></div>'
                                   +'    <div class="message error"></div>'
                                   +'</form>');
-        
+
         HypervideoSettingsContainer.append(EditHypervideoForm);
 
         if ( hypervideo.subtitles ) {
@@ -1196,7 +1198,7 @@
                 existingSubtitlesDelete.click(function(evt) {
                     $(this).parent().remove();
                     EditHypervideoForm.find('.subtitlesSettingsWrapper').append('<input type="hidden" name="SubtitlesToDelete[]" value="'+ $(this).attr('data-lang') +'">');
-                    
+
                     updateDatabaseFromForm();
                 }).appendTo(existingSubtitlesItem);
 
@@ -1337,6 +1339,7 @@
             DatabaseEntry.description = EditHypervideoForm.find('textarea[name="description"]').val();
             DatabaseEntry.hidden = EditHypervideoForm.find('input[name="hidden"]').is(':checked');
             for (var configKey in DatabaseEntry.config) {
+                if (configKey === 'layoutArea') { continue; }
                 var newConfigVal = EditHypervideoForm.find('input[data-configkey=' + configKey + ']').val();
                 newConfigVal = (newConfigVal === 'true')
                                 ? true
@@ -1373,15 +1376,15 @@
             EditHypervideoForm.find('.message.saveReminder').addClass('active');
             newUnsavedChange('settings');
         }
-        
+
         EditHypervideoForm.ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
             beforeSubmit: function (array, form, options) {
-                
+
                 updateDatabaseFromForm();
                 array.push({ name: 'src', value:  JSON.stringify(FrameTrail.module("Database").convertToDatabaseFormat(thisID), null, 4) });
-                
+
             },
             beforeSerialize: function(form, options) {
 
@@ -1425,7 +1428,7 @@
             },
             success: function(response) {
 
-                
+
                 switch(response['code']) {
                     case 0:
 
@@ -1509,7 +1512,7 @@
     }
 
 
-    
+
     /**
      * YET TO IMPLEMENT
      *

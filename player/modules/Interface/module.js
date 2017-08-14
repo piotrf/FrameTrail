@@ -14,7 +14,7 @@
  * * {{#crossLink "ViewOverview"}}ViewOverview{{/crossLink}}
  * * {{#crossLink "ViewVideo"}}ViewVideo{{/crossLink}} (when there is a hypervideo present)
  * * {{#crossLink "ViewResources"}}ViewResources{{/crossLink}}
- * 
+ *
  * @class Interface
  * @static
  */
@@ -30,6 +30,7 @@ FrameTrail.defineModule('Interface', function(){
 
   	if (FrameTrail.module('RouteNavigation').hypervideoID) {
   		FrameTrail.initModule('ViewVideo');
+        FrameTrail.initModule('ViewLayout');
   	}
 
   	FrameTrail.initModule('ViewResources');
@@ -44,7 +45,7 @@ FrameTrail.defineModule('Interface', function(){
 	 * I call the create method of all my sub-modules, and set the window resize event listener.
 	 *
 	 * @method create
-	 * @param {Function} callback 
+	 * @param {Function} callback
 	 */
 	function create(callback) {
 
@@ -65,11 +66,12 @@ FrameTrail.defineModule('Interface', function(){
 
 		$('body').append(mainContainer);
 
-		
+
 		FrameTrail.module('ViewOverview').create();
 
 		if (FrameTrail.module('RouteNavigation').hypervideoID) {
 			FrameTrail.module('ViewVideo').create();
+            FrameTrail.module('ViewLayout').create();
 		}
 
 		FrameTrail.module('ViewResources').create();
@@ -77,8 +79,8 @@ FrameTrail.defineModule('Interface', function(){
 		initWindowResizeHandler();
 
 		callback.call();
-		
-		
+
+
 	};
 
 
@@ -111,16 +113,16 @@ FrameTrail.defineModule('Interface', function(){
 		 	resizeTimeout = setTimeout(function() {
 	 			FrameTrail.changeState('viewSizeChanged');
 	 		}, 300);
-		
+
 		});
 
-		
+
 		_window.resize();
-		
+
 
 
 	};
-	
+
 
 	/**
 	 * When the global state "sidebarOpen" changes, I react to it.
@@ -143,7 +145,7 @@ FrameTrail.defineModule('Interface', function(){
 		if (ViewVideo) {
 			ViewVideo.toggleSidebarOpen(opened);
 		}
-		
+
 
     };
 
@@ -169,9 +171,9 @@ FrameTrail.defineModule('Interface', function(){
     };
 
 
-   
 
-	
+
+
    	return {
 
    		create: create,

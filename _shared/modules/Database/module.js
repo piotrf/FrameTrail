@@ -60,17 +60,17 @@
     function loadProjectData(success, fail) {
 
         $.ajax({
-            type:   "GET",
-            url:    '../_data/projects/_index.json',
-            cache:  false,
+            type:     "GET",
+            url:      '../_data/projects/_index.json',
+            cache:    false,
             dataType: "json",
             mimeType: "application/json"
         }).done(function(data){
 
             $.ajax({
-                type:   "GET",
-                url:    '../_data/projects/' + data.projects[projectID] + '/project.json',
-                cache:  false,
+                type:     "GET",
+                url:      '../_data/projects/' + data.projects[projectID] + '/project.json',
+                cache:    false,
                 dataType: "json",
                 mimeType: "application/json"
             }).done(function (projectData) {
@@ -336,25 +336,29 @@
                             "creatorId": contentItem.creator.id,
                             "created": (new Date(contentItem.created)).getTime(),
                             "type": contentItem.body['frametrail:type'],
-                            "src": contentItem.body.source,
+                            "src":    contentItem.body.source
+                                   || contentItem.body.value,
                             "start": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[1]),
                             "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[2]),
-                            "startOffset": (contentItem.body.selector.value)
+                            "startOffset": (contentItem.body.selector && contentItem.body.selector.value)
                                             ? parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.body.selector.value)[1])
                                             : 0,
-                            "endOffset": (contentItem.body.selector.value)
+                            "endOffset": (contentItem.body.selector && contentItem.body.selector.value)
                                             ? parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.body.selector.value)[2])
                                             : 0,
                             "attributes": contentItem["frametrail:attributes"],
                             "position": (function () {
                                 if (!contentItem.target.selector) { return {}; }
-                                var match = /xywh=percent:(\d+\.?\d*),(\d+\.?\d*),(\d+\.?\d*),(\d+\.?\d*)/g.exec(contentItem.target.selector.value);
-                                return {
-                                    "top": parseFloat(match[2]),
-                                    "left": parseFloat(match[1]),
-                                    "width": parseFloat(match[3]),
-                                    "height": parseFloat(match[4])
-                                };
+                                try {
+                                    var match = /xywh=percent:(\d+\.?\d*),(\d+\.?\d*),(\d+\.?\d*),(\d+\.?\d*)/g
+                                                .exec(contentItem.target.selector.value);
+                                    return {
+                                        "top": parseFloat(match[2]),
+                                        "left": parseFloat(match[1]),
+                                        "width": parseFloat(match[3]),
+                                        "height": parseFloat(match[4])
+                                    };
+                                } catch (_) { return {}; }
                             })(),
                             "events": contentItem["frametrail:events"],
                             "tags": contentItem["frametrail:tags"]
@@ -373,7 +377,7 @@
                             "creatorId": contentItem.creator.id,
                             "created": (new Date(contentItem.created)).getTime(),
                             "snippet": contentItem.body.value,
-                            "start": parseInt(/t=(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[1]),
+                            "start": parseFloat(/t=(\d+\.?\d*)/g.exec(contentItem.target.selector.value)[1]),
                             "attributes": contentItem['frametrail:attributes'],
                             "tags": contentItem['frametrail:tags']
                         });
@@ -442,9 +446,12 @@
                             "creatorId": data[i].creator.id,
                             "created": (new Date(data[i].created)).getTime(),
                             "type": data[i].body['frametrail:type'],
-                            "src": (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( data[i].body["frametrail:type"] ) >= 0)
-                                        ? data[i].body.value
-                                        : data[i].body.source,
+                            "src": (function () {
+                                        if (data[i].body["frametrail:type"] === 'location') { return null; }
+                                        return (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( data[i].body["frametrail:type"] ) >= 0)
+                                                ? data[i].body.value
+                                                : data[i].body.source
+                                    })(),
                             "thumb": data[i].body['frametrail:thumb'],
                             "start": parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].target.selector.value)[1]),
                             "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(data[i].target.selector.value)[2]),
@@ -462,10 +469,10 @@
 
                         if (annotationData[annotationData.length-1].type === 'video') {
                             var annotationItem = annotationData[annotationData.length-1];
-                            annotationItem.startOffset = (data[i].body.selector.value)
+                            annotationItem.startOffset = (data[i].body.selector && data[i].body.selector.value)
                                                          ? parseFloat(/t=(\d+)/g.exec(data[i].body.selector.value)[1])
                                                          : 0;
-                            annotationItem.endOffset = (data[i].body.selector.value)
+                            annotationItem.endOffset = (data[i].body.selector && data[i].body.selector.value)
                                                         ? parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].body.selector.value)[2])
                                                         : 0;
                         }
@@ -781,7 +788,8 @@
         		"slidingTrigger": hypervideos[thisHypervideoID].config.slidingTrigger,
         		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
-        		"hidden": hypervideos[thisHypervideoID].hidden
+        		"hidden": hypervideos[thisHypervideoID].hidden,
+                "layoutArea": hypervideos[thisHypervideoID].config.layoutArea
         	},
         	"clips": hypervideos[thisHypervideoID].clips,
         	"globalEvents": (codeSnippets.globalEvents) ? codeSnippets.globalEvents : {},
@@ -804,7 +812,7 @@
             			"created": (new Date(overlays[i].created)).toString(),
             			"type": "Annotation",
             			"frametrail:type": "Overlay",
-            			"frametrail:tags": overlays[i].tags,
+            			"frametrail:tags": overlays[i].tags || [],
             			"target": {
             				"type": "Video",
             				"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
@@ -822,18 +830,24 @@
             			},
             			"body": {
             				"type": ({
-                                'image': 'Image',
-                                'video': 'Video',
-                                'location': 'Dataset',
-                                'wikipedia': 'Text',
-                                'text': 'TextualBody',
-                                'vimeo': 'Video',
-                                'webpage': 'Text',
-                                'youtube': 'Video'
-                            })[overlays[i].type],
+                                        'image':     'Image',
+                                        'video':     'Video',
+                                        'location':  'Dataset',
+                                        'wikipedia': 'Text',
+                                        'text':      'TextualBody',
+                                        'vimeo':     'Video',
+                                        'webpage':   'Text',
+                                        'youtube':   'Video'
+                                    })[overlays[i].type],
             				"frametrail:type": overlays[i].type,
             				"format": ({
-                                'image': 'image/' + (/\.(.+)$/g.exec(overlays[i].src)[1]),
+                                'image': 'image/' + (function () {
+                                    try {
+                                        return (overlays[i].src ? (/\.(\w{3,4})$/g.exec(overlays[i].src)[1]) : '*');
+                                    } catch (_) {
+                                        return '*';
+                                    }
+                                })(),
                                 'video': 'video/mp4',
                                 'location': 'application/x-frametrail-location',
                                 'wikipedia': 'text/html',
@@ -842,18 +856,29 @@
                                 'webpage': 'text/html',
                                 'youtube': 'text/html'
                             })[overlays[i].type],
-            				"source": overlays[i].src,
-                            "value": overlays[i].value,
+            				"source": (function () {
+            				    if (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( overlays[i].type ) < 0) {
+                                    return overlays[i].src
+                                }
+                                return undefined;
+            				})(),
+                            "value": (function () {
+            				    if (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( overlays[i].type ) >= 0) {
+                                    return overlays[i].src
+                                }
+                                return undefined;
+            				})(),
             				"frametrail:name": overlays[i].name,
             				"frametrail:thumb": overlays[i].thumb,
             				"selector": (function () {
-            				    if (['video', 'vimeo', 'youtube'].indexOf(overlays[i].type) >= 0) {
+            				    if (   ['video', 'vimeo', 'youtube'].indexOf(overlays[i].type) >= 0
+                                    && overlays[i].startOffset
+                                    && overlays[i].endOffset
+                                ) {
                                     return {
                     					"type": "FragmentSelector",
                     					"conformsTo": "http://www.w3.org/TR/media-frags/",
-                    					"value": (overlays[i].startOffset && overlays[i].endOffset)
-                                                    ? "t=" + overlays[i].startOffset + "," + overlays[i].endOffset
-                                                    : ''
+                    					"value": "t=" + overlays[i].startOffset + "," + overlays[i].endOffset
                     				}
                                 } else {
                                     return undefined;
@@ -864,11 +889,15 @@
             			"frametrail:events": overlays[i].events,
             			"frametrail:attributes": overlays[i].attributes
                     });
-                    if (contents[contents.length-1].body['frametrail:type'] === location) {
+                    console.log(contents);
+                    if (contents[contents.length-1].body['frametrail:type'] === 'location') {
                         var contentItem = contents[contents.length-1];
                         contentItem.body['frametrail:lat'] = overlays[i].attributes.lat;
-                        contentItem.body['frametrail:long'] = overlays[i].attributes.long;
+                        contentItem.body['frametrail:long'] = overlays[i].attributes.lon;
                         contentItem.body['frametrail:boundingBox'] = overlays[i].attributes.boundingBox.join(',');
+                        delete contentItem["frametrail:attributes"].lat;
+                        delete contentItem["frametrail:attributes"].lon;
+                        delete contentItem["frametrail:attributes"].boundingBox;
                     }
                 }
                 for (var i in codeSnippets.timebasedEvents) {
@@ -1028,7 +1057,7 @@
         		"created": (new Date(annotationItem.created)).toString(),
         		"type": "Annotation",
         		"frametrail:type": "Annotation",
-        		"frametrail:tags": annotationItem.tags,
+        		"frametrail:tags": annotationItem.tags || [],
         		"target": {
         			"type": "Video",
         			"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
@@ -1051,7 +1080,13 @@
                     })[annotationItem.type],
                     "frametrail:type": annotationItem.type,
                     "format": ({
-                        'image': 'image/' + (annotationItem.src ? /\.(.+)$/g.exec(annotationItem.src)[1] : '*'),
+                        'image': 'image/' + (function () {
+                            try {
+                                return (annotationItem.src ? (/\.(\w{3,4})$/g.exec(annotationItem.src)[1]) : '*')
+                            } catch (_) {
+                                return '*';
+                            }
+                        })(),
                         'video': 'video/mp4',
                         'location': 'application/x-frametrail-location',
                         'wikipedia': 'text/html',
@@ -1060,18 +1095,29 @@
                         'webpage': 'text/html',
                         'youtube': 'text/html'
                     })[annotationItem.type],
-                    "source": annotationItem.src,
-                    "value": annotationItem.value,
+                    "source": (function () {
+                        if (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( annotationItem.type ) < 0) {
+                            return annotationItem.src
+                        }
+                        return undefined;
+                    })(),
+                    "value": (function () {
+                        if (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( annotationItem.type ) >= 0) {
+                            return annotationItem.src
+                        }
+                        return undefined;
+                    })(),
                     "frametrail:name": annotationItem.name,
                     "frametrail:thumb": annotationItem.thumb,
                     "selector": (function () {
-                        if (['video', 'vimeo', 'youtube'].indexOf(annotationItem.type) >= 0) {
+                        if (   ['video', 'vimeo', 'youtube'].indexOf(annotationItem.type) >= 0
+                            && annotationItem.startOffset
+                            && annotationItem.endOffset
+                        ) {
                             return {
                                 "type": "FragmentSelector",
                                 "conformsTo": "http://www.w3.org/TR/media-frags/",
-                                "value": (annotationItem.startOffset && annotationItem.endOffset)
-                                            ? "t=" + annotationItem.startOffset + "," + annotationItem.endOffset
-                                            : ''
+                                "value": "t=" + annotationItem.startOffset + "," + annotationItem.endOffset
                             }
                         } else {
                             return undefined;

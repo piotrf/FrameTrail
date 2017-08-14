@@ -698,9 +698,41 @@ FrameTrail.defineType(
 
             return compareTimelineElement;
 
+        },
+
+
+
+
+
+
+
+
+        // TODO
+
+        setActiveInContentView: function (contentView) {
+            console.log(this, 'setActiveInContentView', contentView);
+
+
+            this._activeStateInContentView.push(contentView);
+        },
+
+
+        setInactiveInContentView: function (contentView) {
+            console.log(this, 'setInactiveInContentView', contentView);
+
+            this._activeStateInContentView = this._activeStateInContentView.filter(function (each) {
+                return each !== contentView;
+            })
+        },
+
+        _activeStateInContentView: null,
+        activeStateInContentView: function (contentView) {
+            if (!this._activeStateInContentView) {
+                this._activeStateInContentView = [];
+            }
+
+            return this._activeStateInContentView.indexOf(contentView) >= 0;
         }
-
-
 
 
 

@@ -29,6 +29,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 		VideolinksController   = FrameTrail.initModule('VideolinksController'),
 		CodeSnippetsController = FrameTrail.initModule('CodeSnippetsController'),
 		SubtitlesController    = FrameTrail.initModule('SubtitlesController'),
+        ViewLayout             = FrameTrail.initModule('ViewLayout'),
 
 		InteractionController  = FrameTrail.initModule('InteractionController'),
 
@@ -441,7 +442,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 		OverlaysController.updateStatesOfOverlays(currentTime);
 		VideolinksController.updateStatesOfVideolinks(currentTime);
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
-		AnnotationsController.updateStatesOfAnnotations(currentTime);
+		//AnnotationsController.updateStatesOfAnnotations(currentTime);
+        ViewLayout.updateTimedStateOfContentViews(currentTime);
 		SubtitlesController.updateStatesOfSubtitles(currentTime);
 
 	};
@@ -463,6 +465,7 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 		ViewVideo.PlayerProgress.slider('value', currentTime);
 
+        OverlaysController.checkMediaSynchronization();
 
 	};
 
@@ -487,7 +490,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 		OverlaysController.updateStatesOfOverlays(currentTime);
 		VideolinksController.updateStatesOfVideolinks(currentTime);
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
-		AnnotationsController.updateStatesOfAnnotations(currentTime);
+		//AnnotationsController.updateStatesOfAnnotations(currentTime);
+        ViewLayout.updateTimedStateOfContentViews(currentTime);
 		SubtitlesController.updateStatesOfSubtitles(currentTime);
 
 	};

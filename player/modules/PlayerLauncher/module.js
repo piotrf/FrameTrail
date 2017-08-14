@@ -18,7 +18,7 @@
  * I initialize all main modules, and then start their init process in the right order.
  * When I am finished, the Application is either up and running, or displays a meaningful
  * error message, why loading has failed.
- * I am a "one-pass" module, this is: I don't export any public methods or properties, and 
+ * I am a "one-pass" module, this is: I don't export any public methods or properties, and
  * my sole purpose is to start other modules, after which I am discarded.
  *
  * @class PlayerLauncher
@@ -39,6 +39,7 @@
     FrameTrail.initModule('RouteNavigation');
     FrameTrail.initModule('UserManagement');
     FrameTrail.initModule('Database');
+    FrameTrail.initModule('TagModel');
     FrameTrail.initModule('ResourceManager');
     FrameTrail.initModule('HypervideoModel');
 
@@ -59,39 +60,51 @@
 
         FrameTrail.module('Database').loadData(
 
-            function(){
+            function () {
 
-                FrameTrail.module('InterfaceModal').setLoadingTitle(FrameTrail.module('Database').hypervideo.name);
+                FrameTrail.module('TagModel').initTagModel(
 
-                FrameTrail.module('HypervideoModel').initModel(function(){
+                    function () {
 
-                    FrameTrail.module('Interface').create(function(){
+                        FrameTrail.module('InterfaceModal').setLoadingTitle(FrameTrail.module('Database').hypervideo.name);
 
-                        FrameTrail.module('InterfaceModal').hideLoadingScreen();
+                        FrameTrail.module('HypervideoModel').initModel(function(){
 
-                        FrameTrail.module('HypervideoController').initController(
+                            FrameTrail.module('Interface').create(function(){
 
-                            function(){
+                                FrameTrail.module('InterfaceModal').hideLoadingScreen();
 
-                                // Finished
-                                FrameTrail.module('InterfaceModal').hideMessage();
-                                
-                            },
+                                FrameTrail.module('HypervideoController').initController(
 
-                            function(errorMsg){
+                                    function(){
 
-                                // Fail: Init thread was aborted with:
-                                FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
+                                        // Finished
+                                        FrameTrail.module('InterfaceModal').hideMessage();
 
-                            }
+                                    },
 
-                        );
+                                    function(errorMsg){
 
-                    });
+                                        // Fail: Init thread was aborted with:
+                                        FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
+
+                                    }
+
+                                );
+
+                            });
 
 
-                });
+                        });
 
+
+                    },
+
+                    function () {
+                        FrameTrail.module('InterfaceModal').showErrorMessage('Could not init TagModel.');
+                    }
+
+                );
             },
 
             function(errorMsg){
@@ -100,7 +113,7 @@
                 FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
 
             }
-            
+
         );
 
     } else {
@@ -129,13 +142,13 @@
                 FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
 
             }
-            
+
         );
 
     }
 
 
-    
+
     return null;
 
 });
