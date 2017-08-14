@@ -42,7 +42,7 @@ FrameTrail.defineType(
 
         this.appendDOMElement();
 
-        this.updateContentView();
+        this.updateContentCollection();
 
         this.appendContentCollectionElements();
 
@@ -53,8 +53,8 @@ FrameTrail.defineType(
         contentViewData:    null,
         contentCollection: null,
 
-        
-        updateContentView: function () {
+
+        updateContentCollection: function () {
 
             if (!this.contentViewData.collectionFilter) {
                 return;
@@ -110,8 +110,14 @@ FrameTrail.defineType(
             //
             // switch (this.whichArea) {
             //     case 'top':
-            //         FrameTrail.module('ViewLayout').areaTopContainer........
-            //         FrameTrail.module('ViewLayout').areaTopDetails..........
+            //
+            //         // store in this object
+            //         this.myDetailView = $('<div>....</div>')
+            //         this.myContainerView = $('<div>....</div>')
+            //
+            //         FrameTrail.module('ViewLayout').areaTopContainer.apend(this.myContainerView);
+            //         FrameTrail.module('ViewLayout').areaTopDetails.append(this.myDetailView);
+            //
             //
             //         break;
             //     case 'bottom':
@@ -135,11 +141,13 @@ FrameTrail.defineType(
         removeDOMElement: function () {
             // TODO
             // remove contentView from layoutArea [this.whichArea]
+            //         this.myDetailView = $('<div>....</div>')
+            //         this.myContainerView = $('<div>....</div>')
         },
 
         updateTimedStateOfContentViews: function (currentTime) {
             // console.log('updateTimedStateOfContentViews', this, currentTime);
-            // TODO
+            // TODO (optional)
             // switch (this.contentViewData.type) {
             //     case 'TimedContent':
             //         // Annotations are already updated by ViewLayout module!
