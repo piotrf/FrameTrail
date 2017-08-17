@@ -30,7 +30,7 @@
 }
 
 .layoutArea[data-area="areaTop"][data-size="small"] .collectionElement, .layoutArea[data-area="areaBottom"][data-size="small"] .collectionElement {
-	width: 40px;
+	width: 44px;
 }
 
 .layoutArea[data-area="areaTop"][data-size="medium"] .collectionElement, .layoutArea[data-area="areaBottom"][data-size="medium"] .collectionElement {
@@ -64,12 +64,13 @@
 
 .layoutArea .contentViewContainer {
 	position: absolute;
-	top: 48px;
+	top: 36px;
 	width: 100%;
-	height: calc(100% - 48px);
+	height: calc(100% - 36px);
 	padding: 10px;
 	box-sizing: border-box;
 	background: var(--secondary-bg-color);
+	color: var(--primary-fg-color);
 	overflow: hidden;
 	display: none;
 }
@@ -86,9 +87,9 @@
 
 #LayoutManager .layoutArea .contentViewPreview {
 	position: absolute;
-	top: 48px;
+	top: 46px;
 	width: calc(100% - 20px);
-	height: calc(100% - 58px);
+	height: calc(100% - 56px);
 	display: none;
 }
 

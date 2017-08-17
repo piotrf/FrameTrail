@@ -165,7 +165,7 @@
 
             // empty searchText string means no filtering by search text
             if (searchText.length > 0) {
-                if (annotationData.name.indexOf(searchText) < 0) {
+                if (annotationData.name.toLowerCase().indexOf(searchText.toLowerCase()) < 0) {
                     match = false;
                 }
             }

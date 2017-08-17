@@ -33,12 +33,13 @@ FrameTrail.defineModule('ViewLayout', function(){
 		managedAnnotations  = [],
 		managedOverlays     = [],
 
-		HypervideoLayoutContainer = FrameTrail.module('ViewVideo').HypervideoLayoutContainer;
+		HypervideoLayoutContainer = FrameTrail.module('ViewVideo').HypervideoLayoutContainer,
+		Hypervideo = FrameTrail.module('Database').hypervideo;
 
 
 	function create () {
 
-		configLayoutArea = FrameTrail.module('Database').hypervideo.config['layoutArea'];
+		configLayoutArea = FrameTrail.module('Database').hypervideo.config.layoutArea;
 
 		areaTopContainer    = FrameTrail.module('ViewVideo').AreaTopContainer;
 		areaTopDetails      = FrameTrail.module('ViewVideo').AreaTopDetails;
@@ -131,6 +132,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 		);
 
 		updateManagedContent();
+
+		FrameTrail.module('HypervideoModel').newUnsavedChange('layout');
 
 	}
 
@@ -275,7 +278,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 						+  '</div>'),
 		
 		LayoutManager        = domElement.find('#LayoutManager'),
-		LayoutManagerOptions = domElement.find('#LayoutManagerOptions');
+		LayoutManagerOptions = domElement.find('#LayoutManagerOptions'),
+		self = this;
 
 		HypervideoLayoutContainer.append(domElement);
 
@@ -304,7 +308,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 					contentAxis = (layoutArea == 'areaTop' || layoutArea == 'areaBottom') ? 'x' : 'y',
 					templateContentViewData = {
 						'type': ui.helper.data('type'),
-						'name': 'Lorem Ipsum',
+						'name': '',
 						'description': '',
 						'cssClass': '',
 						'html': '',
@@ -326,6 +330,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 					renderPreview = true;
 
 				createContentView(whichArea, templateContentViewData, renderPreview);
+
+				FrameTrail.module('HypervideoModel').newUnsavedChange('layout');
 
 			}
 
@@ -357,6 +363,51 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 
 
+	/**
+	 * I return the data of all ContentViews in all LayoutAreas.
+	 *
+	 * @method getLayoutAreaData
+	 * @return {Object} layoutAreaData
+	 */
+	function getLayoutAreaData() {
+
+		var layoutAreaData = {
+			'areaTop': (function() {
+				var contentViewDataTop = [];
+				for (var i=0; i<contentViewsTop.length; i++) {
+					contentViewDataTop.push(contentViewsTop[i].contentViewData);
+				}
+				return contentViewDataTop;
+			})(),
+			'areaBottom': (function() {
+				var contentViewDataBottom = [];
+				for (var i=0; i<contentViewsBottom.length; i++) {
+					contentViewDataBottom.push(contentViewsBottom[i].contentViewData);
+				}
+				return contentViewDataBottom;
+			})(),
+			'areaLeft': (function() {
+				var contentViewDataLeft = [];
+				for (var i=0; i<contentViewsLeft.length; i++) {
+					contentViewDataLeft.push(contentViewsLeft[i].contentViewData);
+				}
+				return contentViewDataLeft;
+			})(),
+			'areaRight': (function() {
+				var contentViewDataRight = [];
+				for (var i=0; i<contentViewsRight.length; i++) {
+					contentViewDataRight.push(contentViewsRight[i].contentViewData);
+				}
+				return contentViewDataRight;
+			})()
+		}
+
+	    return layoutAreaData;
+	    
+	}
+
+
+
 	return {
 		create: create,
 
@@ -368,6 +419,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 		updateTimedStateOfContentViews: updateTimedStateOfContentViews,
 
 		initLayoutManager: initLayoutManager,
+
+		getLayoutAreaData: getLayoutAreaData,
 
 		get areaTopContainer()      { return areaTopContainer; },
 		get areaTopDetails()        { return areaTopDetails; },

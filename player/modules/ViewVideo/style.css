@@ -43,7 +43,7 @@ path {
     width: 100%;
     overflow: hidden;
     margin-top: 0px;
-    transition-property: all;
+    transition-property: margin-top;
     transition-duration: 200ms;
 }
 
@@ -100,7 +100,7 @@ path {
     margin-left: -1px;
     height: 100%;
     width: 2px;
-    background: #cfcfcf;
+    background: #fff;
     outline: none;
     opacity: .8;
 }
@@ -112,7 +112,7 @@ path {
 
 #PlayerContainer #PlayerProgress .ui-slider-range {
     height: 100%;
-    background: rgba(200, 200, 200, 0.2);
+    background: rgba(230, 230, 230, 0.2);
 }
 
 #PlayerContainer #PlayerProgress:hover .ui-slider-handle {
@@ -126,7 +126,7 @@ path {
     width: 6px;
     height: 6px;
     bottom: 0px;
-    background: #cfcfcf;
+    background: #fff;
     z-index: 1;
 }
 
@@ -137,7 +137,7 @@ path {
     width: 6px;
     height: 6px;
     top: 0px;
-    background: #cfcfcf;
+    background: #fff;
     z-index: 1;
 }
 
@@ -151,7 +151,7 @@ path {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 8px;
-    background: #cfcfcf;
+    background: #fff;
 }
 
 #PlayerContainer #PlayerProgress .ui-slider-handle:hover .ui-slider-handle-circle, #PlayerContainer #PlayerProgress .ui-slider-handle:hover, #PlayerContainer #PlayerProgress .ui-slider-handle:hover:after, #PlayerContainer #PlayerProgress .ui-slider-handle:before {
@@ -198,7 +198,8 @@ path {
     position: relative;
     order: 0;
     align-self: stretch;
-    background: transparent;
+    background: var(--primary-bg-color);
+    border-bottom: 2px solid var(--primary-bg-color);
 }
 
 #AreaTopDetails, #AreaBottomDetails {
@@ -243,24 +244,24 @@ path {
 /* LayoutArea Sizes */
 
 #AreaTopContainer, #AreaBottomContainer {
-    min-height: 180px;
+    min-height: 0px;
 }
 
 #AreaTopContainer[data-size="small"], #AreaBottomContainer[data-size="small"] {
-    min-height: 100px;
+    min-height: 90px;
 }
 
 #AreaTopContainer[data-size="medium"], #AreaBottomContainer[data-size="medium"] {
-    min-height: 180px;
+    min-height: 170px;
 }
 
 #AreaTopContainer[data-size="large"], #AreaBottomContainer[data-size="large"] {
-    min-height: 300px;
+    min-height: 290px;
 }
 
 #AreaLeftContainer, #AreaRightContainer {
-    flex: 0 0 400px;
-    min-width: 400px;
+    flex: 0 0 0px;
+    min-width: 0px;
 }
 
 #AreaLeftContainer[data-size="small"], #AreaRightContainer[data-size="small"] {
@@ -269,8 +270,8 @@ path {
 }
 
 #AreaLeftContainer[data-size="medium"], #AreaRightContainer[data-size="medium"] {
-    flex: 0 0 400px;
-    min-width: 400px;
+    flex: 0 0 300px;
+    min-width: 300px;
 }
 
 #AreaLeftContainer[data-size="large"], #AreaRightContainer[data-size="large"] {
@@ -330,7 +331,7 @@ path {
     min-height: 40px;
     align-self: auto;
     width: 100%;
-    background: transparent;
+    background: var(--secondary-bg-color);
     z-index: 2;
     pointer-events: none;
 }
@@ -378,7 +379,7 @@ path {
     content: "\e8a9";
 }
 
-#PlayerContainer #Controls .playerControl#AnnotationSettingsButton.active {
+#PlayerContainer #Controls .playerControl#AnnotationSearchButton.active {
     opacity: 1;
 }
 
@@ -596,7 +597,7 @@ path {
     flex: 1 1 auto;
     width: 100%;
     align-self: auto;
-    background: #000;
+    background: transparent;
     z-index: 2;
 }
 
@@ -682,7 +683,7 @@ path {
     order: 0;
     flex: 1 1 auto;
     align-self: stretch;
-    background: transparent;
+    background: #000;
     overflow: hidden;
     -moz-transition-property: width;
     -moz-transition-duration: 200ms;

@@ -39,11 +39,9 @@
         
         annotations = HypervideoModel.annotations;
 
-        refreshAnnotationSelectmenu(true);
         initAnnotations();
         
     }
-
 
 
     /**
@@ -59,97 +57,10 @@
         // update references
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
-
-        refreshAnnotationSelectmenu(true);
         
         initAnnotations();
         
     }
-
-    /**
-     * I refresh the view of the select menu in the sidebar.
-     * When my parameter is false, I hide the select menu,
-     * otherwise I show it an append all available annotation sets
-     * as option to the select box.
-     *
-     * @method refreshAnnotationSelectmenu
-     * @param {Boolean} visible
-     * @private
-     */
-    function refreshAnnotationSelectmenu(visible) {
-
-        var AnnotationSettingsButton  = ViewVideo.AnnotationSettingsButton,
-            SelectAnnotationContainer = AnnotationSettingsButton.find('#SelectAnnotationContainer'),
-            HypervideoModel           = FrameTrail.module('HypervideoModel'),
-            annotationSets;
-
-
-        if (visible) {
-
-            annotationSets = HypervideoModel.annotationSets;
-
-            if ( annotationSets.length != 0 ) {
-                
-                SelectAnnotationContainer.empty();
-            
-                var noAnnotationsButton = $('<div class="annotationSetButton none">None</div>');
-                noAnnotationsButton.click(function() {
-                    FrameTrail.changeState('hv_config_areaBottomVisible', false);
-                    FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
-                }).appendTo(SelectAnnotationContainer);
-
-                for (var idx in annotationSets) {
-
-                    var annotationSetButton = $('<div class="annotationSetButton" data-annotationset-id="'
-                        +   annotationSets[idx].id 
-                        +   '" style="color: #'
-                        +   annotationSets[idx].color
-                        +   ';"><span class="icon-user"></span>'
-                        +   annotationSets[idx].name 
-                        +   '</div>');
-
-                    annotationSetButton.click(function() {
-                        var setID = $(this).data('annotationset-id');
-
-                        FrameTrail.module('HypervideoModel').annotationSet = setID;
-                        annotations = FrameTrail.module('HypervideoModel').annotations;
-
-                        initAnnotations();
-
-                        FrameTrail.changeState('hv_config_areaBottomVisible', true);
-                        FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
-
-                    });
-
-                    SelectAnnotationContainer.append(annotationSetButton);
-
-                }
-
-                var activeSet;
-                if ( !FrameTrail.getState('hv_config_areaBottomVisible') ) {
-                    activeSet = SelectAnnotationContainer.find('.annotationSetButton.none');
-                } else {
-                    activeSet = SelectAnnotationContainer.find('.annotationSetButton[data-annotationset-id="'+ HypervideoModel.annotationSet +'"]');
-                }
-                
-                activeSet.addClass('active');
-
-                AnnotationSettingsButton.show();
-
-            } else {
-                AnnotationSettingsButton.hide();
-            }
-            
-
-        } else /*if ( !FrameTrail.getState('editMode') )*/ {
-
-            AnnotationSettingsButton.hide();
-            
-        }
-
-
-    }
-
 
 
     /**
@@ -922,27 +833,27 @@
             
 
 
-        if ( editMode === false && oldEditMode !== false && FrameTrail.getState('hv_config_areaBottomVisible') ) {
+        if ( editMode === false && oldEditMode !== false ) {
 
-            refreshAnnotationSelectmenu(true);
+            console.log('SHOW SEARCH BUTTON');
 
         } else if ( editMode && oldEditMode === false ) {
 
             HypervideoModel.annotationSet = '#myAnnotationSet';
             
-            refreshAnnotationSelectmenu(false);
+            console.log('HIDE SEARCH BUTTON');
 
             window.setTimeout(function() {
                 initAnnotations();
             }, 300);
 
-        } else if ( editMode === false && FrameTrail.getState('hv_config_areaBottomVisible') ) {
+        } else if ( editMode === false ) {
 
-            refreshAnnotationSelectmenu(true);
+            console.log('SHOW SEARCH BUTTON');
             
         } else {
 
-            refreshAnnotationSelectmenu(false);
+            console.log('HIDE SEARCH BUTTON');
             
         }
 
@@ -1199,24 +1110,10 @@
 
         if (newColor.length > 1) {
 
-            refreshAnnotationSelectmenu(true);
+            // REFRESH COLOR VALUES SOMEWHERE
 
         }
 
-    }
-
-
-    /**
-     * I am called when the global state "hv_config_areaBottomVisible" changes.
-     *
-     * This is a configuration option (saved in the hypervideo's index.json entry).
-     *
-     * @method toggleConfig_areaBottomVisible
-     * @param {Boolean} newState
-     * @param {Boolean} oldState
-     */
-    function toggleConfig_areaBottomVisible(newState, oldState) {
-        refreshAnnotationSelectmenu(true);
     }
 
         
@@ -1229,8 +1126,6 @@
             sidebarOpen:     toggleSidebarOpen,
             viewMode:        toggleViewMode,
             userColor:       changeUserColor,
-
-            hv_config_areaBottomVisible: toggleConfig_areaBottomVisible,
         },
 
         initController:             initController,

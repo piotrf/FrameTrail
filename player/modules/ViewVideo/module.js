@@ -68,11 +68,9 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                    </div>'
                         + '                </div>'
                         + '                <div id="RightControlPanel">'
-                        + '                    <div class="playerControl contextButton" id="AnnotationSettingsButton">'
-                        + '                        <span class="icon-annotations"></span>'
-                        + '                        <div id="AnnotationSettingsContainer" class="contextButtonContainer">'
-                        + '                            <div>Annotations</div>'
-                        + '                            <div id="SelectAnnotationContainer"></div>'
+                        + '                    <div class="playerControl contextButton" id="AnnotationSearchButton">'
+                        + '                        <span class="icon-search"></span>'
+                        + '                        <div id="AnnotationSearchContainer" class="contextButtonContainer">'
                         + '                        </div>'
                         + '                    </div>'
                         + '                    <div class="playerControl contextButton" id="SettingsButton">'
@@ -147,7 +145,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         CodeSnippetTimeline         = domElement.find('#CodeSnippetTimeline'),
 
         Controls                    = domElement.find('#Controls'),
-        AnnotationSettingsButton    = domElement.find('#AnnotationSettingsButton'),
+        AnnotationSearchButton      = domElement.find('#AnnotationSearchButton'),
         EditingOptions              = domElement.find('#EditingOptions'),
         HypervideoSettingsContainer = domElement.find('#HypervideoSettingsContainer'),
         HypervideoLayoutContainer   = domElement.find('#HypervideoLayoutContainer'),
@@ -1692,11 +1690,11 @@ FrameTrail.defineModule('ViewVideo', function(){
 
 
         /**
-         * I contain the AnnotationSettingsButton element.
-         * @attribute AnnotationSettingsButton
+         * I contain the AnnotationSearchButton element.
+         * @attribute AnnotationSearchButton
          * @type HTMLElement
          */
-        get AnnotationSettingsButton() { return AnnotationSettingsButton },
+        get AnnotationSearchButton() { return AnnotationSearchButton },
 
         /**
          * I contain the ExpandButton element.

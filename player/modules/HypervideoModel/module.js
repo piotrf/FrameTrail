@@ -49,6 +49,7 @@
         unsavedEvents           = false,
         unsavedCustomCSS        = false,
         unsavedAnnotations      = false;
+        unsavedLayout           = false;
 
 
 
@@ -859,6 +860,9 @@
 
             unsavedAnnotations = true;
 
+        } else if (category === 'layout') {
+
+            unsavedLayout = true;
         }
 
         FrameTrail.module('Sidebar').newUnsavedChange(category);
@@ -909,7 +913,7 @@
                     $('#EditHypervideoForm').submit();
 
                 } else if ( unsavedOverlays || unsavedVideolinks || unsavedCodeSnippets
-                    || unsavedEvents || unsavedCustomCSS) {
+                    || unsavedEvents || unsavedCustomCSS || unsavedLayout) {
                     saveRequests.push(function(){
                         FrameTrail.module('Database').saveHypervideo(databaseCallback);
                     });
@@ -962,6 +966,7 @@
             unsavedEvents       = false;
             unsavedCustomCSS    = false;
             unsavedAnnotations  = false;
+            unsavedLayout       = false;
             FrameTrail.changeState('unsavedChanges', false)
 
             if (callback) {

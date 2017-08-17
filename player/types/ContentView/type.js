@@ -42,9 +42,7 @@ FrameTrail.defineType(
 
         this.appendDOMElement();
 
-        this.updateContentCollection();
-
-        this.appendContentCollectionElements();
+        this.updateContent();
 
     },
 
@@ -54,37 +52,76 @@ FrameTrail.defineType(
         contentCollection: null,
 
 
-        updateContentCollection: function() {
+        updateContent: function() {
+            
+            var self = this;
 
-            if (!this.contentViewData.collectionFilter) {
-                return;
+            self.contentViewTab.attr('data-type', self.contentViewData.type);
+            self.contentViewTab.find('.contentViewTabName').text(self.contentViewData.name);
+
+            self.contentViewContainer.attr('data-type', self.contentViewData.type);
+            self.contentViewContainer.attr('data-size', self.contentViewData.contentSize);
+
+            switch (this.contentViewData.type) {
+                
+                case 'TimedContent':
+                    
+                    self.contentViewContainer.find('.customhtmlContainer, .transcriptContainer').remove();
+
+                    if (!self.contentViewData.collectionFilter) {
+                        return;
+                    }
+
+                    var old_contentCollection = self.contentCollection;
+
+                    self.contentCollection = FrameTrail.module('TagModel').getContentCollection(
+                        self.contentViewData.collectionFilter.tags,
+                        false,
+                        true,
+                        self.contentViewData.collectionFilter.users,
+                        self.contentViewData.collectionFilter.text,
+                        self.contentViewData.collectionFilter.types
+                    );
+
+                    old_contentCollection.filter(function(contentItem) {
+                        return 0 > self.contentCollection.indexOf(contentItem)
+                    }).forEach(function(contentItem) {
+                        self.removeContentCollectionElements(contentItem);
+                    });
+
+                    self.contentCollection.filter(function(contentItem) {
+                        return 0 > old_contentCollection.indexOf(contentItem)
+                    }).forEach(function (contentItem) {
+                        self.appendContentCollectionElements(contentItem);
+                    });
+
+                    FrameTrail.module('ViewLayout').updateManagedContent();
+
+                    break;
+
+                case 'CustomHTML':
+
+                    self.contentCollection.forEach(function (contentItem) {
+                        self.removeContentCollectionElements(contentItem);
+                    });
+
+                    self.contentViewContainer.html('<div class="customhtmlContainer">'+ self.contentViewData.html +'</div>');
+
+                    break;
+
+                case 'Transcript':
+                    
+                    self.contentCollection.forEach(function (contentItem) {
+                        self.removeContentCollectionElements(contentItem);
+                    });
+
+                    self.contentViewContainer.html('<div class="transcriptContainer">TRANSCRIPT HERE</div>');
+                    console.log('Init Hyperaud.io Light Transcript');
+
+                    break;
             }
 
-            var self = this,
-                old_contentCollection = this.contentCollection;
-
-            this.contentCollection = FrameTrail.module('TagModel').getContentCollection(
-                this.contentViewData.collectionFilter.tags,
-                false,
-                true,
-                this.contentViewData.collectionFilter.users,
-                this.contentViewData.collectionFilter.text,
-                this.contentViewData.collectionFilter.types
-            );
-
-            old_contentCollection.filter(function(contentItem) {
-                return 0 > self.contentCollection.indexOf(contentItem)
-            }).forEach(function(contentItem) {
-                self.removeContentCollectionElements(contentItem);
-            });
-
-            this.contentCollection.filter(function(contentItem) {
-                return 0 > old_contentCollection.indexOf(contentItem)
-            }).forEach(function (contentItem) {
-                self.appendContentCollectionElements(contentItem);
-            });
-
-            FrameTrail.module('ViewLayout').updateManagedContent();
+            self.resizeLayoutArea();
 
         },
 
@@ -92,20 +129,14 @@ FrameTrail.defineType(
         appendContentCollectionElements: function(contentItem) {
             // TODO Joscha
             // single item (like an annotation)
-            //console.log(contentItem);
+            // console.log(contentItem);
             
-            // TODO: CHECK WHY LAST contentItem is undefined !!!
-
             var collectionElement = $('<div class="collectionElement"></div>');
 
+            collectionElement.append(contentItem.resourceItem.renderThumb());
+            this.contentViewContainer.append(collectionElement);
 
-
-            if (contentItem) {
-                collectionElement.append(contentItem.resourceItem.renderThumb());
-                this.contentViewContainer.append(collectionElement);
-
-                contentItem.contentViewElements.push(collectionElement);
-            }
+            contentItem.contentViewElements.push(collectionElement);
 
         },
 
@@ -113,7 +144,7 @@ FrameTrail.defineType(
         removeContentCollectionElements: function(contentItem) {
             // TODO
             // single item (like an annotation)
-            console.log(contentItem);
+            // console.log(contentItem);
 
             // TODO: CHECK WHY contentItem is undefined !!!
 
@@ -367,10 +398,17 @@ FrameTrail.defineType(
             previewElement.find('.deleteContentView').click(function() {
                 
                 // TODO: use closest()
-                var closestContentViewTab = (self.contentViewPreviewTab.prev('.contentViewTab').length != 0) ? self.contentViewPreviewTab.prev('.contentViewTab') : self.contentViewPreviewTab.next('.contentViewTab');
-
+                var closestContentViewTab = (self.contentViewTab.prev('.contentViewTab').length != 0) ? self.contentViewTab.prev('.contentViewTab') : self.contentViewTab.next('.contentViewTab');
                 if ( closestContentViewTab.length != 0 ) {
                     closestContentViewTab.click();
+                } else {
+                    self.resizeLayoutArea(true);
+                }
+
+                // TODO: use closest()
+                var closestContentViewPreviewTab = (self.contentViewPreviewTab.prev('.contentViewTab').length != 0) ? self.contentViewPreviewTab.prev('.contentViewTab') : self.contentViewPreviewTab.next('.contentViewTab');
+                if ( closestContentViewPreviewTab.length != 0 ) {
+                    closestContentViewPreviewTab.click();
                 } else {
                     self.resizeLayoutAreaPreview(true);
                 }
@@ -537,6 +575,10 @@ FrameTrail.defineType(
 
                                 self.contentViewData = newContentViewData;
                                 self.updateContentViewPreview();
+
+                                self.updateContent();
+
+                                FrameTrail.module('HypervideoModel').newUnsavedChange('layout');
 
                                 $(this).dialog( 'close' );
                             }
@@ -710,12 +752,9 @@ FrameTrail.defineType(
             });
 
             // TODO: Replace with actual data values
-            newDataObject.collectionFilter = {
-                "tags": [],
-                "types": [],
-                "text": "",
-                "users": []
-            };
+            newDataObject.collectionFilter.tags = [];
+            newDataObject.collectionFilter.types = [];
+            newDataObject.collectionFilter.users = [];
 
             return newDataObject;    
 

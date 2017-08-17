@@ -393,7 +393,7 @@
             console.log(e);
             return fail('Could not load content data');
         }
-        //console.log('oberlays', overlays);
+        //console.log('overlays', overlays);
         //console.log('codeSnippets', codeSnippets);
         success();
 
@@ -767,7 +767,7 @@
     function convertToDatabaseFormat (thisHypervideoID) {
 
         thisHypervideoID = thisHypervideoID || hypervideoID;
-        //console.log(sequence);
+
         return ({
         	"meta": {
         		"name": hypervideos[thisHypervideoID].name,
@@ -789,7 +789,7 @@
         		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
         		"hidden": hypervideos[thisHypervideoID].hidden,
-                "layoutArea": hypervideos[thisHypervideoID].config.layoutArea
+                "layoutArea": FrameTrail.module('ViewLayout').getLayoutAreaData()
         	},
         	"clips": hypervideos[thisHypervideoID].clips,
         	"globalEvents": (codeSnippets.globalEvents) ? codeSnippets.globalEvents : {},
@@ -889,12 +889,12 @@
             			"frametrail:events": overlays[i].events,
             			"frametrail:attributes": overlays[i].attributes
                     });
-                    console.log(contents);
+                    //console.log(contents);
                     if (contents[contents.length-1].body['frametrail:type'] === 'location') {
                         var contentItem = contents[contents.length-1];
                         contentItem.body['frametrail:lat'] = overlays[i].attributes.lat;
                         contentItem.body['frametrail:long'] = overlays[i].attributes.lon;
-                        contentItem.body['frametrail:boundingBox'] = overlays[i].attributes.boundingBox.join(',');
+                        contentItem.body['frametrail:boundingBox'] = (overlays[i].attributes.boundingBox) ?  overlays[i].attributes.boundingBox.join(',') : null;
                         delete contentItem["frametrail:attributes"].lat;
                         delete contentItem["frametrail:attributes"].lon;
                         delete contentItem["frametrail:attributes"].boundingBox;
@@ -964,7 +964,7 @@
         thisHypervideoID = thisHypervideoID || hypervideoID;
 
         var saveData = convertToDatabaseFormat(thisHypervideoID);
-        console.log(saveData);
+        //console.log(saveData);
 
         $.ajax({
             type:   'POST',
@@ -1135,7 +1135,7 @@
 
         }
 
-        console.log(annotationsToSave);
+        //console.log(annotationsToSave);
 
         $.ajax({
             type:   'POST',
