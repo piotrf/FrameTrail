@@ -38,6 +38,8 @@ FrameTrail.defineType(
         this.annotationElement = $('<div class="annotationElement"></div>');
         this.previewElement    = $('<div class="previewElement"></div>');
 
+        this.contentViewElements = [];
+
 
     },
 
@@ -710,7 +712,11 @@ FrameTrail.defineType(
         // TODO
 
         setActiveInContentView: function (contentView) {
-            console.log(this, 'setActiveInContentView', contentView);
+            
+            for (var i=0; i<this.contentViewElements.length; i++) {
+                this.contentViewElements[i].addClass('active');
+            }
+            //console.log(this, 'setActiveInContentView', contentView);
 
 
             this._activeStateInContentView.push(contentView);
@@ -718,7 +724,11 @@ FrameTrail.defineType(
 
 
         setInactiveInContentView: function (contentView) {
-            console.log(this, 'setInactiveInContentView', contentView);
+            
+            for (var i=0; i<this.contentViewElements.length; i++) {
+                this.contentViewElements[i].removeClass('active');
+            }
+            //console.log(this, 'setInactiveInContentView', contentView);
 
             this._activeStateInContentView = this._activeStateInContentView.filter(function (each) {
                 return each !== contentView;

@@ -66,7 +66,7 @@ path {
     order: 0;
     flex: 1 1 auto;
     align-self: auto;
-    margin: 30px 0;
+    margin: 10px 0;
     z-index: 1;
     overflow: hidden;
 }
@@ -183,7 +183,7 @@ path {
     order: 0;
     flex: 0 1 auto;
     align-self: auto;
-    background: var(--secondary-bg-color);
+    background: transparent;
     transition-property: margin-top;
     transition-duration: 500ms;
     -moz-transition-property: margin-top;
@@ -198,7 +198,7 @@ path {
     position: relative;
     order: 0;
     align-self: stretch;
-    background: var(--secondary-bg-color);
+    background: transparent;
 }
 
 #AreaTopDetails, #AreaBottomDetails {
@@ -243,15 +243,15 @@ path {
 /* LayoutArea Sizes */
 
 #AreaTopContainer, #AreaBottomContainer {
-    min-height: 120px;
+    min-height: 180px;
 }
 
 #AreaTopContainer[data-size="small"], #AreaBottomContainer[data-size="small"] {
-    min-height: 40px;
+    min-height: 100px;
 }
 
 #AreaTopContainer[data-size="medium"], #AreaBottomContainer[data-size="medium"] {
-    min-height: 120px;
+    min-height: 180px;
 }
 
 #AreaTopContainer[data-size="large"], #AreaBottomContainer[data-size="large"] {

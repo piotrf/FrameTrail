@@ -14,226 +14,367 @@
 
 FrameTrail.defineModule('ViewLayout', function(){
 
-    var configLayoutArea,
+	var configLayoutArea,
 
-        areaTopContainer,
-        areaTopDetails,
+		areaTopContainer,
+		areaTopDetails,
 
-        areaBottomContainer,
-        areaBottomDetails,
+		areaBottomContainer,
+		areaBottomDetails,
 
-        areaLeftContainer,
-        areaRightContainer,
+		areaLeftContainer,
+		areaRightContainer,
 
-        contentViewsTop     = [],
-        contentViewsBottom  = [],
-        contentViewsLeft    = [],
-        contentViewsRight   = [],
+		contentViewsTop     = [],
+		contentViewsBottom  = [],
+		contentViewsLeft    = [],
+		contentViewsRight   = [],
 
-        managedAnnotations  = [],
-        managedOverlays     = [];
+		managedAnnotations  = [],
+		managedOverlays     = [],
 
+		HypervideoLayoutContainer = FrameTrail.module('ViewVideo').HypervideoLayoutContainer;
 
 
-    function create () {
+	function create () {
 
-        configLayoutArea = FrameTrail.module('Database').hypervideo.config['layoutArea'];
+		configLayoutArea = FrameTrail.module('Database').hypervideo.config['layoutArea'];
 
-        areaTopContainer    = FrameTrail.module('ViewVideo').AreaTopContainer;
-        areaTopDetails      = FrameTrail.module('ViewVideo').AreaTopDetails;
-        areaBottomContainer = FrameTrail.module('ViewVideo').AreaBottomContainer;
-        areaBottomDetails   = FrameTrail.module('ViewVideo').AreaBottomDetails;
-        areaLeftContainer   = FrameTrail.module('ViewVideo').AreaLeftContainer;
-        areaRightContainer  = FrameTrail.module('ViewVideo').AreaRightContainer;
+		areaTopContainer    = FrameTrail.module('ViewVideo').AreaTopContainer;
+		areaTopDetails      = FrameTrail.module('ViewVideo').AreaTopDetails;
+		areaBottomContainer = FrameTrail.module('ViewVideo').AreaBottomContainer;
+		areaBottomDetails   = FrameTrail.module('ViewVideo').AreaBottomDetails;
+		areaLeftContainer   = FrameTrail.module('ViewVideo').AreaLeftContainer;
+		areaRightContainer  = FrameTrail.module('ViewVideo').AreaRightContainer;
 
-        for (var i in configLayoutArea.areaTop) {
-            contentViewsTop.push(
-                new FrameTrail.newObject('ContentView',
-                    configLayoutArea.areaTop[i],
-                    'top'));
-        }
+		for (var i in configLayoutArea.areaTop) {
+			contentViewsTop.push(
+				new FrameTrail.newObject('ContentView',
+					configLayoutArea.areaTop[i],
+					'top'));
+		}
 
-        for (var i in configLayoutArea.areaBottom) {
-            contentViewsBottom.push(
-                new FrameTrail.newObject('ContentView',
-                    configLayoutArea.areaBottom[i],
-                    'bottom'));
-        }
+		for (var i in configLayoutArea.areaBottom) {
+			contentViewsBottom.push(
+				new FrameTrail.newObject('ContentView',
+					configLayoutArea.areaBottom[i],
+					'bottom'));
+		}
 
-        for (var i in configLayoutArea.areaLeft) {
-            contentViewsLeft.push(
-                new FrameTrail.newObject('ContentView',
-                    configLayoutArea.areaLeft[i],
-                    'left'));
-        }
+		for (var i in configLayoutArea.areaLeft) {
+			contentViewsLeft.push(
+				new FrameTrail.newObject('ContentView',
+					configLayoutArea.areaLeft[i],
+					'left'));
+		}
 
-        for (var i in configLayoutArea.areaRight) {
-            contentViewsRight.push(
-                new FrameTrail.newObject('ContentView',
-                    configLayoutArea.areaRight[i],
-                    'right'));
-        }
+		for (var i in configLayoutArea.areaRight) {
+			contentViewsRight.push(
+				new FrameTrail.newObject('ContentView',
+					configLayoutArea.areaRight[i],
+					'right'));
+		}
 
-    }
+	}
+
+
+	function createContentView(whichArea, templateContentViewData, renderPreview) {
 
+		var arrayOfContentViews = ({
+			'top': contentViewsTop,
+			'bottom': contentViewsBottom,
+			'left': contentViewsLeft,
+			'right': contentViewsRight
+		})[whichArea];
 
+		if (!Array.isArray(arrayOfContentViews)) {
+			throw new Error('whichArea is string top/bottom/left/right');
+		}
 
-    function createContentView (whichArea, templateContentViewData) {
+		var newContentView = new FrameTrail.newObject('ContentView', templateContentViewData, whichArea)
 
-        var arrayOfContentViews = ({
-            'top': contentViewsTop,
-            'bottom': contentViewsBottom,
-            'left': contentViewsLeft,
-            'right': contentViewsRight
-        })[whichArea];
+		arrayOfContentViews.push(newContentView);
 
-        if (!Array.isArray(arrayOfContentViews)) {
-            throw new Error('whichArea is string top/bottom/left/right');
-        }
+		configLayoutArea[({
+			'top': 'areaTop',
+			'bottom': 'areaBottom',
+			'left': 'areaLeft',
+			'right': 'areaRight'
+		})[whichArea]].push(newContentView.contentViewData);
 
-        var newContentView = new FrameTrail.newObject('ContentView', templateContentViewData, whichArea)
+		updateManagedContent();
 
-        arrayOfContentViews.push(newContentView);
+		if (renderPreview) {
+			newContentView.renderContentViewPreview(true);
+		}
 
-        configLayoutArea[({
-            'top': 'areaTop',
-            'bottom': 'areaBottom',
-            'left': 'areaLeft',
-            'right': 'areaRight'
-        })[whichArea]].push(newContentView.contentViewData);
+	}
 
-        updateManagedContent();
 
-    }
+	function removeContentView(contentViewToRemove) {
 
+		var layoutAreaToRemovefrom = ({
+			'top': contentViewsTop,
+			'bottom': contentViewsBottom,
+			'left': contentViewsLeft,
+			'right': contentViewsRight
+		})[contentViewToRemove.whichArea];
 
-    function removeContentView (contentViewToRemove) {
+		contentViewToRemove.contentCollection.forEach(function(contentItem) {
+            contentViewToRemove.removeContentCollectionElements(contentItem);
+        });
+		contentViewToRemove.removeDOMElement();
+		
+		layoutAreaToRemovefrom.splice(
+			layoutAreaToRemovefrom.indexOf(contentViewToRemove),
+			1
+		);
 
-        var layoutAreaToRemovefrom = ({
-            'top': contentViewsTop,
-            'bottom': contentViewsBottom,
-            'left': contentViewsLeft,
-            'right': contentViewsRight
-        })[contentViewToRemove.whichArea];
+		updateManagedContent();
 
-        contentViewToRemove.removeContentCollectionElements();
+	}
 
-        layoutAreaToRemovefrom.splice(
-            layoutAreaToRemovefrom.indexOf(contentViewToRemove),
-            1
-        );
 
-        updateManagedContent();
-
-    }
-
-
-    function updateManagedContent() {
-
-        managedAnnotations = [];
-        managedOverlays    = [];
-
-        var contentViewAreas = [
-            contentViewsTop, contentViewsBottom, contentViewsLeft, contentViewsRight
-        ];
-
-        for (var a in contentViewAreas) {
-            for (var i in contentViewAreas[a]) {
-                var contentView = contentViewAreas[a][i];
-                for (var k in contentView.contentCollection) {
-                    var item = contentView.contentCollection[k];
-                    if (item.annotationElement) {
-                        managedAnnotations.push([item, contentView]);
-                    } else if (item.overlayElement) {
-                        managedOverlays.push([item, contentView]);
-                    }
-                }
-            }
-        }
-
-    }
-
-
-    function updateTimedStateOfContentViews (currentTime) {
-
-        var self = this;
-
-        for (var i in contentViewsTop) {
-            contentViewsTop[i].updateTimedStateOfContentViews(currentTime);
-        }
-        for (var i in contentViewsBottom) {
-            contentViewsBottom[i].updateTimedStateOfContentViews(currentTime);
-        }
-        for (var i in contentViewsLeft) {
-            contentViewsLeft[i].updateTimedStateOfContentViews(currentTime);
-        }
-        for (var i in contentViewsRight) {
-            contentViewsRight[i].updateTimedStateOfContentViews(currentTime);
-        }
-
-
-        for (var idx in managedAnnotations) {
-            var annotation  = managedAnnotations[idx][0],
-                contentView = managedAnnotations[idx][1];
-
-            if (    annotation.data.start <= currentTime
-                 && annotation.data.end   >= currentTime) {
-
-                if (!annotation.activeStateInContentView(contentView)) {
-                    annotation.setActiveInContentView(contentView);
-                }
-
-            } else {
-
-                if (annotation.activeStateInContentView(contentView)) {
-                    annotation.setInactiveInContentView(contentView);
-                }
-
-            }
-
-        }
-
-        for (var idx in managedOverlays) {
-            var overlay     = managedOverlays[idx][0],
-                contentView = managedOverlays[idx][1];
-
-            if (    overlay.data.start <= currentTime
-                 && overlay.data.end   >= currentTime) {
-
-                if (!overlay.activeStateInContentView(contentView)) {
-                    overlay.setActiveInContentView(contentView);
-                }
-
-            } else {
-
-                if (overlay.activeStateInContentView(contentView)) {
-                    overlay.setInactiveInContentView(contentView);
-                }
-
-            }
-
-        }
-
-    }
-
-
-
-    return {
-        create: create,
-
-        createContentView: createContentView,
-        removeContentView: removeContentView,
-
-        updateManagedContent: updateManagedContent,
-
-        updateTimedStateOfContentViews: updateTimedStateOfContentViews,
-
-        get areaTopContainer()      { return areaTopContainer; },
-        get areaTopDetails()        { return areaTopDetails; },
-        get areaBottomContainer()   { return areaBottomContainer; },
-        get areaBottomDetails()     { return areaBottomDetails; },
-        get areaLeftContainer()     { return areaLeftContainer; },
-        get areaRightContainer()    { return areaRightContainer; }
-    };
+	function updateManagedContent() {
+
+		managedAnnotations = [];
+		managedOverlays    = [];
+
+		var contentViewAreas = [
+			contentViewsTop, contentViewsBottom, contentViewsLeft, contentViewsRight
+		];
+
+		for (var a in contentViewAreas) {
+			for (var i in contentViewAreas[a]) {
+				var contentView = contentViewAreas[a][i];
+				for (var k in contentView.contentCollection) {
+					var item = contentView.contentCollection[k];
+					if (item.annotationElement) {
+						managedAnnotations.push([item, contentView]);
+					} else if (item.overlayElement) {
+						managedOverlays.push([item, contentView]);
+					}
+				}
+			}
+		}
+		
+	}
+
+
+	function updateTimedStateOfContentViews(currentTime) {
+
+		var self = this;
+
+		for (var i in contentViewsTop) {
+			contentViewsTop[i].updateTimedStateOfContentViews(currentTime);
+		}
+		for (var i in contentViewsBottom) {
+			contentViewsBottom[i].updateTimedStateOfContentViews(currentTime);
+		}
+		for (var i in contentViewsLeft) {
+			contentViewsLeft[i].updateTimedStateOfContentViews(currentTime);
+		}
+		for (var i in contentViewsRight) {
+			contentViewsRight[i].updateTimedStateOfContentViews(currentTime);
+		}
+
+
+		for (var idx in managedAnnotations) {
+			var annotation  = managedAnnotations[idx][0],
+				contentView = managedAnnotations[idx][1];
+
+			if (    annotation.data.start <= currentTime
+				 && annotation.data.end   >= currentTime) {
+
+				if (!annotation.activeStateInContentView(contentView)) {
+					annotation.setActiveInContentView(contentView);
+				}
+
+			} else {
+
+				if (annotation.activeStateInContentView(contentView)) {
+					annotation.setInactiveInContentView(contentView);
+				}
+
+			}
+
+		}
+
+		for (var idx in managedOverlays) {
+			var overlay     = managedOverlays[idx][0],
+				contentView = managedOverlays[idx][1];
+
+			if (    overlay.data.start <= currentTime
+				 && overlay.data.end   >= currentTime) {
+
+				if (!overlay.activeStateInContentView(contentView)) {
+					overlay.setActiveInContentView(contentView);
+				}
+
+			} else {
+
+				if (overlay.activeStateInContentView(contentView)) {
+					overlay.setInactiveInContentView(contentView);
+				}
+
+			}
+
+		}
+
+	}
+
+
+	function initLayoutManager() {
+		var domElement = $('<div id="LayoutManagerContainer">'
+						+  '    <div id="LayoutManagerMain">'
+						+  '        <div id="LayoutManager">'
+						+  '            <div data-area="areaTop" class="layoutArea">'
+						+  '                <div class="layoutAreaTabs"></div>'
+						+  '                <div class="layoutAreaContent"></div>'
+						+  '            </div>'
+						+  '            <div class="playerWrapper">'
+						+  '                <div data-area="areaLeft" class="layoutArea">'
+						+  '                    <div class="layoutAreaTabs"></div>'
+						+  '                    <div class="layoutAreaContent"></div>'
+						+  '                </div>'
+						+  '                <div class="playerArea">'
+						+  '                    <span class="icon-play-1"></span>'
+						+  '                </div>'
+						+  '                <div data-area="areaRight" class="layoutArea">'
+						+  '                    <div class="layoutAreaTabs"></div>'
+						+  '                    <div class="layoutAreaContent"></div>'
+						+  '                </div>'
+						+  '            </div>'
+						+  '            <div data-area="areaBottom" class="layoutArea">'
+						+  '                <div class="layoutAreaTabs"></div>'
+						+  '                <div class="layoutAreaContent"></div>'
+						+  '            </div>'
+						+  '        </div>'
+						+  '    </div>'
+						+  '    <div id="LayoutManagerOptions">'
+						+  '        <div class="message active">Drag and Drop Content Views into Layout Areas</div>'
+						+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="small">'
+						+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Tile)</span></div>'
+						+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
+						+  '        </div>'
+						+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="medium">'
+						+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Preview)</span></div>'
+						+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
+						+  '        </div>'
+						+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="large">'
+						+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Full)</span></div>'
+						+  '            <div class="contentViewTemplateSize"><span class="icon-coverflow"></span></div>'
+						+  '        </div>'
+						+  '        <div class="contentViewTemplate" data-type="CustomHTML" data-size="medium">'
+						+  '            <div class="contentViewTemplateType"><span class="icon-file-code">Custom HTML</span></div>'
+						+  '        </div>'
+						+  '        <div class="contentViewTemplate" data-type="Transcript" data-size="large">'
+						+  '            <div class="contentViewTemplateType"><span class="icon-doc-text">Text Transcript</span></div>'
+						+  '        </div>'
+						+  '    </div>'
+						+  '</div>'),
+		
+		LayoutManager        = domElement.find('#LayoutManager'),
+		LayoutManagerOptions = domElement.find('#LayoutManagerOptions');
+
+		HypervideoLayoutContainer.append(domElement);
+
+		LayoutManagerOptions.find('.contentViewTemplate').draggable({
+			containment: domElement,
+			snapTolerance: 10,
+			appendTo: 		'body',
+			helper: 		'clone',
+			revert: 		'invalid',
+			revertDuration: 100,
+			distance: 		10,
+			zIndex: 		1000,
+			start: function(event, ui) {
+				ui.helper.width($(event.target).width());
+			}
+		});
+
+		LayoutManager.find('.layoutAreaContent').droppable({
+			accept: '.contentViewTemplate, .contentViewPreview',
+			activeClass: 'droppableActive',
+			hoverClass: 'droppableHover',
+			tolerance: 'pointer',
+			drop: function( event, ui ) {
+				
+				var layoutArea = $(event.target).parent().data('area'),
+					contentAxis = (layoutArea == 'areaTop' || layoutArea == 'areaBottom') ? 'x' : 'y',
+					templateContentViewData = {
+						'type': ui.helper.data('type'),
+						'name': 'Lorem Ipsum',
+						'description': '',
+						'cssClass': '',
+						'html': '',
+						'collectionFilter': {
+							'tags': [],
+							'types': [],
+							'text': '',
+							'users': []
+						},
+						'transcriptSource': '',
+						'mode': 'slide',
+						'axis': contentAxis,
+						'contentSize': ui.helper.data('size') || '',
+						'autoSync': false,
+						'onClickContentItem': ''
+					};
+				
+				var whichArea = layoutArea.split('area')[1].toLowerCase(),
+					renderPreview = true;
+
+				createContentView(whichArea, templateContentViewData, renderPreview);
+
+			}
+
+		});
+
+		initLayoutAreaPreview(contentViewsTop);
+		initLayoutAreaPreview(contentViewsBottom);
+		initLayoutAreaPreview(contentViewsLeft);
+		initLayoutAreaPreview(contentViewsRight);
+		
+
+
+	}
+
+
+	/**
+	 * I initialize a LayoutArea Preview and trigger initialization of its ContentViews.
+	 *
+	 * @method initLayoutAreaPreview
+	 * @param {Array} contentViews
+	 */
+	function initLayoutAreaPreview(contentViews) {
+	    	    
+	    for (var i=0; i < contentViews.length; i++) {
+	        contentViews[i].renderContentViewPreview();
+	    }
+	    
+	}
+
+
+
+	return {
+		create: create,
+
+		createContentView: createContentView,
+		removeContentView: removeContentView,
+
+		updateManagedContent: updateManagedContent,
+
+		updateTimedStateOfContentViews: updateTimedStateOfContentViews,
+
+		initLayoutManager: initLayoutManager,
+
+		get areaTopContainer()      { return areaTopContainer; },
+		get areaTopDetails()        { return areaTopDetails; },
+		get areaBottomContainer()   { return areaBottomContainer; },
+		get areaBottomDetails()     { return areaBottomDetails; },
+		get areaLeftContainer()     { return areaLeftContainer; },
+		get areaRightContainer()    { return areaRightContainer; }
+	};
 
 });

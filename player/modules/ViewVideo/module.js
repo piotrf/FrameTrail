@@ -22,11 +22,17 @@ FrameTrail.defineModule('ViewVideo', function(){
     var domElement  = $(  '<div id="ViewVideo">'
                         + '    <div id="SlideArea">'
                         + '        <div id="AreaTopDetails"></div>'
-                        + '        <div id="AreaTopContainer"></div>'
+                        + '        <div id="AreaTopContainer" class="layoutArea" data-area="areaTop">'
+                        + '            <div class="layoutAreaTabs"></div>'
+                        + '            <div class="layoutAreaContent"></div>'
+                        + '        </div>'
                         + '        <div id="PlayerContainer">'
                         + '            <div id="PlayerProgress"></div>'
                         + '            <div id="HypervideoContainer">'
-                        + '                <div id="AreaLeftContainer"></div>'
+                        + '                <div id="AreaLeftContainer" class="layoutArea" data-area="areaLeft">'
+                        + '                    <div class="layoutAreaTabs"></div>'
+                        + '                    <div class="layoutAreaContent"></div>'
+                        + '                </div>'
                         + '                <div id="VideoContainer">'
                         + '                    <div id="Hypervideo">'
                         + '                        <video id="Video"></video>'
@@ -43,7 +49,10 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '                        <div class="workingSpinner"></div>'
                         + '                    </div>'
                         + '                </div>'
-                        + '                <div id="AreaRightContainer"></div>'
+                        + '                <div id="AreaRightContainer" class="layoutArea" data-area="areaRight">'
+                        + '                    <div class="layoutAreaTabs"></div>'
+                        + '                    <div class="layoutAreaContent"></div>'
+                        + '                </div>'
                         + '                <div id="InfoAreaRight">'
                         + '                    <div id="EditPropertiesContainer"></div>'
                         + '                </div>'
@@ -98,7 +107,10 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '            </div>'
                         + '            <div id="AnnotationTimeline" class="timeline"></div>'
                         + '        </div>'
-                        + '        <div id="AreaBottomContainer"></div>'
+                        + '        <div id="AreaBottomContainer" class="layoutArea" data-area="areaBottom">'
+                        + '            <div class="layoutAreaTabs"></div>'
+                        + '            <div class="layoutAreaContent"></div>'
+                        + '        </div>'
                         + '        <div id="AreaBottomDetails"></div>'
                         + '    </div>'
                         + '    <div id="EditingOptions"></div>'
@@ -750,7 +762,6 @@ FrameTrail.defineModule('ViewVideo', function(){
         switch (editMode) {
             case false:
                 HypervideoSettingsContainer.empty();
-                HypervideoLayoutContainer.empty();
                 leaveEditMode();
                 break;
             case 'preview':
@@ -799,7 +810,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         AnnotationTimeline.hide();
         domElement.find('#InfoAreaRight').hide();
         HypervideoSettingsContainer.removeClass('active');
-        HypervideoLayoutContainer.removeClass('active');
+        HypervideoLayoutContainer.empty().removeClass('active');
     }
 
     /**
@@ -847,7 +858,7 @@ FrameTrail.defineModule('ViewVideo', function(){
     function leaveEditMode() {
         EditingOptions.removeClass('active');
         HypervideoSettingsContainer.removeClass('active');
-        HypervideoLayoutContainer.removeClass('active');
+        HypervideoLayoutContainer.empty().removeClass('active');
         EditPropertiesContainer.removeAttr('data-editmode').hide();
 
         toggleConfig_areaTopVisible(FrameTrail.getState('hv_config_areaTopVisible'));
@@ -886,7 +897,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method enterLayoutMode
      */
     function enterLayoutMode() {
-        console.log('INIT VIEWLAYOUT / LAYOUT MANAGER');
+        FrameTrail.module('ViewLayout').initLayoutManager();
         HypervideoLayoutContainer.addClass('active');
     }
 

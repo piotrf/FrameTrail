@@ -6,20 +6,20 @@ var fakeID = 0;
  * If startEditing is set to true, editContentView is called
  * right after rendering.
  *
- * @method renderContentView
+ * @method renderContentViewPreview
  * @param {String} layoutArea
  * @param {Object} contentViewData
  * @param {Boolean} startEditing
  */
-function renderContentView(layoutArea, contentViewData, startEditing) {
+function renderContentViewPreview(layoutArea, contentViewData, startEditing) {
     var areaContainer = $('.layoutArea[data-area="'+ layoutArea +'"]'),
-        contentViewTabElement = renderContentViewTab(contentViewData),
-        contentViewPreviewElement = renderContentViewPreview(contentViewData);
+        contentViewTabElement = renderContentViewPreviewPreviewTab(contentViewData),
+        contentViewPreviewElement = renderContentViewPreviewPreviewElement(contentViewData);
     
     areaContainer.find('.layoutAreaTabs').append( contentViewTabElement );
     areaContainer.find('.layoutAreaContent').append( contentViewPreviewElement );
 
-    activateContentView( layoutArea, contentViewTabElement.attr('data-fakeid') );
+    activateContentViewPreview( layoutArea, contentViewTabElement.attr('data-fakeid') );
     
     if (startEditing) {
         window.setTimeout(function() {
@@ -32,11 +32,11 @@ function renderContentView(layoutArea, contentViewData, startEditing) {
 /**
  * I render a tab based on a contentView data object.
  *
- * @method renderContentViewTab
+ * @method renderContentViewPreviewTab
  * @param {Object} contentViewData
  * @return HTMLElement
  */
-function renderContentViewTab(contentViewData) {
+function renderContentViewPreviewTab(contentViewData) {
 
     var tabItem = $('<div class="contentViewTab" '
                     +   'data-type="'+ contentViewData.type +'" '
@@ -46,7 +46,7 @@ function renderContentViewTab(contentViewData) {
                     +   '</div>');
 
     tabItem.find('.contentViewTabName').click(function() {
-        activateContentView( $(this).parents('.layoutArea').attr('data-area'), $(this).parents('.contentViewTab').attr('data-fakeid') );
+        activateContentViewPreview( $(this).parents('.layoutArea').attr('data-area'), $(this).parents('.contentViewTab').attr('data-fakeid') );
     });
 
     return tabItem;
@@ -56,11 +56,11 @@ function renderContentViewTab(contentViewData) {
 /**
  * I render a preview based on a contentView data object.
  *
- * @method renderContentViewPreview
+ * @method renderContentViewPreviewElement
  * @param {Object} contentViewData
  * @return HTMLElement
  */
-function renderContentViewPreview(contentViewData) {
+function renderContentViewPreviewElement(contentViewData) {
 
     var previewItem = $('<div class="contentViewPreview" '
                     +   'data-size="'+ contentViewData.contentSize +'" '
@@ -92,7 +92,7 @@ function renderContentViewPreview(contentViewData) {
         $(this).parents('.contentViewPreview').remove();
         contentViewTabItem.remove();
 
-        activateContentView( area, $('.layoutArea[data-area="'+ area +'"] .contentViewTab').eq(0).attr('data-fakeid') );
+        activateContentViewPreview( area, $('.layoutArea[data-area="'+ area +'"] .contentViewTab').eq(0).attr('data-fakeid') );
 
     });
 
@@ -122,11 +122,11 @@ function updateContentViewPreview() {
  * I activate a contentView (tab and preview) 
  * based on a FAKEID (later internal in contentView type).
  *
- * @method activateContentView
+ * @method activateContentViewPreview
  * @param {String} area
  * @param {String} fakeID
  */
-function activateContentView(area, fakeID) {
+function activateContentViewPreview(area, fakeID) {
 
     if ($('.layoutArea[data-area="'+ area +'"] .contentViewPreview[data-fakeid="'+ fakeID +'"]').length == 0) {
         resizeLayoutArea(area, 'empty');
@@ -181,7 +181,7 @@ function editContentView(contentViewPreviewElement) {
         
         var editDialog   = $('<div class="editContentViewDialog" title="Edit ContentView"></div>');
 
-        editDialog.append(renderContentViewEditingUI());
+        editDialog.append(renderContentViewPreviewEditingUI());
 
         editDialog.dialog({
             resizable: false,
@@ -229,9 +229,9 @@ function editContentView(contentViewPreviewElement) {
 /**
  * I render the Editing UI for a given ContentView
  *
- * @method renderContentViewEditingUI
+ * @method renderContentViewPreviewEditingUI
  */
-function renderContentViewEditingUI() {
+function renderContentViewPreviewEditingUI() {
 
     var contentViewData = sampleConfigData.areaBottom[0],
         elements = $('<div class="contentViewEditingUI">'

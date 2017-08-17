@@ -155,17 +155,21 @@
                 }
             }
 
-            if (arrayOfContentTypes.indexOf(annotationData.type) < 0) {
-                //console.log(annotationData.type);
-                match = false;
-            }
-
-            if (searchText) {
-                if (annotationData.name.indexOf(searchText) < 0) {
+            // empty arrayOfContentTypes means no filtering by content types
+            if (arrayOfContentTypes.length > 0) {
+                if (arrayOfContentTypes.indexOf(annotationData.type) < 0) {
+                    //console.log(annotationData.type);
                     match = false;
                 }
             }
 
+            // empty searchText string means no filtering by search text
+            if (searchText.length > 0) {
+                if (annotationData.name.indexOf(searchText) < 0) {
+                    match = false;
+                }
+            }
+            
             return match;
 
         });

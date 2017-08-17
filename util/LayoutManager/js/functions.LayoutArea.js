@@ -1,12 +1,12 @@
 
 /**
- * I initialize a LayoutArea and trigger initialization of its ContentViews.
+ * I initialize a LayoutArea Preview and trigger initialization of its ContentViews.
  *
- * @method initLayoutArea
+ * @method initLayoutAreaPreview
  * @param {String} layoutArea
  * @param {Array} contentViews
  */
-function initLayoutArea(layoutArea, contentViews) {
+function initLayoutAreaPreview(layoutArea, contentViews) {
     var areaContainer = $('.layoutArea[data-area="'+ layoutArea +'"]');
     
     // LayoutAreas can't be set visible or invisible in config.
@@ -18,19 +18,19 @@ function initLayoutArea(layoutArea, contentViews) {
     }
     
     for (var i=0; i < contentViews.length; i++) {
-        renderContentView(layoutArea, contentViews[i]);
+        renderContentViewPreview(layoutArea, contentViews[i]);
     }
     
 }
 
 /**
- * I resize a LayoutArea based on a given size 
+ * I resize a LayoutArea Preview based on a given size 
  * ('small', 'medium', 'large') derived from a ContentView size.
  *
- * @method resizeLayoutArea
+ * @method resizeLayoutAreaPreview
  * @param {String} size
  */
-function resizeLayoutArea(layoutArea, size) {
+function resizeLayoutAreaPreview(layoutArea, size) {
     var areaContainer = $('.layoutArea[data-area="'+ layoutArea +'"]');
 
     switch(size) {
