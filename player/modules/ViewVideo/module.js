@@ -241,7 +241,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             var config      = $(evt.target).attr('data-config');
             var configState = $(evt.target).hasClass('active');
 
-            if ( config != 'hv_config_annotationsPosition' && config != 'hv_config_slidingMode' ) {
+            if ( config != 'hv_config_slidingMode' ) {
 
                 FrameTrail.changeState(config, !configState);
 
@@ -251,14 +251,6 @@ FrameTrail.defineModule('ViewVideo', function(){
                     FrameTrail.changeState('hv_config_slidingMode', 'overlay');
                 } else {
                     FrameTrail.changeState('hv_config_slidingMode', 'adjust');
-                }
-
-            } else {
-
-                if ( FrameTrail.getState('hv_config_annotationsPosition') == 'top' ) {
-                    FrameTrail.changeState('hv_config_annotationsPosition', 'bottom');
-                } else {
-                    FrameTrail.changeState('hv_config_annotationsPosition', 'top');
                 }
 
             }
@@ -312,12 +304,6 @@ FrameTrail.defineModule('ViewVideo', function(){
     function create() {
 
         toggleViewMode(FrameTrail.getState('viewMode'));
-
-        toggleConfig_areaTopVisible(FrameTrail.getState('hv_config_areaTopVisible'));
-        toggleConfig_areaBottomVisible(FrameTrail.getState('hv_config_areaBottomVisible'));
-        toggleConfig_areaLeftVisible(FrameTrail.getState('hv_config_areaLeftVisible'));
-        toggleConfig_areaRightVisible(FrameTrail.getState('hv_config_areaRightVisible'));
-        toggleConfig_overlaysVisible(FrameTrail.getState('hv_config_overlaysVisible'));
 
         toggleConfig_captionsVisible(FrameTrail.getState('hv_config_captionsVisible'))
 

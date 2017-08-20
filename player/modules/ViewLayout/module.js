@@ -76,6 +76,18 @@ FrameTrail.defineModule('ViewLayout', function(){
 					'right'));
 		}
 
+		updateLayoutAreaVisibility();
+
+	}
+
+
+	function updateLayoutAreaVisibility() {
+
+		FrameTrail.changeState('hv_config_areaTopVisible', (contentViewsTop.length != 0));
+        FrameTrail.changeState('hv_config_areaBottomVisible', (contentViewsBottom.length != 0));
+        FrameTrail.changeState('hv_config_areaLeftVisible', (contentViewsLeft.length != 0));
+        FrameTrail.changeState('hv_config_areaRightVisible', (contentViewsRight.length != 0));
+
 	}
 
 
@@ -109,6 +121,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 			newContentView.renderContentViewPreview(true);
 		}
 
+		updateLayoutAreaVisibility();
+
 	}
 
 
@@ -132,6 +146,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 		);
 
 		updateManagedContent();
+
+		updateLayoutAreaVisibility();
 
 		FrameTrail.module('HypervideoModel').newUnsavedChange('layout');
 
@@ -415,7 +431,9 @@ FrameTrail.defineModule('ViewLayout', function(){
     function changeViewSize(arrayWidthAndHeight) {
 
         var currentTime = FrameTrail.module('HypervideoController').currentTime;
-		updateTimedStateOfContentViews(currentTime);
+		
+		//TODO: CHECK WHY THIS THROWS ERROR RIGHT AFTER DELETING A CONTENT VIEW
+		// updateTimedStateOfContentViews(currentTime);
 
 		for (var i in contentViewsTop) {
 			contentViewsTop[i].updateLayout();

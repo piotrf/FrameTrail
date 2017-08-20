@@ -515,9 +515,7 @@ FrameTrail.defineType(
                 areaContainer.attr('data-size', this.contentViewData.contentSize);
             }
 
-            window.setTimeout(function() {
-                FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
-            }, 50);
+            FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
             
         },
 
