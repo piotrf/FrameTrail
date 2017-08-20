@@ -3,7 +3,7 @@
 *******************/
 
 .layoutArea {
-
+    overflow: hidden;
 }
 
 /* Layout Area Tabs */
@@ -24,11 +24,19 @@
 }
 
 .layoutArea[data-area="areaLeft"] .layoutAreaTabs {
-    text-align: left;
+    transform-origin: top right;
+    transform: rotate(-90deg);
+    text-align: right;
+    right: 36px;
+    width: 100vh;
 }
 
 .layoutArea[data-area="areaRight"] .layoutAreaTabs {
-    text-align: left;
+    transform-origin: top right;
+    transform: rotate(-90deg);
+    text-align: right;
+    right: 100%;
+    width: 100vh;
 }
 
 .layoutArea .layoutAreaTabs .contentViewTab {
@@ -51,21 +59,11 @@
     opacity: 1;
 }
 
-.layoutArea[data-area="areaTop"] .layoutAreaTabs .contentViewTab {
+.layoutArea[data-area="areaTop"] .layoutAreaTabs .contentViewTab, .layoutArea[data-area="areaLeft"] .layoutAreaTabs .contentViewTab {
     vertical-align: bottom;
 }
 
-.layoutArea[data-area="areaLeft"] .layoutAreaTabs .contentViewTab {
-    margin-left: 0px;
-    margin-right: 2px;
-}
-
-.layoutArea[data-area="areaRight"] .layoutAreaTabs .contentViewTab {
-    margin-left: 0px;
-    margin-right: 2px;
-}
-
-.layoutArea[data-area="areaTop"] .layoutAreaTabs .contentViewTab.active {
+.layoutArea[data-area="areaTop"] .layoutAreaTabs .contentViewTab.active, .layoutArea[data-area="areaLeft"] .layoutAreaTabs .contentViewTab.active {
     padding-top: 2px;
 }
 
@@ -74,6 +72,7 @@
     font-size: 14px;
     text-align: left;
     padding: 6px 8px;
+    white-space: nowrap;
 }
 
 /* Layout Area Content */
@@ -199,15 +198,25 @@ body > .contentViewTemplate {
     transition-duration: 100ms;
 }
 
-#LayoutManager .layoutArea .layoutAreaTabs {
-    top: 10px;
-    right: 10px;
-    width: calc(100% - 20px);
-}
-
 #LayoutManager .layoutArea[data-area="areaTop"] .layoutAreaTabs {
     top: auto;
+    right: 10px;
     bottom: 10px;
+}
+
+#LayoutManager .layoutArea[data-area="areaBottom"] .layoutAreaTabs {
+    top: 10px;
+    right: 10px;
+}
+
+#LayoutManager .layoutArea[data-area="areaLeft"] .layoutAreaTabs {
+    top: 10px;
+    right: 46px;
+}
+
+#LayoutManager .layoutArea[data-area="areaRight"] .layoutAreaTabs {
+    top: 10px;
+    right: calc(100% - 10px);
 }
 
 #LayoutManager .layoutArea .layoutAreaTabs .contentViewTab {
@@ -288,13 +297,13 @@ body > .contentViewTemplate {
 }
 
 #LayoutManager .layoutArea[data-area="areaLeft"][data-size="small"], #LayoutManager .layoutArea[data-area="areaRight"][data-size="small"] {
-    flex: 0 0 300px;
-    min-width: 300px;
+    flex: 0 0 160px;
+    min-width: 160px;
 }
 
 #LayoutManager .layoutArea[data-area="areaLeft"][data-size="medium"], #LayoutManager .layoutArea[data-area="areaRight"][data-size="medium"] {
-    flex: 0 0 300px;
-    min-width: 300px;
+    flex: 0 0 200px;
+    min-width: 200px;
 }
 
 #LayoutManager .layoutArea[data-area="areaLeft"][data-size="large"], #LayoutManager .layoutArea[data-area="areaRight"][data-size="large"] {

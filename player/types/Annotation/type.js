@@ -741,7 +741,7 @@ FrameTrail.defineType(
                 this._activeStateInContentView = [];
             }
 
-            return this._activeStateInContentView.indexOf(contentView) >= 0;
+            return this._activeStateInContentView.indexOf(contentView) != -1;
         }
 
 

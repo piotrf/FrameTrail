@@ -5,7 +5,8 @@
 /* Content View Items / Collection Items */
 .collectionElement {
 	float: left;
-	position: relative;	
+	position: relative;
+	margin-right: 4px;
 	opacity: .6;
 }
 
@@ -26,7 +27,8 @@
 /* Content View Item Sizes */
 
 .layoutArea[data-area="areaTop"] .collectionElement, .layoutArea[data-area="areaBottom"] .collectionElement {
-	height: 100%;
+	top: 4px;
+	height: calc(100% - 8px);
 }
 
 .layoutArea[data-area="areaTop"][data-size="small"] .collectionElement, .layoutArea[data-area="areaBottom"][data-size="small"] .collectionElement {
@@ -42,23 +44,24 @@
 }
 
 .layoutArea[data-area="areaLeft"] .collectionElement, .layoutArea[data-area="areaRight"] .collectionElement {
-	width: 100%;
 	height: 100%;
+	left: 4px;
+	margin-right: 0px;
+	margin-bottom: 4px;
+	width: calc(100% - 8px);
 }
 
-/*
 .layoutArea[data-area="areaLeft"][data-size="small"] .collectionElement, .layoutArea[data-area="areaRight"][data-size="small"] .collectionElement {
-	height: 40px;
+	height: 34px;
 }
 
 .layoutArea[data-area="areaLeft"][data-size="medium"] .collectionElement, .layoutArea[data-area="areaRight"][data-size="medium"] .collectionElement {
-	height: 160px;
+	height: 110px;
 }
 
 .layoutArea[data-area="areaLeft"][data-size="large"] .collectionElement, .layoutArea[data-area="areaRight"][data-size="large"] .collectionElement {
-	height: 340px;
+	height: 220px;
 }
-*/
 
 /* Content View Container */
 
@@ -67,7 +70,7 @@
 	top: 36px;
 	width: 100%;
 	height: calc(100% - 36px);
-	padding: 10px;
+	padding: 0px;
 	box-sizing: border-box;
 	background: var(--secondary-bg-color);
 	color: var(--primary-fg-color);
@@ -79,8 +82,33 @@
 	top: 0px;
 }
 
+.layoutArea[data-area="areaLeft"] .contentViewContainer {
+	top: 0px;
+	right: 36px;
+	height: 100%;
+	width: calc(100% - 36px);
+}
+
+.layoutArea[data-area="areaRight"] .contentViewContainer {
+	top: 0px;
+	left: 36px;
+	height: 100%;
+	width: calc(100% - 36px);
+}
+
 .layoutArea .contentViewContainer.active {
 	display: block;
+}
+
+.layoutArea .contentViewContainer .contentViewContents {
+	position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    transition-property: top, left;
+    transition-duration: 250ms;
 }
 
 /* View Layout Manager */
@@ -95,6 +123,20 @@
 
 #LayoutManager .layoutArea[data-area="areaTop"] .contentViewPreview {
 	top: 10px;
+}
+
+#LayoutManager .layoutArea[data-area="areaLeft"] .contentViewPreview {
+	top: 10px;
+	right: 46px;
+	height: calc(100% - 20px);
+	width: calc(100% - 56px);
+}
+
+#LayoutManager .layoutArea[data-area="areaRight"] .contentViewPreview {
+	top: 10px;
+	left: 46px;
+	height: calc(100% - 20px);
+	width: calc(100% - 56px);
 }
 
 #LayoutManager .layoutArea .contentViewPreview.active {

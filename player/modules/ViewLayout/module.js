@@ -168,20 +168,6 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 		var self = this;
 
-		for (var i in contentViewsTop) {
-			contentViewsTop[i].updateTimedStateOfContentViews(currentTime);
-		}
-		for (var i in contentViewsBottom) {
-			contentViewsBottom[i].updateTimedStateOfContentViews(currentTime);
-		}
-		for (var i in contentViewsLeft) {
-			contentViewsLeft[i].updateTimedStateOfContentViews(currentTime);
-		}
-		for (var i in contentViewsRight) {
-			contentViewsRight[i].updateTimedStateOfContentViews(currentTime);
-		}
-
-
 		for (var idx in managedAnnotations) {
 			var annotation  = managedAnnotations[idx][0],
 				contentView = managedAnnotations[idx][1];
@@ -222,6 +208,19 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 			}
 
+		}
+
+		for (var i in contentViewsTop) {
+			contentViewsTop[i].updateTimedStateOfContentViews(currentTime);
+		}
+		for (var i in contentViewsBottom) {
+			contentViewsBottom[i].updateTimedStateOfContentViews(currentTime);
+		}
+		for (var i in contentViewsLeft) {
+			contentViewsLeft[i].updateTimedStateOfContentViews(currentTime);
+		}
+		for (var i in contentViewsRight) {
+			contentViewsRight[i].updateTimedStateOfContentViews(currentTime);
 		}
 
 	}
@@ -407,8 +406,57 @@ FrameTrail.defineModule('ViewLayout', function(){
 	}
 
 
+	/**
+     * I am called when the global state "viewSize" changes (which it does after a window resize,
+     * and one time during app start, after all create methods of interface modules have been called).
+     * @method changeViewSize
+     * @param {Array} arrayWidthAndHeight
+     */
+    function changeViewSize(arrayWidthAndHeight) {
+
+        var currentTime = FrameTrail.module('HypervideoController').currentTime;
+		updateTimedStateOfContentViews(currentTime);
+
+		for (var i in contentViewsTop) {
+			contentViewsTop[i].updateLayout();
+		}
+		for (var i in contentViewsBottom) {
+			contentViewsBottom[i].updateLayout();
+		}
+		for (var i in contentViewsLeft) {
+			contentViewsLeft[i].updateLayout();
+		}
+		for (var i in contentViewsRight) {
+			contentViewsRight[i].updateLayout();
+		}
+
+    }
+
+
+    /**
+     * I react to changes in the global state viewSizeChanged.
+     * The state changes after a window resize event
+     * and is meant to be used for performance-heavy operations.
+     *
+     * @method onViewSizeChanged
+     * @private
+     */
+    function onViewSizeChanged() {
+
+        
+
+    }
+
+
 
 	return {
+		
+		onChange: {
+
+            viewSize:        changeViewSize,
+            viewSizeChanged: onViewSizeChanged
+        },
+
 		create: create,
 
 		createContentView: createContentView,

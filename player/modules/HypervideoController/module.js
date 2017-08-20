@@ -165,6 +165,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 						setCurrentTime(0);
 					}
 
+					FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+
 					callback.call();
 
 				},
@@ -207,6 +209,8 @@ FrameTrail.defineModule('HypervideoController', function(){
 			} else {
 				setCurrentTime(0);
 			}
+
+			FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
 
 			callback.call();
 

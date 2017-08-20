@@ -248,15 +248,15 @@ path {
 }
 
 #AreaTopContainer[data-size="small"], #AreaBottomContainer[data-size="small"] {
-    min-height: 90px;
+    min-height: 76px;
 }
 
 #AreaTopContainer[data-size="medium"], #AreaBottomContainer[data-size="medium"] {
-    min-height: 170px;
+    min-height: 156px;
 }
 
 #AreaTopContainer[data-size="large"], #AreaBottomContainer[data-size="large"] {
-    min-height: 290px;
+    min-height: 276px;
 }
 
 #AreaLeftContainer, #AreaRightContainer {
@@ -265,18 +265,18 @@ path {
 }
 
 #AreaLeftContainer[data-size="small"], #AreaRightContainer[data-size="small"] {
-    flex: 0 0 300px;
-    min-width: 300px;
+    flex: 0 0 88px;
+    min-width: 88px;
 }
 
 #AreaLeftContainer[data-size="medium"], #AreaRightContainer[data-size="medium"] {
-    flex: 0 0 300px;
-    min-width: 300px;
+    flex: 0 0 200px;
+    min-width: 200px;
 }
 
 #AreaLeftContainer[data-size="large"], #AreaRightContainer[data-size="large"] {
-    flex: 0 0 500px;
-    min-width: 500px;
+    flex: 0 0 400px;
+    min-width: 400px;
 }
 
 /* Annotations */

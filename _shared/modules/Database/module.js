@@ -894,7 +894,7 @@
                         var contentItem = contents[contents.length-1];
                         contentItem.body['frametrail:lat'] = overlays[i].attributes.lat;
                         contentItem.body['frametrail:long'] = overlays[i].attributes.lon;
-                        contentItem.body['frametrail:boundingBox'] = (overlays[i].attributes.boundingBox) ?  overlays[i].attributes.boundingBox.join(',') : null;
+                        contentItem.body['frametrail:boundingBox'] = (overlays[i].attributes.boundingBox) ?  overlays[i].attributes.boundingBox.join(',') : '';
                         delete contentItem["frametrail:attributes"].lat;
                         delete contentItem["frametrail:attributes"].lon;
                         delete contentItem["frametrail:attributes"].boundingBox;

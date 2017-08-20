@@ -105,7 +105,7 @@ FrameTrail.defineType(
                         self.removeContentCollectionElements(contentItem);
                     });
 
-                    self.contentViewContainer.html('<div class="customhtmlContainer">'+ self.contentViewData.html +'</div>');
+                    self.contentViewContainer.find('.contentViewContents').html('<div class="customhtmlContainer">'+ self.contentViewData.html +'</div>');
 
                     break;
 
@@ -115,7 +115,7 @@ FrameTrail.defineType(
                         self.removeContentCollectionElements(contentItem);
                     });
 
-                    self.contentViewContainer.html('<div class="transcriptContainer">TRANSCRIPT HERE</div>');
+                    self.contentViewContainer.find('.contentViewContents').html('<div class="transcriptContainer">TRANSCRIPT HERE</div>');
                     console.log('Init Hyperaud.io Light Transcript');
 
                     break;
@@ -134,7 +134,7 @@ FrameTrail.defineType(
             var collectionElement = $('<div class="collectionElement"></div>');
 
             collectionElement.append(contentItem.resourceItem.renderThumb());
-            this.contentViewContainer.append(collectionElement);
+            this.contentViewContainer.find('.contentViewContents').append(collectionElement);
 
             contentItem.contentViewElements.push(collectionElement);
 
@@ -150,21 +150,28 @@ FrameTrail.defineType(
 
             if (contentItem) {
                 
-                for (var i=0; i<contentItem.contentViewElements.length; i++) {
-                    
-                    if ( this.contentViewContainer.find(contentItem.contentViewElements[i]).length != 0 ) {
-                        this.contentViewContainer.find(contentItem.contentViewElements[i]).remove();
+                if ( this.getContentViewElementFromContentItem(contentItem) ) {
+                    this.getContentViewElementFromContentItem(contentItem).remove();
 
-                        contentItem.contentViewElements.splice(
-                            contentItem.contentViewElements.indexOf(contentItem),
-                            1
-                        );
-                    }
-                    
+                    contentItem.contentViewElements.splice(
+                        contentItem.contentViewElements.indexOf(contentItem),
+                        1
+                    );
                 }
-
+                
             }
 
+        },
+
+
+        getContentViewElementFromContentItem: function(contentItem) {
+            for (var i=0; i<contentItem.contentViewElements.length; i++) {
+                if ( this.contentViewContainer.find(contentItem.contentViewElements[i]).length != 0 ) {
+                    return this.contentViewContainer.find(contentItem.contentViewElements[i]);
+                }
+            }
+
+            return null;
         },
 
 
@@ -235,18 +242,45 @@ FrameTrail.defineType(
 
         updateTimedStateOfContentViews: function(currentTime) {
             // console.log('updateTimedStateOfContentViews', this, currentTime);
-            // TODO (optional)
-            // switch (this.contentViewData.type) {
-            //     case 'TimedContent':
-            //         // Annotations are already updated by ViewLayout module!
-            //         break;
-            //     case 'CustomHTML':
-            //
-            //         break;
-            //     case 'Transcript':
-            //
-            //         break;
-            // }
+
+            switch (this.contentViewData.type) {
+                case 'TimedContent':
+                    // Annotations are already updated by ViewLayout module!
+
+                    this.updateCollectionSlider();
+
+                    break;
+                case 'CustomHTML':
+                    
+                    break;
+                case 'Transcript':
+                    
+                    break;
+            }
+
+            
+        },
+
+
+
+        updateLayout: function() {
+
+            var HypervideoDuration = FrameTrail.module('HypervideoModel').duration;
+
+            if ( HypervideoDuration != 0 ) {
+                switch (this.contentViewData.contentSize) {
+                    case 'small':
+                        this.distributeElements();
+                        break;
+                    case 'medium':
+                        this.distributeElements();
+                        break;
+                    case 'large':
+                        // full view update
+                        break;
+                }
+            }
+
         },
 
 
@@ -358,9 +392,10 @@ FrameTrail.defineType(
 
             var self = this;
                 containerElement = $('<div class="contentViewContainer" '
-                            +   'data-size="'+ this.contentViewData.contentSize +'" '
-                            +   'data-type="'+ this.contentViewData.type +'">'
-                            +   '</div>');
+                                    +'data-size="'+ this.contentViewData.contentSize +'" '
+                                    +'data-type="'+ this.contentViewData.type +'">'
+                                    +'    <div class="contentViewContents"></div>'
+                                    +'</div>');
 
             return containerElement;
 
@@ -483,7 +518,9 @@ FrameTrail.defineType(
                 areaContainer.attr('data-size', this.contentViewData.contentSize);
             }
 
-            FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+            window.setTimeout(function() {
+                FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+            }, 50);
             
         },
 
@@ -503,6 +540,442 @@ FrameTrail.defineType(
                 areaContainer.attr('data-size', this.contentViewData.contentSize);
             }
             
+        },
+
+
+        /**
+         * I distribute the Collection Elements in the contentViewContainer, so that they
+         * match closely to the position of their related timelineElements.
+         * When they would start to overlap, I arrange them in groups.
+         *
+         * @method distributeElements
+         */
+        distributeElements: function() {
+
+            if ( this.whichArea == 'left' || this.whichArea == 'right' ) {
+                return;
+            }
+
+            var self = this,
+                annotations         = self.contentCollection,
+                videoDuration       = FrameTrail.module('HypervideoModel').duration,
+                sliderParent        = self.contentViewContainer,
+                containerElement    = self.contentViewContainer.find('.contentViewContents'),
+                groupCnt            = 0,
+                gap                 = 4,
+                thisElement,
+                previousElement,
+                previousElementRightPos,
+                startTime,
+                endTime,
+                middleTime,
+                desiredPosition,
+                finalPosition;
+
+            containerElement.children().removeAttr('data-group-id');
+            containerElement.children().css({
+                position: '',
+                left:     ''
+            });
+
+            function getTotalWidth(collection, addition){
+
+                var totalWidth = 0;
+                collection.each(function() {
+                    totalWidth += $(this).width()+addition;
+                });
+                return totalWidth;
+
+            }
+
+            function getNegativeOffsetRightCorrection(leftPosition, collectionWidth) {
+                
+                var offsetCorrection,
+                    mostRightPos = leftPosition + collectionWidth + (gap*2);
+
+                if ( mostRightPos >= sliderParent.width() ) {
+                    
+                    offsetCorrection = mostRightPos - sliderParent.width();
+
+                    return offsetCorrection;
+                    
+                }
+
+                return 0;
+            }
+
+            // Cancel if total width > container width
+            if ( getTotalWidth(containerElement.children(), 3) > sliderParent.width() ) {
+                containerElement.width( getTotalWidth(containerElement.children(), 3) );
+                return;
+            } else {
+                containerElement.width('');
+            }
+            
+            // Distribute Items
+            for (var i = 0; i < annotations.length; i++) {
+
+                thisElement = self.getContentViewElementFromContentItem(annotations[i]);
+
+                //console.log(thisElement);
+                if (i > 0) {
+                    previousElement         = self.getContentViewElementFromContentItem(annotations[i-1]);
+                    previousElementRightPos = previousElement.position().left + previousElement.width();
+                }
+
+                startTime   = annotations[i].data.start;
+                endTime     = annotations[i].data.end;
+                middleTime  = startTime + ( (endTime-startTime)/2 );
+                
+                desiredPosition = ( (sliderParent.width() / videoDuration) * middleTime ) - ( thisElement.width()/2 );
+                //console.log(desiredPosition);
+                
+                thisElement.attr({
+                    'data-in':  startTime,
+                    'data-out': endTime
+                });
+
+                if (desiredPosition <= 0) {
+                    finalPosition = 0;
+                    thisElement.removeAttr('data-group-id');
+                    groupCnt++;
+
+                } else if (desiredPosition < previousElementRightPos + gap) {
+
+                    
+                    finalPosition = previousElementRightPos + gap;
+
+                    if (previousElement.attr('data-group-id')) {
+
+                        containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]').attr('data-group-id', groupCnt);
+
+                    } else {
+
+                        previousElement.attr('data-group-id', groupCnt);
+
+                    }
+
+                    thisElement.attr('data-group-id', groupCnt);
+                    groupCnt++;
+
+                } else {
+
+                    finalPosition = desiredPosition;
+                    thisElement.removeAttr('data-group-id');
+                    groupCnt++;
+
+                }
+
+                thisElement.css({
+                    position: "absolute",
+                    left: finalPosition + "px"
+                });
+
+            }
+
+            // Re-Arrange Groups
+
+            var groupCollection,
+                p,
+                previousGroupCollection,
+                previousGroupCollectionRightPos,
+                totalWidth,
+                groupStartTime,
+                groupEndTime,
+                groupMiddleTime,
+                desiredGroupPosition,
+                correction,
+                negativeOffsetRightCorrection,
+                groupIDs;
+            
+            function arrangeGroups() {
+
+                groupIDs = [];
+
+                containerElement.children('[data-group-id]').each(function() {
+                    if ( groupIDs.indexOf( $(this).attr('data-group-id') ) == -1 ) {
+                        groupIDs.push($(this).attr('data-group-id'));
+                    }
+                });
+
+                for (var i=0; i < groupIDs.length; i++) {
+                    
+                    var g = groupIDs[i];
+
+                    groupCollection = containerElement.children('[data-group-id="'+ g +'"]');
+
+                    if (groupCollection.length < 1) {
+                        continue;
+                    }
+
+                    if ( groupIDs[i-1] ) {
+                        p = groupIDs[i-1];
+                        previousGroupCollection         = containerElement.children('[data-group-id="'+ p +'"]');
+                        previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 3 );
+                    }
+
+                    totalWidth      = getTotalWidth( groupCollection, 3 );
+
+                    groupStartTime  = parseInt(groupCollection.eq(0).attr('data-in'));
+                    groupEndTime    = parseInt(groupCollection.eq(groupCollection.length-1).attr('data-out'));
+                    groupMiddleTime = groupStartTime + ( (groupEndTime-groupStartTime)/2 );
+
+                    desiredGroupPosition = ( (sliderParent.width() / videoDuration) * groupMiddleTime ) - ( totalWidth/2 );
+
+                    correction = groupCollection.eq(0).position().left - desiredGroupPosition;
+
+                    if ( groupCollection.eq(0).position().left - correction >= 0 && desiredGroupPosition > previousGroupCollectionRightPos + gap ) {
+                        
+                        groupCollection.each(function() {
+                            $(this).css('left', '-='+ correction +'');
+                        });
+
+                    } else if ( groupCollection.eq(0).position().left - correction >= 0 && desiredGroupPosition < previousGroupCollectionRightPos + gap ) {
+                        
+                        var  attachCorrection = groupCollection.eq(0).position().left - previousGroupCollectionRightPos;
+                        groupCollection.each(function() {
+                            
+                            $(this).css('left', '-='+ attachCorrection +'');
+
+                        });
+
+                        if ( groupCollection.eq(0).prev().length ) {
+                            
+                            var prevElem = groupCollection.eq(0).prev();
+
+                            if ( prevElem.attr('data-group-id') ) {
+
+                                previousGroupCollection.attr('data-group-id', g);
+
+                            } else {
+
+                                prevElem.attr('data-group-id', g);
+                                
+                            }
+                            
+                        }
+
+                    }
+
+                }
+
+            }
+
+            arrangeGroups();
+            
+
+
+            // Deal with edge case > elements outside container on right side
+            
+            var repeatIteration;
+
+            function solveRightEdgeOverlap() {
+
+                repeatIteration = false;
+
+                for (var i = 0; i < annotations.length; i++) {
+
+                    thisElement = self.getContentViewElementFromContentItem(annotations[i]);
+
+                    var g = undefined;
+                    
+                    if ( thisElement.attr('data-group-id') ) {
+                        g = thisElement.attr('data-group-id');
+                        groupCollection = containerElement.children('[data-group-id="'+ g +'"]');
+                    } else {
+                        groupCollection = thisElement;
+                    }
+
+                    if (groupCollection.eq(0).prev().length) {
+                        
+                        previousElement = groupCollection.eq(0).prev();
+
+                        if ( previousElement.attr('data-group-id') ) {
+
+                            previousGroupCollection         = containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]');
+                            previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 3 );
+
+                        } else {
+
+                            previousGroupCollection         = previousElement;
+                            previousGroupCollectionRightPos = previousElement.position().left + previousElement.width() + gap;
+                            
+                        }
+
+                        
+                    } else {
+                        previousGroupCollectionRightPos = 0;
+                    }
+
+                    totalWidth = getTotalWidth( groupCollection, 3 );
+
+                    currentGroupCollectionLeft = groupCollection.eq(0).position().left;
+                    currentGroupCollectionRightPos = groupCollection.eq(0).position().left + totalWidth;
+
+                    negativeOffsetRightCorrection = getNegativeOffsetRightCorrection(currentGroupCollectionLeft, totalWidth);
+
+                    if ( currentGroupCollectionLeft - negativeOffsetRightCorrection >= 0  && negativeOffsetRightCorrection > 1 ) {
+                        
+                        if ( currentGroupCollectionLeft - negativeOffsetRightCorrection > previousGroupCollectionRightPos + gap ) {
+                            
+                            groupCollection.each(function() {
+                                $(this).css('left', '-='+ negativeOffsetRightCorrection +'');
+                            });
+
+                        } else if ( currentGroupCollectionLeft - negativeOffsetRightCorrection < previousGroupCollectionRightPos + gap ) {
+
+                            var attachCorrection = currentGroupCollectionLeft - previousGroupCollectionRightPos;
+                            groupCollection.each(function() {
+                                $(this).css('left', '-='+ attachCorrection +'');
+                            });
+
+                            if ( !g && previousElement.length && previousElement.attr('data-group-id') ) {
+                                
+                                thisElement.attr('data-group-id', previousElement.attr('data-group-id'));
+
+                            }
+
+                            if ( previousElement.attr('data-group-id') ) {
+
+                                containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]').attr('data-group-id', g);
+                                
+                            } else {
+
+                                previousElement.attr('data-group-id', g);
+
+                            }                        
+                            
+                            
+                            repeatIteration = false;                            
+
+                        }
+
+                    }
+
+                }
+
+                if ( repeatIteration ) {
+                    solveRightEdgeOverlap();
+                }
+
+            }
+
+            solveRightEdgeOverlap();
+            
+
+        },
+
+
+        /**
+         * I update the slider for the current contentCollection
+         *
+         * @method updateCollectionSlider
+         */
+        updateCollectionSlider: function() {
+
+            var widthOfSlider           = 0,
+                heightOfSlider          = 0,
+                gap                     = 4,
+                slideAxis               = (this.whichArea == 'top' || this.whichArea == 'bottom') ? 'x' : 'y',
+                sliderParent            = this.contentViewContainer,
+                sliderElement           = this.contentViewContainer.find('.contentViewContents');
+
+            // Set sliderElement Dimensions
+
+            if ( slideAxis == 'x' ) {
+                
+                for (var idx in this.contentCollection) {
+                    widthOfSlider += this.getContentViewElementFromContentItem(this.contentCollection[idx]).width() + gap;
+                }
+
+                if ( widthOfSlider > sliderParent.width() ) {
+                    sliderElement.width(widthOfSlider);
+                } else {
+                    sliderElement.width('');
+                    return;
+                }
+
+            } else {
+                
+                for (var idx in this.contentCollection) {
+                    heightOfSlider += this.getContentViewElementFromContentItem(this.contentCollection[idx]).height() + gap;
+                }
+
+                if ( heightOfSlider > sliderParent.height() ) {
+                    sliderElement.height(heightOfSlider);
+                } else {
+                    sliderElement.height('');
+                    return;
+                }
+
+            }
+
+            // Slide to active Annotation Element
+
+            var activeAnnotations = [];
+
+            for (var idx in this.contentCollection) {
+                
+                // TODO: CHECK WHY ANNOTATIONS IN IDENTICAL CONTENT COLLECTIONS ARE NOT SET ACTIVE (only first one)!
+                // console.log(this.whichArea, this.contentCollection[idx].activeStateInContentView(this));
+                
+                if ( this.contentCollection[idx].activeStateInContentView(this) ) {
+                    activeAnnotations.push(this.contentCollection[idx]);
+                }
+            }
+
+            if (activeAnnotations.length == 0) {
+                return;
+            }
+
+            var activeAnnotationElement = this.getContentViewElementFromContentItem(activeAnnotations[0]),
+                activeElementPosition   = activeAnnotationElement.position();
+
+            if ( slideAxis == 'x' ) {
+                
+                if ( widthOfSlider > sliderParent.width() ) {
+                    
+                    var leftOffset = -1 * (     activeElementPosition.left 
+                                              - 1 
+                                              - sliderParent.innerWidth() / 2
+                                              + activeAnnotationElement.width() / 2
+                                    );
+                    
+                    if ( leftOffset > 0 ) {
+                        sliderElement.css('left', 0);
+                    } else if ( leftOffset < - (widthOfSlider - sliderParent.width()) ) {
+                        sliderElement.css('left', - (widthOfSlider - sliderParent.width()));
+                    } else {
+                        sliderElement.css('left', leftOffset);
+                    }
+
+                }
+                
+
+            } else {
+                
+                if ( heightOfSlider > sliderParent.height() ) {
+                    
+                    var topOffset = -1 * (      activeElementPosition.top 
+                                              - 1
+                                              - sliderParent.innerHeight() / 2
+                                              + activeAnnotationElement.height() / 2
+                                    );
+                    
+                    if ( topOffset > 0 ) {
+                        sliderElement.css('top', 0);
+                    } else if ( topOffset < - (heightOfSlider - sliderParent.height()) ) {
+                        console.log('end');
+                        sliderElement.css('top', - (heightOfSlider - sliderParent.height()));
+                    } else {
+                        sliderElement.css('top', topOffset);
+                    }
+
+                }
+
+            }
+            
+
         },
 
 
