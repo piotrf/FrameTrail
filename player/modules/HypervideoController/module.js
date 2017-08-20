@@ -9,7 +9,7 @@
  * I am the central controller module of the application. I control the interactions between the UI elements of the hypervideo and its data model.
  *
  * My two most important jobs are:
- *   * I init the video element, all its UI controls, and my sub-controllers (for annotations, overlays, videolinks, codeSnippets)
+ *   * I init the video element, all its UI controls, and my sub-controllers (for annotations, overlays, codeSnippets)
  *   * I control the playback und the update handlers to show time-based contents
  *
  * @class HypervideoController
@@ -26,7 +26,6 @@ FrameTrail.defineModule('HypervideoController', function(){
 
 		AnnotationsController  = FrameTrail.initModule('AnnotationsController'),
 		OverlaysController     = FrameTrail.initModule('OverlaysController'),
-		VideolinksController   = FrameTrail.initModule('VideolinksController'),
 		CodeSnippetsController = FrameTrail.initModule('CodeSnippetsController'),
 		SubtitlesController    = FrameTrail.initModule('SubtitlesController'),
         ViewLayout             = FrameTrail.initModule('ViewLayout'),
@@ -140,7 +139,6 @@ FrameTrail.defineModule('HypervideoController', function(){
 					}
 
 					OverlaysController.initController();
-					VideolinksController.initController();
 					CodeSnippetsController.initController();
 					SubtitlesController.initController();
 
@@ -185,7 +183,6 @@ FrameTrail.defineModule('HypervideoController', function(){
 			}
 
 			OverlaysController.initController();
-			VideolinksController.initController();
 			CodeSnippetsController.initController();
 			SubtitlesController.initController();
 
@@ -444,7 +441,6 @@ FrameTrail.defineModule('HypervideoController', function(){
 		ViewVideo.currentTime = formatTime(currentTime);
 
 		OverlaysController.updateStatesOfOverlays(currentTime);
-		VideolinksController.updateStatesOfVideolinks(currentTime);
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
 		//AnnotationsController.updateStatesOfAnnotations(currentTime);
         ViewLayout.updateTimedStateOfContentViews(currentTime);
@@ -492,7 +488,6 @@ FrameTrail.defineModule('HypervideoController', function(){
 		ViewVideo.currentTime = formatTime(currentTime);
 
 		OverlaysController.updateStatesOfOverlays(currentTime);
-		VideolinksController.updateStatesOfVideolinks(currentTime);
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
 		//AnnotationsController.updateStatesOfAnnotations(currentTime);
         ViewLayout.updateTimedStateOfContentViews(currentTime);

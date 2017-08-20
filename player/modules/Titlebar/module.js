@@ -357,12 +357,10 @@ FrameTrail.defineModule('Titlebar', function(){
                         "lastchanged": Date.now()
                     },
                     "config": {
+                        "areaTopVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaTopVisible'],
                         "areaBottomVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaBottomVisible'],
-                        "annotationsPosition": FrameTrail.module('Database').project.defaultHypervideoConfig['annotationsPosition'],
-                        "annotationTimelineVisible": true,
+                        "areaLeftVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaLeftVisible'],
                         "areaRightVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaRightVisible'],
-                        "areaTopVisible": false,
-                        "videolinkTimelineVisible": true,
                         "overlaysVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'],
                         "slidingMode": FrameTrail.module('Database').project.defaultHypervideoConfig['slidingMode'],
                         "slidingTrigger": "key",

@@ -230,7 +230,7 @@ function hypervideoClone($projectID, $hypervideoID, $src) {
 
 	//$file->writeClose(json_encode(json_decode($src,true), $conf["settings"]["json_flags"]));
 	$file->writeClose($src);
-	/* TODO: How to handle annotation/overlay/links files? */
+	/* TODO: How to handle annotation files? */
 
 	$return["status"] = "success";
 	$return["code"] = 0;
@@ -343,7 +343,7 @@ Returning Code:
 0		=	Success. File has been written
 1		=	failed. Not logged in to the projectID.
 2		=	failed. User not active
-3		=	failed. type not correct. ("overlays", "links")
+3		=	failed. type not correct. ("overlays")
 4		=	failed. HypervideoID not found.
 5		=	failed. permission denied! The User is not an admin, nor is it his own hypervideo.
 6		=	failed. $src too short (10)

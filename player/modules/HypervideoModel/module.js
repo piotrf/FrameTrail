@@ -32,7 +32,6 @@
         selectedLang            = '',
 
         overlays                = [],
-        videolinks              = [],
 
         codeSnippets            = [],
         events                  = {},
@@ -44,7 +43,6 @@
 
         unsavedSettings         = false;
         unsavedOverlays         = false,
-        unsavedVideolinks       = false,
         unsavedCodeSnippets     = false,
         unsavedEvents           = false,
         unsavedCustomCSS        = false,
@@ -62,7 +60,7 @@
      * * I read in the {{#crossLink "Database/hypervideo:attribute"}}hypervideo metadata{{/crossLink}}, and store them in my attributes (like name, description, creator)
      * * I read in the {{#crossLink "Database/hypervideo:attribute"}}configuration of the hypervideo{{/crossLink}} (hypervideo.config) and set the key-value-pairs as global state (FrameTrail.changeState())
      * * I read in the sequence data of the hypervideo, and set the video source file (mp4), or – when their is no resourceId for a video – I set the {{#crossLink "HypervideoModel/duration:attribute"}}duration{{/crossLink}} attribute for a "null video".
-     * * I call {{#crossLink "HypervideoModel/initModelOfOverlays:method"}}initModelOfOverlays{{/crossLink}}, {{#crossLink "HypervideoModel/initModelOfVideolinks:method"}}initModelOfVideolinks{{/crossLink}}, {{#crossLink "HypervideoModel/initModelOfCodeSnippets:method"}}initModelOfCodeSnippets{{/crossLink}} and {{#crossLink "HypervideoModel/initModelOfAnnotations:method"}}initModelOfAnnotations{{/crossLink}}.
+     * * I call {{#crossLink "HypervideoModel/initModelOfOverlays:method"}}initModelOfOverlays{{/crossLink}}, {{#crossLink "HypervideoModel/initModelOfCodeSnippets:method"}}initModelOfCodeSnippets{{/crossLink}} and {{#crossLink "HypervideoModel/initModelOfAnnotations:method"}}initModelOfAnnotations{{/crossLink}}.
      * * I return control to the callback.
      *
      * @method initModel
@@ -112,7 +110,6 @@
         subtitleFiles        = hypervideo.subtitles;
 
         initModelOfOverlays(database);
-        initModelOfVideolinks(database);
         initModelOfCodeSnippets(database);
         initModelOfAnnotations(database);
         initModelOfSubtitles(database);
@@ -154,28 +151,6 @@
 
         }
 
-
-    };
-
-    /**
-     * I create the {{#crossLink "Videolink"}}Videolink{{/crossLink}} objects from the data in the {{#crossLink "Database"}}Database{{/crossLink}} and store them
-     * in my {{#crossLink "HypervideoModel/videolinks:attribute"}}videolinks{{/crossLink}} attribute.
-     *
-     * @method initModelOfVideolinks
-     * @param {Database} database
-     * @private
-     */
-    function initModelOfVideolinks(database) {
-
-        for (var idx in database.links) {
-
-            videolinks.push(
-                FrameTrail.newObject('Videolink',
-                    database.links[idx]
-                )
-            );
-
-        }
 
     };
 
@@ -307,31 +282,9 @@
     };
 
     /**
-     * I remove all data of a video link from the model and from the database.
-     *
-     * I am called from {{#crossLink "VideolinksController/deleteVideolink:method"}}VideolinksController/deleteVideolink{{/crossLink}}.
-     *
-     * @method removeVideolink
-     * @param {Videolink} videolink
-     */
-    function removeVideolink(videolink) {
-
-        var idx;
-
-        idx = videolinks.indexOf(videolink);
-        videolinks.splice(idx, 1);
-
-        idx = FrameTrail.module('Database').links.indexOf(videolink.data);
-        FrameTrail.module('Database').links.splice(idx, 1);
-
-        newUnsavedChange('links');
-
-    };
-
-    /**
      * I remove all data of a code snippet from the model and from the database.
      *
-     * I am called from {{#crossLink "CodeSnippetsController/deleteVideolink:method"}}CodeSnippetsController/deleteCodeSnippet{{/crossLink}}.
+     * I am called from {{#crossLink "CodeSnippetsController/deleteCodeSnippet:method"}}CodeSnippetsController/deleteCodeSnippet{{/crossLink}}.
      *
      * @method removeCodeSnippet
      * @param {CodeSnippet} codeSnippet
@@ -446,41 +399,6 @@
     };
 
     /**
-     * I create a new {{#crossLink "Videolink"}}video link{{/crossLink}}.
-     *
-     * I am called from {{#crossLink "VideolinksController/makeTimelineDroppable:method"}}VideolinksController{{/crossLink}}.
-     *
-     * @method newVideolink
-     * @param {} protoData
-     * @return Videolink
-     */
-    function newVideolink(protoData) {
-
-        var newVideolink,
-
-            newData = {
-                            "name":         protoData.name,
-                            "creator":      FrameTrail.getState('username'),
-                            "creatorId":    FrameTrail.module('UserManagement').userID,
-                            "created":      Date.now(),
-                            "href":         protoData.href,
-                            "start":        protoData.start,
-                            "end":          protoData.end,
-                            "attributes":   {}
-                        };
-
-
-            FrameTrail.module('Database').links.push(newData);
-            newVideolink = FrameTrail.newObject('Videolink', newData)
-            videolinks.push(newVideolink);
-
-            newUnsavedChange('links');
-
-            return newVideolink;
-
-    };
-
-    /**
      * I create a new {{#crossLink "CodeSnippet"}}code snippet{{/crossLink}}.
      *
      * I am called from {{#crossLink "CodeSnippetsController/makeTimelineDroppable:method"}}CodeSnippetsController{{/crossLink}}.
@@ -560,31 +478,6 @@
             newUnsavedChange('annotations');
 
             return newAnnotation;
-
-    };
-
-
-    /**
-     * When the {{#crossLinks "HypervideoModel/videolinks:attribute"}}attribute videolinks{{/crossLinks}} is accessed,
-     * it needs to return the video link objects in an array, which is sorted by the start time. This is what I do.
-     *
-     * @method getVideolinks
-     * @return Array of Videolinks
-     * @private
-     */
-    function getVideolinks() {
-
-        return videolinks.sort(function(a, b){
-
-            if(a.data.start > b.data.start) {
-                return 1;
-            } else if(a.data.start < b.data.start) {
-                return -1;
-            } else {
-                return 0;
-            }
-
-        });
 
     };
 
@@ -825,7 +718,7 @@
 
     /**
      * I serve the purpose to set markers (both visually and in my data model),
-     * in which categories (overlays, videolinks, annotations, codeSnippets) the user has unsaved changes.
+     * in which categories (overlays, annotations, codeSnippets) the user has unsaved changes.
      *
      * @method newUnsavedChange
      * @param {String} category
@@ -839,10 +732,6 @@
         } else if (category === 'overlays') {
 
             unsavedOverlays = true;
-
-        } else if (category === 'links') {
-
-            unsavedVideolinks = true;
 
         } else if (category === 'codeSnippets') {
 
@@ -875,7 +764,7 @@
     /**
      * I am the central function for saving changes back to the server.
      *
-     * I save only, what is necessary (overlays, videolinks, annotations, codeSnippets).
+     * I save only, what is necessary (overlays, annotations, codeSnippets).
      *
      * When all saving requests to the server have completed, I check all their responses.
      * If there where any errors I display them and abort. Otherwise I reset the
@@ -912,7 +801,7 @@
                     //TODO: avoid this by adding a subtitles dialog to the settings tab
                     $('#EditHypervideoForm').submit();
 
-                } else if ( unsavedOverlays || unsavedVideolinks || unsavedCodeSnippets
+                } else if ( unsavedOverlays || unsavedCodeSnippets
                     || unsavedEvents || unsavedCustomCSS || unsavedLayout) {
                     saveRequests.push(function(){
                         FrameTrail.module('Database').saveHypervideo(databaseCallback);
@@ -961,7 +850,6 @@
 
             unsavedSettings     = false;
             unsavedOverlays     = false;
-            unsavedVideolinks   = false;
             unsavedCodeSnippets = false;
             unsavedEvents       = false;
             unsavedCustomCSS    = false;
@@ -1629,14 +1517,6 @@
         get overlays()          { return overlays        },
 
         /**
-         * The videolinks of the hypervideo (fetched via {{#crossLink "HypervideoModel/getVideolinks:method"}}getVideolinks(){{/crossLinks}}).
-         * @type Array of Videolink
-         * @attribute videolinks
-         * @readOnly
-         */
-        get videolinks()        { return getVideolinks() },
-
-        /**
          * The codeSnippets of the hypervideo (fetched via {{#crossLink "HypervideoModel/getCodeSnippets:method"}}getCodeSnippets(){{/crossLinks}}).
          * @type Array of CodeSnippets
          * @attribute codeSnippets
@@ -1731,10 +1611,7 @@
 
         removeOverlay:          removeOverlay,
         newOverlay:             newOverlay,
-
-        removeVideolink:        removeVideolink,
-        newVideolink:           newVideolink,
-
+        
         removeCodeSnippet:      removeCodeSnippet,
         newCodeSnippet:         newCodeSnippet,
 

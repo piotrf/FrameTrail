@@ -6,7 +6,7 @@
 /**
  * I am the ViewVideo. I am the most important user interface component. I contain
  * all the visual elements of the hypervideo player, like the main &lt;video&gt; element,
- * the containers for overlays, videolinks and annotations, their respective timelines
+ * the containers for overlays and annotations, their respective timelines
  * and the player control elements.
  *
  * When I am initialized, I prepare all DOM elements and set up their event listeners.
@@ -286,9 +286,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     AreaTopContainer.click(function(evt) {
 
-        if ( FrameTrail.module('VideolinksController').openedLink && $(evt.target).attr('id') == 'AreaTopContainer' ) {
-            FrameTrail.module('VideolinksController').openedLink = null;
-        }
+        //
 
     });
 
@@ -778,9 +776,6 @@ FrameTrail.defineModule('ViewVideo', function(){
             case 'audio':
                 enterAudioMode();
                 break;
-            case 'links':
-                enterLinkMode();
-                break;
             case 'codesnippets':
                 enterCodeSnippetMode();
                 break;
@@ -919,18 +914,6 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function enterAudioMode() {
         initEditMode();
-    }
-
-    /**
-     * I am called when the app enters the editMode "links"
-     * @method enterLinkMode
-     */
-    function enterLinkMode() {
-        initEditMode();
-
-        EditPropertiesContainer
-            .html('<span class="icon-videolinks"></span><div class="message active">Add video links by dragging hypervideos into the active timeline or entering a link manually.</div>')
-            .attr('data-editmode', 'links');
     }
 
     /**
@@ -1151,8 +1134,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * I am called when the global state "slidePosition" changes.
      *
      * This state is either "top", "middle" or "bottom", and indicates, which area has the most visual weight.
-     * The Hypervideocontainer is always displayed in the middle (in different sizes), while the annotations
-     * and the video links can change their position (top or bottom), as defined in the hypervideo's _index.json.
+     * The Hypervideocontainer is always displayed in the middle (in different sizes).
      *
      * @method changeSlidePosition
      * @param {String} newState
@@ -1308,7 +1290,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     /**
      * Toggles the visibility of a vertical grid based on the positions of all timeline items
-     * in each category (Videolinks, Overlays, Annotations). This grid is used to allow snapping
+     * in each category (Overlays, Annotations). This grid is used to allow snapping
      * items to positions of other timeline items.
      *
      * @method toggleGrid
@@ -1673,7 +1655,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         get AnnotationPreviewContainer()  { return AnnotationPreviewContainer  },
 
         /**
-         * I contain the EditPropertiesContainer element (where properties of an overlay/annotation/videolink can be viewed and – in the case ov overlays – changed).
+         * I contain the EditPropertiesContainer element (where properties of an overlay/annotation can be viewed and – in the case ov overlays – changed).
          * @attribute EditPropertiesContainer
          * @type HTMLElement
          */

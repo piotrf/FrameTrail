@@ -28,10 +28,7 @@ FrameTrail.defineType(
             contentViewData.collectionFilter.text  = contentViewData.collectionFilter.text  || "";
             contentViewData.collectionFilter.users = contentViewData.collectionFilter.users || [];
         contentViewData.transcriptSource       = contentViewData.transcriptSource || "";
-        contentViewData.mode                   = contentViewData.mode || "slide";
-        contentViewData.axis                   = contentViewData.axis || "x";
         contentViewData.contentSize            = contentViewData.contentSize || "small";
-        contentViewData.autoSync               = contentViewData.autoSync || false;
         contentViewData.onClickContentItem     = contentViewData.onClickContentItem || "";
 
         this.contentViewData = contentViewData;
@@ -918,7 +915,7 @@ FrameTrail.defineType(
                 
                 // TODO: CHECK WHY ANNOTATIONS IN IDENTICAL CONTENT COLLECTIONS ARE NOT SET ACTIVE (only first one)!
                 // console.log(this.whichArea, this.contentCollection[idx].activeStateInContentView(this));
-                
+
                 if ( this.contentCollection[idx].activeStateInContentView(this) ) {
                     activeAnnotations.push(this.contentCollection[idx]);
                 }
@@ -1126,6 +1123,7 @@ FrameTrail.defineType(
                             +'        <hr>'
                             +'    </div>'
                             +'    <div class="typeSpecific '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
+                            /*
                             +'        <div class="contentViewData formColumn column1" data-property="mode" data-value="'+ contentViewData.mode +'">'
                             +'            <label>Mode:</label>'
                             +'            <div '+ (contentViewData.mode == 'slide' ? 'class="active"' : '') +' data-value="slide">Slide</div>'
@@ -1144,6 +1142,7 @@ FrameTrail.defineType(
                             +'        </div>'
                             +'        <div style="clear: both;"></div>'
                             +'        <hr>'
+                            */
                             +'        <label>OnClick Content Item:</label>'
                             +'        <textarea class="contentViewData" data-property="onClickContentItem" data-value="'+ contentViewData.onClickContentItem +'" placeholder="(optional)">'+ contentViewData.onClickContentItem +'</textarea>'
                             +'    </div>'

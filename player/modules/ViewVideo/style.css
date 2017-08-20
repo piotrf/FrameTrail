@@ -610,7 +610,7 @@ path {
     display: none;
 }
 
-.editActive[data-edit-mode="links"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="overlays"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="codesnippets"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="annotations"] #HypervideoContainer #InfoAreaRight {
+.editActive[data-edit-mode="overlays"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="codesnippets"] #HypervideoContainer #InfoAreaRight, .editActive[data-edit-mode="annotations"] #HypervideoContainer #InfoAreaRight {
     flex: 0 0 500px;
 }
 

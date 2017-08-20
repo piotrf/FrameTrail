@@ -9,7 +9,7 @@
  * * Text Resources only appear in the 'Add Custom Overlay' tab
  *   and are not listed in the ResourceManager.
  * 
- * * Text Resources can not be used as Annotation or Videolink
+ * * Text Resources can not be used as Annotation
  *
  * @class ResourceText
  * @category TypeDefinition

@@ -41,7 +41,6 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '                <button class="editMode" data-editmode="preview"><span class="icon-eye"></span>Preview</button>'
                             + '                <button class="editMode" data-editmode="settings"><span class="icon-cog"></span>Settings</button>'
                             + '                <button class="editMode" data-editmode="layout"><span class="icon-news"></span>Layout</button>'
-                            /*+ '                <button class="editMode" data-editmode="links"><span class="icon-videolinks"></span>Video Links</button>'*/
                             + '                <button class="editMode" data-editmode="overlays"><span class="icon-overlays"></span>Overlays</button>'
                             + '                <button class="editMode" data-editmode="codesnippets"><span class="icon-code"></span>Custom Code</button>'
                             + '                <button class="editMode" data-editmode="annotations"><span class="icon-annotations"></span>My Annotations</button>'
@@ -356,7 +355,7 @@ FrameTrail.defineModule('Sidebar', function(){
     /**
      * I am called from the {{#crossLink "HypervideoModel/newUnsavedChange:method"}}HypervideoModel/newUnsavedChange(){{/crossLink}}.
      *
-     * I mark the categories (overlays, videolinks, annotations, codeSnippets), which have unsaved changes inside them.
+     * I mark the categories (overlays, annotations, codeSnippets), which have unsaved changes inside them.
      *
      * @method newUnsavedChange
      * @param {String} category
@@ -455,7 +454,6 @@ FrameTrail.defineModule('Sidebar', function(){
                     videoContainerControls.find('.editMode[data-editmode="settings"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="layout"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="overlays"]').addClass('disabled');
-                    videoContainerControls.find('.editMode[data-editmode="links"]').addClass('disabled');
                     videoContainerControls.find('.editMode[data-editmode="codesnippets"]').addClass('disabled');
 
                 }

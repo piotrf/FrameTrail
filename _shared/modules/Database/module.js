@@ -26,7 +26,6 @@
         sequence     = {},
 
         overlays     = [],
-        links        = [],
         codeSnippets = {},
         resources    = {},
 
@@ -639,7 +638,6 @@
             sequence     = {};
             annotations  = {};
             overlays     = [];
-            links        = [];
             codeSnippets = {};
 
             return  loadProjectData(function(){
@@ -1266,11 +1264,6 @@
          * @attribute overlays
          */
         get overlays()      { return overlays },
-        /**
-         * I store the video links data (from the server's ../_data/projects/<ID>/hypervideos/<ID>/links.json)
-         * @attribute links
-         */
-        get links()         { return links },
         /**
          * I store the code snippets data (from the server's ../_data/projects/<ID>/hypervideos/<ID>/codeSnippets.json)
          * @attribute codesnippets

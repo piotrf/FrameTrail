@@ -128,15 +128,7 @@ FrameTrail.defineModule('InteractionController', function(){
 
 	    	currentAnnotation.openAnnotation();
 
-	    } else if ( FrameTrail.getState('hv_config_annotationsPosition') == 'bottom'
-                &&  FrameTrail.getState('hv_config_videolinksVisible')
-                &&  FrameTrail.getState('slidePosition') == 'middle'
-                &&  FrameTrail.module('VideolinksController').openedLink === null
-                &&  FrameTrail.module('HypervideoModel').videolinks[0]) {
-
-            FrameTrail.module('HypervideoModel').videolinks[0].openVideolink();
-
-        } else {
+	    } else {
 
 	    	FrameTrail.module('ViewVideo').slidePositionUp();
 
@@ -162,15 +154,7 @@ FrameTrail.defineModule('InteractionController', function(){
 
 	    	currentAnnotation.openAnnotation();
 
-	    } else if ( FrameTrail.getState('hv_config_annotationsPosition') == 'top'
-                &&  FrameTrail.getState('hv_config_videolinksVisible')
-                &&  FrameTrail.getState('slidePosition') == 'middle'
-                &&  FrameTrail.module('VideolinksController').openedLink === null
-                &&  FrameTrail.module('HypervideoModel').videolinks[0]) {
-
-            FrameTrail.module('HypervideoModel').videolinks[0].openVideolink();
-
-        } else {
+	    } else {
 
 	    	FrameTrail.module('ViewVideo').slidePositionDown();
 
@@ -196,16 +180,6 @@ FrameTrail.defineModule('InteractionController', function(){
 
             FrameTrail.module('HypervideoModel').annotations[idx-1].openAnnotation();
 
-        } else if ( FrameTrail.module('ViewVideo').shownDetails == 'videolinks' ) {
-
-            var currentVideolink    = FrameTrail.module('VideolinksController').openedLink,
-                videolinks          = FrameTrail.module('HypervideoModel').videolinks,
-                idx                 = videolinks.indexOf(currentVideolink);
-
-            if (idx < 1) return;
-
-            FrameTrail.module('HypervideoModel').videolinks[idx-1].openVideolink();
-
         }
 
 
@@ -228,16 +202,6 @@ FrameTrail.defineModule('InteractionController', function(){
             if (idx < 0 || idx >= annotations.length-1) return;
 
             FrameTrail.module('HypervideoModel').annotations[idx+1].openAnnotation();
-
-        } else if ( FrameTrail.module('ViewVideo').shownDetails == 'videolinks' ) {
-
-            var currentVideolink    = FrameTrail.module('VideolinksController').openedLink,
-                videolinks          = FrameTrail.module('HypervideoModel').videolinks,
-                idx                 = videolinks.indexOf(currentVideolink);
-
-            if (idx < 0 || idx >= videolinks.length-1) return;
-
-            FrameTrail.module('HypervideoModel').videolinks[idx+1].openVideolink();
 
         }
 
