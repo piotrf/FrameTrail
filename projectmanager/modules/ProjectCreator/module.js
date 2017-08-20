@@ -40,130 +40,10 @@
                         + '            <input type="checkbox" name="defaultHypervideoHidden" id="hypervideo_hidden" value="true">'
                         + '            <label for="hypervideo_hidden">hidden</label>'
                         + '        </div>'
-                        + '        <div class="hypervideoLayout">'
-                        + '            <div>Default Player Layout:</div>'
-                        + '            <div class="message active">Here you can set the default layout for hypervideos in this project. Users can override these settings when adding new hypervideos.<br> Click regions to activate / deactivate.</div>'
-                        + '            <div class="settingsContainer">'
-                        + '                <div class="layoutSettingsWrapper">'
-                        + '                    <div data-config="videolinksVisible" class="">Videolinks'
-                        + '                        <div data-config="annotationsPosition" class="active"><span class="icon-sort"></span></div>'
-                        + '                    </div>'
-                        + '                    <div class="playerWrapper">'
-                        + '                        <div data-config="overlaysVisible" class="active">Overlays</div>'
-                        + '                        <div data-config="annotationPreviewVisible" class="">Annotation-Preview</div>'
-                        + '                    </div>'
-                        + '                    <div data-config="annotationsVisible" class="active">Annotations'
-                        + '                        <div data-config="annotationsPosition" class="active"><span class="icon-sort"></span></div>'
-                        + '                    </div>'
-                        + '                </div>'
-                        + '                <div class="genericSettingsWrapper">Layout Mode'
-                        + '                    <div data-config="slidingMode" class="">'
-                        + '                        <div class="slidingMode" data-value="adjust">Adjust</div>'
-                        + '                        <div class="slidingMode" data-value="overlay">Overlay</div>'
-                        + '                    </div>'
-                        + '                </div>'
-                        + '            </div>'
-                        + '        </div>'
                         + '        <div style="clear: both;"></div>'
                         + '        <div class="message error"></div>'
                         + '    </form>'
                         + '</div>');
-        
-        
-        newDialog.find('.hypervideoLayout [data-config]').each(function() {
-                    
-            var tmpVal = '';
-
-            if ( $(this).hasClass('active') ) {
-                
-                if ( $(this).attr('data-config') == 'slidingMode' ) {
-                    tmpVal = 'overlay';
-                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-                    tmpVal = 'bottom'
-                } else {
-                    tmpVal = 'true';    
-                }
-
-            } else {
-                
-                if ( $(this).attr('data-config') == 'slidingMode' ) {
-                    tmpVal = 'adjust';
-                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-                    tmpVal = 'top'
-                } else {
-                    tmpVal = 'false';    
-                }
-
-            }
-
-            if ( !newDialog.find('.hypervideoLayout input[name="config['+$(this).attr('data-config')+']"]').length ) {
-                newDialog.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" value="'+tmpVal+'">');
-            }
-
-            if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
-                
-                newDialog.find('.hypervideoLayout .playerWrapper')
-                    .after(newDialog.find('div[data-config="videolinksVisible"]'))
-                    .before(newDialog.find('div[data-config="annotationsVisible"]'));
-
-            }
-
-        }).click(function(evt) {
-
-
-            var config      = $(evt.target).attr('data-config'),
-                configState = $(evt.target).hasClass('active'),
-                configValue = (configState ? 'false': 'true');
-
-            if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
-            
-                newDialog.find('[name="config['+config+']"]').val(configValue);
-                $(evt.target).toggleClass('active');
-
-            } else if ( config == 'slidingMode' ) {
-
-                if ( configState ) {
-                    
-                    newDialog.find('[name="config['+config+']"]').val('adjust');
-
-                } else {
-                    
-                    newDialog.find('[name="config['+config+']"]').val('overlay');
-
-                }
-
-                $(evt.target).toggleClass('active');
-
-            } else if ( config == 'annotationsPosition' ) {
-
-                if ( configState ) {
-                    
-                    newDialog.find('[name="config['+config+']"]').val('top');
-
-                    newDialog.find('.hypervideoLayout .playerWrapper')
-                        .after(newDialog.find('div[data-config="videolinksVisible"]'))
-                        .before(newDialog.find('div[data-config="annotationsVisible"]'));
-
-                } else {
-                    
-                    newDialog.find('[name="config['+config+']"]').val('bottom');
-
-                    newDialog.find('.hypervideoLayout .playerWrapper')
-                        .before(newDialog.find('div[data-config="videolinksVisible"]'))
-                        .after(newDialog.find('div[data-config="annotationsVisible"]'));
-
-                }
-
-                newDialog.find('.hypervideoLayout [data-config="annotationsPosition"]').toggleClass('active');
-
-            }
-
-            evt.preventDefault();
-            evt.stopPropagation();
-        });
-
-        
-        
         
         newDialog.find('#NewProjectForm').ajaxForm({
             method:     'POST',
@@ -183,11 +63,7 @@
                 }
             }
         });
-
-
         
-
-
         newDialog.dialog({
             modal: true,
             resizable: false,

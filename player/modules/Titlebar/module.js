@@ -138,12 +138,12 @@ FrameTrail.defineModule('Titlebar', function(){
         var newDialog = $('<div id="NewHypervideoDialog" title="New Hypervideo">'
                         + '    <form id="NewHypervideoForm" method="post">'
                         + '        <div class="hypervideoData">'
-                        + '            <div>Hypervideo Settings:</div>'
                         + '            <input type="text" name="name" placeholder="Name of Hypervideo" value=""><br>'
                         + '            <textarea name="description" placeholder="Description for Hypervideo"></textarea><br>'
                         + '            <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((FrameTrail.module('Database').project.defaultHypervideoHidden.toString() == "true") ? "checked" : "")+'>'
                         + '            <label for="hypervideo_hidden">Hidden from other users?</label>'
                         + '        </div>'
+                        /*
                         + '        <div class="hypervideoLayout">'
                         + '            <div>Player Layout:</div>'
                         + '            <div class="settingsContainer">'
@@ -170,6 +170,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '                <div id="NewSubtitlesContainer"></div>'
                         + '            </div>'
                         + '        </div>'
+                        */
                         + '        <div style="clear: both;"></div>'
                         + '        <div id="NewHypervideoTabs">'
                         + '            <ul>'
@@ -189,101 +190,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '        <div class="message error"></div>'
                         + '    </form>'
                         + '</div>');
-
-
-        newDialog.find('.hypervideoLayout [data-config]').each(function() {
-
-            var tmpVal = '';
-
-            if ( $(this).hasClass('active') ) {
-
-                if ( $(this).attr('data-config') == 'slidingMode' ) {
-                    tmpVal = 'overlay';
-                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-                    tmpVal = 'bottom'
-                } else {
-                    tmpVal = 'true';
-                }
-
-            } else {
-
-                if ( $(this).attr('data-config') == 'slidingMode' ) {
-                    tmpVal = 'adjust';
-                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-                    tmpVal = 'top'
-                } else {
-                    tmpVal = 'false';
-                }
-
-            }
-
-            if ( !newDialog.find('.hypervideoLayout input[name="config['+$(this).attr('data-config')+']"]').length ) {
-                newDialog.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" data-configkey="'+ $(this).attr('data-config') +'" value="'+tmpVal+'">');
-            }
-
-            if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
-
-                newDialog.find('.hypervideoLayout .playerWrapper')
-                    .after(newDialog.find('div[data-config="areaTopVisible"]'))
-                    .before(newDialog.find('div[data-config="areaBottomVisible"]'));
-
-            }
-
-        }).click(function(evt) {
-
-
-            var config      = $(evt.target).attr('data-config'),
-                configState = $(evt.target).hasClass('active'),
-                configValue = (configState ? 'false': 'true');
-
-            if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
-
-                newDialog.find('[name="config['+config+']"]').val(configValue);
-                $(evt.target).toggleClass('active');
-
-            } else if ( config == 'slidingMode' ) {
-
-                if ( configState ) {
-
-                    newDialog.find('[name="config['+config+']"]').val('adjust');
-
-                } else {
-
-                    newDialog.find('[name="config['+config+']"]').val('overlay');
-
-                }
-
-                $(evt.target).toggleClass('active');
-
-            } else if ( config == 'annotationsPosition' ) {
-
-                if ( configState ) {
-
-                    newDialog.find('[name="config['+config+']"]').val('top');
-
-                    newDialog.find('.hypervideoLayout .playerWrapper')
-                        .after(newDialog.find('div[data-config="areaTopVisible"]'))
-                        .before(newDialog.find('div[data-config="areaBottomVisible"]'));
-
-                } else {
-
-                    newDialog.find('[name="config['+config+']"]').val('bottom');
-
-                    newDialog.find('.hypervideoLayout .playerWrapper')
-                        .before(newDialog.find('div[data-config="areaTopVisible"]'))
-                        .after(newDialog.find('div[data-config="areaBottomVisible"]'));
-
-                }
-
-                newDialog.find('.hypervideoLayout [data-config="annotationsPosition"]').toggleClass('active');
-
-            }
-
-            evt.preventDefault();
-            evt.stopPropagation();
-        });
-
-
+        
         // Manage Subtitles
         newDialog.find('#SubtitlesPlus').on('click', function() {
             var langOptions, languageSelect;
@@ -357,17 +264,18 @@ FrameTrail.defineModule('Titlebar', function(){
                         "lastchanged": Date.now()
                     },
                     "config": {
-                        "areaTopVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaTopVisible'],
-                        "areaBottomVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaBottomVisible'],
-                        "areaLeftVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaLeftVisible'],
-                        "areaRightVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['areaRightVisible'],
-                        "overlaysVisible": FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'],
-                        "slidingMode": FrameTrail.module('Database').project.defaultHypervideoConfig['slidingMode'],
+                        "slidingMode": "adjust",
                         "slidingTrigger": "key",
-                        "theme": "CssClassName",
+                        "theme": "",
                         "autohideControls": true,
                         "captionsVisible": false,
-                        "hidden": $('#NewHypervideoForm').find('input[name="hidden"]').is(':checked')
+                        "hidden": $('#NewHypervideoForm').find('input[name="hidden"]').is(':checked'),
+                        "layoutArea": {
+                            "areaTop": [],
+                            "areaBottom": [],
+                            "areaLeft": [],
+                            "areaRight": []
+                        }
                     },
                     "clips": [
                         {

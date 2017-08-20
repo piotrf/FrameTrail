@@ -90,7 +90,6 @@
             if (key === 'layoutArea') { continue; }
 
             FrameTrail.changeState('hv_config_' + key, hypervideo.config[key]);
-
         }
 
         // Set video source or NullVideo
@@ -1047,14 +1046,6 @@
                                   +'    <div class="hypervideoLayout">'
                                   +'        <div>Player Layout:</div>'
                                   +'        <div class="settingsContainer">'
-                                  +'            <div class="layoutSettingsWrapper">'
-                                  +'                <div data-config="areaTopVisible" class="'+ ((hypervideo.config.areaTopVisible.toString() == 'true') ? 'active' : '') +'">LayoutArea Top</div>'
-                                  +'                <div class="playerWrapper">'
-                                  +'                    <div data-config="overlaysVisible" class="'+ ((hypervideo.config.overlaysVisible.toString() == 'true') ? 'active' : '') +'">Overlays</div>'
-                                  +'                    <div data-config="areaRightVisible" class="'+ ((hypervideo.config.areaRightVisible.toString() == 'true') ? 'active' : '') +'">LayoutArea Right</div>'
-                                  +'                </div>'
-                                  +'                <div data-config="areaBottomVisible" class="'+ ((hypervideo.config.areaBottomVisible.toString() == 'true') ? 'active' : '') +'">LayoutArea Bottom</div>'
-                                  +'            </div>'
                                   +'            <div class="genericSettingsWrapper">Layout Mode'
                                   +'                <div data-config="slidingMode" class="'+ ((hypervideo.config.slidingMode.toString() == 'overlay') ? 'active' : '') +'">'
                                   +'                    <div class="slidingMode" data-value="adjust">Adjust</div>'
@@ -1110,8 +1101,6 @@
 
                 if ( $(this).attr('data-config') == 'slidingMode' ) {
                     tmpVal = 'overlay';
-                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-                    tmpVal = 'bottom'
                 } else {
                     tmpVal = 'true';
                 }
@@ -1120,8 +1109,6 @@
 
                 if ( $(this).attr('data-config') == 'slidingMode' ) {
                     tmpVal = 'adjust';
-                } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-                    tmpVal = 'top'
                 } else {
                     tmpVal = 'false';
                 }
@@ -1132,14 +1119,6 @@
                 EditHypervideoForm.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" data-configkey="'+ $(this).attr('data-config') +'" value="'+tmpVal+'">');
             }
 
-            if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
-
-                EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
-                    .after(EditHypervideoForm.find('div[data-config="areaTopVisible"]'))
-                    .before(EditHypervideoForm.find('div[data-config="areaBottomVisible"]'));
-
-            }
-
         }).click(function(evt) {
 
 
@@ -1147,7 +1126,7 @@
                 configState = $(evt.target).hasClass('active'),
                 configValue = (configState ? 'false': 'true');
 
-            if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
+            if ( config != 'slidingMode' ) {
 
                 EditHypervideoForm.find('[name="config['+config+']"]').val(configValue);
                 $(evt.target).toggleClass('active');
@@ -1165,28 +1144,6 @@
                 }
 
                 $(evt.target).toggleClass('active');
-
-            } else if ( config == 'annotationsPosition' ) {
-
-                if ( configState ) {
-
-                    EditHypervideoForm.find('[name="config['+config+']"]').val('top');
-
-                    EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
-                        .after(EditHypervideoForm.find('div[data-config="areaTopVisible"]'))
-                        .before(EditHypervideoForm.find('div[data-config="areaBottomVisible"]'));
-
-                } else {
-
-                    EditHypervideoForm.find('[name="config['+config+']"]').val('bottom');
-
-                    EditHypervideoForm.find('.hypervideoLayout .playerWrapper')
-                        .before(EditHypervideoForm.find('div[data-config="areaTopVisible"]'))
-                        .after(EditHypervideoForm.find('div[data-config="areaBottomVisible"]'));
-
-                }
-
-                EditHypervideoForm.find('.hypervideoLayout [data-config="annotationsPosition"]').toggleClass('active');
 
             }
 

@@ -55,30 +55,6 @@
 	                        +   '                    <input type="checkbox" name="defaultHypervideoHidden" id="hypervideo_hidden" value="true" '+ ((project.data.defaultHypervideoHidden.toString() == "true") ? "checked" : "") +'>'
 	                        +   '                    <label for="hypervideo_hidden">hidden</label>'
 	                        +   '                </div>'
-	                        +   '                <div class="hypervideoLayout">'
-	                        +   '                    <div>Default Player Layout:</div>'
-	                        +   '                    <div class="message active">Here you can set the default layout for hypervideos in this project. Users can override these settings when adding new hypervideos.<br> Click regions to activate / deactivate.</div>'
-	                        +   '                    <div class="settingsContainer">'
-	                        +   '                        <div class="layoutSettingsWrapper">'
-	                        +   '                            <div data-config="videolinksVisible" class="'+ ((project.data.defaultHypervideoConfig['videolinksVisible'].toString() == 'true') ? 'active' : '') +'">Videolinks'
-	                        +   '                                <div data-config="annotationsPosition" class="'+ ((project.data.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
-	                        +   '                            </div>'
-	                        +   '                            <div class="playerWrapper">'
-	                        +   '                                <div data-config="overlaysVisible" class="'+ ((project.data.defaultHypervideoConfig['overlaysVisible'].toString() == 'true') ? 'active' : '') +'">Overlays</div>'
-	                        +   '                                <div data-config="annotationPreviewVisible" class="'+ ((project.data.defaultHypervideoConfig['annotationPreviewVisible'].toString() == 'true') ? 'active' : '') +'">Annotation-Preview</div>'
-	                        +   '                            </div>'
-	                        +   '                            <div data-config="annotationsVisible" class="'+ ((project.data.defaultHypervideoConfig['annotationsVisible'].toString() == 'true') ? 'active' : '') +'">Annotations'
-	                        +   '                                <div data-config="annotationsPosition" class="'+ ((project.data.defaultHypervideoConfig['annotationsPosition'].toString() == 'bottom') ? 'active' : '') +'"><span class="icon-sort"></span></div>'
-	                        +   '                            </div>'
-	                        +   '                        </div>'
-	                        +   '                        <div class="genericSettingsWrapper">Layout Mode'
-	                        +   '                            <div data-config="slidingMode" class="'+ ((project.data.defaultHypervideoConfig['slidingMode'].toString() == 'overlay') ? 'active' : '') +'">'
-	                        +   '                                <div class="slidingMode" data-value="adjust">Adjust</div>'
-	                        +   '                                <div class="slidingMode" data-value="overlay">Overlay</div>'
-	                        +   '                            </div>'
-	                        +   '                        </div>'
-	                        +   '                    </div>'
-	                        +   '                </div>'
 	                        +   '                <div style="clear: both;"></div>'
 	                        +   '                <button type="submit">Save changes</button>'
 	                        +   '                <div style="margin-top: 10px;" class="message resp"></div>'
@@ -133,101 +109,6 @@
 	        heightStyle: 'auto'
 	    });
 
-	 	domElement.find('.hypervideoLayout [data-config]').each(function() {
-    
-		    var tmpVal = '';
-
-		    if ( $(this).hasClass('active') ) {
-		        
-		        if ( $(this).attr('data-config') == 'slidingMode' ) {
-		            tmpVal = 'overlay';
-		        } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-		            tmpVal = 'bottom'
-		        } else {
-		            tmpVal = 'true';    
-		        }
-
-		    } else {
-		        
-		        if ( $(this).attr('data-config') == 'slidingMode' ) {
-		            tmpVal = 'adjust';
-		        } else if ( $(this).attr('data-config') == 'annotationsPosition' ) {
-		            tmpVal = 'top'
-		        } else {
-		            tmpVal = 'false';    
-		        }
-
-		    }
-
-		    if ( !domElement.find('.hypervideoLayout input[name="config['+$(this).attr('data-config')+']"]').length ) {
-		        domElement.find('.hypervideoLayout').append('<input type="hidden" name="config['+$(this).attr('data-config')+']" data-configkey="'+ $(this).attr('data-config') +'" value="'+tmpVal+'">');
-		    }
-
-		    if ( $(this).attr('data-config') == 'annotationsPosition' && !$(this).hasClass('active') ) {
-		        
-		        domElement.find('.hypervideoLayout .playerWrapper')
-		            .after(domElement.find('div[data-config="videolinksVisible"]'))
-		            .before(domElement.find('div[data-config="annotationsVisible"]'));
-
-		    }
-
-		}).click(function(evt) {
-
-
-		    var config      = $(evt.target).attr('data-config'),
-		        configState = $(evt.target).hasClass('active'),
-		        configValue = (configState ? 'false': 'true');
-
-		    if ( config != 'annotationsPosition' && config != 'slidingMode' ) {
-		    
-		        domElement.find('[name="config['+config+']"]').val(configValue);
-		        $(evt.target).toggleClass('active');
-		        
-		    } else if ( config == 'slidingMode' ) {
-
-		        if ( configState ) {
-		            
-		            domElement.find('[name="config['+config+']"]').val('adjust');
-		            
-		        } else {
-		            
-		            domElement.find('[name="config['+config+']"]').val('overlay');
-		            
-		        }
-
-		        $(evt.target).toggleClass('active');
-
-		    } else if ( config == 'annotationsPosition' ) {
-
-		        if ( configState ) {
-		            
-		            domElement.find('[name="config['+config+']"]').val('top');
-
-		            domElement.find('.hypervideoLayout .playerWrapper')
-		                .after(domElement.find('div[data-config="videolinksVisible"]'))
-		                .before(domElement.find('div[data-config="annotationsVisible"]'));
-
-		        } else {
-		            
-		            domElement.find('[name="config['+config+']"]').val('bottom');
-
-		            domElement.find('.hypervideoLayout .playerWrapper')
-		                .before(domElement.find('div[data-config="videolinksVisible"]'))
-		                .after(domElement.find('div[data-config="annotationsVisible"]'));
-
-		        }
-
-		        domElement.find('.hypervideoLayout [data-config="annotationsPosition"]').toggleClass('active');
-
-		    }
-
-		    evt.preventDefault();
-		    evt.stopPropagation();
-		});
-
-
-
-
 		domElement.find('#EditProjectForm').ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
@@ -244,11 +125,6 @@
                 }
             }
         });
-
-
-
-
-
 
 	 	domElement.find('#RegistrationForm').ajaxForm({
 			method: 	"POST",
@@ -274,10 +150,6 @@
 				}
 			}
 		});
-
-
-
-
 
 	 	var refreshAdministrationForm = function(){
 
@@ -382,8 +254,6 @@
 			}
 		});
 
-
-
 		function renderUserColorCollectionForm(selectedColor, targetElement) {
 			var elem = $("<div class='userColorCollectionContainer'><input type='hidden' name='color' value='"+ selectedColor +"'>User Color:<div class='userColorCollection'></div></div>");
 			for (var c in userColorCollection) {
@@ -408,9 +278,6 @@
 
 		}
 
-
-
-
 	 	domElement.dialog({
 	 		modal: true,
 	        resizable: false,
@@ -427,9 +294,7 @@
 
 	        }
 	 	});
-
-
-
+	 	
  	}
 
     

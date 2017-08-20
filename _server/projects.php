@@ -71,7 +71,7 @@ function projectsGet($details = false, $login = false) {
 	return $return;
 }
 
-function projectsNew($name, $description, $config, $userNeedsConfirmation, $defaultUserRole, $theme, $overviewMode, $defaultHypervideoHidden) {
+function projectsNew($name, $description, $config, $userNeedsConfirmation, $defaultUserRole, $theme, $defaultHypervideoHidden) {
 	global $conf;
 	$login = superUserLogin();
 
@@ -118,8 +118,8 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 	$project["defaultUserRole"] = $defaultUserRole;
 	$project["defaultHypervideoHidden"] = filter_var($defaultHypervideoHidden, FILTER_VALIDATE_BOOLEAN);
 	$project["theme"] = $theme;
-	$project["overviewMode"] = $overviewMode;
 
+	/*
 	foreach ($config as $k=>$v) {
 		if (($v == "true") || ($v == "false")) {
 			$config[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
@@ -127,6 +127,8 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 	}
 
 	$project["defaultHypervideoConfig"] = $config;
+	*/
+	
 	file_put_contents($conf["dir"]["projects"]."/".$projects["project-increment"]."/project.json", json_encode($project,$conf["settings"]["json_flags"]));
 
 	$return["status"] = "success";
@@ -135,7 +137,7 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 	return $return;
 }
 
-function projectsEdit($projectID, $name, $description, $config, $userNeedsConfirmation, $defaultUserRole, $theme, $overviewMode, $defaultHypervideoHidden) {
+function projectsEdit($projectID, $name, $description, $config, $userNeedsConfirmation, $defaultUserRole, $theme, $defaultHypervideoHidden) {
 	global $conf;
 
 	/* Check for User is ProjectAdmin */
@@ -189,7 +191,8 @@ function projectsEdit($projectID, $name, $description, $config, $userNeedsConfir
 	$project["defaultUserRole"] = $defaultUserRole;
 	$project["defaultHypervideoHidden"] = filter_var($defaultHypervideoHidden, FILTER_VALIDATE_BOOLEAN);
 	$project["theme"] = $theme;
-	$project["overviewMode"] = $overviewMode;
+	
+	/*
 	foreach ($config as $k=>$v) {
 		if (($v == "true") || ($v == "false")) {
 			$config[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
@@ -197,6 +200,7 @@ function projectsEdit($projectID, $name, $description, $config, $userNeedsConfir
 	}
 
 	$project["defaultHypervideoConfig"] = $config;
+	*/
 
 
 	$project = json_encode($project, $conf["settings"]["json_flags"]);
