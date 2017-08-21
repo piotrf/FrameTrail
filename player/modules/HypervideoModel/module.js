@@ -87,7 +87,7 @@
         // Read in config of Hypervideo
         for (var key in hypervideo.config) {
 
-            if (key === 'layoutArea') { continue; }
+            if (key === 'layoutArea' || key === 'theme') { continue; }
 
             FrameTrail.changeState('hv_config_' + key, hypervideo.config[key]);
         }
@@ -1019,23 +1019,48 @@
     /**
      * Initialize Hypervideo Settings
      * (triggered when global state editMode changes to 'settings')
-     *
+     * 
+     * TODO: Move to separate module
+     * 
      * @method initHypervideoSettings
      */
     function initHypervideoSettings() {
-
-        var HypervideoSettingsContainer = FrameTrail.module('ViewVideo').HypervideoSettingsContainer;
-
-        if ( HypervideoSettingsContainer.find('#EditHypervideoForm').length != 0 ) {
-            return;
-        }
 
         var database   = FrameTrail.module('Database'),
             hypervideo = database.hypervideo,
             thisID     = FrameTrail.module('RouteNavigation').hypervideoID,
             projectID  = FrameTrail.module('RouteNavigation').projectID,
-            EditHypervideoForm = $('<form method="POST" id="EditHypervideoForm">'
-                                  +'    <div class="message saveReminder">Please save you settings right now to update the subtitle settings.</div>'
+            EditingOptions = FrameTrail.module('ViewVideo').EditingOptions;
+
+        EditingOptions.empty();
+
+        var settingsEditingOptions = $('<div id="SettingsEditingTabs">'
+                                    +  '    <ul>'
+                                    +  '        <li>'
+                                    +  '            <a href="#ChangeSettings">Change Settings</a>'
+                                    +  '        </li>'
+                                    +  '        <li>'
+                                    +  '            <a href="#ChangeTheme">Change Color Theme</a>'
+                                    +  '        </li>'
+                                    +  '        <li>'
+                                    +  '            <a href="#ChangeCSSVariables">Edit CSS Variables</a>'
+                                    +  '        </li>'
+                                    +  '    </ul>'
+                                    +  '    <div id="ChangeSettings"></div>'
+                                    +  '    <div id="ChangeTheme"></div>'
+                                    +  '    <div id="ChangeCSSVariables"></div>'
+                                    +  '</div>')
+                                  .tabs({
+                                      heightStyle: "fill"
+                                  });
+
+        EditingOptions.append(settingsEditingOptions);
+
+        /* Edit Hypervideo Form */
+
+        
+        var EditHypervideoForm = $('<form method="POST" id="EditHypervideoForm">'
+                                  +'    <div class="message saveReminder">Please save your settings right now to update the subtitle settings.</div>'
                                   +'    <div class="hypervideoData">'
                                   +'        <div>Hypervideo Settings:</div>'
                                   +'        <input type="text" name="name" placeholder="Name of Hypervideo" value="'+ hypervideoName +'"><br>'
@@ -1065,13 +1090,9 @@
                                   +'    <div style="clear: both;"></div>'
                                   +'    <div class="message error"></div>'
                                   +'    <hr>'
-                                  +'</form>'),
+                                  +'</form>');
 
-            CSSVariablesEditingUI = $('<div id="CSSVariablesEditingUI">'
-                                    + '</div>');
-
-        HypervideoSettingsContainer.append(EditHypervideoForm, CSSVariablesEditingUI);
-
+        settingsEditingOptions.find('#ChangeSettings').append(EditHypervideoForm);
 
         if ( hypervideo.subtitles ) {
 
@@ -1192,7 +1213,7 @@
             DatabaseEntry.description = EditHypervideoForm.find('textarea[name="description"]').val();
             DatabaseEntry.hidden = EditHypervideoForm.find('input[name="hidden"]').is(':checked');
             for (var configKey in DatabaseEntry.config) {
-                if (configKey === 'layoutArea') { continue; }
+                if (configKey === 'layoutArea' || configKey === 'theme') { continue; }
                 var newConfigVal = EditHypervideoForm.find('input[data-configkey=' + configKey + ']').val();
                 newConfigVal = (newConfigVal === 'true')
                                 ? true
@@ -1336,14 +1357,18 @@
                                         function() {}
                                     );
 
-                                    HypervideoSettingsContainer.empty();
+                                    FrameTrail.module('ViewVideo').EditingOptions.empty();
                                     initHypervideoSettings();
+
+                                    FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
 
                                 } else {
                                     initList();
 
-                                    HypervideoSettingsContainer.empty();
+                                    FrameTrail.module('ViewVideo').EditingOptions.empty();
                                     initHypervideoSettings();
+
+                                    FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
                                     //EditHypervideoForm.dialog('close');
                                 }
 
@@ -1360,6 +1385,38 @@
                 }
             }
         });
+        
+        
+        /* Change Theme UI */
+
+        var ChangeThemeUI = $('<div id="ThemeContainer">'
+                            + '    <div class="themeItem" data-theme="default">Default</div>'
+                            + '    <div class="themeItem" data-theme="dark">Dark</div>'
+                            + '    <div class="themeItem" data-theme="bright">Bright</div>'
+                            + '    <div class="themeItem" data-theme="aw">AW</div>'
+                            + '</div>');
+        
+        settingsEditingOptions.find('#ChangeTheme').append(ChangeThemeUI);
+
+        ChangeThemeUI.find('.themeItem').click(function() {
+            var selectedTheme = $(this).attr('data-theme');
+
+            if (selectedTheme != hypervideo.config.theme) {
+                $('html').attr('class', selectedTheme);
+
+                FrameTrail.module('Database').hypervideos[thisID].config.theme = selectedTheme;
+                newUnsavedChange('settings');
+            }
+
+        });
+
+
+        /* CSS Variables Editing UI */
+
+        var CSSVariablesEditingUI = $('<div id="CSSVariablesEditingUI">'
+                                    + '</div>');
+        
+        settingsEditingOptions.find('#ChangeCSSVariables').append(CSSVariablesEditingUI);
 
 
     }
