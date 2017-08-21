@@ -938,6 +938,10 @@ path {
     display: block;
 }
 
+#MainContainer.editActive[data-edit-mode="settings"] #EditingOptions {
+    flex-basis: 160px;
+}
+
 #EditingOptions .executeEventCode {
     position: absolute;
     right: 12px;
@@ -945,7 +949,7 @@ path {
     background-color: #eaeaef;
 }
 
-#HypervideoSettingsContainer, #HypervideoLayoutContainer {
+#HypervideoLayoutContainer {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -956,7 +960,7 @@ path {
     display: none;
 }
 
-#HypervideoSettingsContainer.active, #HypervideoLayoutContainer.active {
+#HypervideoLayoutContainer.active {
     display: block;
 }
 

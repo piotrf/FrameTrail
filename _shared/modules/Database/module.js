@@ -302,6 +302,13 @@
             clips: hypervideos[hypervideoID].clips
         }
         //console.log('sequence', sequence);
+
+        // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
+        if (hypervideos[hypervideoID].config.theme) {
+            $('html').attr('class', hypervideos[hypervideoID].config.theme);
+        }
+        // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
+
         success();
     };
 
@@ -777,16 +784,12 @@
         		"lastchanged": Date.now()
         	},
         	"config": {
-        		"areaTopVisible": hypervideos[thisHypervideoID].config.areaTopVisible,
-        		"areaBottomVisible": hypervideos[thisHypervideoID].config.areaBottomVisible,
-        		"areaLeftVisible": hypervideos[thisHypervideoID].config.areaLeftVisible,
-        		"areaRightVisible": hypervideos[thisHypervideoID].config.areaRightVisible,
-        		"overlaysVisible": hypervideos[thisHypervideoID].config.overlaysVisible,
         		"slidingMode": hypervideos[thisHypervideoID].config.slidingMode,
         		"slidingTrigger": hypervideos[thisHypervideoID].config.slidingTrigger,
         		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
         		"hidden": hypervideos[thisHypervideoID].hidden,
+                "theme": hypervideos[thisHypervideoID].config.theme,
                 "layoutArea": FrameTrail.module('ViewLayout').getLayoutAreaData()
         	},
         	"clips": hypervideos[thisHypervideoID].clips,

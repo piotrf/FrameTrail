@@ -270,6 +270,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         "autohideControls": true,
                         "captionsVisible": false,
                         "hidden": $('#NewHypervideoForm').find('input[name="hidden"]').is(':checked'),
+                        "theme": (FrameTrail.module('Database').project.theme) ? FrameTrail.module('Database').project.theme : null,
                         "layoutArea": {
                             "areaTop": [],
                             "areaBottom": [],
