@@ -212,11 +212,20 @@
 	height: 42px;
 }
 .contentViewEditingUI .typeSpecific {
+	position: relative;
 	display: none;
 }
 
 .contentViewEditingUI .typeSpecific.active {
 	display: block;
+}
+
+.contentViewEditingUI .typeSpecific.codeEditorSmall {
+	height: 100px;
+}
+
+.contentViewEditingUI .typeSpecific.codeEditorLarge {
+	height: 278px;
 }
 
 .contentViewEditingUI .contentViewData > div[data-value] {

@@ -306,6 +306,8 @@
         // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
         if (hypervideos[hypervideoID].config.theme) {
             $('html').attr('class', hypervideos[hypervideoID].config.theme);
+        } else {
+            $('html').attr('class', '');
         }
         // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
 

@@ -424,6 +424,8 @@ FrameTrail.defineType(
                 
                 self.editContentView();
 
+                console.log(self.contentCollection[0].data.tags);
+
 
             });
 
@@ -960,7 +962,6 @@ FrameTrail.defineType(
                     if ( topOffset > 0 ) {
                         sliderElement.css('top', 0);
                     } else if ( topOffset < - (heightOfSlider - sliderParent.height()) ) {
-                        console.log('end');
                         sliderElement.css('top', - (heightOfSlider - sliderParent.height()));
                     } else {
                         sliderElement.css('top', topOffset);
@@ -1034,6 +1035,11 @@ FrameTrail.defineType(
                         $('.ui-widget-overlay').click(function() {
                             editDialog.dialog('close');
                         });
+                        if (editDialog.find('.CodeMirror').length != 0) {
+                            editDialog.find('.CodeMirror').each(function() {
+                                $(this)[0].CodeMirror.refresh();
+                            });
+                        }
                     },
                     buttons: [
                         { text: 'OK',
@@ -1042,6 +1048,7 @@ FrameTrail.defineType(
                                 var newContentViewData = self.getDataFromEditingUI($(this));
 
                                 self.contentViewData = newContentViewData;
+                                console.log(self.contentViewData);
                                 self.updateContentViewPreview();
 
                                 self.updateContent();
@@ -1120,7 +1127,7 @@ FrameTrail.defineType(
                             +'        <div style="clear: both;"></div>'
                             +'        <hr>'
                             +'    </div>'
-                            +'    <div class="typeSpecific '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
+                            +'    <div class="typeSpecific codeEditorSmall '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
                             /*
                             +'        <div class="contentViewData formColumn column1" data-property="mode" data-value="'+ contentViewData.mode +'">'
                             +'            <label>Mode:</label>'
@@ -1144,7 +1151,7 @@ FrameTrail.defineType(
                             +'        <label>OnClick Content Item:</label>'
                             +'        <textarea class="contentViewData" data-property="onClickContentItem" data-value="'+ contentViewData.onClickContentItem +'" placeholder="(optional)">'+ contentViewData.onClickContentItem +'</textarea>'
                             +'    </div>'
-                            +'    <div class="typeSpecific '+ (contentViewData.type == 'CustomHTML' ? 'active' : '') +'" data-type="CustomHTML">'
+                            +'    <div class="typeSpecific codeEditorLarge '+ (contentViewData.type == 'CustomHTML' ? 'active' : '') +'" data-type="CustomHTML">'
                             +'        <label>Custom HTML:</label>'
                             +'        <textarea class="contentViewData" data-property="html" data-value="'+ contentViewData.html +'">'+ contentViewData.html +'</textarea>'
                             +'    </div>'
@@ -1171,10 +1178,69 @@ FrameTrail.defineType(
                             editingUI.find('.typeSpecific').removeClass('active');
                             editingUI.find('.typeSpecific[data-type="'+ parent.attr('data-value') +'"]').addClass('active');
                         }
+
+                        if (editingUI.find('.CodeMirror').length != 0) {
+                            editingUI.find('.CodeMirror').each(function() {
+                                $(this)[0].CodeMirror.refresh();
+                            });
+                        }
                     });
                 }
 
             });
+
+            // Init CodeMirror for onClickContentItem
+
+            var textarea = editingUI.find('.contentViewData[data-property="onClickContentItem"]');
+
+            var codeEditor = CodeMirror.fromTextArea(textarea[0], {
+                    value: textarea[0].value,
+                    lineNumbers: true,
+                    mode:  'javascript',
+                    gutters: ['CodeMirror-lint-markers'],
+                    lint: true,
+                    lineWrapping: true,
+                    tabSize: 2,
+                    theme: 'hopscotch'
+                });
+            codeEditor.on('change', function(instance, changeObj) {
+                
+                var thisTextarea = $(instance.getTextArea());
+                                
+                $(thisTextarea).attr('data-value', instance.getValue());
+
+                thisTextarea.val(instance.getValue());
+                
+
+            });
+            codeEditor.setSize(null, '100%');
+
+            // Init CodeMirror for Custom HTML
+
+            var htmlTextarea = editingUI.find('.contentViewData[data-property="html"]');
+
+            var htmlCodeEditor = CodeMirror.fromTextArea(htmlTextarea[0], {
+                    value: htmlTextarea[0].value,
+                    lineNumbers: true,
+                    mode:  'text/html',
+                    htmlMode: true,
+                    lint: true,
+                    lineWrapping: true,
+                    tabSize: 2,
+                    theme: 'hopscotch'
+                });
+            htmlCodeEditor.on('change', function(instance, changeObj) {
+                
+                var thisTextarea = $(instance.getTextArea());
+                                
+                $(thisTextarea).attr('data-value', instance.getValue());
+
+                thisTextarea.val(instance.getValue());
+                
+
+            });
+            htmlCodeEditor.setSize(null, '100%');
+
 
             return editingUI;
 

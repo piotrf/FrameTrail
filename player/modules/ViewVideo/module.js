@@ -305,6 +305,8 @@ FrameTrail.defineModule('ViewVideo', function(){
         
         toggleConfig_captionsVisible(FrameTrail.getState('hv_config_captionsVisible'))
 
+        FrameTrail.changeState('hv_config_overlaysVisible', true);
+        
         changeSlidePosition(FrameTrail.getState('slidePosition'));
 
         $('#MainContainer').append(domElement);
