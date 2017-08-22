@@ -11,6 +11,7 @@
 	-moz-transition: all 200ms linear; /* WebKit */
 	-o-transition: all 200ms linear; /* Opera */
 	transition: all 200ms linear; /* Standard */
+	color: var(--primary-fg-color);
 }
 
 
@@ -26,6 +27,7 @@
 
 #MainContainer.editActive {
 	border-top: 1px solid var(--secondary-bg-color);
+	color: var(--primary-bg-color);
 }
 
 

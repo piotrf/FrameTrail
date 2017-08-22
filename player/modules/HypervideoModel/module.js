@@ -977,6 +977,7 @@
             FrameTrail.module('HypervideoModel').initModel(function(){
 
 
+                FrameTrail.module('ViewLayout').create();
                 FrameTrail.module('ViewVideo').create();
 
                 FrameTrail.module('HypervideoController').initController(
@@ -992,7 +993,8 @@
                         FrameTrail.module('InterfaceModal').hideMessage(600);
 
                         window.setTimeout(function() {
-                            FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+                            //FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+                            $(window).resize();
                         }, 300);
 
                     },
@@ -1050,8 +1052,13 @@
                                     +  '    <div id="ChangeTheme"></div>'
                                     +  '    <div id="ChangeCSSVariables"></div>'
                                     +  '</div>')
-                                  .tabs({
-                                      heightStyle: "fill"
+                                    .tabs({
+                                        heightStyle: "fill",
+                                        activate: function(event, ui) {
+                                            if (ui.newPanel.find('.CodeMirror').length != 0) {
+                                                ui.newPanel.find('.CodeMirror')[0].CodeMirror.refresh();
+                                            }
+                                        }
                                   });
 
         EditingOptions.append(settingsEditingOptions);
@@ -1390,15 +1397,29 @@
         /* Change Theme UI */
 
         var ChangeThemeUI = $('<div id="ThemeContainer">'
+                            + '    <div class="message active">Select Color Theme</div>'
                             + '    <div class="themeItem" data-theme="default">Default</div>'
                             + '    <div class="themeItem" data-theme="dark">Dark</div>'
                             + '    <div class="themeItem" data-theme="bright">Bright</div>'
                             + '    <div class="themeItem" data-theme="aw">AW</div>'
                             + '</div>');
         
+        ChangeThemeUI.find('.themeItem').each(function() {
+            if ( hypervideo.config.theme == $(this).attr('data-theme') ) {
+                $(this).addClass('active');
+            }
+            if ( !hypervideo.config.theme && $(this).attr('data-theme') == 'default' ) {
+                $(this).addClass('active');
+            }
+        });
+
         settingsEditingOptions.find('#ChangeTheme').append(ChangeThemeUI);
 
         ChangeThemeUI.find('.themeItem').click(function() {
+            
+            $(this).siblings('.themeItem').removeClass('active');
+            $(this).addClass('active');
+
             var selectedTheme = $(this).attr('data-theme');
 
             if (selectedTheme != hypervideo.config.theme) {
@@ -1413,11 +1434,38 @@
 
         /* CSS Variables Editing UI */
 
-        var CSSVariablesEditingUI = $('<div id="CSSVariablesEditingUI">'
+        var CSSVariablesEditingUI = $('<div id="CSSVariablesEditingUI" style="height: 110px;">'
+                                    + '    <textarea id="CSSVariables">/* Custom CSS Variables coming soon */</textarea>'
                                     + '</div>');
         
         settingsEditingOptions.find('#ChangeCSSVariables').append(CSSVariablesEditingUI);
 
+        // Init CodeMirror for CSS Variables
+
+        var textarea = settingsEditingOptions.find('#CSSVariables');
+
+        var codeEditor = CodeMirror.fromTextArea(textarea[0], {
+                value: textarea[0].value,
+                lineNumbers: true,
+                mode:  'css',
+                gutters: ['CodeMirror-lint-markers'],
+                lint: true,
+                lineWrapping: true,
+                tabSize: 2,
+                theme: 'hopscotch'
+            });
+        codeEditor.on('change', function(instance, changeObj) {
+            
+            var thisTextarea = $(instance.getTextArea());
+                            
+            // TODO: Update CSS Variables (instance.getValue()) in Database
+
+            thisTextarea.val(instance.getValue());
+            
+
+        });
+        codeEditor.setSize(null, '100%');
+        
 
     }
 
