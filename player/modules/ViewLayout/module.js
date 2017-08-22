@@ -37,7 +37,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 		Hypervideo = FrameTrail.module('Database').hypervideo;
 
 
-	function create () {
+	function create() {
 
 		configLayoutArea = FrameTrail.module('Database').hypervideo.config.layoutArea;
 
@@ -430,12 +430,7 @@ FrameTrail.defineModule('ViewLayout', function(){
      */
     function changeViewSize(arrayWidthAndHeight) {
 
-        var currentTime = FrameTrail.module('HypervideoController').currentTime;
-		
-		//TODO: CHECK WHY THIS THROWS ERROR RIGHT AFTER DELETING A CONTENT VIEW
-		// updateTimedStateOfContentViews(currentTime);
-
-		for (var i in contentViewsTop) {
+        for (var i in contentViewsTop) {
 			contentViewsTop[i].updateLayout();
 		}
 		for (var i in contentViewsBottom) {
@@ -461,7 +456,9 @@ FrameTrail.defineModule('ViewLayout', function(){
      */
     function onViewSizeChanged() {
 
-        
+        //TODO: CHECK WHY THIS THROWS ERROR RIGHT AFTER DELETING A CONTENT VIEW
+		var currentTime = FrameTrail.module('HypervideoController').currentTime;
+		// updateTimedStateOfContentViews(currentTime);
 
     }
 
