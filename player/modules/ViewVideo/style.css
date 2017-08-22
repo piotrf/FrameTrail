@@ -431,6 +431,10 @@ path {
     background-color: #F8F8F8;
 }
 
+#PlayerContainer #Controls .playerControl#SettingsButton {
+    display: none;
+}
+
 #PlayerContainer #Controls .playerControl#SettingsButton.active {
     opacity: 1;
 }
@@ -942,6 +946,29 @@ path {
     flex-basis: 160px;
 }
 
+#MainContainer.editActive[data-edit-mode="settings"] #EditingOptions #ThemeContainer {
+    
+}
+
+#MainContainer.editActive[data-edit-mode="settings"] #EditingOptions #ThemeContainer .themeItem {
+    float: left;
+    width: 100px;
+    height: 60px;
+    padding: 4px 8px;
+    margin-right: 8px;
+    background: var(--secondary-fg-color);
+    border: 3px solid transparent;
+    cursor: pointer;
+}
+
+#MainContainer.editActive[data-edit-mode="settings"] #EditingOptions #ThemeContainer .themeItem.active, #MainContainer.editActive[data-edit-mode="settings"] #EditingOptions #ThemeContainer .themeItem:hover {
+    border-color: var(--primary-bg-color);
+}
+
+#MainContainer.editActive[data-edit-mode="settings"] #EditingOptions .message.error {
+    margin-top: 10px;
+}
+
 #EditingOptions .executeEventCode {
     position: absolute;
     right: 12px;
@@ -962,10 +989,6 @@ path {
 
 #HypervideoLayoutContainer.active {
     display: block;
-}
-
-#HypervideoSettingsContainer .message.error {
-    margin-top: 10px;
 }
 
 .hypervideoData {
