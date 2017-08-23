@@ -57,7 +57,7 @@ FrameTrail.defineType(
                 left: originOffset.left + 'px',
                 width: elementOrigin.width(),
                 height: elementOrigin.height(),
-                zIndex: 99
+                zIndex: 101
             }).appendTo('body');
 
             animationDiv.animate({
@@ -509,11 +509,85 @@ FrameTrail.defineType(
                                     + '    <label for="TimeEnd">End</label>'
                                     + '    <input id="TimeEnd" value="' + annotation.data.end + '">'
                                     + '</div>'),
-                thumbContainer    = $('<div id="PreviewThumbContainer"></div>');
+                thumbContainer    = $('<div id="PreviewThumbContainer"></div>'),
+                tagManagementUI   = $('<div class="tagManagementUI">'
+                                    + '    <hr>'
+                                    + '    <label>Manage Tags:</label>'
+                                    + '    <div class="existingTags"></div>'
+                                    + '    <div class="button small contextSelectButton newTagButton">'
+                                    + '        <span class="icon-plus">Add</span>'
+                                    + '        <div class="contextSelectList"></div>'
+                                    + '    </div>'
+                                    + '</div>');
 
             thumbContainer.append(annotation.resourceItem.renderThumb());
                                   
-            controlsContainer.append(defaultControls, thumbContainer);
+            controlsContainer.append(defaultControls, thumbContainer, tagManagementUI);
+
+            // Tag Management
+
+            updateExistingTags();
+
+            tagManagementUI.find('.newTagButton').click(function() {
+                tagManagementUI.find('.contextSelectButton').not($(this)).removeClass('active');
+
+                updateTagSelectContainer();
+                $(this).toggleClass('active');
+            });
+
+            function updateExistingTags() {
+                tagManagementUI.find('.existingTags').empty();
+
+                for (var i=0; i<annotation.data.tags.length; i++) {
+                    
+                    var tagLabel = FrameTrail.module('TagModel').getTagLabelAndDescription(annotation.data.tags[i], 'de').label,
+                        tagItem = $('<div class="tagItem" data-tag="'+ annotation.data.tags[i] +'">'+ tagLabel +'</div>');
+                    var deleteButton = $('<div class="deleteItem"><span class="icon-cancel"></span></div>')
+                    deleteButton.click(function() {
+                        
+                        // Delete tag
+                        annotation.data.tags.splice(annotation.data.tags.indexOf($(this).parent().attr('data-tag')), 1);
+                        updateExistingTags();
+                        FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+                        
+                        FrameTrail.module('ViewLayout').updateManagedContent();
+                        FrameTrail.module('ViewLayout').updateContentInContentViews();
+
+                    });
+                    tagItem.append(deleteButton);
+                    tagManagementUI.find('.existingTags').append(tagItem);
+
+                }
+            }
+
+            function updateTagSelectContainer() {
+                
+                tagManagementUI.find('.newTagButton .contextSelectList').empty();
+                
+                var allTags = FrameTrail.module('TagModel').getAllTagLabelsAndDescriptions('de');
+                for (var tagID in allTags) {
+                    if ( annotation.data.tags.indexOf(tagID) != -1 ) {
+                        continue;
+                    }
+                    var tagLabel = allTags[tagID].label,
+                        tagItem = $('<div class="tagItem" data-tag="'+ tagID +'">'+ tagLabel +'</div>');
+                    tagItem.click(function() {
+                        
+                        // Add tag
+                        annotation.data.tags.push( $(this).attr('data-tag') );
+                        updateExistingTags();
+                        FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                        FrameTrail.module('ViewLayout').updateManagedContent();
+                        FrameTrail.module('ViewLayout').updateContentInContentViews();
+
+                    });
+                    tagManagementUI.find('.newTagButton .contextSelectList').append(tagItem);
+                }
+
+            }
+
+            // Timing
 
             controlsContainer.find('#TimeStart').spinner({
                 step: 0.1,
