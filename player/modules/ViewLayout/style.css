@@ -249,7 +249,7 @@ body > .contentViewTemplate {
 
 #LayoutManager .layoutArea[data-area="areaLeft"], #LayoutManager .layoutArea[data-area="areaRight"] {
     align-self: stretch;
-    height: 100%;
+    min-height: 100%;
 }
 
 #LayoutManager .playerWrapper .playerArea {
@@ -257,7 +257,7 @@ body > .contentViewTemplate {
     order: 0;
     flex: 1 1 auto;
     align-self: stretch;
-    height: 100%;
+    min-height: 100%;
 }
 
 #LayoutManager .playerWrapper .playerArea .icon-play-1 {
