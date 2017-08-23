@@ -118,7 +118,9 @@ FrameTrail.defineType(
                     break;
             }
 
-            self.resizeLayoutArea();
+            window.setTimeout(function() {
+                self.resizeLayoutArea();
+            }, 50);
 
         },
 
@@ -128,10 +130,22 @@ FrameTrail.defineType(
             // single item (like an annotation)
             // console.log(contentItem);
             
-            var collectionElement = $('<div class="collectionElement"></div>');
+            var collectionElement = $('<div class="collectionElement"></div>'),
+                self = this;
 
+            if ( self.contentViewData.onClickContentItem.length != 0 ) {
+                collectionElement.click(function() {
+                    try {
+                        var thisFunction = new Function(self.contentViewData.onClickContentItem);
+                        thisFunction.call(contentItem);
+                    } catch (exception) {
+                        // could not parse and compile JS code!
+                        console.warn('Event handler contains errors: '+ exception.message);
+                    }
+                });
+            }
             collectionElement.append(contentItem.resourceItem.renderThumb());
-            this.contentViewContainer.find('.contentViewContents').append(collectionElement);
+            self.contentViewContainer.find('.contentViewContents').append(collectionElement);
 
             contentItem.contentViewElements.push(collectionElement);
 
@@ -257,7 +271,6 @@ FrameTrail.defineType(
 
             
         },
-
 
 
         updateLayout: function() {
@@ -419,14 +432,7 @@ FrameTrail.defineType(
                             +   '</div>');
 
             previewElement.find('.editContentView').click(function() {
-                
-                var contentViewPreviewElement = $(this).parents('.contentViewPreview');
-                
                 self.editContentView();
-
-                console.log(self.contentCollection[0].data.tags);
-
-
             });
 
             previewElement.find('.deleteContentView').click(function() {
@@ -877,6 +883,9 @@ FrameTrail.defineType(
                 sliderParent            = this.contentViewContainer,
                 sliderElement           = this.contentViewContainer.find('.contentViewContents');
 
+            if (this.contentCollection.length == 0) {
+                return;
+            }
             // Set sliderElement Dimensions
 
             if ( slideAxis == 'x' ) {
@@ -1042,19 +1051,27 @@ FrameTrail.defineType(
                         }
                     },
                     buttons: [
-                        { text: 'OK',
+                        { text: 'Apply',
                             click: function() {
                                 
                                 var newContentViewData = self.getDataFromEditingUI($(this));
 
                                 self.contentViewData = newContentViewData;
-                                console.log(self.contentViewData);
+                                
                                 self.updateContentViewPreview();
 
                                 self.updateContent();
 
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('layout');
 
+                                $(this).dialog( 'close' );
+
+                                var currentTime = FrameTrail.module('HypervideoController').currentTime;
+                                self.updateTimedStateOfContentViews(currentTime);
+                            }
+                        },
+                        { text: 'Cancel',
+                            click: function() {
                                 $(this).dialog( 'close' );
                             }
                         }
@@ -1074,7 +1091,8 @@ FrameTrail.defineType(
          */
         renderContentViewPreviewEditingUI: function() {
 
-            var contentViewData = this.contentViewData,
+            var self = this,
+                contentViewData = this.contentViewData,
                 editingUI = $('<div class="contentViewEditingUI">'
                             +'    <div class="contentViewData formColumn column2" data-property="type" data-value="'+ contentViewData.type +'">'
                             +'        <label>Type:</label>'
@@ -1107,48 +1125,46 @@ FrameTrail.defineType(
                             +'    </div>'
                             +'    <hr>'
                             +'    <div class="typeSpecific '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
-                            +'        <label>Content Filter:</label>'
+                            +'        <label>Select contents:</label>'
+                            +'        <div class="message active">If no filter is selected, the collection contains all annotations by all users.</div>'
                             +'        <div class="formColumn column1">'
-                            +'            <label>Tags</label>'
-                            +'            <input type="text" class="contentViewData" data-property="collectionFilter-tags" data-value="'+ contentViewData.collectionFilter.tags +'" value="'+ contentViewData.collectionFilter.tags +'" placeholder="(optional)"/>'
+                            +'            <label>Filter by tags</label>'
+                            +'            <div class="existingTags"></div>'
+                            +'            <div class="button small contextSelectButton newTagButton">'
+                            +'                <span class="icon-plus">Add</span>'
+                            +'                <div class="contextSelectList"></div>'
+                            +'            </div>'
+                            +'            <input type="hidden" class="contentViewData" data-property="collectionFilter-tags" data-value="'+ contentViewData.collectionFilter.tags +'" value="'+ contentViewData.collectionFilter.tags +'" placeholder="(optional)"/>'
                             +'        </div>'
                             +'        <div class="formColumn column1">'
-                            +'            <label>Types</label>'
-                            +'            <input type="text" class="contentViewData" data-property="collectionFilter-types" data-value="'+ contentViewData.collectionFilter.types +'" value="'+ contentViewData.collectionFilter.types +'" placeholder="(optional)"/>'
+                            +'            <label>Filter by types (eg. "Image")</label>'
+                            +'            <div class="existingTypes"></div>'
+                            +'            <div class="button small contextSelectButton newTypeButton">'
+                            +'                <span class="icon-plus">Add</span>'
+                            +'                <div class="contextSelectList"></div>'
+                            +'            </div>'
+                            +'            <input type="hidden" class="contentViewData" data-property="collectionFilter-types" data-value="'+ contentViewData.collectionFilter.types +'" value="'+ contentViewData.collectionFilter.types +'" placeholder="(optional)"/>'
                             +'        </div>'
                             +'        <div class="formColumn column1">'
-                            +'            <label>Users</label>'
-                            +'            <input type="text" class="contentViewData" data-property="collectionFilter-users" data-value="'+ contentViewData.collectionFilter.users +'" value="'+ contentViewData.collectionFilter.users +'" placeholder="(optional)"/>'
+                            +'            <label>Filter by users</label>'
+                            +'            <div class="existingUsers"></div>'
+                            +'            <div class="button small contextSelectButton newUserButton">'
+                            +'                <span class="icon-plus">Add</span>'
+                            +'                <div class="contextSelectList"></div>'
+                            +'            </div>'
+                            +'            <input type="hidden" class="contentViewData" data-property="collectionFilter-users" data-value="'+ contentViewData.collectionFilter.users +'" value="'+ contentViewData.collectionFilter.users +'" placeholder="(optional)"/>'
                             +'        </div>'
                             +'        <div class="formColumn column1">'
-                            +'            <label>Text</label>'
+                            +'            <label>Filter by name</label>'
                             +'            <input type="text" class="contentViewData" data-property="collectionFilter-text" data-value="'+ contentViewData.collectionFilter.text +'" value="'+ contentViewData.collectionFilter.text +'" placeholder="(optional)"/>'
                             +'        </div>'
                             +'        <div style="clear: both;"></div>'
+                            +'        <div class="message active">Items in collection: <span class="collectionCounter"></span></div>'
                             +'        <hr>'
                             +'    </div>'
                             +'    <div class="typeSpecific codeEditorSmall '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
-                            /*
-                            +'        <div class="contentViewData formColumn column1" data-property="mode" data-value="'+ contentViewData.mode +'">'
-                            +'            <label>Mode:</label>'
-                            +'            <div '+ (contentViewData.mode == 'slide' ? 'class="active"' : '') +' data-value="slide">Slide</div>'
-                            +'            <div '+ (contentViewData.mode == 'toggle' ? 'class="active"' : '') +' data-value="toggle">Show / Hide</div>'
-                            +'            <div '+ (contentViewData.mode == 'scroll' ? 'class="active"' : '') +' data-value="scroll">Scroll</div>'
-                            +'        </div>'
-                            +'        <div class="contentViewData formColumn column1" data-property="axis" data-value="'+ contentViewData.axis +'">'
-                            +'            <label>Direction:</label>'
-                            +'            <div '+ (contentViewData.axis == 'x' ? 'class="active"' : '') +' data-value="x">Horizontal</div>'
-                            +'            <div '+ (contentViewData.axis == 'y' ? 'class="active"' : '') +' data-value="y">Vertical</div>'
-                            +'        </div>'
-                            +'        <div class="contentViewData formColumn column1" data-property="autoSync" data-value="'+ contentViewData.autoSync +'">'
-                            +'            <label>Auto Sync:</label>'
-                            +'            <div '+ (contentViewData.autoSync ? 'class="active"' : '') +' data-value="true">Yes</div>'
-                            +'            <div '+ (!contentViewData.autoSync ? 'class="active"' : '') +' data-value="false">No</div>'
-                            +'        </div>'
-                            +'        <div style="clear: both;"></div>'
-                            +'        <hr>'
-                            */
-                            +'        <label>OnClick Content Item:</label>'
+                            +'        <label>onClickContentItem:</label>'
+                            +'        <div class="message active">This code gets executed whenever an item in the collection is clicked. <br>"this" contains the current item / annotation object (data, ui elements & states). Example: console.log(this.data).</div>'
                             +'        <textarea class="contentViewData" data-property="onClickContentItem" data-value="'+ contentViewData.onClickContentItem +'" placeholder="(optional)">'+ contentViewData.onClickContentItem +'</textarea>'
                             +'    </div>'
                             +'    <div class="typeSpecific codeEditorLarge '+ (contentViewData.type == 'CustomHTML' ? 'active' : '') +'" data-type="CustomHTML">'
@@ -1188,6 +1204,181 @@ FrameTrail.defineType(
                 }
 
             });
+
+            var tagFilters = self.contentViewData.collectionFilter.tags;
+            var typeFilters = self.contentViewData.collectionFilter.types;
+            var userFilters = self.contentViewData.collectionFilter.users;
+
+            // Tag Filter UI
+
+            updateExistingTagFilters();
+
+            editingUI.find('.newTagButton').click(function() {
+                editingUI.find('.contextSelectButton').not($(this)).removeClass('active');
+
+                updateTagSelectContainer();
+                $(this).toggleClass('active');
+            });
+
+            function updateExistingTagFilters() {
+                updateCollectionFilterValues();
+                editingUI.find('.existingTags').empty();
+
+                for (var i=0; i<tagFilters.length; i++) {
+                    var tagLabel = FrameTrail.module('TagModel').getTagLabelAndDescription(tagFilters[i], 'de').label,
+                        tagItem = $('<div class="tagItem" data-tag="'+ tagFilters[i] +'">'+ tagLabel +'</div>');
+                    var deleteButton = $('<div class="deleteItem"><span class="icon-cancel"></span></div>')
+                    deleteButton.click(function() {
+                        tagFilters.splice(tagFilters.indexOf($(this).parent().attr('data-tag')), 1);
+                        updateExistingTagFilters();
+                    });
+                    tagItem.append(deleteButton);
+                    editingUI.find('.existingTags').append(tagItem);
+                }
+            }
+
+            function updateTagSelectContainer() {
+                editingUI.find('.newTagButton .contextSelectList').empty();
+                
+                var allTags = FrameTrail.module('TagModel').getAllTagLabelsAndDescriptions('de');
+                for (var tagID in allTags) {
+                    if ( tagFilters.indexOf(tagID) != -1 ) {
+                        continue;
+                    }
+                    var tagLabel = allTags[tagID].label,
+                        tagItem = $('<div class="tagItem" data-tag="'+ tagID +'">'+ tagLabel +'</div>');
+                    tagItem.click(function() {
+                        tagFilters.push( $(this).attr('data-tag') );
+                        updateExistingTagFilters();
+                    });
+                    editingUI.find('.newTagButton .contextSelectList').append(tagItem);
+                }
+            }
+
+            // Type Filter UI
+
+            updateExistingTypeFilters();
+
+            editingUI.find('.newTypeButton').click(function() {
+                editingUI.find('.contextSelectButton').not($(this)).removeClass('active');
+                
+                updateTypeSelectContainer();
+                $(this).toggleClass('active');
+            });
+
+            function updateExistingTypeFilters() {
+                updateCollectionFilterValues();
+                editingUI.find('.existingTypes').empty();
+
+                for (var i=0; i<typeFilters.length; i++) {
+                    var typeItem = $('<div class="typeItem" data-type="'+ typeFilters[i] +'">'+ typeFilters[i].charAt(0).toUpperCase() + typeFilters[i].substring(1) +'</div>');
+                    var deleteButton = $('<div class="deleteItem"><span class="icon-cancel"></span></div>')
+                    deleteButton.click(function() {
+                        typeFilters.splice(typeFilters.indexOf($(this).parent().attr('data-type')), 1);
+                        updateExistingTypeFilters();
+                    });
+                    typeItem.append(deleteButton);
+                    editingUI.find('.existingTypes').append(typeItem);
+                }
+            }
+
+            function updateTypeSelectContainer() {
+                editingUI.find('.newTypeButton .contextSelectList').empty();
+                
+                var allTypes = [];
+
+                for (var typeDef in FrameTrail.types) {
+                    if ( typeDef.indexOf('Resource') != -1 && typeDef != 'Resource' && typeDef != 'ResourceText' ) {
+                        allTypes.push( typeDef.split('Resource')[1].toLowerCase() );
+                    }
+                };
+                for (var t=0; t<allTypes.length; t++) {
+                    if ( typeFilters.indexOf(allTypes[t]) != -1 ) {
+                        continue;
+                    }
+                    var typeItem = $('<div class="typeItem" data-type="'+ allTypes[t] +'">'+ allTypes[t].charAt(0).toUpperCase() + allTypes[t].substring(1) +'</div>');
+                    typeItem.click(function() {
+                        typeFilters.push( $(this).attr('data-type') );
+                        updateExistingTypeFilters();
+                    });
+                    editingUI.find('.newTypeButton .contextSelectList').append(typeItem);
+                }
+            }
+
+            // User Filter UI
+
+            updateExistingUserFilters();
+
+            editingUI.find('.newUserButton').click(function() {
+                editingUI.find('.contextSelectButton').not($(this)).removeClass('active');
+                
+                updateUserSelectContainer();
+                $(this).toggleClass('active');
+            });
+
+            function updateExistingUserFilters() {
+                updateCollectionFilterValues();
+                editingUI.find('.existingUsers').empty();
+
+                for (var u=0; u<userFilters.length; u++) {
+                    var userLabel = FrameTrail.module('Database').users[userFilters[u]].name,
+                        userItem = $('<div class="userItem" data-user="'+ userFilters[u] +'">'+ userLabel +'</div>');
+                    var deleteButton = $('<div class="deleteItem"><span class="icon-cancel"></span></div>')
+                    deleteButton.click(function() {
+                        userFilters.splice(userFilters.indexOf($(this).parent().attr('data-user')), 1);
+                        updateExistingUserFilters();
+                    });
+                    userItem.append(deleteButton);
+                    editingUI.find('.existingUsers').append(userItem);
+                }
+            }
+
+            function updateUserSelectContainer() {
+                editingUI.find('.newUserButton .contextSelectList').empty();
+                
+                var allUsers = FrameTrail.module('Database').users;
+                for (var user in allUsers) {
+                    if ( userFilters.indexOf(user) != -1 ) {
+                        continue;
+                    }
+                    var userItem = $('<div class="userItem" data-user="'+ user +'">'+ allUsers[user].name +'</div>');
+                    userItem.click(function() {
+                        userFilters.push( $(this).attr('data-user') );
+                        updateExistingUserFilters();
+                    });
+                    editingUI.find('.newUserButton .contextSelectList').append(userItem);
+                }
+            }
+
+            // Update Collection Filter Values from UI Elements
+
+            editingUI.find('.contentViewData[data-property="collectionFilter-text"]').keyup(function() {
+                updateCollectionFilterValues();
+            });
+
+            function updateCollectionFilterValues() {
+                var numberOfAnnotations = FrameTrail.module('TagModel').getContentCollection(
+                        tagFilters,
+                        false,
+                        true,
+                        userFilters,
+                        editingUI.find('.contentViewData[data-property="collectionFilter-text"]').val(),
+                        typeFilters
+                    ).length;
+                editingUI.find('.collectionCounter').text(numberOfAnnotations);
+                if ( numberOfAnnotations == 0 ) {
+                    editingUI.find('.collectionCounter').parent('.message').removeClass('success').addClass('error');
+                } else {
+                    editingUI.find('.collectionCounter').parent('.message').removeClass('error').addClass('success');
+                }
+
+                var tagFilterString = tagFilters.join(',');
+                editingUI.find('.contentViewData[data-property="collectionFilter-tags"]').val(tagFilterString);
+                var typeFilterString = typeFilters.join(',');
+                editingUI.find('.contentViewData[data-property="collectionFilter-types"]').val(typeFilterString);
+                var userFilterString = userFilters.join(',');
+                editingUI.find('.contentViewData[data-property="collectionFilter-users"]').val(userFilterString);
+            }
 
             // Init CodeMirror for onClickContentItem
 
@@ -1264,6 +1455,13 @@ FrameTrail.defineType(
                 var newValue;
                 if ( $(this).is('input') || $(this).is('textarea') ) {
                     newValue = $(this).val();
+                    if ( $(this).attr('data-property').indexOf('collectionFilter') != -1 && $(this).attr('data-property') != 'collectionFilter-text' ) {
+                        if ( $(this).val().length != 0 ) {
+                            newValue = $(this).val().split(',');
+                        } else {
+                            newValue = [];
+                        }
+                    }
                 } else {
                     newValue = $(this).attr('data-value');
                 }
@@ -1286,11 +1484,6 @@ FrameTrail.defineType(
                     newDataObject[$(this).attr('data-property')] = newValue;
                 }
             });
-
-            // TODO: Replace with actual data values
-            newDataObject.collectionFilter.tags = [];
-            newDataObject.collectionFilter.types = [];
-            newDataObject.collectionFilter.users = [];
 
             return newDataObject;    
 

@@ -31,7 +31,7 @@ body {
     align-items: flex-start;
 }
 
-button, input[type="submit"], input[type="button"] {
+button, input[type="submit"], input[type="button"], .button {
 	font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
 	border: none;
 	font-size: 14px;
@@ -40,6 +40,11 @@ button, input[type="submit"], input[type="button"] {
 	background-color: transparent;
 	border: 2px solid var(--primary-bg-color);
 	color: var(--primary-bg-color);
+}
+
+button.small, .button.small {
+    padding: 2px 4px 2px 1px;
+    line-height: 12px;
 }
 
 button:focus, input[type="submit"]:focus, input[type="button"]:focus {
@@ -52,10 +57,15 @@ button[disabled], input[disabled] {
     pointer-events: none;
 }
 
-button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+button:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
 	background-color: var(--primary-bg-color);
     color: var(--primary-fg-color);
 	cursor: pointer;
+}
+
+button.active, input[type="submit"].active, input[type="button"].active, .button.active {
+    background-color: var(--primary-bg-color);
+    color: var(--primary-fg-color);
 }
 
 input[type="text"], input[type="password"], textarea {
@@ -75,6 +85,66 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 input[readonly], textarea[readonly] {
 	background-color: #cfcfcf;
+}
+
+.contextSelectButton {
+    position: relative;
+    display: inline-block;
+}
+
+.contextSelectList {
+    position: absolute;
+    top: 20px;
+    left: -2px;
+    min-width: 170px;
+    min-height: 10px;
+    background: var(--primary-fg-color);
+    border: 2px solid var(--primary-bg-color);
+    z-index: 99;
+    display: none;
+}
+
+.contextSelectButton.active .contextSelectList {
+    display: block;
+}
+
+.contextSelectList div {
+    display: block;
+    margin: 0px;
+    padding: 2px 4px;
+    line-height: initial;
+    color: var(--primary-bg-color);
+    background: var(--primary-fg-color);
+}
+
+.contextSelectList div:hover {
+    color: var(--primary-fg-color);
+    background: var(--secondary-bg-color);
+    cursor: pointer;
+}
+
+
+/* Tags */
+
+.tagItem, .typeItem, .userItem {
+    display: inline-block;
+    padding: 2px 6px;
+    color: var(--primary-fg-color);
+    background: var(--secondary-bg-color);
+    margin: 2px 6px 6px 0px;
+    border-radius: 3px;
+    line-height: 20px;
+    cursor: default;
+}
+
+.tagItem:hover, .typeItem:hover, .userItem:hover {
+    background: var(--primary-bg-color);
+}
+
+.tagItem .deleteItem, .typeItem .deleteItem, .userItem .deleteItem {
+    display: inline-block;
+    margin-right: -4px;
+    cursor: pointer;
 }
 
 /* Select Menu */

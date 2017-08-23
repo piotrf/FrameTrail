@@ -16,6 +16,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 	var configLayoutArea,
 
+		/*
 		areaTopContainer,
 		areaTopDetails,
 
@@ -24,6 +25,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 		areaLeftContainer,
 		areaRightContainer,
+		*/
 
 		contentViewsTop     = [],
 		contentViewsBottom  = [],
@@ -41,12 +43,14 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 		configLayoutArea = FrameTrail.module('Database').hypervideo.config.layoutArea;
 
+		/*
 		areaTopContainer    = FrameTrail.module('ViewVideo').AreaTopContainer;
 		areaTopDetails      = FrameTrail.module('ViewVideo').AreaTopDetails;
 		areaBottomContainer = FrameTrail.module('ViewVideo').AreaBottomContainer;
 		areaBottomDetails   = FrameTrail.module('ViewVideo').AreaBottomDetails;
 		areaLeftContainer   = FrameTrail.module('ViewVideo').AreaLeftContainer;
 		areaRightContainer  = FrameTrail.module('ViewVideo').AreaRightContainer;
+		*/
 
 		for (var i in configLayoutArea.areaTop) {
 			contentViewsTop.push(
@@ -177,6 +181,23 @@ FrameTrail.defineModule('ViewLayout', function(){
 			}
 		}
 		
+	}
+
+
+	function updateContentInContentViews() {
+		var contentViewAreas = [
+			contentViewsTop, contentViewsBottom, contentViewsLeft, contentViewsRight
+		];
+
+		for (var a in contentViewAreas) {
+			for (var i in contentViewAreas[a]) {
+				var contentView = contentViewAreas[a][i];
+				contentView.updateContent();
+			}
+		}
+
+		var currentTime = FrameTrail.module('HypervideoController').currentTime;
+		updateTimedStateOfContentViews(currentTime);
 	}
 
 
@@ -458,7 +479,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 
         //TODO: CHECK WHY THIS THROWS ERROR RIGHT AFTER DELETING A CONTENT VIEW
 		var currentTime = FrameTrail.module('HypervideoController').currentTime;
-		// updateTimedStateOfContentViews(currentTime);
+		updateTimedStateOfContentViews(currentTime);
 
     }
 
@@ -479,18 +500,22 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 		updateManagedContent: updateManagedContent,
 
+		updateContentInContentViews: updateContentInContentViews,
+
 		updateTimedStateOfContentViews: updateTimedStateOfContentViews,
 
 		initLayoutManager: initLayoutManager,
 
 		getLayoutAreaData: getLayoutAreaData,
 
+		/*
 		get areaTopContainer()      { return areaTopContainer; },
 		get areaTopDetails()        { return areaTopDetails; },
 		get areaBottomContainer()   { return areaBottomContainer; },
 		get areaBottomDetails()     { return areaBottomDetails; },
 		get areaLeftContainer()     { return areaLeftContainer; },
 		get areaRightContainer()    { return areaRightContainer; }
+		*/
 	};
 
 });

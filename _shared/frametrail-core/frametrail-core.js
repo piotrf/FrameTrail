@@ -261,6 +261,9 @@
 
 		defineType: 	_defineType,
 
+		//TODO: Check if it's ok to export the types
+		types: 			defs_types,
+
 		type: 			_type,
 
 		newObject: 		_newObject
