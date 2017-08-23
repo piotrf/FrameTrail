@@ -137,6 +137,11 @@
 	height: 100%;
 }
 
+#EditPropertiesContainer .tagManagementUI {
+	padding-top: 10px;
+	clear: both;
+}
+
 #EditPropertiesContainer .propertiesTypeIcon {
 	background-position: left 3px;
     background-repeat: no-repeat;
