@@ -976,6 +976,50 @@ path {
     background-color: #eaeaef;
 }
 
+/* Subtitles Settings */
+
+.subtitlesSettingsWrapper {
+
+}
+
+.subtitlesSettingsWrapper #SubtitlesPlus,  .subtitlesSettingsWrapper .subtitlesRemove, .subtitlesSettingsWrapper .subtitlesDelete {
+    padding: 1px 2px;
+    font-size: 12px;
+    min-width: 24px;
+    margin: 4px 4px 0px 4px;
+    text-align: center;
+}
+
+.subtitlesSettingsWrapper .subtitlesItem, .subtitlesSettingsWrapper .existingSubtitlesItem {
+    margin: 4px 10px 8px 0;
+    display: inline-block;
+}
+
+.subtitlesSettingsWrapper .subtitlesItem, .subtitlesSettingsWrapper .existingSubtitlesItem > span {
+    font-size: 12px;
+    padding: 0 2px;
+}
+
+.subtitlesSettingsWrapper .existingSubtitlesItem > span {
+    color: var(--primary-fg-color);
+    background: var(--primary-bg-color);
+    border: 3px solid var(--primary-bg-color);
+    display: inline-block;
+    width: auto;
+}
+
+.subtitlesSettingsWrapper .subtitlesItem .subtitlesTmpKeySetter {
+    width: 85px;
+    padding: 0;
+    margin-right: 6px;
+}
+
+.subtitlesSettingsWrapper .subtitlesItem input[type="file"] {
+    width: 200px;
+}
+
+/* Hypervideo Layout Container */
+
 #HypervideoLayoutContainer {
     position: absolute;
     top: 0px;
@@ -991,15 +1035,6 @@ path {
     display: block;
 }
 
-.hypervideoData {
-    float: left;
-    width: 200px;
-}
-
-.hypervideoLayout {
-    float: left;
-    width: 328px;
-}
 
 @media (min-height: 920px) {
     #AreaBottomDetails, #AreaTopDetails {
