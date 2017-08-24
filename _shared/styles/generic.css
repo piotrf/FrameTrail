@@ -87,6 +87,31 @@ input[readonly], textarea[readonly] {
 	background-color: #cfcfcf;
 }
 
+.formColumn {
+    float: left;
+}
+
+.formColumn.column1 {
+    width: 25%;
+}
+
+.formColumn.column2 {
+    width: 50%;
+}
+
+.formColumn.column3 {
+    width: 75%;
+}
+
+.formColumn.column4 {
+    width: 100%;
+}
+
+.formColumn input[type="text"], .formColumn textarea {
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+}
+
 .contextSelectButton {
     position: relative;
     display: inline-block;
