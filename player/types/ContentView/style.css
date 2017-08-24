@@ -111,6 +111,28 @@
     transition-duration: 250ms;
 }
 
+.layoutArea .contentViewContainer .contentViewContents .transcriptContainer {
+	padding: 10px;
+	max-height: 100%;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.layoutArea .contentViewContainer .contentViewContents .transcriptContainer span {
+	position: relative;
+	padding: 1px 2px 1px 4px;
+	opacity: .7;
+}
+
+.layoutArea .contentViewContainer .contentViewContents .transcriptContainer span:first-child {
+	padding-left: 0px;
+}
+
+.layoutArea .contentViewContainer .contentViewContents .transcriptContainer span:hover, .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span.active {
+	background: var(--primary-bg-color);
+	opacity: 1;
+}
+
 /* View Layout Manager */
 
 #LayoutManager .layoutArea .contentViewPreview {
@@ -181,26 +203,6 @@
 	margin-top: 8px;
 }
 
-.contentViewEditingUI .formColumn {
-	float: left;
-}
-
-.contentViewEditingUI .formColumn.column1 {
-	width: 25%;
-}
-
-.contentViewEditingUI .formColumn.column2 {
-	width: 50%;
-}
-
-.contentViewEditingUI .formColumn.column3 {
-	width: 75%;
-}
-
-.contentViewEditingUI .formColumn.column4 {
-	width: 100%;
-}
-
 .contentViewEditingUI label {
 	display: block;
 }
@@ -239,4 +241,18 @@
 
 .contentViewEditingUI .contentViewData > div[data-value].active, .collectionCounter {
 	font-weight: bold;
+}
+
+.contentViewEditingUI .existingSubtitlesItem {
+	display: inline-block;
+	margin-right: 8px;
+	margin-bottom: 6px;
+	padding: 3px 8px;
+	background: var(--secondary-bg-color);
+	color: var(--primary-fg-color);
+	cursor: pointer;
+}
+
+.contentViewEditingUI .existingSubtitlesItem.active {
+	background: var(--primary-bg-color);
 }

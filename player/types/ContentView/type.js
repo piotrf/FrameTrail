@@ -112,8 +112,26 @@ FrameTrail.defineType(
                         self.removeContentCollectionElements(contentItem);
                     });
 
-                    self.contentViewContainer.find('.contentViewContents').html('<div class="transcriptContainer">TRANSCRIPT HERE</div>');
-                    console.log('Init Hyperaud.io Light Transcript');
+                    var transcriptContainer = $('<div class="transcriptContainer"></div>');
+
+                    self.contentViewContainer.find('.contentViewContents').empty().append(transcriptContainer);
+
+                    var subtitles = FrameTrail.module('Database').subtitles[self.contentViewData.transcriptSource];
+                    if ( subtitles ) {
+                        for (var i=0; i<subtitles.cues.length; i++) {
+                            var cueElement = $('<span data-start="'+ subtitles.cues[i].startTime +'" data-end="'+ subtitles.cues[i].endTime +'">'+ subtitles.cues[i].text +' </span>');
+                            cueElement.click(function() {
+                                FrameTrail.module('HypervideoController').currentTime = $(this).attr('data-start') - 0.5;
+                            });
+                            transcriptContainer.append(cueElement);
+                        }
+                    }
+
+                    transcriptContainer.perfectScrollbar({
+                        wheelSpeed: 4,
+                        suppressScrollX: true,
+                        wheelPropagation: true
+                    });
 
                     break;
             }
@@ -266,6 +284,37 @@ FrameTrail.defineType(
                     break;
                 case 'Transcript':
                     
+                    var transcriptElements = this.contentViewContainer.find('.transcriptContainer').find('span');
+                    
+                    if ( transcriptElements.length != 0 ) {
+                        transcriptElements.each(function() {
+                            var startTime = parseFloat($(this).attr('data-start')),
+                                endTime = parseFloat($(this).attr('data-end'));
+                            if ( startTime-0.5 <= currentTime && endTime-0.5 >= currentTime ) {
+                                if ( !$(this).hasClass('active') ) {
+                                    $(this).addClass('active');
+                                    scrollTranscript();
+                                }
+                            } else if ( $(this).hasClass('active') ) {
+                                $(this).removeClass('active');
+                            }
+                        });
+                    }
+
+                    function scrollTranscript() {
+            
+                        var transcriptContainer = this.contentViewContainer.find('.transcriptContainer');
+                          
+                        if ( transcriptContainer.find('span.active').position().top < transcriptContainer.height()/2+transcriptContainer.scrollTop() 
+                            || transcriptContainer.find('span.active').position().top > transcriptContainer.height()/2+transcriptContainer.scrollTop()) {
+                            
+                            var newPos = transcriptContainer.find('span.active').position().top + transcriptContainer.scrollTop() - transcriptContainer.height()/2;
+                            transcriptContainer.animate({scrollTop : newPos},400);
+                            
+                        }
+                        
+                    }
+
                     break;
             }
 
@@ -289,6 +338,10 @@ FrameTrail.defineType(
                         // full view update
                         break;
                 }
+            }
+
+            if ( this.contentViewData.type == 'Transcipt' ) {
+                this.contentViewContainer.find('.transcriptContainer').perfectScrollbar('update');
             }
 
         },
@@ -1112,7 +1165,7 @@ FrameTrail.defineType(
                             +'    <hr>'
                             +'    <div class="generic formColumn column1">'
                             +'        <label>Name:</label>'
-                            +'        <input type="text" class="contentViewData" data-property="name" data-value="'+ contentViewData.name +'" value="'+ contentViewData.name +'" placeholder="(optional)"/>'
+                            +'        <input type="text" class="contentViewData" data-property="name" data-value="'+ contentViewData.name +'" value="'+ contentViewData.name +'" placeholder="(required)"/>'
                             +'    </div>'
                             +'    <div class="generic formColumn column3">'
                             +'        <label>Description:</label>'
@@ -1173,7 +1226,9 @@ FrameTrail.defineType(
                             +'    </div>'
                             +'    <div class="typeSpecific '+ (contentViewData.type == 'Transcript' ? 'active' : '') +'" data-type="Transcript">'
                             +'        <label>Transcript Source:</label>'
-                            +'        <input type="text" class="contentViewData" data-property="transcriptSource" data-value="'+ contentViewData.transcriptSource +'" value="'+ contentViewData.transcriptSource +'" />'
+                            +'        <div class="message active">New transcripts can be uploaded in the "Settings" tab.</div>'
+                            +'        <div class="existingTranscripts"></div>'
+                            +'        <input type="hidden" class="contentViewData" data-property="transcriptSource" data-value="'+ contentViewData.transcriptSource +'" value="'+ contentViewData.transcriptSource +'" />'
                             +'    </div>'
                             +'</div>');
             
@@ -1204,6 +1259,39 @@ FrameTrail.defineType(
                 }
 
             });
+
+            // Transcripts
+
+            function updateExistingTranscripts() {
+                editingUI.find('.existingTranscripts').empty();
+
+                var database = FrameTrail.module('Database');
+
+                if ( database.hypervideo.subtitles ) {
+
+                    var langMapping = database.subtitlesLangMapping;
+
+                    for (var i=0; i < database.hypervideo.subtitles.length; i++) {
+                        var currentSubtitles = database.hypervideo.subtitles[i],
+                            existingSubtitlesItem = $('<div class="existingSubtitlesItem" data-srclang="'+ currentSubtitles.srclang +'"><span>'+ langMapping[currentSubtitles.srclang] +'</span></div>');
+
+                        if ( editingUI.find('.contentViewData[data-property="transcriptSource"]').val() == currentSubtitles.srclang ) {
+                            existingSubtitlesItem.addClass('active');
+                        }
+                        existingSubtitlesItem.click(function(evt) {
+                            var thisSourceLang = $(this).attr('data-srclang');
+                            editingUI.find('.contentViewData[data-property="transcriptSource"]').val(thisSourceLang);
+                            updateExistingTranscripts();
+                        }).appendTo(existingSubtitlesItem);
+
+                        editingUI.find('.existingTranscripts').append(existingSubtitlesItem);
+                    }
+                }
+            }
+
+            updateExistingTranscripts();
+            
+            // Content Collection Filters
 
             var tagFilters = self.contentViewData.collectionFilter.tags;
             var typeFilters = self.contentViewData.collectionFilter.types;
