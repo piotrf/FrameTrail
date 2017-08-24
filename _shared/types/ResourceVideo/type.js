@@ -142,7 +142,7 @@ FrameTrail.defineType(
 
                             });
 
-            basicControls.controlsContainer.append(syncedLabel, syncedRadio);
+            basicControls.controlsContainer.find('#OverlayOptions').append(syncedLabel, syncedRadio);
 
             return basicControls;
 
