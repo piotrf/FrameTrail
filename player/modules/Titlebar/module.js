@@ -137,11 +137,15 @@ FrameTrail.defineModule('Titlebar', function(){
 
         var newDialog = $('<div id="NewHypervideoDialog" title="New Hypervideo">'
                         + '    <form id="NewHypervideoForm" method="post">'
-                        + '        <div class="hypervideoData">'
-                        + '            <input type="text" name="name" placeholder="Name of Hypervideo" value=""><br>'
-                        + '            <textarea name="description" placeholder="Description for Hypervideo"></textarea><br>'
+                        + '        <div class="formColumn column2">'
+                        + '            <label for="name">Hypervideo Name</label>'
+                        + '            <input type="text" name="name" placeholder="Name" value=""><br>'
                         + '            <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((FrameTrail.module('Database').project.defaultHypervideoHidden.toString() == "true") ? "checked" : "")+'>'
                         + '            <label for="hypervideo_hidden">Hidden from other users?</label>'
+                        + '        </div>'
+                        + '        <div class="formColumn column2">'
+                        + '            <label for="description">Description</label>'
+                        + '            <textarea name="description" placeholder="Description"></textarea><br>'
                         + '        </div>'
                         /*
                         + '        <div class="hypervideoLayout">'
@@ -172,6 +176,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '        </div>'
                         */
                         + '        <div style="clear: both;"></div>'
+                        + '        <hr>'
                         + '        <div id="NewHypervideoTabs">'
                         + '            <ul>'
                         + '                <li><a href="#ChooseVideo">Choose Video</a></li>'

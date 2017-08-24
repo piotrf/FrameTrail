@@ -1068,14 +1068,20 @@
         
         var EditHypervideoForm = $('<form method="POST" id="EditHypervideoForm">'
                                   +'    <div class="message saveReminder">Please save your settings right now to update the subtitle settings.</div>'
-                                  +'    <div class="hypervideoData">'
-                                  +'        <div>Hypervideo Settings:</div>'
+                                  +'    <div class="formColumn column1">'
+                                  +'        <label for="name">Hypervideo Name</label>'
                                   +'        <input type="text" name="name" placeholder="Name of Hypervideo" value="'+ hypervideoName +'"><br>'
-                                  +'        <textarea name="description" placeholder="Description for Hypervideo">'+ description +'</textarea><br>'
                                   +'        <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((hidden.toString() == "true") ? "checked" : "")+'>'
                                   +'        <label for="hypervideo_hidden">Hidden from other users?</label>'
                                   +'    </div>'
-                                  +'    <div class="hypervideoLayout">'
+                                  +'    <div class="formColumn column1">'
+                                  +'        <label for="description">Description</label>'
+                                  +'        <textarea name="description" placeholder="Description for Hypervideo">'+ description +'</textarea><br>'
+                                  +'    </div>'
+                                  +'    <div class="formColumn column2">'
+                                  +'    </div>'
+                                  +'    <div class="formColumn column2">'
+                                  /*
                                   +'        <div>Player Layout:</div>'
                                   +'        <div class="settingsContainer">'
                                   +'            <div class="genericSettingsWrapper">Layout Mode'
@@ -1085,8 +1091,9 @@
                                   +'                </div>'
                                   +'            </div>'
                                   +'        </div>'
+                                  */
                                   +'        <div class="subtitlesSettingsWrapper">'
-                                  +'            <span>Subtitles</span>'
+                                  +'            <div>Subtitles (also used for interactive transcripts)</div>'
                                   +'            <button id="SubtitlesPlus" type="button">Add +</button>'
                                   +'            <input type="checkbox" name="config[captionsVisible]" id="captionsVisible" value="true" '+((hypervideo.config.captionsVisible && hypervideo.config.captionsVisible.toString() == 'true') ? "checked" : "")+'>'
                                   +'            <label for="captionsVisible">Show by default (if present)</label>'
@@ -1096,7 +1103,6 @@
                                   +'    </div>'
                                   +'    <div style="clear: both;"></div>'
                                   +'    <div class="message error"></div>'
-                                  +'    <hr>'
                                   +'</form>');
 
         settingsEditingOptions.find('#ChangeSettings').append(EditHypervideoForm);
@@ -1209,7 +1215,11 @@
             updateDatabaseFromForm();
         });
 
-        EditHypervideoForm.find('input, textarea').on('change', function() {
+        EditHypervideoForm.find('input, textarea').on('keydown', function() {
+            updateDatabaseFromForm();
+        });
+
+        EditHypervideoForm.find('input[type="checkbox"]').on('change', function() {
             updateDatabaseFromForm();
         });
 
