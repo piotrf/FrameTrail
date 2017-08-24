@@ -33,7 +33,7 @@ FrameTrail.defineType(
 
     {
         /**
-         * I hold the data object of a custom ResourceText, which is not stored in the Databse and doesn't appear in the resource's _index.json.
+         * I hold the data object of a custom ResourceText, which is not stored in the Database and doesn't appear in the resource's _index.json.
          * @attribute resourceData
          * @type {}
          */
@@ -110,26 +110,44 @@ FrameTrail.defineType(
 
             /* Add Video Type  Controls */
 
-            var textLabel = $('<div>Custom Text:</div>'),
-
-                textarea = $('<textarea>' + overlay.data.attributes.text + '</textarea>')
-                    .on('keyup', function () {
-                        
-                        var escapeHelper = document.createElement('div'),
-                            escapedHtml;
-
-                        // save escaped html string
-                        escapeHelper.appendChild(document.createTextNode($(this).val()));
-                        escapedHtml = escapeHelper.innerHTML;
-                        overlay.data.attributes.text = escapedHtml;
-
-                        overlay.overlayElement.children('.resourceDetail').html($(this).val());
-
-                        FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
-
-                    });
+            var textLabel = $('<div>Custom HTML:</div>'),
+                textarea = $('<textarea>' + overlay.data.attributes.text + '</textarea>');
 
             basicControls.controlsContainer.find('#OverlayOptions').append(textLabel, textarea);
+
+            // Init CodeMirror for Custom HTML
+
+            var htmlCodeEditor = CodeMirror.fromTextArea(textarea[0], {
+                    value: textarea[0].value,
+                    lineNumbers: true,
+                    mode:  'text/html',
+                    htmlMode: true,
+                    lint: true,
+                    lineWrapping: true,
+                    tabSize: 2,
+                    theme: 'hopscotch'
+                });
+            htmlCodeEditor.on('change', function(instance, changeObj) {
+                
+                var thisTextarea = $(instance.getTextArea());
+                
+                thisTextarea.val(instance.getValue());
+
+                var escapeHelper = document.createElement('div'),
+                    escapedHtml;
+
+                // save escaped html string
+                escapeHelper.appendChild(document.createTextNode(instance.getValue()));
+                escapedHtml = escapeHelper.innerHTML;
+                overlay.data.attributes.text = escapedHtml;
+
+                overlay.overlayElement.children('.resourceDetail').html(instance.getValue());
+
+                FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+                
+
+            });
+            htmlCodeEditor.setSize(null, 140);
 
             return basicControls;
 

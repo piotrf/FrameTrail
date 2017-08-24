@@ -500,6 +500,10 @@ FrameTrail.defineModule('OverlaysController', function(){
 
         ViewVideo.EditPropertiesContainer.find('#OverlayOptionsTabs').tabs('refresh');
 
+        if ( ViewVideo.EditPropertiesContainer.find('.CodeMirror').length != 0 ) {
+            ViewVideo.EditPropertiesContainer.find('.CodeMirror')[0].CodeMirror.refresh();
+        }
+
 
     };
 
