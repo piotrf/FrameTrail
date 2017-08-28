@@ -865,7 +865,9 @@ FrameTrail.defineType(
                     
                     // Rescale elements in type "large" contentViews
                     var domElement = this.getContentViewElementFromContentItem(currentContentItem);
-                    rescale(domElement, domElement.width());
+                    if  (domElement) {
+                        rescale(domElement, domElement.width());
+                    }
 
                     // TODO: RESCALE DETAIL ELEMENTS
 
