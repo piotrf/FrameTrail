@@ -131,6 +131,8 @@ function projectsNew($name, $description, $config, $userNeedsConfirmation, $defa
 	
 	file_put_contents($conf["dir"]["projects"]."/".$projects["project-increment"]."/project.json", json_encode($project,$conf["settings"]["json_flags"]));
 
+	file_put_contents($conf["dir"]["projects"]."/".$projects["project-increment"]."/tagdefinitions.json", "{}");
+
 	$return["status"] = "success";
 	$return["code"] = 0;
 	$return["string"] = "Project has been created";
