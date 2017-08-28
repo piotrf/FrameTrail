@@ -396,7 +396,7 @@ FrameTrail.defineModule('UserManagement', function(){
 		data:       { "projectID":FrameTrail.module('RouteNavigation').projectID },
 
 		success: function(response) {
-			console.log(response);
+			//console.log(response);
 			switch(response.code){
 				
 				case 0:

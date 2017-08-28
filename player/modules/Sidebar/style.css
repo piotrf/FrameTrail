@@ -8,7 +8,7 @@
 	color: #cececb;
 	font-weight: 100;
 	z-index: 2;
-	box-shadow: 0 0 2px 1px #000;
+	/*box-shadow: 0 0 2px 1px #000;*/
 	-webkit-transition: all 200ms linear; /* Firefox */
 	-moz-transition: all 200ms linear; /* WebKit */
 	-o-transition: all 200ms linear; /* Opera */
@@ -16,7 +16,7 @@
 }
 
 #Sidebar.open {
-	box-shadow: 0 0 2px 1px #000;
+	box-shadow: 0 0 2px 1px var(--primary-fg-color);
 	left: 0px;
 }
 
@@ -108,6 +108,14 @@
 #SidebarContainer .viewmodeInfo {
 	padding: 10px;
 	overflow: auto;
+}
+
+#SidebarContainer .viewmodeInfo a {
+	color: var(--primary-fg-color);
+}
+
+#Sidebar.editActive #SidebarContainer .viewmodeInfo a {
+	color: var(--primary-bg-color);
 }
 
 #SidebarContainer .descriptionLabel {

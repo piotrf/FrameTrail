@@ -43,10 +43,9 @@ function userGet($projectID, $userID) {
  */
 function userRegister($projectID, $name, $mail, $passwd) {
 	global $conf;
-	$json = file_get_contents($conf["dir"]["projects"]."/_index.json");
+	$json = file_get_contents($conf["dir"]["projects"]."/". $projectID ."/project.json");
 	$configDB = json_decode($json, true);
-	$configDB = $configDB["projects"][$projectID];
-
+	
 	$userFile = $conf["dir"]["projects"]."/".$projectID."/users.json";
 
 

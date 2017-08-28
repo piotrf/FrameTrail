@@ -42,7 +42,7 @@ FrameTrail.defineType(
          * @return HTMLElement
          */
         renderContent: function() {
-
+            
             return $(
                     '<video class="resourceDetail" data-type="'+ this.resourceData.type +'" controls autobuffer>'
                 +       '<source src="../_data/projects/'

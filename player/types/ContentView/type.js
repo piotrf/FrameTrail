@@ -33,6 +33,10 @@ FrameTrail.defineType(
 
         this.contentViewData = contentViewData;
 
+        this.previousContentSize = this.contentViewData.contentSize;
+
+        this.isMouseOver = false;
+
         this.whichArea = whichArea;
 
         this.contentCollection = [];
@@ -80,19 +84,36 @@ FrameTrail.defineType(
                         self.contentViewData.collectionFilter.types
                     );
 
-                    old_contentCollection.filter(function(contentItem) {
-                        return 0 > self.contentCollection.indexOf(contentItem)
-                    }).forEach(function(contentItem) {
-                        self.removeContentCollectionElements(contentItem);
-                    });
+                    /*
+                    if ( (this.previousContentSize == 'large' && this.contentViewData.contentSize != 'large') || 
+                         (this.previousContentSize != 'large' && this.contentViewData.contentSize == 'large') ) {
 
-                    self.contentCollection.filter(function(contentItem) {
-                        return 0 > old_contentCollection.indexOf(contentItem)
-                    }).forEach(function (contentItem) {
-                        self.appendContentCollectionElements(contentItem);
-                    });
+                        old_contentCollection.forEach(function (contentItem) {
+                            self.removeContentCollectionElements(contentItem);
+                        });
 
-                    FrameTrail.module('ViewLayout').updateManagedContent();
+                        self.contentCollection.forEach(function (contentItem) {
+                            self.appendContentCollectionElements(contentItem);
+                        });
+
+                        this.previousContentSize = this.contentViewData.contentSize;
+
+                    } else {
+                    */
+
+                        old_contentCollection.filter(function(contentItem) {
+                            return 0 > self.contentCollection.indexOf(contentItem)
+                        }).forEach(function(contentItem) {
+                            self.removeContentCollectionElements(contentItem);
+                        });
+
+                        self.contentCollection.filter(function(contentItem) {
+                            return 0 > old_contentCollection.indexOf(contentItem)
+                        }).forEach(function (contentItem) {
+                            self.appendContentCollectionElements(contentItem);
+                        });
+
+                    //}
 
                     break;
 
@@ -136,6 +157,8 @@ FrameTrail.defineType(
                     break;
             }
 
+            FrameTrail.module('ViewLayout').updateManagedContent();
+            
             window.setTimeout(function() {
                 self.resizeLayoutArea();
             }, 50);
@@ -162,10 +185,55 @@ FrameTrail.defineType(
                     }
                 });
             }
-            collectionElement.append(contentItem.resourceItem.renderThumb());
+            
+            if ( self.contentViewData.contentSize == 'large' ) {
+                collectionElement.append(contentItem.resourceItem.renderContent());
+            } else {
+                collectionElement.append(contentItem.resourceItem.renderThumb());
+            }
+            
+            
             self.contentViewContainer.find('.contentViewContents').append(collectionElement);
-
             contentItem.contentViewElements.push(collectionElement);
+
+            // Append Detail Element if contentView size is not large 
+            // (otherwise Details are already shown)
+            // ONLY APPLY TO TOP & BOTTOM DETAILS
+            if ( self.contentViewData.contentSize != 'large' && (self.whichArea == 'top' || self.whichArea == 'bottom') ) {
+
+                var detailElement = $('<div class="collectionElement"></div>');
+
+                detailElement.append(contentItem.resourceItem.renderContent());
+
+                self.contentViewDetailsContainer.find('.contentViewDetailsContents').append(detailElement);
+                contentItem.contentViewDetailElements.push(detailElement);
+
+                collectionElement.click(function() {
+                    if ( !$(this).hasClass('open') ) {
+                        $(this).siblings('.collectionElement').removeClass('open');
+                        self.contentViewDetailsContainer.find('.collectionElement').removeClass('open');
+                        
+                        $(this).addClass('open');
+                        self.contentViewDetailsContainer.find('.collectionElement').eq($(this).index()).addClass('open');
+                        
+                        self.updateCollectionSlider(true);
+
+                        FrameTrail.module('ViewVideo').shownDetails = self.whichArea;
+                    } else {
+                        $(this).removeClass('open');
+                        self.contentViewDetailsContainer.find('.collectionElement').removeClass('open');
+                        FrameTrail.module('ViewVideo').shownDetails = null;
+                    }
+                });
+            }
+
+            if ( self.whichArea == 'left' || self.whichArea == 'right' ) {
+                collectionElement.click(function() {
+                    if ( self.contentViewData.contentSize == 'small' ) {
+                        $(this).find('.resourcePreviewButton').click();
+                    }
+                });
+            }
 
         },
 
@@ -175,17 +243,34 @@ FrameTrail.defineType(
             // single item (like an annotation)
             // console.log(contentItem);
 
-            // TODO: CHECK WHY contentItem is undefined !!!
+            // TODO: CHECK WHY contentItem is sometimes undefined !!!
 
             if (contentItem) {
                 
-                if ( this.getContentViewElementFromContentItem(contentItem) ) {
-                    this.getContentViewElementFromContentItem(contentItem).remove();
-
+                var contentViewElement = this.getContentViewElementFromContentItem(contentItem);
+                
+                if ( contentViewElement ) {
+                    
                     contentItem.contentViewElements.splice(
-                        contentItem.contentViewElements.indexOf(contentItem),
+                        contentItem.contentViewElements.indexOf(contentViewElement),
                         1
                     );
+
+                    contentViewElement.remove();
+
+                }
+
+                var detailElement = this.getDetailElementFromContentItem(contentItem);
+
+                if ( detailElement ) {
+                    
+                    contentItem.contentViewDetailElements.splice(
+                        contentItem.contentViewDetailElements.indexOf(detailElement),
+                        1
+                    );
+
+                    detailElement.remove();
+
                 }
                 
             }
@@ -197,6 +282,17 @@ FrameTrail.defineType(
             for (var i=0; i<contentItem.contentViewElements.length; i++) {
                 if ( this.contentViewContainer.find(contentItem.contentViewElements[i]).length != 0 ) {
                     return this.contentViewContainer.find(contentItem.contentViewElements[i]);
+                }
+            }
+
+            return null;
+        },
+
+
+        getDetailElementFromContentItem: function(contentItem) {
+            for (var i=0; i<contentItem.contentViewDetailElements.length; i++) {
+                if ( this.contentViewDetailsContainer.find(contentItem.contentViewDetailElements[i]).length != 0 ) {
+                    return this.contentViewDetailsContainer.find(contentItem.contentViewDetailElements[i]);
                 }
             }
 
@@ -235,18 +331,33 @@ FrameTrail.defineType(
             //         break;
             // }
 
-            var self = this;
-                contentViewTab = self.renderContentViewTab(),
-                contentViewContainer = self.renderContentViewContainer(),
-                areaContainer = self.getLayoutAreaContainer();
+            // Append ContentView Containers
+            var contentViewTab = this.renderContentViewTab(),
+                contentViewContainer = this.renderContentViewContainer(),
+                areaContainer = this.getLayoutAreaContainer();
 
-            self.contentViewTab = contentViewTab;
-            self.contentViewContainer = contentViewContainer;
-            
+            var self = this;
+            contentViewContainer.hover(function() {
+                self.isMouseOver = true;
+            }, function() {
+                self.isMouseOver = false;
+            });
+
+            this.contentViewTab = contentViewTab;
+            this.contentViewContainer = contentViewContainer;
+
             areaContainer.find('.layoutAreaTabs').append( contentViewTab );
             areaContainer.find('.layoutAreaContent').append( contentViewContainer );
 
-            self.activateContentView();
+            // Append Details Containers
+            var contentViewDetailsContainer = this.renderContentViewDetailsContainer(),
+                areaDetailsContainer = this.getLayoutAreaDetailsContainer();
+            
+            this.contentViewDetailsContainer = contentViewDetailsContainer;
+
+            areaDetailsContainer.append(contentViewDetailsContainer);
+
+            this.activateContentView();
 
         },
 
@@ -258,6 +369,7 @@ FrameTrail.defineType(
             //         this.myContainerView = $('<div>....</div>')
             this.contentViewContainer.remove();
             this.contentViewTab.remove();
+            this.contentViewDetailsContainer.remove();
 
             if (this.contentViewPreviewElement.length != 0) {
                 this.contentViewPreviewElement.remove();
@@ -272,11 +384,15 @@ FrameTrail.defineType(
         updateTimedStateOfContentViews: function(currentTime) {
             // console.log('updateTimedStateOfContentViews', this, currentTime);
 
-            switch (this.contentViewData.type) {
+            var self = this;
+
+            switch (self.contentViewData.type) {
                 case 'TimedContent':
                     // Annotations are already updated by ViewLayout module!
 
-                    this.updateCollectionSlider();
+                    if (!self.isMouseOver) {
+                        self.updateCollectionSlider();
+                    }
 
                     break;
                 case 'CustomHTML':
@@ -284,7 +400,7 @@ FrameTrail.defineType(
                     break;
                 case 'Transcript':
                     
-                    var transcriptElements = this.contentViewContainer.find('.transcriptContainer').find('span');
+                    var transcriptElements = self.contentViewContainer.find('.transcriptContainer').find('span');
                     
                     if ( transcriptElements.length != 0 ) {
                         transcriptElements.each(function() {
@@ -303,14 +419,24 @@ FrameTrail.defineType(
 
                     function scrollTranscript() {
             
-                        var transcriptContainer = this.contentViewContainer.find('.transcriptContainer');
-                          
-                        if ( transcriptContainer.find('span.active').position().top < transcriptContainer.height()/2+transcriptContainer.scrollTop() 
-                            || transcriptContainer.find('span.active').position().top > transcriptContainer.height()/2+transcriptContainer.scrollTop()) {
+                        if (self.isMouseOver) {
+                            return;
+                        }
+                        var transcriptContainer = self.contentViewContainer.find('.transcriptContainer'),
+                            firstActiveElement = transcriptContainer.find('span.active').eq(0);
+                        
+                        if ( !self.contentViewContainer.hasClass('active') || firstActiveElement.length == 0 ) {
+                            return;
+                        }
+
+                        var activeElementPosition = firstActiveElement.position();
+                        
+                        if ( activeElementPosition.top < 
+                            transcriptContainer.height()/2 + transcriptContainer.scrollTop() 
+                            || activeElementPosition.top > transcriptContainer.height()/2 + transcriptContainer.scrollTop() ) {
                             
-                            var newPos = transcriptContainer.find('span.active').position().top + transcriptContainer.scrollTop() - transcriptContainer.height()/2;
-                            transcriptContainer.animate({scrollTop : newPos},400);
-                            
+                            var newPos = activeElementPosition.top + transcriptContainer.scrollTop() - transcriptContainer.height()/2;
+                            transcriptContainer.animate({scrollTop : newPos},400);                            
                         }
                         
                     }
@@ -324,15 +450,16 @@ FrameTrail.defineType(
 
         updateLayout: function() {
 
-            var HypervideoDuration = FrameTrail.module('HypervideoModel').duration;
+            var self = this;
+                HypervideoDuration = FrameTrail.module('HypervideoModel').duration;
 
             if ( HypervideoDuration != 0 ) {
-                switch (this.contentViewData.contentSize) {
+                switch (self.contentViewData.contentSize) {
                     case 'small':
-                        this.distributeElements();
+                        self.distributeElements();
                         break;
                     case 'medium':
-                        this.distributeElements();
+                        self.distributeElements();
                         break;
                     case 'large':
                         // full view update
@@ -340,9 +467,11 @@ FrameTrail.defineType(
                 }
             }
 
-            if ( this.contentViewData.type == 'Transcipt' ) {
-                this.contentViewContainer.find('.transcriptContainer').perfectScrollbar('update');
+            if ( self.contentViewData.type == 'Transcript' ) {
+                self.contentViewContainer.find('.transcriptContainer').perfectScrollbar('update');
             }
+
+            self.scaleDetailElements();
 
         },
 
@@ -392,7 +521,7 @@ FrameTrail.defineType(
 
             self.contentViewPreviewElement.attr('data-type', self.contentViewData.type);
             self.contentViewPreviewElement.attr('data-size', self.contentViewData.contentSize);
-            self.contentViewPreviewElement.find('.contentViewPreviewDescription').text(self.contentViewData.name +' '+ self.contentViewData.contentSize);
+            self.contentViewPreviewElement.find('.contentViewPreviewDescription').text(''+ ((self.contentViewData.type == 'TimedContent') ? 'Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'');
 
             self.resizeLayoutAreaPreview();
 
@@ -432,8 +561,8 @@ FrameTrail.defineType(
 
             var self = this;
                 tabElement = $('<div class="contentViewTab" '
-                            +   'data-type="'+ this.contentViewData.type +'">'
-                            +   '    <div class="contentViewTabName">'+ this.contentViewData.name +'</div>'
+                            +   'data-type="'+ self.contentViewData.type +'">'
+                            +   '    <div class="contentViewTabName">'+ self.contentViewData.name +'</div>'
                             +   '</div>');
 
             tabElement.click(function() {
@@ -453,14 +582,120 @@ FrameTrail.defineType(
          */
         renderContentViewContainer: function() {
 
-            var self = this;
+            var self = this,
                 containerElement = $('<div class="contentViewContainer" '
-                                    +'data-size="'+ this.contentViewData.contentSize +'" '
-                                    +'data-type="'+ this.contentViewData.type +'">'
+                                    +'data-size="'+ self.contentViewData.contentSize +'" '
+                                    +'data-type="'+ self.contentViewData.type +'">'
                                     +'    <div class="contentViewContents"></div>'
                                     +'</div>');
 
+            if ( self.whichArea == 'top' || self.whichArea == 'bottom' ) {
+                var slideLeftButton  = $('<div class="slideButton slideLeft">'
+                                        +'    <span class="icon-left-open-big"></span>'
+                                        +'</div>');
+                var slideRightButton = $('<div class="slideButton slideRight">'
+                                        +'    <span class="icon-right-open-big"></span>'
+                                        +'</div>');
+
+                slideLeftButton.click(function() {
+                    var container = self.contentViewContainer.find('.contentViewContents'),
+                        slideAmount = container.parent().width() / 3,
+                        leftValue = parseInt(container.css('left')) + slideAmount;
+
+                    if ( leftValue >= 10 ) {
+                        container.css('left', '');
+                    } else {
+                        container.css('left', leftValue + 'px');
+                    }
+                });
+                slideRightButton.click(function() {
+                    var container = self.contentViewContainer.find('.contentViewContents'),
+                        slideAmount = container.parent().width() / 3,
+                        leftValue = parseInt(container.css('left')) - slideAmount;
+
+                    if ( leftValue <= - ( container.outerWidth() - container.parent().width() ) ) {
+                        container.css('left', - ( container.outerWidth() - container.parent().width() ) );
+                    } else {
+                        container.css('left', leftValue + 'px');
+                    }
+                });
+
+                containerElement.append(slideLeftButton, slideRightButton);
+
+            } else {
+                var slideTopButton    = $('<div class="slideButton slideTop">'
+                                        + '    <span class="icon-up-open-big"></span>'
+                                        + '</div>');
+                var slideBottomButton = $('<div class="slideButton slideBottom">'
+                                        + '    <span class="icon-down-open-big"></span>'
+                                        + '</div>');
+
+                slideTopButton.click(function() {
+                    var container = self.contentViewContainer.find('.contentViewContents'),
+                        slideAmount = container.parent().height() / 3,
+                        topValue = parseInt(container.css('top')) + slideAmount;
+
+                    if ( topValue >= 10 ) {
+                        container.css('top', '');
+                    } else {
+                        container.css('top', topValue + 'px');
+                    }
+                });
+                slideBottomButton.click(function() {
+                    var container = self.contentViewContainer.find('.contentViewContents'),
+                        slideAmount = container.parent().height() / 3,
+                        topValue = parseInt(container.css('top')) - slideAmount;
+
+                    if ( topValue <= - ( container.outerHeight() - container.parent().height() ) ) {
+                        container.css('top', - ( container.outerHeight() - container.parent().height() ) );
+                    } else {
+                        container.css('top', topValue + 'px');
+                    }
+                });
+
+                containerElement.append(slideTopButton, slideBottomButton);
+            }
+
             return containerElement;
+
+        },
+
+
+
+        /**
+         * I render a ContentView Details Container Element.
+         *
+         * @method renderContentViewDetailsContainer
+         * @return {HTMLElement} detailsContainerElement
+         */
+        renderContentViewDetailsContainer: function() {
+
+            var self = this,
+                detailsContainerElement = $('<div class="contentViewDetailsContainer">'
+                                        +   '    <div class="contentViewDetailsContents"></div>'
+                                        +   '    <div class="slideButton slideLeft" title="Try using arrow keys">'
+                                        +   '        <span class="icon-left-open-big"></span>'
+                                        +   '    </div>'
+                                        +   '    <div class="slideButton slideRight" title="Try using arrow keys">'
+                                        +   '        <span class="icon-right-open-big"></span>'
+                                        +   '    </div>'
+                                        +   '</div>');
+
+            detailsContainerElement.find('.slideButton.slideLeft').click(function() {
+                var activeElement = self.contentViewContainer.find('.collectionElement.open');
+                if ( activeElement ) {
+                    activeElement.prev('.collectionElement').click();
+                } 
+            });
+
+            detailsContainerElement.find('.slideButton.slideRight').click(function() {
+                var activeElement = self.contentViewContainer.find('.collectionElement.open');
+                if ( activeElement ) {
+                    activeElement.next('.collectionElement').click();
+                } 
+            });
+
+            return detailsContainerElement;
 
         },
 
@@ -473,15 +708,15 @@ FrameTrail.defineType(
          */
         renderContentViewPreviewElement: function() {
 
-            var self = this;
+            var self = this,
                 previewElement = $('<div class="contentViewPreview" '
-                            +   'data-size="'+ this.contentViewData.contentSize +'" '
-                            +   'data-type="'+ this.contentViewData.type +'">'
+                            +   'data-size="'+ self.contentViewData.contentSize +'" '
+                            +   'data-type="'+ self.contentViewData.type +'">'
                             +   '    <div class="contentViewOptions">'
                             +   '        <button class="editContentView"><span class="icon-pencil"></span></button>'
                             +   '        <button class="deleteContentView"><span class="icon-trash"></span></button>'
                             +   '    </div>'
-                            +   '    <div class="contentViewPreviewDescription">'+ this.contentViewData.name +' '+ this.contentViewData.contentSize +'</div>'
+                            +   '    <div class="contentViewPreviewDescription">'+ ((self.contentViewData.type == 'TimedContent') ? 'Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'</div>'
                             +   '</div>');
 
             previewElement.find('.editContentView').click(function() {
@@ -522,18 +757,29 @@ FrameTrail.defineType(
          */
         activateContentView: function() {
 
-            if (this.contentViewContainer.length == 0) {
-                this.resizeLayoutArea(true);
+            var self = this;
+
+            if (self.contentViewContainer.length == 0) {
+                self.resizeLayoutArea(true);
                 return;
             }
 
-            this.contentViewTab.siblings('.contentViewTab').removeClass('active');
-            this.contentViewTab.addClass('active');
+            FrameTrail.module('ViewVideo').shownDetails = null;
 
-            this.contentViewContainer.siblings('.contentViewContainer').removeClass('active');
-            this.contentViewContainer.addClass('active');
+            self.contentViewTab.siblings('.contentViewTab').removeClass('active');
+            self.contentViewTab.addClass('active');
+
+            self.contentViewContainer.siblings('.contentViewContainer').removeClass('active');
+            self.contentViewContainer.addClass('active');
+
+            self.contentViewDetailsContainer.siblings('.contentViewDetailsContainer').removeClass('active');
+            self.contentViewDetailsContainer.addClass('active');
                         
-            this.resizeLayoutArea();
+            self.resizeLayoutArea();
+
+            window.setTimeout(function() {
+                self.updateCollectionSlider();
+            }, 300);
 
         },
 
@@ -545,18 +791,20 @@ FrameTrail.defineType(
          */
         activateContentViewPreview: function() {
 
-            if (this.contentViewPreviewElement.length == 0) {
-                this.resizeLayoutAreaPreview(true);
+            var self = this;
+
+            if (self.contentViewPreviewElement.length == 0) {
+                self.resizeLayoutAreaPreview(true);
                 return;
             }
 
-            this.contentViewPreviewTab.siblings('.contentViewTab').removeClass('active');
-            this.contentViewPreviewTab.addClass('active');
+            self.contentViewPreviewTab.siblings('.contentViewTab').removeClass('active');
+            self.contentViewPreviewTab.addClass('active');
 
-            this.contentViewPreviewElement.siblings('.contentViewPreview').removeClass('active');
-            this.contentViewPreviewElement.addClass('active');
+            self.contentViewPreviewElement.siblings('.contentViewPreview').removeClass('active');
+            self.contentViewPreviewElement.addClass('active');
                         
-            this.resizeLayoutAreaPreview();
+            self.resizeLayoutAreaPreview();
 
         },
 
@@ -568,12 +816,13 @@ FrameTrail.defineType(
          * @param {Boolean} isEmpty
          */
         resizeLayoutArea: function(isEmpty) {
-            var areaContainer = this.getLayoutAreaContainer();
+            var self = this,
+                areaContainer = self.getLayoutAreaContainer();
 
             if (isEmpty) {
                 areaContainer.removeAttr('data-size');
             } else {
-                areaContainer.attr('data-size', this.contentViewData.contentSize);
+                areaContainer.attr('data-size', self.contentViewData.contentSize);
             }
 
             FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -588,14 +837,72 @@ FrameTrail.defineType(
          * @param {Boolean} isEmpty
          */
         resizeLayoutAreaPreview: function(isEmpty) {
-            var areaContainer = this.getLayoutAreaPreviewContainer();
+            var self = this,
+                areaContainer = self.getLayoutAreaPreviewContainer();
 
             if (isEmpty) {
                 areaContainer.removeAttr('data-size');
             } else {
-                areaContainer.attr('data-size', this.contentViewData.contentSize);
+                areaContainer.attr('data-size', self.contentViewData.contentSize);
             }
             
+        },
+
+
+        /**
+        * I scale the detail elements in case the space is too small
+        * @method scaleDetailElements
+        */
+        scaleDetailElements: function() {
+
+            var contentItems = this.contentCollection;
+
+            for (var i = 0; i < contentItems.length; i++) {
+
+                var currentContentItem = contentItems[i];
+
+                if (currentContentItem.data.type == 'wikipedia' || currentContentItem.data.type == 'webpage') {
+                    
+                    // Rescale elements in type "large" contentViews
+                    var domElement = this.getContentViewElementFromContentItem(currentContentItem);
+                    rescale(domElement, domElement.width());
+
+                    // TODO: RESCALE DETAIL ELEMENTS
+
+                    //rescale( this.annotationElement, FrameTrail.module('ViewVideo').AreaBottomDetails.width() );
+                }
+
+                function rescale(element, referenceWidth) {
+
+                    var elementToScale = element.find('.resourceDetail'),
+                        wrapperElement = element,
+                        scaleBase = 400;
+
+                    if (referenceWidth >= scaleBase) {
+                        elementToScale.css({
+                            top: 0,
+                            left: 0,
+                            height: '',
+                            width: '',
+                            transform: "none"
+                        });
+                        return;
+                    }
+
+                    var scale = referenceWidth / scaleBase,
+                        negScale = 1/scale;
+
+                    elementToScale.css({
+                        top: 50 + '%',
+                        left: 50 + '%',
+                        width: scaleBase + 'px',
+                        height: wrapperElement.height() * negScale + 'px',
+                        transform: "translate(-50%, -50%) scale(" + scale + ")"
+                    });
+
+                }
+            }
+
         },
 
 
@@ -618,7 +925,7 @@ FrameTrail.defineType(
                 sliderParent        = self.contentViewContainer,
                 containerElement    = self.contentViewContainer.find('.contentViewContents'),
                 groupCnt            = 0,
-                gap                 = 4,
+                gap                 = 4 + 4,
                 thisElement,
                 previousElement,
                 previousElementRightPos,
@@ -924,46 +1231,61 @@ FrameTrail.defineType(
 
         /**
          * I update the slider for the current contentCollection
+         * 
+         * If param details is set to true, I update the details' slider
          *
          * @method updateCollectionSlider
+         * @param {Boolean} details
          */
-        updateCollectionSlider: function() {
+        updateCollectionSlider: function(details) {
 
-            var widthOfSlider           = 0,
+            var self = this,
+                widthOfSlider           = 0,
                 heightOfSlider          = 0,
-                gap                     = 4,
-                slideAxis               = (this.whichArea == 'top' || this.whichArea == 'bottom') ? 'x' : 'y',
-                sliderParent            = this.contentViewContainer,
-                sliderElement           = this.contentViewContainer.find('.contentViewContents');
+                gap                     = (details || self.contentViewData.contentSize == 'large') ? 10 : 4,
+                slideAxis               = (self.whichArea == 'top' || self.whichArea == 'bottom') ? 'x' : 'y',
+                sliderParent            = (details) ? self.contentViewDetailsContainer : self.contentViewContainer,
+                sliderElement           = (details) ? self.contentViewDetailsContainer.find('.contentViewDetailsContents') : self.contentViewContainer.find('.contentViewContents');
 
-            if (this.contentCollection.length == 0) {
+            if ( self.contentCollection.length == 0 
+                || ( (self.whichArea == 'left' || self.whichArea == 'right') && self.contentViewData.contentSize == 'large') 
+                || !sliderParent.hasClass('active') ) {
                 return;
             }
+            
             // Set sliderElement Dimensions
 
             if ( slideAxis == 'x' ) {
                 
-                for (var idx in this.contentCollection) {
-                    widthOfSlider += this.getContentViewElementFromContentItem(this.contentCollection[idx]).width() + gap;
+                for (var idx in self.contentCollection) {
+                    var element = (details) ? self.getDetailElementFromContentItem(self.contentCollection[idx]) : self.getContentViewElementFromContentItem(self.contentCollection[idx]);
+                    widthOfSlider += element.outerWidth() + gap;
                 }
 
                 if ( widthOfSlider > sliderParent.width() ) {
                     sliderElement.width(widthOfSlider);
+                    sliderParent.find('.slideButton').show();
                 } else {
                     sliderElement.width('');
+                    sliderElement.css('left', gap + 'px');
+                    sliderParent.find('.slideButton').hide();
                     return;
                 }
 
             } else {
                 
-                for (var idx in this.contentCollection) {
-                    heightOfSlider += this.getContentViewElementFromContentItem(this.contentCollection[idx]).height() + gap;
+                for (var idx in self.contentCollection) {
+                    var element = (details) ? self.getDetailElementFromContentItem(self.contentCollection[idx]) : self.getContentViewElementFromContentItem(self.contentCollection[idx]);
+                    heightOfSlider += element.outerHeight() + gap;
                 }
 
                 if ( heightOfSlider > sliderParent.height() ) {
                     sliderElement.height(heightOfSlider);
+                    sliderParent.find('.slideButton').show();
                 } else {
                     sliderElement.height('');
+                    sliderElement.css('top', gap + 'px');
+                    sliderParent.find('.slideButton').hide();
                     return;
                 }
 
@@ -973,21 +1295,31 @@ FrameTrail.defineType(
 
             var activeAnnotations = [];
 
-            for (var idx in this.contentCollection) {
-                
-                // TODO: CHECK WHY ANNOTATIONS IN IDENTICAL CONTENT COLLECTIONS ARE NOT SET ACTIVE (only first one)!
-                // console.log(this.whichArea, this.contentCollection[idx].activeStateInContentView(this));
+            if (details) {
 
-                if ( this.contentCollection[idx].activeStateInContentView(this) ) {
-                    activeAnnotations.push(this.contentCollection[idx]);
+                self.contentViewDetailsContainer.find('.collectionElement.open').each(function() {
+                    activeAnnotations.push($(this));
+                });
+
+            } else {
+
+                for (var idx in self.contentCollection) {
+                    
+                    // TODO: CHECK WHY ANNOTATIONS IN IDENTICAL CONTENT COLLECTIONS ARE NOT SET ACTIVE (only first one)!
+                    // console.log(this.whichArea, this.contentCollection[idx].activeStateInContentView(this));
+
+                    if ( self.contentCollection[idx].activeStateInContentView(self) ) {
+                        activeAnnotations.push(self.contentCollection[idx]);
+                    }
                 }
+
             }
 
             if (activeAnnotations.length == 0) {
                 return;
             }
 
-            var activeAnnotationElement = this.getContentViewElementFromContentItem(activeAnnotations[0]),
+            var activeAnnotationElement = (details) ? activeAnnotations[0] : self.getContentViewElementFromContentItem(activeAnnotations[0]),
                 activeElementPosition   = activeAnnotationElement.position();
 
             if ( slideAxis == 'x' ) {
@@ -997,12 +1329,12 @@ FrameTrail.defineType(
                     var leftOffset = -1 * (     activeElementPosition.left 
                                               - 1 
                                               - sliderParent.innerWidth() / 2
-                                              + activeAnnotationElement.width() / 2
+                                              + activeAnnotationElement.outerWidth() / 2
                                     );
                     
-                    if ( leftOffset > 0 ) {
-                        sliderElement.css('left', 0);
-                    } else if ( leftOffset < - (widthOfSlider - sliderParent.width()) ) {
+                    if ( !details && leftOffset > 0 ) {
+                        sliderElement.css('left', gap + 'px');
+                    } else if ( !details && leftOffset < - (widthOfSlider - sliderParent.width()) ) {
                         sliderElement.css('left', - (widthOfSlider - sliderParent.width()));
                     } else {
                         sliderElement.css('left', leftOffset);
@@ -1018,12 +1350,12 @@ FrameTrail.defineType(
                     var topOffset = -1 * (      activeElementPosition.top 
                                               - 1
                                               - sliderParent.innerHeight() / 2
-                                              + activeAnnotationElement.height() / 2
+                                              + activeAnnotationElement.outerHeight() / 2
                                     );
                     
-                    if ( topOffset > 0 ) {
-                        sliderElement.css('top', 0);
-                    } else if ( topOffset < - (heightOfSlider - sliderParent.height()) ) {
+                    if ( !details && topOffset > 0 ) {
+                        sliderElement.css('top', gap + 'px');
+                    } else if ( !details && topOffset < - (heightOfSlider - sliderParent.height()) ) {
                         sliderElement.css('top', - (heightOfSlider - sliderParent.height()));
                     } else {
                         sliderElement.css('top', topOffset);
@@ -1605,6 +1937,37 @@ FrameTrail.defineType(
             }
 
             return areaContainer;
+            
+        },
+
+
+        /**
+         * I return the LayoutArea Details Container of the ContentView.
+         *
+         * @method getLayoutAreaDetailsContainer
+         * @return {HTMLElement} areaDetailsContainer
+         */
+        getLayoutAreaDetailsContainer: function() {
+            
+            var ViewVideo = FrameTrail.module('ViewVideo'),
+                areaDetailsContainer;
+
+            switch (this.whichArea) {
+                case 'top':
+                    areaDetailsContainer = ViewVideo.AreaTopDetails;
+                    break;
+                case 'bottom':
+                    areaDetailsContainer = ViewVideo.AreaBottomDetails;
+                    break;
+                case 'left':
+                    areaDetailsContainer = ViewVideo.AreaLeftDetails;
+                    break;
+                case 'right':
+                    areaDetailsContainer = ViewVideo.AreaRightDetails;
+                    break;
+            }
+
+            return areaDetailsContainer;
             
         },
 

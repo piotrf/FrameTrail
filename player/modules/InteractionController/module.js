@@ -119,6 +119,23 @@ FrameTrail.defineModule('InteractionController', function(){
      */
     function interfaceUp(evt) {
 
+        var ViewVideo = FrameTrail.module('ViewVideo');
+
+        if ( FrameTrail.getState('slidePosition') == 'middle' 
+            && ViewVideo.AreaTopContainer.attr('data-size') != 'large' 
+            && ViewVideo.AreaTopDetails.find('.collectionElement').length != 0 ) {
+            
+            var activeContentViewContainer = ViewVideo.AreaTopContainer.find('.contentViewContainer.active');
+            if ( activeContentViewContainer && activeContentViewContainer.find('.collectionElement.open').length == 0 ) {
+                activeContentViewContainer.find('.collectionElement').eq(0).click();
+            } else {
+                ViewVideo.shownDetails = 'top';
+            }
+
+        } else if ( FrameTrail.getState('slidePosition') == 'bottom' ) {
+            ViewVideo.shownDetails = null;
+        }
+        /*
         var currentAnnotation = FrameTrail.module('AnnotationsController').findTopMostActiveAnnotation();
 
     	if ( 	 FrameTrail.getState('hv_config_annotationsPosition') == 'top'
@@ -133,6 +150,7 @@ FrameTrail.defineModule('InteractionController', function(){
 	    	FrameTrail.module('ViewVideo').slidePositionUp();
 
 	    }
+        */
 
     };
 
@@ -145,6 +163,23 @@ FrameTrail.defineModule('InteractionController', function(){
      */
     function interfaceDown(evt) {
 
+        var ViewVideo = FrameTrail.module('ViewVideo');
+
+        if ( FrameTrail.getState('slidePosition') == 'middle' 
+            && ViewVideo.AreaBottomContainer.attr('data-size') != 'large' 
+            && ViewVideo.AreaBottomDetails.find('.collectionElement').length != 0 ) {
+            
+            var activeContentViewContainer = ViewVideo.AreaBottomContainer.find('.contentViewContainer.active');
+            if ( activeContentViewContainer && activeContentViewContainer.find('.collectionElement.open').length == 0 ) {
+                activeContentViewContainer.find('.collectionElement').eq(0).click();
+            } else {
+                ViewVideo.shownDetails = 'bottom';
+            }
+
+        } else if ( FrameTrail.getState('slidePosition') == 'top' ) {
+            ViewVideo.shownDetails = null;
+        }
+        /*
         var currentAnnotation = FrameTrail.module('AnnotationsController').findTopMostActiveAnnotation();
 
 	    if ( 	 FrameTrail.getState('hv_config_annotationsPosition') == 'bottom'
@@ -159,6 +194,7 @@ FrameTrail.defineModule('InteractionController', function(){
 	    	FrameTrail.module('ViewVideo').slidePositionDown();
 
 	    }
+        */
     	
     };
 
@@ -170,6 +206,24 @@ FrameTrail.defineModule('InteractionController', function(){
      */
     function interfaceLeft(evt) {
     	
+        var ViewVideo = FrameTrail.module('ViewVideo');
+
+        if ( FrameTrail.getState('slidePosition') == 'top' ) {
+            
+            var activeContentViewContainer = ViewVideo.AreaTopContainer.find('.contentViewContainer.active');
+            if ( activeContentViewContainer && activeContentViewContainer.find('.collectionElement.open').length != 0 ) {
+                activeContentViewContainer.find('.collectionElement.open').prev('.collectionElement').click();
+            }
+
+        } else if ( FrameTrail.getState('slidePosition') == 'bottom' ) {
+            
+            var activeContentViewContainer = ViewVideo.AreaBottomContainer.find('.contentViewContainer.active');
+            if ( activeContentViewContainer && activeContentViewContainer.find('.collectionElement.open').length != 0 ) {
+                activeContentViewContainer.find('.collectionElement.open').prev('.collectionElement').click();
+            }
+
+        }
+        /*
         if ( FrameTrail.module('ViewVideo').shownDetails == 'annotations' ) {
             
             var currentAnnotation   = FrameTrail.module('AnnotationsController').openedAnnotation,
@@ -181,6 +235,7 @@ FrameTrail.defineModule('InteractionController', function(){
             FrameTrail.module('HypervideoModel').annotations[idx-1].openAnnotation();
 
         }
+        */
 
 
     };
@@ -193,7 +248,25 @@ FrameTrail.defineModule('InteractionController', function(){
      */
     function interfaceRight(evt) {
 
-    	if ( FrameTrail.module('ViewVideo').shownDetails == 'annotations' ) {
+    	var ViewVideo = FrameTrail.module('ViewVideo');
+
+        if ( FrameTrail.getState('slidePosition') == 'top' ) {
+            
+            var activeContentViewContainer = ViewVideo.AreaTopContainer.find('.contentViewContainer.active');
+            if ( activeContentViewContainer && activeContentViewContainer.find('.collectionElement.open').length != 0 ) {
+                activeContentViewContainer.find('.collectionElement.open').next('.collectionElement').click();
+            }
+
+        } else if ( FrameTrail.getState('slidePosition') == 'bottom' ) {
+            
+            var activeContentViewContainer = ViewVideo.AreaBottomContainer.find('.contentViewContainer.active');
+            if ( activeContentViewContainer && activeContentViewContainer.find('.collectionElement.open').length != 0 ) {
+                activeContentViewContainer.find('.collectionElement.open').next('.collectionElement').click();
+            }
+
+        }
+        /*
+        if ( FrameTrail.module('ViewVideo').shownDetails == 'annotations' ) {
 
             var currentAnnotation   = FrameTrail.module('AnnotationsController').openedAnnotation,
                 annotations         = FrameTrail.module('HypervideoModel').annotations,
@@ -204,6 +277,7 @@ FrameTrail.defineModule('InteractionController', function(){
             FrameTrail.module('HypervideoModel').annotations[idx+1].openAnnotation();
 
         }
+        */
 
     };
 

@@ -1,5 +1,5 @@
 {
-    "resources-increment": 38,
+    "resources-increment": 39,
     "resources": {
         "3": {
             "name": "Sintel",
@@ -7,10 +7,8 @@
             "creatorId": "2",
             "created": 1458908274,
             "description": null,
-            "src": "2_1458908274_sintel.webm",
-            "attributes": {
-                "alternateVideoFile": "2_1458908274_sintel.mp4"
-            },
+            "src": "2_1458908274_sintel.mp4",
+            "attributes": [],
             "type": "video",
             "thumb": "2_1458908274_thumb_sintel.png"
         },
@@ -21,9 +19,7 @@
             "created": 1458909015,
             "description": null,
             "src": "2_1458909015_big-buck-bunny.mp4",
-            "attributes": {
-                "alternateVideoFile": "2_1458909015_big-buck-bunny.mp4"
-            },
+            "attributes": [],
             "type": "video",
             "thumb": "2_1458909015_thumb_big-buck-bunny.png"
         },
@@ -33,10 +29,8 @@
             "creatorId": "2",
             "created": 1459152893,
             "description": null,
-            "src": "2_1459152893_testvideo-blue.webm",
-            "attributes": {
-                "alternateVideoFile": "2_1459152893_testvideo-blue.mp4"
-            },
+            "src": "2_1459152893_testvideo-blue.mp4",
+            "attributes": [],
             "type": "video",
             "thumb": "2_1459152893_thumb_testvideo-blue.png"
         },
@@ -46,10 +40,8 @@
             "creatorId": "2",
             "created": 1459152919,
             "description": null,
-            "src": "2_1459152919_testvideo-green.webm",
-            "attributes": {
-                "alternateVideoFile": "2_1459152919_testvideo-green.mp4"
-            },
+            "src": "2_1459152919_testvideo-green.mp4",
+            "attributes": [],
             "type": "video",
             "thumb": "2_1459152919_thumb_testvideo-green.png"
         },
@@ -59,10 +51,8 @@
             "creatorId": "2",
             "created": 1459152938,
             "description": null,
-            "src": "2_1459152938_testvideo-red.webm",
-            "attributes": {
-                "alternateVideoFile": "2_1459152938_testvideo-red.mp4"
-            },
+            "src": "2_1459152938_testvideo-red.mp4",
+            "attributes": [],
             "type": "video",
             "thumb": "2_1459152938_thumb_testvideo-red.png"
         },
@@ -234,10 +224,8 @@
             "creatorId": "2",
             "created": 1459154838,
             "description": null,
-            "src": "2_1459154838_everything-is-a-remix-4.webm",
-            "attributes": {
-                "alternateVideoFile": "2_1459154838_everything-is-a-remix-4.mp4"
-            },
+            "src": "2_1459154838_everything-is-a-remix-4.mp4",
+            "attributes": [],
             "type": "video",
             "thumb": "2_1459154838_thumb_everything-is-a-remix-4.png"
         },
@@ -251,30 +239,6 @@
             "type": "wikipedia",
             "attributes": [],
             "thumb": null
-        },
-        "24": {
-            "name": "Blender Foundation",
-            "creator": "demo",
-            "creatorId": "2",
-            "created": 1459246944,
-            "description": null,
-            "src": "https://www.blender.org/foundation/",
-            "type": "webpage",
-            "attributes": [],
-            "thumb": null
-        },
-        "31": {
-            "name": "test",
-            "creator": "demo",
-            "creatorId": "2",
-            "created": 1465481797,
-            "description": null,
-            "src": "2_1465481797_test.webm",
-            "attributes": {
-                "alternateVideoFile": "2_1465481797_test.mp4"
-            },
-            "type": "video",
-            "thumb": "2_1465481797_thumb_test.png"
         },
         "32": {
             "name": "Test",
@@ -308,6 +272,17 @@
             "type": "webpage",
             "attributes": [],
             "thumb": null
+        },
+        "39": {
+            "name": "Test mp4",
+            "creator": "test",
+            "creatorId": "2",
+            "created": 1503622218,
+            "description": null,
+            "src": "2_1503622218_test-mp4.mp4",
+            "attributes": [],
+            "type": "video",
+            "thumb": "2_1503622218_thumb_test-mp4.png"
         }
     }
 }

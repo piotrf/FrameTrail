@@ -172,14 +172,16 @@ FrameTrail.defineModule('ViewLayout', function(){
 				var contentView = contentViewAreas[a][i];
 				for (var k in contentView.contentCollection) {
 					var item = contentView.contentCollection[k];
-					if (item.annotationElement) {
-						managedAnnotations.push([item, contentView]);
-					} else if (item.overlayElement) {
+					if (item.overlayElement) {
 						managedOverlays.push([item, contentView]);
+					} else {
+						managedAnnotations.push([item, contentView]);
 					}
 				}
 			}
 		}
+
+		//console.log(managedAnnotations);
 		
 	}
 
@@ -202,7 +204,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 
 	function updateTimedStateOfContentViews(currentTime) {
-
+		
 		var self = this;
 
 		for (var idx in managedAnnotations) {
@@ -451,6 +453,21 @@ FrameTrail.defineModule('ViewLayout', function(){
      */
     function changeViewSize(arrayWidthAndHeight) {
 
+        adjustContentViewLayout();
+
+    }
+
+
+    /**
+     * I adjust the layout (sizes, positioning etc.) of all contentViews.
+     * @method adjustContentViewLayout
+     */
+    function adjustContentViewLayout() {
+
+    	if ( FrameTrail.getState('viewMode') != 'video' ) {
+        	return;
+        }
+
         for (var i in contentViewsTop) {
 			contentViewsTop[i].updateLayout();
 		}
@@ -477,9 +494,90 @@ FrameTrail.defineModule('ViewLayout', function(){
      */
     function onViewSizeChanged() {
 
+    	if ( FrameTrail.getState('viewMode') != 'video' ) {
+        	return;
+        }
+        
         //TODO: CHECK WHY THIS THROWS ERROR RIGHT AFTER DELETING A CONTENT VIEW
 		var currentTime = FrameTrail.module('HypervideoController').currentTime;
 		updateTimedStateOfContentViews(currentTime);
+
+		if ( FrameTrail.module('ViewVideo').shownDetails == 'top' ) {
+			for (var i in contentViewsTop) {
+				contentViewsTop[i].updateCollectionSlider(true);
+			}
+		} else if ( FrameTrail.module('ViewVideo').shownDetails == 'bottom' ) {
+			for (var i in contentViewsBottom) {
+				contentViewsBottom[i].updateCollectionSlider(true);
+			}
+		}
+
+    }
+
+
+    /**
+     * When the state of the sidebar changes, I have to re-arrange 
+     * the tileElements and the annotationElements, to fit the new
+     * width of the #mainContainer.
+     * @method toggleSidebarOpen
+     * @private
+     */
+    function toggleSidebarOpen() {
+
+        
+        var maxSlideDuration = 280,
+            interval;
+
+        interval = window.setInterval(function(){
+            changeViewSize(FrameTrail.getState('viewSize'));
+        }, 40);
+        
+        window.setTimeout(function(){
+
+            window.clearInterval(interval);
+
+        }, maxSlideDuration);
+
+
+    }
+
+
+    /**
+     * When we enter the viewMode 'video', we have to update the
+     * distribution of tiles accoring to the current browser width.
+     * @method toggleViewMode
+     * @param {String} viewMode
+     * @param {String} oldViewMode
+     * @return 
+     */
+    function toggleViewMode(viewMode, oldViewMode){
+
+        if (viewMode === 'video' && oldViewMode !== 'video') {
+            window.setTimeout(function() {
+                changeViewSize(FrameTrail.getState('viewSize'));
+            }, 300);
+        }
+
+    }
+
+
+
+    /**
+     * I am called when the global state "slidePosition" changes.
+     *
+     * This state is either "top", "middle" or "bottom", and indicates, which area has the most visual weight.
+     * The Hypervideocontainer is always displayed in the middle (in different sizes).
+     *
+     * @method changeSlidePosition
+     * @param {String} newState
+     * @param {String} oldState
+     */
+    function onChangeSlidePosition(newState, oldState) {
+
+    	// TODO: find way to avoid jQuery selector
+    	if ( newState == 'middle' ) {
+    		$('#ViewVideo').find('.collectionElement.open').removeClass('open');
+    	}
 
     }
 
@@ -488,9 +586,11 @@ FrameTrail.defineModule('ViewLayout', function(){
 	return {
 		
 		onChange: {
-
             viewSize:        changeViewSize,
-            viewSizeChanged: onViewSizeChanged
+            viewSizeChanged: onViewSizeChanged,
+            sidebarOpen: 	 toggleSidebarOpen,
+            viewMode: 		 toggleViewMode,
+            slidePosition:   onChangeSlidePosition
         },
 
 		create: create,
@@ -501,6 +601,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 		updateManagedContent: updateManagedContent,
 
 		updateContentInContentViews: updateContentInContentViews,
+		adjustContentViewLayout: adjustContentViewLayout,
 
 		updateTimedStateOfContentViews: updateTimedStateOfContentViews,
 

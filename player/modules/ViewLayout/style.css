@@ -46,7 +46,7 @@
     background: var(--secondary-bg-color);
     height: 34px;
     cursor: pointer;
-    opacity: .7;
+    opacity: .6;
     color: var(--primary-fg-color);
     box-sizing: border-box;
     transition-property: all;

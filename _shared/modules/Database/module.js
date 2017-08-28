@@ -75,6 +75,15 @@
             }).done(function (projectData) {
                 project = projectData;
                 //console.log('project', project);
+
+                // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
+                if (project.theme) {
+                    $('html').attr('class', project.theme);
+                } else {
+                    $('html').attr('class', '');
+                }
+                // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
+
                 success.call(this);
             }).fail(function () {
                 fail('No project.json file.');
@@ -210,9 +219,16 @@
             mimeType: "application/json"
         }).done(function(data){
 
+            
             var countdown = Object.keys(data.hypervideos).length,
                 bufferedData = {};
 
+            // TODO: fix server object / array php problem
+            if ( Array.isArray(data.hypervideos) || countdown == 0 ) {
+                success.call(this);
+                return;
+            }
+            
             for (var key in data.hypervideos) {
                 (function (hypervideoID) {
 
@@ -1209,11 +1225,16 @@
      */
     function getIdOfResource(resourceData) {
 
-        for (var id in resources) {
-            if (resources[id] === resourceData){
-                return id;
+        if (resourceData.resourceId) {
+            return resourceData.resourceId;
+        } else {
+            for (var id in resources) {
+                if (resources[id] === resourceData){
+                    return id;
+                }
             }
         }
+        
         return null;
     };
 

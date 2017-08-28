@@ -20,8 +20,9 @@
 FrameTrail.defineModule('ViewVideo', function(){
 
     var domElement  = $(  '<div id="ViewVideo">'
+                        + '    <div id="AreaLeftDetails" class="layoutAreaDetails" data-area="areaLeft"></div>'
                         + '    <div id="SlideArea">'
-                        + '        <div id="AreaTopDetails"></div>'
+                        + '        <div id="AreaTopDetails" class="layoutAreaDetails" data-area="areaTop"></div>'
                         + '        <div id="AreaTopContainer" class="layoutArea" data-area="areaTop">'
                         + '            <div class="layoutAreaTabs"></div>'
                         + '            <div class="layoutAreaContent"></div>'
@@ -109,8 +110,9 @@ FrameTrail.defineModule('ViewVideo', function(){
                         + '            <div class="layoutAreaTabs"></div>'
                         + '            <div class="layoutAreaContent"></div>'
                         + '        </div>'
-                        + '        <div id="AreaBottomDetails"></div>'
+                        + '        <div id="AreaBottomDetails" class="layoutAreaDetails" data-area="areaBottom"></div>'
                         + '    </div>'
+                        + '    <div id="AreaRightDetails" class="layoutAreaDetails" data-area="areaRight"></div>'
                         + '    <div id="EditingOptions"></div>'
                         + '    <div id="HypervideoLayoutContainer"></div>'
                         + '</div>'),
@@ -126,14 +128,14 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         AreaTopDetails              = domElement.find('#AreaTopDetails'),
         AreaTopContainer            = domElement.find('#AreaTopContainer'),
-        AreaTopTileSlider           = domElement.find('#AreaTopContainer .tileSlider'),
 
         AreaBottomDetails           = domElement.find('#AreaBottomDetails'),
         AreaBottomContainer         = domElement.find('#AreaBottomContainer'),
-        AreaBottomTileSlider        = domElement.find('#AreaBottomContainer .tileSlider'),
-        AnnotationSlider            = domElement.find('#AnnotationSlider'),
 
+        AreaLeftDetails             = domElement.find('#AreaLeftDetails'),
         AreaLeftContainer           = domElement.find('#AreaLeftContainer'),
+        
+        AreaRightDetails            = domElement.find('#AreaRightDetails'),
         AreaRightContainer          = domElement.find('#AreaRightContainer'),
 
         AnnotationTimeline          = domElement.find('#AnnotationTimeline'),
@@ -161,7 +163,6 @@ FrameTrail.defineModule('ViewVideo', function(){
         Video                       = domElement.find('#Video')[0],
 
         EditPropertiesContainer     = domElement.find('#EditPropertiesContainer'),
-        AnnotationPreviewContainer  = domElement.find('#AnnotationPreviewContainer'),
 
         ExpandButton                = domElement.find('#ExpandButton'),
 
@@ -301,16 +302,50 @@ FrameTrail.defineModule('ViewVideo', function(){
      */
     function create() {
 
+        $('#MainContainer').append(domElement);
+
+        if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+            fixGoddamnSafariBug();
+        };
+
         toggleViewMode(FrameTrail.getState('viewMode'));
         
         toggleConfig_captionsVisible(FrameTrail.getState('hv_config_captionsVisible'))
 
         FrameTrail.changeState('hv_config_overlaysVisible', true);
         
-        changeSlidePosition(FrameTrail.getState('slidePosition'));
+        changeSlidePosition('middle');
 
-        $('#MainContainer').append(domElement);
+    }
 
+    function fixGoddamnSafariBug() {
+        
+        $($('#Sidebar'), $('#MainContainer'), $('#ViewVideo'), $('#SlideArea') ).css({
+            'transition-duration': '0ms',
+            '-moz-transition-duration': '0ms',
+            '-webkit-transition-duration': '0ms',
+            '-o-transition-duration': '0ms'
+        });
+
+        window.setTimeout(function() {
+            
+            slidePositionDown();
+            showDetails(false);
+
+            alert('Safari tests are still ongoing. To avoid problems, please switch to any other browser for now.');
+
+            /*
+            window.setTimeout(function() {
+                slideArea.css({
+                    'transition-duration': '',
+                    '-moz-transition-duration': '',
+                    '-webkit-transition-duration': '',
+                    '-o-transition-duration': ''
+                });
+            }, 300);
+            */
+            
+        }, 6000);
     }
 
     /**
@@ -343,12 +378,14 @@ FrameTrail.defineModule('ViewVideo', function(){
         adjustLayout();
         adjustHypervideo();
 
-        slideArea.css({
-            'transition-duration': '',
-            '-moz-transition-duration': '',
-            '-webkit-transition-duration': '',
-            '-o-transition-duration': ''
-        });
+        if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) == false) {
+            slideArea.css({
+                'transition-duration': '',
+                '-moz-transition-duration': '',
+                '-webkit-transition-duration': '',
+                '-o-transition-duration': ''
+            });
+        }
 
     };
 
@@ -373,11 +410,19 @@ FrameTrail.defineModule('ViewVideo', function(){
         adjustLayout();
         adjustHypervideo();
 
-        slideArea.css({
-            'transition-duration': '',
-            '-moz-transition-duration': '',
-            '-webkit-transition-duration': '',
-            '-o-transition-duration': ''
+        if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) == false) {
+            slideArea.css({
+                'transition-duration': '',
+                '-moz-transition-duration': '',
+                '-webkit-transition-duration': '',
+                '-o-transition-duration': ''
+            });
+        }
+
+        domElement.find('.resourceDetail[data-type="location"]').each(function() {
+            if ( $(this).data('map') ) {
+                $(this).data('map').updateSize();
+            }
         });
 
     };
@@ -680,11 +725,11 @@ FrameTrail.defineModule('ViewVideo', function(){
         if (animate) {
             window.setTimeout(function() {
                 FrameTrail.module('OverlaysController').rescaleOverlays();
-                FrameTrail.module('AnnotationsController').rescaleAnnotations();
+                FrameTrail.module('ViewLayout').adjustContentViewLayout();
             }, 220);
         } else {
             FrameTrail.module('OverlaysController').rescaleOverlays();
-            FrameTrail.module('AnnotationsController').rescaleAnnotations();
+            FrameTrail.module('ViewLayout').adjustContentViewLayout();
         }
 
     };
@@ -823,10 +868,6 @@ FrameTrail.defineModule('ViewVideo', function(){
         domElement.find('.timeline').not('#CodeSnippetTimeline, #AnnotationTimeline').show();
 
         EditingOptions.addClass('active');
-
-        if ( FrameTrail.getState('hv_config_areaRightVisible') ) {
-            HypervideoContainer.find('#AnnotationPreviewContainer').hide();
-        }
 
         domElement.find('#InfoAreaRight').show();
         EditPropertiesContainer.show();
@@ -1021,12 +1062,10 @@ FrameTrail.defineModule('ViewVideo', function(){
     function toggleConfig_areaRightVisible(newState, oldState) {
         if (newState == true) {
             AreaRightContainer.show();
-            HypervideoContainer.find('#AnnotationPreviewContainer').show();
             Controls.find('[data-config="hv_config_areaRightVisible"]').addClass('active');
 
         } else {
             AreaRightContainer.hide();
-            HypervideoContainer.find('#AnnotationPreviewContainer').hide();
             Controls.find('[data-config="hv_config_areaRightVisible"]').removeClass('active');
         }
     };
@@ -1159,20 +1198,10 @@ FrameTrail.defineModule('ViewVideo', function(){
             ExpandButton.hide();
         }
 
-        if (  ( FrameTrail.getState('hv_config_annotationsPosition') == 'bottom'
-             && newState == 'bottom' ) ||
-              ( FrameTrail.getState('hv_config_annotationsPosition') == 'top'
-             && newState == 'top') ) {
-
-            shownDetails = 'annotations';
-            AreaBottomDetails.find('.resourceDetail[data-type="location"]').each(function() {
-                if ( $(this).data('map') ) {
-                    $(this).data('map').updateSize();
-                }
-            });
-
+        if ( newState == 'bottom' ) {
+            shownDetails = 'bottom';
         } else if ( newState != 'middle' ) {
-            shownDetails = 'videolinks';
+            shownDetails = 'top';
         } else {
             shownDetails = null;
         }
@@ -1597,12 +1626,6 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get AreaTopContainer()     { return AreaTopContainer     },
-        /**
-         * I contain the AreaTopTileSlider element.
-         * @attribute AreaTopTileSlider
-         * @type HTMLElement
-         */
-        get AreaTopTileSlider()     { return AreaTopTileSlider },
 
         /**
          * I contain the AreaBottomDetails element.
@@ -1616,13 +1639,13 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get AreaBottomContainer()     { return AreaBottomContainer     },
+        
         /**
-         * I contain the AreaBottomTileSlider element.
-         * @attribute AreaBottomTileSlider
+         * I contain the AreaLeftDetails element.
+         * @attribute AreaLeftDetails
          * @type HTMLElement
          */
-        get AreaBottomTileSlider()  { return AreaBottomTileSlider     },
-        
+        get AreaLeftDetails() { return AreaLeftDetails    },
         /**
          * I contain the AreaLeftContainer element.
          * @attribute AreaLeftContainer
@@ -1630,6 +1653,12 @@ FrameTrail.defineModule('ViewVideo', function(){
          */
         get AreaLeftContainer()     { return AreaLeftContainer     },
 
+        /**
+         * I contain the AreaRightDetails element.
+         * @attribute AreaRightDetails
+         * @type HTMLElement
+         */
+        get AreaRightDetails() { return AreaRightDetails    },
         /**
          * I contain the AreaRightContainer element.
          * @attribute AreaRightContainer
@@ -1643,14 +1672,7 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get AnnotationTimeline()  { return AnnotationTimeline  },
-        /**
-         * I contain the AnnotationPreviewContainer element.
-         * @attribute AnnotationPreviewContainer
-         * @type HTMLElement
-         */
-
-        get AnnotationPreviewContainer()  { return AnnotationPreviewContainer  },
-
+        
         /**
          * I contain the EditPropertiesContainer element (where properties of an overlay/annotation can be viewed and – in the case ov overlays – changed).
          * @attribute EditPropertiesContainer

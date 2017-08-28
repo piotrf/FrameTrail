@@ -74,11 +74,11 @@ FrameTrail.defineType(
                 self = this;
 
             if (!id) {
-                trueID = FrameTrail.module('Database').getIdOfResource(this.resourceData);
+                trueID = FrameTrail.module('Database').getIdOfResource(self.resourceData);
             } else {
                 trueID = id;
             }
-
+                        
             var thumbUrl = (this.resourceData.thumb ? FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.thumb) 
                             : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) );
 

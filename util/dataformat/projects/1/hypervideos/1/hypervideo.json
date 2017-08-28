@@ -6,79 +6,50 @@
         "creator": "test",
         "creatorId": "2",
         "created": 1490624549,
-        "lastchanged": 1502288109809
+        "lastchanged": 1503910710588
     },
     "config": {
-        "areaTopVisible": false,
-        "areaBottomVisible": true,
-        "areaLeftVisible": false,
-        "areaRightVisible": true,
-        "overlaysVisible": true,
         "slidingMode": "adjust",
         "slidingTrigger": "key",
         "autohideControls": true,
         "captionsVisible": false,
         "hidden": false,
+        "theme": "bright",
         "layoutArea": {
             "areaTop": [
                 {
                     "type": "TimedContent",
-                    "name": "Timed 1",
-                    "description": "",
-                    "cssClass": "",
-                    "html": "",
-                    "collectionFilter": {
-                        "tags": [],
-                        "types": [],
-                        "text": "",
-                        "users": []
-                    },
-                    "transcriptSource": "",
-                    "mode": "slide",
-                    "axis": "x",
                     "contentSize": "small",
-                    "autoSync": false,
-                    "onClickContentItem": ""
-                },
-                {
-                    "type": "TimedContent",
-                    "name": "Timed 2",
+                    "name": "Timed 1zwei",
                     "description": "",
                     "cssClass": "",
-                    "html": "",
                     "collectionFilter": {
                         "tags": [],
                         "types": [],
-                        "text": "",
-                        "users": []
+                        "users": [],
+                        "text": ""
                     },
-                    "transcriptSource": "",
-                    "mode": "slide",
-                    "axis": "x",
-                    "contentSize": "medium",
-                    "autoSync": false,
-                    "onClickContentItem": ""
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
                 }
             ],
             "areaBottom": [
                 {
                     "type": "TimedContent",
-                    "name": "Timed 3",
+                    "contentSize": "small",
+                    "name": "Small",
                     "description": "",
                     "cssClass": "",
-                    "html": "",
                     "collectionFilter": {
                         "tags": [],
                         "types": [],
-                        "text": "",
-                        "users": []
+                        "users": [],
+                        "text": "a"
                     },
-                    "transcriptSource": "",
-                    "mode": "slide",
-                    "axis": "x",
-                    "contentSize": "small",
-                    "autoSync": false,
-                    "onClickContentItem": ""
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
                 },
                 {
                     "type": "TimedContent",
@@ -93,52 +64,92 @@
                         "users": []
                     },
                     "transcriptSource": "",
-                    "mode": "slide",
-                    "axis": "x",
                     "contentSize": "medium",
-                    "autoSync": false,
                     "onClickContentItem": ""
                 },
                 {
                     "type": "TimedContent",
+                    "contentSize": "large",
                     "name": "Timed 5",
                     "description": "",
                     "cssClass": "",
-                    "html": "",
                     "collectionFilter": {
                         "tags": [],
                         "types": [],
-                        "text": "",
-                        "users": []
+                        "users": [],
+                        "text": ""
                     },
-                    "transcriptSource": "",
-                    "mode": "slide",
-                    "axis": "x",
-                    "contentSize": "large",
-                    "autoSync": false,
-                    "onClickContentItem": ""
+                    "onClickContentItem": "var func = function() {\n\tvar test = 'test';\n  console.log(test);\n  /* HELLO */\n  //hello\n};\n\nfunc();",
+                    "html": "",
+                    "transcriptSource": ""
                 }
             ],
-            "areaLeft": [],
-            "areaRight": [
+            "areaLeft": [
                 {
-                    "type": "Transcript",
-                    "name": "Transcript 1",
+                    "type": "TimedContent",
+                    "contentSize": "large",
+                    "name": "Large",
                     "description": "",
                     "cssClass": "",
-                    "html": "",
                     "collectionFilter": {
                         "tags": [],
                         "types": [],
-                        "text": "",
-                        "users": []
+                        "users": [],
+                        "text": ""
                     },
-                    "transcriptSource": "",
-                    "mode": "slide",
-                    "axis": "y",
-                    "contentSize": "",
-                    "autoSync": true,
-                    "onClickContentItem": ""
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
+                },
+                {
+                    "type": "TimedContent",
+                    "contentSize": "medium",
+                    "name": "Medium",
+                    "description": "",
+                    "cssClass": "",
+                    "collectionFilter": {
+                        "tags": [],
+                        "types": [],
+                        "users": [],
+                        "text": ""
+                    },
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
+                }
+            ],
+            "areaRight": [
+                {
+                    "type": "TimedContent",
+                    "contentSize": "medium",
+                    "name": "Collection",
+                    "description": "",
+                    "cssClass": "",
+                    "collectionFilter": {
+                        "tags": [],
+                        "types": [],
+                        "users": [],
+                        "text": ""
+                    },
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
+                },
+                {
+                    "type": "TimedContent",
+                    "contentSize": "small",
+                    "name": "Small",
+                    "description": "",
+                    "cssClass": "",
+                    "collectionFilter": {
+                        "tags": [],
+                        "types": [],
+                        "users": [],
+                        "text": ""
+                    },
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
                 }
             ]
         }
@@ -191,9 +202,9 @@
                 "frametrail:type": "location",
                 "format": "application/x-frametrail-location",
                 "frametrail:name": "Berlin, Germany",
-                "frametrail:lat": 52.5170365,
-                "frametrail:long": 13.3888599,
-                "frametrail:boundingBox": "52.3570365,52.6770365,13.2288599,13.5488599"
+                "frametrail:lat": null,
+                "frametrail:long": null,
+                "frametrail:boundingBox": "NaN"
             },
             "frametrail:events": {},
             "frametrail:attributes": {}
@@ -220,14 +231,14 @@
                 "selector": {
                     "conformsTo": "http://www.w3.org/TR/media-frags/",
                     "type": "FragmentSelector",
-                    "value": "t=1.4228199261675822,3.397673205700549&xywh=percent:17.06081081081081,24.06191369606004,30,30"
+                    "value": "t=22.426661036493698,24.40145691843027&xywh=percent:17.06081081081081,24.06191369606004,30,30"
                 }
             },
             "body": {
                 "type": "Video",
                 "frametrail:type": "video",
                 "format": "video/mp4",
-                "source": "2_1459152893_testvideo-blue.webm",
+                "source": "2_1459152893_testvideo-blue.mp4",
                 "frametrail:name": "Testvideo Blue"
             },
             "frametrail:events": {},
@@ -449,12 +460,16 @@
     ],
     "subtitles": [
         {
+            "src": "de.vtt",
+            "srclang": "de"
+        },
+        {
             "src": "en.vtt",
             "srclang": "en"
         },
         {
-            "src": "de.vtt",
-            "srclang": "de"
+            "src": "fr.vtt",
+            "srclang": "fr"
         }
     ]
 }

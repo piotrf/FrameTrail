@@ -34,11 +34,8 @@ FrameTrail.defineType(
         )
 
         this.timelineElement   = $('<div class="timelineElement"></div>');
-        this.tileElement       = $('<div class="tileElement" data-type="'+data.type+'"><span class="icon-doc-inv"></span></div>');
-        this.annotationElement = $('<div class="annotationElement"></div>');
-        this.previewElement    = $('<div class="previewElement"></div>');
-
         this.contentViewElements = [];
+        this.contentViewDetailElements = [];
 
 
     },
@@ -63,28 +60,6 @@ FrameTrail.defineType(
          * @type HTMLElement
          */
         timelineElement:        null,
-
-
-        /**
-         * I hold the tileElement (a jquery-enabled HTMLElement), which shows a icon for me close to my position in the timeline.
-         * @attribute tileElement
-         * @type HTMLElement
-         */
-        tileElement:            null,
-
-        /**
-         * I hold the annotationElement (a jquery-enabled HTMLElement), which contains the actual conent of my {{#crossLink "Annotation/resourceItem:attribute"}}resourceItem{{/crossLink}}.
-         * @attribute annotationElement
-         * @type HTMLElement
-         */
-        annotationElement:      null,
-
-        /**
-         * I hold the previewElement (a jquery-enabled HTMLElement), which shows the actual conent of my {{#crossLink "Annotation/resourceItem:attribute"}}resourceItem{{/crossLink}} in a special preview area besides the video.
-         * @attribute previewElement
-         * @type HTMLElement
-         */
-        previewElement:         null,
 
         /**
          * I store my state, wether I am "active" (this is, when my timelineElement is highlighted) or not.
@@ -119,6 +94,7 @@ FrameTrail.defineType(
             ViewVideo.AnnotationTimeline.append(this.timelineElement);
             this.updateTimelineElement();
 
+            /*
             this.annotationElement.empty();
             this.annotationElement.append( this.resourceItem.renderContent() );
             ViewVideo.AreaBottomDetails.find('#AnnotationSlider').append(this.annotationElement);
@@ -126,18 +102,19 @@ FrameTrail.defineType(
             this.previewElement.empty();
             this.previewElement.append( this.resourceItem.renderContent() );
             ViewVideo.AnnotationPreviewContainer.append(this.previewElement);
-
-
             ViewVideo.AreaBottomTileSlider.append(this.tileElement);
+            */
 
             this.timelineElement.unbind('hover');
-            this.tileElement.unbind('hover');
-            this.tileElement.unbind('click')
+            //this.tileElement.unbind('hover');
+            //this.tileElement.unbind('click')
             this.timelineElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
-            this.tileElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
+            //this.tileElement.hover(this.brushIn.bind(this), this.brushOut.bind(this));
 
             // self = this necessary as self can not be kept in anonymous handler function
             var self = this;
+            
+            /*
             this.tileElement.click(function() {
                 if ( FrameTrail.module('AnnotationsController').openedAnnotation == self ) {
                     self.closeAnnotation();
@@ -145,6 +122,7 @@ FrameTrail.defineType(
                     self.openAnnotation();
                 }
             });
+            */
 
         },
 
@@ -172,53 +150,6 @@ FrameTrail.defineType(
 
 
         /**
-        * I scale the two annotation elements (annotationElement and previewElement)
-        * in case the space is too small
-        * @method scaleAnnotationElements
-        */
-        scaleAnnotationElements: function() {
-
-            if (this.data.type == 'wikipedia' || this.data.type == 'webpage') {
-
-                rescale( this.annotationElement, FrameTrail.module('ViewVideo').AreaBottomDetails.width() );
-                rescale( this.previewElement, FrameTrail.module('ViewVideo').AnnotationPreviewContainer.width() );
-
-            }
-
-            function rescale(element, referenceWidth) {
-
-                var elementToScale = element.children('.resourceDetail'),
-                    wrapperElement = element,
-                    scaleBase = 400;
-
-                if (referenceWidth >= scaleBase) {
-                    elementToScale.css({
-                        top: 0,
-                        left: 0,
-                        height: '',
-                        width: '',
-                        transform: "none"
-                    });
-                    return;
-                }
-
-                var scale = referenceWidth / scaleBase,
-                    negScale = 1/scale;
-
-                elementToScale.css({
-                    top: 50 + '%',
-                    left: 50 + '%',
-                    width: scaleBase + 'px',
-                    height: wrapperElement.height() * negScale + 'px',
-                    transform: "translate(-50%, -50%) scale(" + scale + ")"
-                });
-
-            }
-
-        },
-
-
-        /**
          * I remove my elements from the DOM.
          *
          * I am called when the Annotation is to be deleted.
@@ -229,12 +160,8 @@ FrameTrail.defineType(
         removeFromDOM: function () {
 
             this.timelineElement.remove();
-            this.tileElement.remove();
-            this.annotationElement.remove();
-            this.previewElement.remove();
 
         },
-
 
 
         /**
@@ -247,14 +174,15 @@ FrameTrail.defineType(
         brushIn: function () {
 
             this.timelineElement.addClass('brushed');
-            this.tileElement.addClass('brushed');
+            //this.tileElement.addClass('brushed');
 
             if ( FrameTrail.getState('editMode') == false || FrameTrail.getState('editMode') == 'preview' ) {
                 clearRaphael();
-                drawConnections( this.tileElement, this.timelineElement, 10, {stroke: "#6B7884"} );
+                //drawConnections( this.tileElement, this.timelineElement, 10, {stroke: "#6B7884"} );
             }
 
         },
+
 
         /**
          * I am called when the mouse pointer is leaving the hovering area over my two DOM elements.
@@ -263,7 +191,7 @@ FrameTrail.defineType(
         brushOut: function () {
 
             this.timelineElement.removeClass('brushed');
-            this.tileElement.removeClass('brushed');
+            //this.tileElement.removeClass('brushed');
 
             if ( (FrameTrail.getState('editMode') ==  false || FrameTrail.getState('editMode') ==  'preview') ) {
                 clearRaphael();
@@ -272,25 +200,14 @@ FrameTrail.defineType(
         },
 
 
-
-
-
         /**
          * When I am scheduled to be displayed, this is the method to be called.
          * @method setActive
          */
         setActive: function () {
-
+            
             this.activeState = true;
-
             this.timelineElement.addClass('active');
-            this.tileElement.addClass('active');
-
-            this.previewElement.addClass('active');
-
-            if ( this.data.type == 'location' && this.previewElement.children('.resourceDetail').data('map') ) {
-                this.previewElement.children('.resourceDetail').data('map').updateSize();
-            }
 
         },
 
@@ -300,13 +217,9 @@ FrameTrail.defineType(
          * @method setInactive
          */
         setInactive: function () {
-
+            
             this.activeState = false;
-
             this.timelineElement.removeClass('active');
-            this.tileElement.removeClass('active');
-
-            this.previewElement.removeClass('active');
 
         },
 
@@ -330,7 +243,6 @@ FrameTrail.defineType(
             FrameTrail.module('AnnotationsController').openedAnnotation = this;
 
             this.timelineElement.addClass('open');
-            this.tileElement.addClass('open');
 
             ViewVideo.ExpandButton.one('click', this.closeAnnotation.bind(this));
 
@@ -358,8 +270,7 @@ FrameTrail.defineType(
          * @method startEditing
          */
         startEditing: function () {
-
-
+            
             var self = this,
                 AnnotationsController = FrameTrail.module('AnnotationsController');
 
@@ -379,7 +290,6 @@ FrameTrail.defineType(
 
             });
 
-
         },
 
         /**
@@ -392,9 +302,7 @@ FrameTrail.defineType(
 
             this.timelineElement.draggable('destroy');
             this.timelineElement.resizable('destroy');
-
             this.timelineElement.unbind('click');
-
 
         },
 
@@ -410,10 +318,8 @@ FrameTrail.defineType(
         makeTimelineElementDraggable: function () {
 
             var self = this;
-
-
+            
             this.timelineElement.draggable({
-
                 axis:        'x',
                 containment: 'parent',
                 snapTolerance: 10,
@@ -498,7 +404,6 @@ FrameTrail.defineType(
 
             var self = this,
                 endHandleGrabbed;
-
 
             this.timelineElement.resizable({
 
@@ -715,6 +620,14 @@ FrameTrail.defineType(
             
             for (var i=0; i<this.contentViewElements.length; i++) {
                 this.contentViewElements[i].addClass('active');
+
+                if ( this.data.type == 'location' 
+                    && contentView.contentViewData.contentSize == 'large' 
+                    && (contentView.whichArea == 'left' || contentView.whichArea == 'right') 
+                    && this.contentViewElements[i].children('.resourceDetail').data('map') ) {
+                    
+                    this.contentViewElements[i].children('.resourceDetail').data('map').updateSize();
+                }
             }
             //console.log(this, 'setActiveInContentView', contentView);
 

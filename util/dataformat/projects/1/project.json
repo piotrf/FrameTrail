@@ -5,14 +5,5 @@
     "userNeedsConfirmation": false,
     "defaultUserRole": "admin",
     "defaultHypervideoHidden": false,
-    "theme": null,
-    "overviewMode": null,
-    "defaultHypervideoConfig": {
-        "areaTopVisible": false,
-        "areaBottomVisible": true,
-        "areaLeftVisible": false,
-        "areaRightVisible": false,
-        "overlaysVisible": true,
-        "slidingMode": "adjust"
-    }
+    "theme": null
 }

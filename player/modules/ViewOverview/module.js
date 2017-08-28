@@ -363,7 +363,7 @@ FrameTrail.defineModule('ViewOverview', function(){
             listWidthState = false;
             changeViewSize();
             domElement.addClass('active');
-            FrameTrail.module('Titlebar').title = 'Project: ' + FrameTrail.module('Database').project.name;
+            FrameTrail.module('Titlebar').title = FrameTrail.module('Database').project.name;
         } else if (viewMode != 'resources') {
             domElement.removeClass('active');
         }

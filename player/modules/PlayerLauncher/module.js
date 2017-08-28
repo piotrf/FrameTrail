@@ -124,7 +124,7 @@
 
             function(){
 
-                FrameTrail.module('InterfaceModal').setLoadingTitle('Project: '+ FrameTrail.module('Database').project.name);
+                FrameTrail.module('InterfaceModal').setLoadingTitle(FrameTrail.module('Database').project.name);
 
                 FrameTrail.module('Interface').create(function(){
 

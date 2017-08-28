@@ -188,6 +188,7 @@
 									},
 
 							success: function(ret) {
+								console.log(ret);
 								domElement.find("#user_change_name").val(ret["response"]["name"]);
 								domElement.find("#user_change_mail").val(ret["response"]["mail"]);
 								domElement.find("#user_change_color").val(ret["response"]["color"]);

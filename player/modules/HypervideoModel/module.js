@@ -459,7 +459,8 @@
                             "start":        protoData.start,
                             "end":          protoData.end,
                             "resourceId":   protoData.resourceId,
-                            "attributes":   resourceDatabase[protoData.resourceId].attributes
+                            "attributes":   resourceDatabase[protoData.resourceId].attributes,
+                            "tags":         []
                         };
 
             if (!database.annotations[ownerId]) {
@@ -624,6 +625,41 @@
     function getAnnotations() {
 
         return annotationSets[selectedAnnotationSet].sort(function(a, b){
+
+            if(a.data.start > b.data.start) {
+                return 1;
+            } else if(a.data.start < b.data.start) {
+                return -1;
+            } else {
+                return 0;
+            }
+
+        });
+
+    };
+
+
+
+    /**
+     * When the {{#crossLinks "HypervideoModel/allAnnotations:attribute"}}attribute allAnnotations{{/crossLinks}} is accessed,
+     * it needs to return an array of all annotations by all users.
+     * The array needs to be sorted by the start time.
+     *
+     * @method getAllAnnotations
+     * @return Array of Annotations
+     * @private
+     */
+    function getAllAnnotations() {
+        
+        var userSets = getAnnotationSets(),
+            allAnnotations = new Array();
+        
+        for (var i=0; i<userSets.length; i++) {
+            var userSet = annotationSets[userSets[i].id];
+            allAnnotations = allAnnotations.concat(userSet);
+        }
+        
+        return allAnnotations.sort(function(a, b){
 
             if(a.data.start > b.data.start) {
                 return 1;
@@ -1408,10 +1444,62 @@
 
         var ChangeThemeUI = $('<div id="ThemeContainer">'
                             + '    <div class="message active">Select Color Theme</div>'
-                            + '    <div class="themeItem" data-theme="default">Default</div>'
-                            + '    <div class="themeItem" data-theme="dark">Dark</div>'
-                            + '    <div class="themeItem" data-theme="bright">Bright</div>'
-                            + '    <div class="themeItem" data-theme="aw">AW</div>'
+                            + '    <div class="themeItem" data-theme="default">'
+                            + '        <div class="themeName">Default</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
+                            + '    <div class="themeItem" data-theme="dark">'
+                            + '        <div class="themeName">Dark</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
+                            + '    <div class="themeItem" data-theme="bright">'
+                            + '        <div class="themeName">Bright</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
+                            + '    <div class="themeItem" data-theme="blue">'
+                            + '        <div class="themeName">Blue</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
+                            + '    <div class="themeItem" data-theme="green">'
+                            + '        <div class="themeName">Green</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
+                            + '    <div class="themeItem" data-theme="orange">'
+                            + '        <div class="themeName">Orange</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
+                            + '    <div class="themeItem" data-theme="grey">'
+                            + '        <div class="themeName">Grey</div>'
+                            + '        <div class="themeColorContainer">'
+                            + '            <div class="primary-fg-color"></div>'
+                            + '            <div class="secondary-bg-color"></div>'
+                            + '            <div class="secondary-fg-color"></div>'
+                            + '        </div>'
+                            + '    </div>'
                             + '</div>');
         
         ChangeThemeUI.find('.themeItem').each(function() {
@@ -1629,6 +1717,14 @@
          * @readOnly
          */
         get annotations()       { return getAnnotations() },
+
+        /**
+         * All annotations in all sets by all users (fetched via {{#crossLink "HypervideoModel/getAllAnnotations:method"}}getAllAnnotations(){{/crossLinks}}).
+         * @type Array of Annotation
+         * @attribute allAnnotations
+         * @readOnly
+         */
+        get allAnnotations()       { return getAllAnnotations() },
 
         /**
          * All annotations sets of the hypervideo in a map of userIDs to their respective annotation set.

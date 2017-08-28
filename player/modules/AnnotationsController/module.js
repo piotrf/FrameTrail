@@ -80,376 +80,20 @@
         } else {
             annotationColor = FrameTrail.module('Database').users[FrameTrail.module('HypervideoModel').annotationSet].color;
         }
-        //console.log('current annotation color: ', annotationColor)
 
         // update references
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
         
-        ViewVideo.AreaBottomDetails.find('#AnnotationSlider').empty();
-        ViewVideo.AreaBottomTileSlider.empty();
         ViewVideo.AnnotationTimeline.empty();
-        ViewVideo.AnnotationPreviewContainer.empty();
-
 
         for (var i = 0; i < annotations.length; i++) {
-
             annotations[i].renderInDOM();
-            
         }
-
-        distributeTiles();
-        initAnnotationSlider();
-
 
     }
 
-
-
-    /**
-     * I distribute the tileElements in the tileContainer, so that they
-     * match closely to the position of their related timelineElements.
-     * When they would start to overlap, I arrange them in groups.
-     * See also {{#crossLink "Annotation"}}Annotation{{/crossLink}}.
-     *
-     * @method distributeTiles
-     * @private
-     */
-    function distributeTiles() {
-
-        var annotations         = FrameTrail.module('HypervideoModel').annotations,
-            videoDuration       = FrameTrail.module('HypervideoModel').duration,
-            sliderParent        = ViewVideo.AreaBottomContainer,
-            containerElement    = ViewVideo.AreaBottomTileSlider,
-            groupCnt            = 0,
-            gap                 = 3,
-            thisTileElement,
-            previousElement,
-            previousElementRightPos,
-            startTime,
-            endTime,
-            middleTime,
-            desiredPosition,
-            finalPosition;
-
-
-        containerElement.children().removeAttr('data-group-id');
-        containerElement.children().css({
-            position: '',
-            left:     ''
-        });
-
-        function getTotalWidth(collection, addition){
-
-            var totalWidth = 0;
-            collection.each(function() {
-                totalWidth += $(this).width()+addition;
-            });
-            return totalWidth;
-
-        }
-
-        function getNegativeOffsetRightCorrection(leftPosition, collectionWidth) {
-            
-            var offsetCorrection,
-                mostRightPos = leftPosition + collectionWidth + (gap*2);
-
-            if ( mostRightPos >= sliderParent.width() ) {
-                
-                offsetCorrection = mostRightPos - sliderParent.width();
-
-                return offsetCorrection;
-                
-            }
-
-            return 0;
-        }
-
-        // Cancel if total width > container width
-        if ( getTotalWidth(containerElement.children(), 3) > sliderParent.width() ) {
-            containerElement.width( getTotalWidth(containerElement.children(), 3) );
-            return;
-        } else {
-            containerElement.width('');
-        }
-        
-        // Distribute Items
-        for (var i = 0; i < annotations.length; i++) {
-
-            thisTileElement = annotations[i].tileElement;
-
-
-
-            if (i > 0) {
-                previousElement         = annotations[i-1].tileElement;
-                previousElementRightPos = previousElement.position().left + previousElement.width();
-            }
-
-            startTime   = annotations[i].data.start;
-            endTime     = annotations[i].data.end;
-            middleTime  = startTime + ( (endTime-startTime)/2 );
-            
-            desiredPosition = ( (sliderParent.width() / videoDuration) * middleTime ) - ( thisTileElement.width()/2 );
-
-            
-            thisTileElement.attr({
-                'data-in':  startTime,
-                'data-out': endTime
-            });
-
-            if (desiredPosition <= 0) {
-                finalPosition = 0;
-                thisTileElement.removeAttr('data-group-id');
-                groupCnt++;
-
-            } else if (desiredPosition < previousElementRightPos + gap) {
-
-                finalPosition = previousElementRightPos + gap;
-                
-                if (previousElement.attr('data-group-id')) {
-
-                    containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]').attr('data-group-id', groupCnt);
-
-                } else {
-
-                    previousElement.attr('data-group-id', groupCnt);
-
-                }
-
-                thisTileElement.attr('data-group-id', groupCnt);
-                groupCnt++;
-
-            } else {
-
-                finalPosition = desiredPosition;
-                thisTileElement.removeAttr('data-group-id');
-                groupCnt++;
-
-            }
-
-            thisTileElement.css({
-                position: "absolute",
-                left: finalPosition + "px"
-            });
-
-        }
-
-        // Re-Arrange Groups
-
-        var groupCollection,
-            p,
-            previousGroupCollection,
-            previousGroupCollectionRightPos,
-            totalWidth,
-            groupStartTime,
-            groupEndTime,
-            groupMiddleTime,
-            desiredGroupPosition,
-            correction,
-            negativeOffsetRightCorrection,
-            groupIDs;
-        
-        function arrangeGroups() {
-
-            groupIDs = [];
-
-            containerElement.children('[data-group-id]').each(function() {
-                if ( groupIDs.indexOf( $(this).attr('data-group-id') ) == -1 ) {
-                    groupIDs.push($(this).attr('data-group-id'));
-                }
-            });
-
-            for (var i=0; i < groupIDs.length; i++) {
-                
-                var g = groupIDs[i];
-
-                groupCollection = containerElement.children('[data-group-id="'+ g +'"]');
-
-                if (groupCollection.length < 1) {
-                    continue;
-                }
-
-                if ( groupIDs[i-1] ) {
-                    p = groupIDs[i-1];
-                    previousGroupCollection         = containerElement.children('[data-group-id="'+ p +'"]');
-                    previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 3 );
-                }
-
-                totalWidth      = getTotalWidth( groupCollection, 3 );
-
-                groupStartTime  = parseInt(groupCollection.eq(0).attr('data-in'));
-                groupEndTime    = parseInt(groupCollection.eq(groupCollection.length-1).attr('data-out'));
-                groupMiddleTime = groupStartTime + ( (groupEndTime-groupStartTime)/2 );
-
-                desiredGroupPosition = ( (sliderParent.width() / videoDuration) * groupMiddleTime ) - ( totalWidth/2 );
-
-                correction = groupCollection.eq(0).position().left - desiredGroupPosition;
-
-                if ( groupCollection.eq(0).position().left - correction >= 0 && desiredGroupPosition > previousGroupCollectionRightPos + gap ) {
-                    
-                    groupCollection.each(function() {
-                        $(this).css('left', '-='+ correction +'');
-                    });
-
-                } else if ( groupCollection.eq(0).position().left - correction >= 0 && desiredGroupPosition < previousGroupCollectionRightPos + gap ) {
-                    
-                    var  attachCorrection = groupCollection.eq(0).position().left - previousGroupCollectionRightPos;
-                    groupCollection.each(function() {
-                        
-                        $(this).css('left', '-='+ attachCorrection +'');
-
-                    });
-
-                    if ( groupCollection.eq(0).prev().length ) {
-                        
-                        var prevElem = groupCollection.eq(0).prev();
-
-                        if ( prevElem.attr('data-group-id') ) {
-
-                            previousGroupCollection.attr('data-group-id', g);
-
-                        } else {
-
-                            prevElem.attr('data-group-id', g);
-                            
-                        }
-                        
-                    }
-
-                }
-
-            }
-
-        }
-
-        arrangeGroups();
-        
-
-
-        // Deal with edge case > tiles outside container on right side
-        
-        var repeatIteration;
-
-        function solveRightEdgeOverlap() {
-
-            repeatIteration = false;
-
-            for (var i = 0; i < annotations.length; i++) {
-
-                thisTileElement = annotations[i].tileElement;
-
-                var g = undefined;
-                
-                if ( thisTileElement.attr('data-group-id') ) {
-                    g = thisTileElement.attr('data-group-id');
-                    groupCollection = containerElement.children('[data-group-id="'+ g +'"]');
-                } else {
-                    groupCollection = thisTileElement;
-                }
-
-                if (groupCollection.eq(0).prev().length) {
-                    
-                    previousElement = groupCollection.eq(0).prev();
-
-                    if ( previousElement.attr('data-group-id') ) {
-
-                        previousGroupCollection         = containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]');
-                        previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 3 );
-
-                    } else {
-
-                        previousGroupCollection         = previousElement;
-                        previousGroupCollectionRightPos = previousElement.position().left + previousElement.width() + gap;
-                        
-                    }
-
-                    
-                } else {
-                    previousGroupCollectionRightPos = 0;
-                }
-
-                totalWidth = getTotalWidth( groupCollection, 3 );
-
-                currentGroupCollectionLeft = groupCollection.eq(0).position().left;
-                currentGroupCollectionRightPos = groupCollection.eq(0).position().left + totalWidth;
-
-                negativeOffsetRightCorrection = getNegativeOffsetRightCorrection(currentGroupCollectionLeft, totalWidth);
-
-                if ( currentGroupCollectionLeft - negativeOffsetRightCorrection >= 0  && negativeOffsetRightCorrection > 1 ) {
-                    
-                    if ( currentGroupCollectionLeft - negativeOffsetRightCorrection > previousGroupCollectionRightPos + gap ) {
-                        
-                        groupCollection.each(function() {
-                            $(this).css('left', '-='+ negativeOffsetRightCorrection +'');
-                        });
-
-                    } else if ( currentGroupCollectionLeft - negativeOffsetRightCorrection < previousGroupCollectionRightPos + gap ) {
-
-                        var attachCorrection = currentGroupCollectionLeft - previousGroupCollectionRightPos;
-                        groupCollection.each(function() {
-                            $(this).css('left', '-='+ attachCorrection +'');
-                        });
-
-                        if ( !g && previousElement.length && previousElement.attr('data-group-id') ) {
-                            
-                            thisTileElement.attr('data-group-id', previousElement.attr('data-group-id'));
-
-                        }
-
-                        if ( previousElement.attr('data-group-id') ) {
-
-                            containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]').attr('data-group-id', g);
-                            
-                        } else {
-
-                            previousElement.attr('data-group-id', g);
-
-                        }                        
-                        
-                        
-                        repeatIteration = false;                            
-
-                    }
-
-                }
-
-            }
-
-            if ( repeatIteration ) {
-                solveRightEdgeOverlap();
-            }
-
-        }
-
-        solveRightEdgeOverlap();
-        
-
-    }
-
-
-
-    /**
-     * I prepare the display of the annotationElement (which contains the content of an 
-     * annotation), which are shown in the AnnotationContainer.
-     * @method initAnnotationSlider
-     * @private
-     */
-    function initAnnotationSlider() {
-
-        var widthOfSlider   = 0,
-            gap             = 10;
-
-        for (var idx in annotations) {
-            widthOfSlider += annotations[idx].annotationElement.width() + gap;
-        }
-
-        ViewVideo.AreaBottomDetails.find('#AnnotationSlider').width(widthOfSlider);
-
-    }
-
-
-
-
+    
     /**
      * When the global state viewSize changes, I re-arrange 
      * the annotationElements and tiles, to fit the new
@@ -460,11 +104,7 @@
      */
     function changeViewSize() {
 
-        updateAnnotationSlider();
-        distributeTiles();
-
     }
-
 
 
     /**
@@ -477,56 +117,7 @@
      */
     function onViewSizeChanged() {
 
-        if (HypervideoModel.annotationSets.length != 0) {
-            updateAnnotationSlider();
-            distributeTiles();
-        }
-
     }
-
-
-    /**
-     * When the state of the sidebar changes, I have to re-arrange 
-     * the tileElements and the annotationElements, to fit the new
-     * width of the #mainContainer.
-     * @method toggleSidebarOpen
-     * @private
-     */
-    function toggleSidebarOpen() {
-
-        
-        if (HypervideoModel.annotationSets.length != 0) {
-            var maxSlideDuration = 280,
-                interval;
-
-            interval = window.setInterval(function(){
-                distributeTiles();
-                updateAnnotationSlider();
-            }, 40);
-            
-            window.setTimeout(function(){
-
-                window.clearInterval(interval);
-
-            }, maxSlideDuration);
-        }
-
-
-    }
-
-
-    /**
-     * I trigger the {{#crossLink "Annotation/scaleAnnotationElements:method"}}scaleAnnotationElements{{/crossLink}} 
-     * method for all annotations.
-     * @method rescaleAnnotations
-     */
-    function rescaleAnnotations() {
-
-        for (var idx in annotations) {
-            annotations[idx].scaleAnnotationElements();
-        }
-        
-    };
 
 
     /**
@@ -562,10 +153,6 @@
         });
 
     }
-
-
-
-
 
 
     /**
@@ -710,35 +297,6 @@
     }
 
 
-    /**
-     * The annotationContainer is a slider element, which means that
-     * its left position within its container element must be
-     * updated according to the left position of the currently opened
-     * annotationElement.
-     * @method updateAnnotationSlider
-     * @private
-     */
-    function updateAnnotationSlider() {
-
-        if (openedAnnotation) {
-
-            initAnnotationSlider();
-            
-            var itemPosition = openedAnnotation.annotationElement.position();
-            
-            var leftOffset = -1 * (     itemPosition.left 
-                                      - 1 
-                                      - ViewVideo.AreaBottomDetails.parent().innerWidth() / 2
-                                      + openedAnnotation.annotationElement.width() / 2
-                            );
-
-            ViewVideo.AreaBottomDetails.find('#AnnotationSlider').css('left', leftOffset);
-
-        }
-
-    }
-
-
 
     /**
      * When an annotation is set into focus, I have to tell 
@@ -835,13 +393,13 @@
 
         if ( editMode === false && oldEditMode !== false ) {
 
-            console.log('SHOW SEARCH BUTTON');
+            //console.log('SHOW SEARCH BUTTON');
 
         } else if ( editMode && oldEditMode === false ) {
 
             HypervideoModel.annotationSet = '#myAnnotationSet';
             
-            console.log('HIDE SEARCH BUTTON');
+            //console.log('HIDE SEARCH BUTTON');
 
             window.setTimeout(function() {
                 initAnnotations();
@@ -849,11 +407,11 @@
 
         } else if ( editMode === false ) {
 
-            console.log('SHOW SEARCH BUTTON');
+            //console.log('SHOW SEARCH BUTTON');
             
         } else {
 
-            console.log('HIDE SEARCH BUTTON');
+            //console.log('HIDE SEARCH BUTTON');
             
         }
 
@@ -1073,25 +631,6 @@
 
 
     /**
-     * When we enter the viewMode 'video', we have to update the
-     * distribution of tiles accoring to the current browser width.
-     * @method toggleViewMode
-     * @param {String} viewMode
-     * @param {String} oldViewMode
-     * @return 
-     */
-    function toggleViewMode(viewMode, oldViewMode){
-
-        if (viewMode === 'video' && oldViewMode !== 'video') {
-            window.setTimeout(function() {
-                distributeTiles();
-            }, 300);
-        }
-
-    }
-
-
-    /**
      * I react to a change in the global state "userColor"
      * @method changeUserColor
      * @param {String} color
@@ -1123,8 +662,6 @@
             editMode:        toggleEditMode,
             viewSize:        changeViewSize,
             viewSizeChanged: onViewSizeChanged,
-            sidebarOpen:     toggleSidebarOpen,
-            viewMode:        toggleViewMode,
             userColor:       changeUserColor,
         },
 
@@ -1132,8 +669,7 @@
         updateController:           updateController,
         updateStatesOfAnnotations:  updateStatesOfAnnotations,
         stackTimelineView:          stackTimelineView,
-        rescaleAnnotations:         rescaleAnnotations,
-
+        
         deleteAnnotation:           deleteAnnotation,
 
         findTopMostActiveAnnotation: findTopMostActiveAnnotation,
