@@ -76,9 +76,9 @@ html.green, .themeItem[data-theme="green"] {
 
 html.orange, .themeItem[data-theme="orange"] {
 	--primary-bg-color: rgba(255, 255, 255, 1);
-	--secondary-bg-color: rgba(220, 220, 220, .6);
+	--secondary-bg-color: rgba(234, 225, 211, .6);
 	--semi-transparent-bg-color: rgba(250, 250, 250, .8);
-	--primary-fg-color: rgba(245, 114, 71, 1);
+	--primary-fg-color: rgba(244, 107, 59, 1);
 	--secondary-fg-color: rgba(125, 120, 120, 1);
 	--semi-transparent-fg-color: rgba(125, 120, 120, .3);
 	--semi-transparent-fg-highlight-color: rgba(125, 120, 120, .4);

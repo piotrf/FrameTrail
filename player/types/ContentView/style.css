@@ -251,16 +251,18 @@
 }
 
 .layoutArea .contentViewContainer .contentViewContents .transcriptContainer {
-	padding: 10px;
-	max-height: 100%;
+	margin: 0px 4px 4px 4px;
+	max-height: calc(100% - 8px);
 	box-sizing: border-box;
 	position: relative;
+	background: #fff;
+	padding: 7px;
 }
 
 .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span {
 	position: relative;
 	padding: 1px 2px 1px 4px;
-	opacity: .7;
+	opacity: .5;
 }
 
 .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span:first-child {
@@ -268,7 +270,6 @@
 }
 
 .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span:hover, .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span.active {
-	background: var(--primary-bg-color);
 	opacity: 1;
 }
 
