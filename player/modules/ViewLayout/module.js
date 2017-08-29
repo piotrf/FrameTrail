@@ -82,6 +82,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 		updateLayoutAreaVisibility();
 
+		updateManagedContent();
+
 	}
 
 
@@ -170,6 +172,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 		for (var a in contentViewAreas) {
 			for (var i in contentViewAreas[a]) {
 				var contentView = contentViewAreas[a][i];
+				//console.log(contentView.whichArea, contentView.contentCollection);
 				for (var k in contentView.contentCollection) {
 					var item = contentView.contentCollection[k];
 					if (item.overlayElement) {
