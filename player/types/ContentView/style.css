@@ -257,12 +257,13 @@
 	position: relative;
 	background: #fff;
 	padding: 7px;
+	color: #777;
 }
 
 .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span {
 	position: relative;
 	padding: 1px 2px 1px 4px;
-	opacity: .5;
+	opacity: .6;
 }
 
 .layoutArea .contentViewContainer .contentViewContents .transcriptContainer span:first-child {
