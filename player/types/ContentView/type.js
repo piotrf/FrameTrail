@@ -521,7 +521,7 @@ FrameTrail.defineType(
 
             self.contentViewPreviewElement.attr('data-type', self.contentViewData.type);
             self.contentViewPreviewElement.attr('data-size', self.contentViewData.contentSize);
-            self.contentViewPreviewElement.find('.contentViewPreviewDescription').text(''+ ((self.contentViewData.type == 'TimedContent') ? 'Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'');
+            self.contentViewPreviewElement.find('.contentViewPreviewDescription').html(''+ ((self.contentViewData.type == 'TimedContent') ? 'Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'');
 
             self.resizeLayoutAreaPreview();
 

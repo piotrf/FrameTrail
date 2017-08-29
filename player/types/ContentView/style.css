@@ -372,6 +372,7 @@
 	pointer-events: none;
 	transition-property: all;
 	transition-duration: 300ms;
+	z-index: 2:;
 }
 
 #LayoutManager .layoutArea .contentViewPreview:hover .contentViewOptions {
