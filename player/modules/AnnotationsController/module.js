@@ -622,7 +622,7 @@
 
         setAnnotationInFocus(null);
         annotation.removeFromDOM();
-        distributeTiles();
+        //distributeTiles();
         FrameTrail.module('HypervideoModel').removeAnnotation(annotation);
 
         stackTimelineView();
