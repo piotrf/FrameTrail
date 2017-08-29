@@ -47,6 +47,10 @@ FrameTrail.defineType(
         	var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'"></div>');
 
             var iFrameSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src.replace('http:', '').replace('https:', '') : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src);
+
+            if (iFrameSource.substr( (iFrameSource.lastIndexOf('.') +1) ) == 'pdf' ) {
+                iFrameSource = '../_lib/pdfjs/web/viewer.html?file=../../' + iFrameSource; 
+            }
             
             var iFrame = $(
                     '<iframe frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
