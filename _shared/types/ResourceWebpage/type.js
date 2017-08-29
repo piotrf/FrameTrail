@@ -46,10 +46,12 @@ FrameTrail.defineType(
 
         	var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'"></div>');
 
+            var iFrameSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src.replace('http:', '').replace('https:', '') : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src);
+            
             var iFrame = $(
                     '<iframe frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
-                +   this.resourceData.src.replace('http:', '').replace('https:', '')
-                +   '?color=ffffff&portrait=0&byline=0&title=0&badge=0" sandbox="allow-same-origin allow-scripts allow-popups allow-forms">'
+                +   iFrameSource
+                +   '" sandbox="allow-same-origin allow-scripts allow-popups allow-forms">'
                 +    '</iframe>'
             ).bind('error, message', function() {
                 return true;
