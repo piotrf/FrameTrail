@@ -84,7 +84,7 @@ FrameTrail.defineType(
                         self.contentViewData.collectionFilter.types
                     );
 
-                    /*
+                    // TODO: Check
                     if ( (this.previousContentSize == 'large' && this.contentViewData.contentSize != 'large') || 
                          (this.previousContentSize != 'large' && this.contentViewData.contentSize == 'large') ) {
 
@@ -99,7 +99,6 @@ FrameTrail.defineType(
                         this.previousContentSize = this.contentViewData.contentSize;
 
                     } else {
-                    */
 
                         old_contentCollection.filter(function(contentItem) {
                             return 0 > self.contentCollection.indexOf(contentItem)
@@ -113,7 +112,7 @@ FrameTrail.defineType(
                             self.appendContentCollectionElements(contentItem);
                         });
 
-                    //}
+                    }
 
                     break;
 
@@ -959,7 +958,6 @@ FrameTrail.defineType(
                     mostRightPos = leftPosition + collectionWidth + (gap*2);
 
                 if ( mostRightPos >= sliderParent.width() ) {
-                    
                     offsetCorrection = mostRightPos - sliderParent.width();
 
                     return offsetCorrection;
@@ -971,7 +969,7 @@ FrameTrail.defineType(
 
             // Cancel if total width > container width
             if ( getTotalWidth(containerElement.children(), 4) > sliderParent.width() ) {
-                containerElement.width( getTotalWidth(containerElement.children(), 3) );
+                containerElement.width( getTotalWidth(containerElement.children(), 4) );
                 return;
             } else {
                 containerElement.width('');
@@ -1252,6 +1250,17 @@ FrameTrail.defineType(
             if ( self.contentCollection.length == 0 
                 || ( (self.whichArea == 'left' || self.whichArea == 'right') && self.contentViewData.contentSize == 'large') 
                 || !sliderParent.hasClass('active') ) {
+                
+                if (slideAxis == 'x') {
+                    sliderElement.width('');
+                    sliderElement.css('left', '');
+                } else {
+                    sliderElement.height('');
+                    sliderElement.css('top', '');
+                }
+                
+                sliderParent.find('.slideButton').hide();
+
                 return;
             }
             
