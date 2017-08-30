@@ -947,7 +947,7 @@ FrameTrail.defineType(
 
                 var totalWidth = 0;
                 collection.each(function() {
-                    totalWidth += $(this).width()+addition;
+                    totalWidth += $(this).outerWidth()+addition+1;
                 });
                 return totalWidth;
 
@@ -970,7 +970,7 @@ FrameTrail.defineType(
             }
 
             // Cancel if total width > container width
-            if ( getTotalWidth(containerElement.children(), 3) > sliderParent.width() ) {
+            if ( getTotalWidth(containerElement.children(), 4) > sliderParent.width() ) {
                 containerElement.width( getTotalWidth(containerElement.children(), 3) );
                 return;
             } else {
@@ -1076,10 +1076,10 @@ FrameTrail.defineType(
                     if ( groupIDs[i-1] ) {
                         p = groupIDs[i-1];
                         previousGroupCollection         = containerElement.children('[data-group-id="'+ p +'"]');
-                        previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 3 );
+                        previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 4 );
                     }
 
-                    totalWidth      = getTotalWidth( groupCollection, 3 );
+                    totalWidth      = getTotalWidth( groupCollection, 4 );
 
                     groupStartTime  = parseInt(groupCollection.eq(0).attr('data-in'));
                     groupEndTime    = parseInt(groupCollection.eq(groupCollection.length-1).attr('data-out'));
@@ -1158,7 +1158,7 @@ FrameTrail.defineType(
                         if ( previousElement.attr('data-group-id') ) {
 
                             previousGroupCollection         = containerElement.children('[data-group-id="'+ previousElement.attr('data-group-id') +'"]');
-                            previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 3 );
+                            previousGroupCollectionRightPos = previousGroupCollection.eq(0).position().left + getTotalWidth( previousGroupCollection, 4 );
 
                         } else {
 
@@ -1172,7 +1172,7 @@ FrameTrail.defineType(
                         previousGroupCollectionRightPos = 0;
                     }
 
-                    totalWidth = getTotalWidth( groupCollection, 3 );
+                    totalWidth = getTotalWidth( groupCollection, 4 );
 
                     currentGroupCollectionLeft = groupCollection.eq(0).position().left;
                     currentGroupCollectionRightPos = groupCollection.eq(0).position().left + totalWidth;
