@@ -243,7 +243,7 @@ FrameTrail.defineType(
             // console.log(contentItem);
 
             // TODO: CHECK WHY contentItem is sometimes undefined !!!
-
+            
             if (contentItem) {
                 
                 var contentViewElement = this.getContentViewElementFromContentItem(contentItem);
@@ -1270,7 +1270,11 @@ FrameTrail.defineType(
                 
                 for (var idx in self.contentCollection) {
                     var element = (details) ? self.getDetailElementFromContentItem(self.contentCollection[idx]) : self.getContentViewElementFromContentItem(self.contentCollection[idx]);
-                    widthOfSlider += element.outerWidth() + gap;
+                    // TODO: Check why element is null after changing collection
+                    if (element) {
+                        widthOfSlider += element.outerWidth() + gap;
+                    }
+                    
                 }
 
                 if ( widthOfSlider > sliderParent.width() ) {
@@ -1284,10 +1288,12 @@ FrameTrail.defineType(
                 }
 
             } else {
-                
                 for (var idx in self.contentCollection) {
                     var element = (details) ? self.getDetailElementFromContentItem(self.contentCollection[idx]) : self.getContentViewElementFromContentItem(self.contentCollection[idx]);
-                    heightOfSlider += element.outerHeight() + gap;
+                    //. TODO: Check why element is null after changing collection
+                    if (element) {
+                        heightOfSlider += element.outerHeight() + gap;
+                    }
                 }
 
                 if ( heightOfSlider > sliderParent.height() ) {
