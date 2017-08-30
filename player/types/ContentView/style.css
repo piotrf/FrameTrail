@@ -66,9 +66,9 @@
 }
 
 .layoutArea[data-size="small"] .collectionElement .resourceTitle {
-	min-width: 140px;
+	min-width: 120px;
 	left: 50%;
-	margin-left: -73px;
+	margin-left: -64px;
 	background: var(--secondary-bg-color);
 	color: var(--primary-fg-color);
 	text-shadow: none;
@@ -77,8 +77,9 @@
 	height: 22px;
 	line-height: 20px;
 	text-align: center;
-	padding: 1px 3px 0 3px;
+	padding: 1px 4px 0 4px;
 	display: none;
+	width: auto;
 }
 
 .layoutArea[data-area="areaTop"][data-size="small"] .collectionElement .resourceTitle {
@@ -352,6 +353,7 @@
 	width: 100%;
 	margin-top: -21px;
 	text-align: center;
+	pointer-events: none;
 }
 
 #LayoutManager .layoutArea .contentViewPreview, .contentViewAnimationDiv {
@@ -374,7 +376,7 @@
 	pointer-events: none;
 	transition-property: all;
 	transition-duration: 300ms;
-	z-index: 2:;
+	z-index: 2;
 }
 
 #LayoutManager .layoutArea .contentViewPreview:hover .contentViewOptions {

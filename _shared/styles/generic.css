@@ -127,6 +127,8 @@ input[readonly], textarea[readonly] {
     border: 2px solid var(--primary-bg-color);
     z-index: 99;
     display: none;
+    max-height: 91px;
+    overflow: auto;
 }
 
 .contextSelectButton.active .contextSelectList {
