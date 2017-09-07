@@ -452,7 +452,11 @@ FrameTrail.defineType(
             var self = this;
                 HypervideoDuration = FrameTrail.module('HypervideoModel').duration;
 
-            if ( HypervideoDuration != 0 ) {
+            if (!self.contentViewContainer.hasClass('active')) {
+                return;
+            }
+
+            if ( HypervideoDuration != 0  ) {
                 switch (self.contentViewData.contentSize) {
                     case 'small':
                         self.distributeElements();
@@ -763,8 +767,6 @@ FrameTrail.defineType(
                 return;
             }
 
-            FrameTrail.module('ViewVideo').shownDetails = null;
-
             self.contentViewTab.siblings('.contentViewTab').removeClass('active');
             self.contentViewTab.addClass('active');
 
@@ -773,12 +775,21 @@ FrameTrail.defineType(
 
             self.contentViewDetailsContainer.siblings('.contentViewDetailsContainer').removeClass('active');
             self.contentViewDetailsContainer.addClass('active');
-                        
-            self.resizeLayoutArea();
+            
+            if (FrameTrail.module('ViewVideo').shownDetails) {
+                FrameTrail.module('ViewVideo').shownDetails = null;
+            }
 
-            window.setTimeout(function() {
+            self.resizeLayoutArea(false, true);
+
+            if (window.contentViewResizeTimeout) {
+                window.clearTimeout(window.contentViewResizeTimeout);
+            }
+            
+            window.contentViewResizeTimeout = window.setTimeout(function() {
+                FrameTrail.changeState('viewSizeChanged');
                 self.updateCollectionSlider();
-            }, 300);
+            }, 600);
 
         },
 
@@ -813,8 +824,9 @@ FrameTrail.defineType(
          *
          * @method resizeLayoutArea
          * @param {Boolean} isEmpty
+         * @param {Boolean} preventViewSizeChange
          */
-        resizeLayoutArea: function(isEmpty) {
+        resizeLayoutArea: function(isEmpty, preventViewSizeChange) {
             var self = this,
                 areaContainer = self.getLayoutAreaContainer();
 
@@ -824,7 +836,9 @@ FrameTrail.defineType(
                 areaContainer.attr('data-size', self.contentViewData.contentSize);
             }
 
-            FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+            if (!preventViewSizeChange) {
+                FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+            }
             
         },
 
@@ -974,7 +988,7 @@ FrameTrail.defineType(
             } else {
                 containerElement.width('');
             }
-            
+                        
             // Distribute Items
             for (var i = 0; i < annotations.length; i++) {
 
@@ -1225,7 +1239,6 @@ FrameTrail.defineType(
 
             solveRightEdgeOverlap();
             
-
         },
 
 
