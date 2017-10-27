@@ -140,12 +140,13 @@ FrameTrail.defineType(
                     if ( subtitles ) {
                         for (var i=0; i<subtitles.cues.length; i++) {
                             var cueElement = $('<span data-start="'+ subtitles.cues[i].startTime +'" data-end="'+ subtitles.cues[i].endTime +'">'+ subtitles.cues[i].text +' </span>');
-                            cueElement.click(function() {
-                                FrameTrail.module('HypervideoController').currentTime = $(this).attr('data-start') - 0.5;
-                            });
                             transcriptContainer.append(cueElement);
                         }
                     }
+
+	                transcriptContainer.click(function(evt) {
+                        FrameTrail.module('HypervideoController').currentTime = $(evt.target).attr('data-start') - 0.5;
+                    });
 
                     transcriptContainer.perfectScrollbar({
                         wheelSpeed: 4,
@@ -435,7 +436,7 @@ FrameTrail.defineType(
                             || activeElementPosition.top > transcriptContainer.height()/2 + transcriptContainer.scrollTop() ) {
                             
                             var newPos = activeElementPosition.top + transcriptContainer.scrollTop() - transcriptContainer.height()/2;
-                            transcriptContainer.animate({scrollTop : newPos},400);                            
+                            transcriptContainer.stop().animate({scrollTop : newPos},400);                            
                         }
                         
                     }
