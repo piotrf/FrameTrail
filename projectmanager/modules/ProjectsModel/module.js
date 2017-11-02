@@ -70,6 +70,11 @@
         }).done(function(data){
 
             var countdown = Object.keys(data.projects).length;
+            
+            if (countdown == 0) {
+                // no projects yet
+                success.call();
+            }
 
             for (var id in data.projects) {
                 (function (id) {
