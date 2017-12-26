@@ -92,7 +92,7 @@
 								message.html('Please define a Master Password to start the setup process').show();
 								$('input[name="masterpassword"]').show();
 								$('#submitBtn').text('OK');
-							} else if (ret["code"] == 7) {
+							} else if ((ret["code"] == 7) || (ret["code"] == 8)) {
 								title.html('Directory not writable').show();
 								message.html(ret["string"]).show();
 								$('input[name="masterpassword"]').hide();

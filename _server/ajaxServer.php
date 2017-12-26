@@ -201,12 +201,23 @@ switch($_REQUEST["a"]) {
 			exit;
 		}
 		
-		if ( !is_writable("../") ) {
+		if ( !file_exists($conf["dir"]["data"]) && !is_writable("../") ) {
 			chmod("../", 0755);
 			if ( !is_writable("../") ) {
 				$return["status"] = "fail";
 				$return["code"] = 7;
 				$return["string"] = "Root directory not writable. Please change permissions (755) or create '_data' directory manually.";
+				echo json_encode($return);
+				exit;
+			}
+		}
+
+		if ( file_exists($conf["dir"]["data"]) && !is_writable($conf["dir"]["data"]) ) {
+			chmod($conf["dir"]["data"], 0755);
+			if ( !is_writable($conf["dir"]["data"]) ) {
+				$return["status"] = "fail";
+				$return["code"] = 8;
+				$return["string"] = "Data directory not writable. Please change permissions (755).";
 				echo json_encode($return);
 				exit;
 			}
