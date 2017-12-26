@@ -281,7 +281,7 @@ FrameTrail.defineModule('Sidebar', function(){
         $('body').append(domElement);
 
         if ( FrameTrail.getState('embed') ) {
-            domElement.find('.viewmodeControls').hide();
+            //domElement.find('.viewmodeControls').hide();
         }
 
         // parse project description here in case we can't use the HypervideoController
