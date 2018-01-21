@@ -1,0 +1,205 @@
+{
+    "meta": {
+        "name": "FrameTrail Playground",
+        "description": "Lorem Ipsum Dolor Sit Amet",
+        "thumb": "2_1458909015_thumb_big-buck-bunny.png",
+        "creator": "demo",
+        "creatorId": "2",
+        "created": 1490624549,
+        "lastchanged": 1509123232368
+    },
+    "config": {
+        "slidingMode": "adjust",
+        "slidingTrigger": "key",
+        "autohideControls": true,
+        "captionsVisible": false,
+        "hidden": false,
+        "theme": "default",
+        "layoutArea": {
+            "areaTop": [
+                {
+                    "type": "TimedContent",
+                    "contentSize": "medium",
+                    "name": "jgdjgd",
+                    "description": "",
+                    "cssClass": "",
+                    "collectionFilter": {
+                        "tags": [],
+                        "types": [],
+                        "users": [],
+                        "text": ""
+                    },
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
+                }
+            ],
+            "areaBottom": [],
+            "areaLeft": [],
+            "areaRight": [
+                {
+                    "type": "TimedContent",
+                    "contentSize": "small",
+                    "name": "khjfjdf",
+                    "description": "",
+                    "cssClass": "",
+                    "collectionFilter": {
+                        "tags": [
+                            "testtag"
+                        ],
+                        "types": [],
+                        "users": [],
+                        "text": ""
+                    },
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
+                }
+            ]
+        }
+    },
+    "clips": [
+        {
+            "resourceId": "4",
+            "duration": 0,
+            "start": 0,
+            "end": 0,
+            "in": 0,
+            "out": 0
+        }
+    ],
+    "globalEvents": {
+        "onReady": "console.log('Hypervideo Ready');",
+        "onPlay": "console.log(\"Hypervideo Play Event\");",
+        "onPause": "console.log(\"Hypervideo Pause Event\");",
+        "onEnded": "console.log(\"Hypervideo Ended\");"
+    },
+    "customCSS": "#Sidebar {\n\t/*background-color: #00ff00 !important;*/\n}",
+    "contents": [
+        {
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                {
+                    "frametrail": "http://frametrail.org/ns/"
+                }
+            ],
+            "creator": {
+                "nickname": "demo",
+                "type": "Person",
+                "id": "2"
+            },
+            "created": "Fri Oct 27 2017 17:53:26 GMT+0100 (BST)",
+            "type": "Annotation",
+            "frametrail:type": "Overlay",
+            "frametrail:tags": [],
+            "target": {
+                "type": "Video",
+                "source": "2_1458909015_big-buck-bunny.mp4",
+                "selector": {
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "type": "FragmentSelector",
+                    "value": "t=25.264901698429163,29.264901698429163&xywh=percent:61.05949077413704,14.11721701150412,29.998147930722872,30"
+                }
+            },
+            "body": {
+                "type": "Video",
+                "frametrail:type": "video",
+                "format": "video/mp4",
+                "source": "2_1459152938_testvideo-red.mp4",
+                "frametrail:name": "Testvideo Red",
+                "frametrail:thumb": "2_1459152938_thumb_testvideo-red.png",
+                "frametrail:resourceId": "7"
+            },
+            "frametrail:events": {},
+            "frametrail:attributes": {}
+        },
+        {
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                {
+                    "frametrail": "http://frametrail.org/ns/"
+                }
+            ],
+            "creator": {
+                "nickname": "demo",
+                "type": "Person",
+                "id": "2"
+            },
+            "created": "Fri Oct 27 2017 17:53:31 GMT+0100 (BST)",
+            "type": "Annotation",
+            "frametrail:type": "Overlay",
+            "frametrail:tags": [],
+            "target": {
+                "type": "Video",
+                "source": "2_1458909015_big-buck-bunny.mp4",
+                "selector": {
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "type": "FragmentSelector",
+                    "value": "t=19.6,23.6&xywh=percent:21.44314415188281,34.241758912474246,42.85537772403964,48.46153846153846"
+                }
+            },
+            "body": {
+                "type": "Dataset",
+                "frametrail:type": "location",
+                "format": "application/x-frametrail-location",
+                "source": "",
+                "frametrail:name": "Berlin, Germany",
+                "frametrail:resourceId": "8",
+                "frametrail:lat": "52.5170365",
+                "frametrail:long": "13.3888599",
+                "frametrail:boundingBox": "52.3570365,52.6770365,13.2288599,13.5488599"
+            },
+            "frametrail:events": {},
+            "frametrail:attributes": {}
+        },
+        {
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                {
+                    "frametrail": "http://frametrail.org/ns/"
+                }
+            ],
+            "creator": {
+                "nickname": "demo",
+                "type": "Person",
+                "id": "1"
+            },
+            "created": "Wed Aug 09 2017 14:46:19 GMT+0100 (BST)",
+            "type": "Annotation",
+            "frametrail:type": "CodeSnippet",
+            "target": {
+                "type": "Video",
+                "source": "2_1458909015_big-buck-bunny.mp4",
+                "selector": {
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "type": "FragmentSelector",
+                    "value": "t=25.84"
+                }
+            },
+            "body": {
+                "type": "TextualBody",
+                "frametrail:type": "codesnippet",
+                "format": "text/javascript",
+                "value": "console.log(\"Hello, I am a Code Snippet XXX\");",
+                "frametrail:name": "Custom Code Snippet",
+                "frametrail:thumb": null,
+                "frametrail:resourceId": null
+            },
+            "frametrail:attributes": {}
+        }
+    ],
+    "subtitles": [
+        {
+            "src": "de.vtt",
+            "srclang": "de"
+        },
+        {
+            "src": "en.vtt",
+            "srclang": "en"
+        },
+        {
+            "src": "fr.vtt",
+            "srclang": "fr"
+        }
+    ]
+}
