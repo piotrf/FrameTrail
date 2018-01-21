@@ -13,11 +13,11 @@
 
 FrameTrail.defineModule('ViewOverview', function(){
 
-    var domElement = $(    '<div id="ViewOverview">'
-                        +  '    <div id="OverviewList"></div>'
+    var domElement = $(    '<div class="viewOverview">'
+                        +  '    <div class="overviewList"></div>'
                         +  '</div>'),
 
-        OverviewList     = domElement.find('#OverviewList'),
+        OverviewList     = domElement.find('.overviewList'),
         listWidthState;
 
 
@@ -30,7 +30,7 @@ FrameTrail.defineModule('ViewOverview', function(){
      */
     function create() {
 
-        $('#MainContainer').append(domElement);
+        $('.mainContainer').append(domElement);
 
         toggleViewMode(FrameTrail.getState('viewMode'));
         toggleEditMode(FrameTrail.getState('editMode'));
@@ -117,7 +117,7 @@ FrameTrail.defineModule('ViewOverview', function(){
 
                         if ( FrameTrail.getState('editMode') && FrameTrail.getState('unsavedChanges') ) {
 
-                            var confirmDialog = $('<div id="ConfirmSaveChanges" title="Save changes?">'
+                            var confirmDialog = $('<div class="confirmSaveChanges" title="Save changes?">'
                                                 + '    <div class="message active">Your changes in the current video will be lost if you don\'t save them.</div>'
                                                 + '    <p>Do you want to save your changes?</p>'
                                                 + '</div>');
@@ -243,10 +243,10 @@ FrameTrail.defineModule('ViewOverview', function(){
 
         if ( FrameTrail.getState('viewMode') != 'overview' ) return;
 
-        var overviewListHeight = $('#MainContainer').outerHeight()
+        var overviewListHeight = $('.mainContainer').outerHeight()
                                     - (FrameTrail.getState('editMode') ? 24 : 0),
             overviewListWidth = $(window).width()
-                                    - (FrameTrail.getState('sidebarOpen') ? $('#Sidebar').width() : 0);
+                                    - (FrameTrail.getState('sidebarOpen') ? $('.sidebar').width() : 0);
 
         OverviewList.height( overviewListHeight );
 

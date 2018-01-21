@@ -50,7 +50,7 @@ FrameTrail.defineModule('SubtitlesController', function(){
         subtitleFiles = FrameTrail.module('HypervideoModel').subtitleFiles;
         
         ViewVideo.CaptionContainer.empty();
-        ViewVideo.CaptionsButton.find('#CaptionSelectList').empty();
+        ViewVideo.CaptionsButton.find('.captionSelectList').empty();
 
         if ( !subtitleFiles || !subtitles ) {
             
@@ -69,7 +69,7 @@ FrameTrail.defineModule('SubtitlesController', function(){
                             FrameTrail.changeState('hv_config_captionsVisible', true);
 
                         });
-                ViewVideo.CaptionsButton.find('#CaptionSelectList').append(captionSelect);
+                ViewVideo.CaptionsButton.find('.captionSelectList').append(captionSelect);
             }
 
 

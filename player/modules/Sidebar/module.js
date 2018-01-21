@@ -17,8 +17,8 @@ FrameTrail.defineModule('Sidebar', function(){
 
     
 
-    var domElement  = $(      '<div id="Sidebar">'
-                            + '    <div id="SidebarContainer">'
+    var domElement  = $(      '<div class="sidebar">'
+                            + '    <div class="sidebarContainer">'
                             + '        <div data-viewmode="overview">'
                             + '            <div class="viewmodeControls">'
                             + '                <div class="viewModeActionButtonContainer">'
@@ -27,7 +27,7 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '                </div>'
                             + '            </div>'
                             + '            <div class="viewmodeInfo">'
-                            + '                <span id="ProjectDescription"></span>'
+                            + '                <span class="projectDescription"></span>'
                             + '            </div>'
                             + '        </div>'
                             + '        <div data-viewmode="video">'
@@ -46,14 +46,14 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '                <button class="editMode" data-editmode="annotations"><span class="icon-annotations"></span>My Annotations</button>'
                             + '            </div>'
                             + '            <div class="viewmodeInfo">'
-                            + '                <span id="VideoDescription"></span>'
+                            + '                <span class="videoDescription"></span>'
                             + '            </div>'
-                            + '            <button id="HypervideoDeleteButton" data-tooltip-top-left="Delete Hypervideo"><span class="icon-trash"></span></button>'
+                            + '            <button class="hypervideoDeleteButton" data-tooltip-top-left="Delete Hypervideo"><span class="icon-trash"></span></button>'
                             /*
-                            + '            <div id="SelectAnnotationContainer" class="ui-front">'
+                            + '            <div class="selectAnnotationContainer" class="ui-front">'
                             + '                <div class="descriptionLabel">Annotations</div>'
-                            + '                <select id="SelectAnnotation" name=""></select>'
-                            + '                <div id="SelectAnnotationSingle"></div>'
+                            + '                <select class="selectAnnotation" name=""></select>'
+                            + '                <div class="selectAnnotationSingle"></div>'
                             + '            </div>'
                             */
                             + '        </div>'
@@ -62,7 +62,7 @@ FrameTrail.defineModule('Sidebar', function(){
                             + '</div>'
                         ),
 
-        sidebarContainer       = domElement.find('#SidebarContainer'),
+        sidebarContainer       = domElement.find('.sidebarContainer'),
         overviewContainer      = sidebarContainer.children('[data-viewmode="overview"]'),
         videoContainer         = sidebarContainer.children('[data-viewmode="video"]'),
         videoContainerInfo     = videoContainer.children('.viewmodeInfo'),
@@ -72,10 +72,10 @@ FrameTrail.defineModule('Sidebar', function(){
         SaveButton             = domElement.find('.saveButton'),
         ForkButton             = domElement.find('.forkButton'),
         ExportButton           = domElement.find('.exportButton'),
-        DeleteButton           = domElement.find('#HypervideoDeleteButton'),
+        DeleteButton           = domElement.find('.hypervideoDeleteButton'),
         
-        ProjectDescription     = sidebarContainer.find('#ProjectDescription'),
-        VideoDescription       = sidebarContainer.find('#VideoDescription');
+        ProjectDescription     = sidebarContainer.find('.projectDescription'),
+        VideoDescription       = sidebarContainer.find('.videoDescription');
 
 
     SaveButton.click(function(){
@@ -91,16 +91,16 @@ FrameTrail.defineModule('Sidebar', function(){
             thisHypervideo = FrameTrail.module('Database').hypervideo,
             projectID = FrameTrail.module('RouteNavigation').projectID;
 
-        var forkDialog = $('<div id="ForkHypervideoDialog" title="Fork Hypervideo">'
+        var forkDialog = $('<div class="forkHypervideoDialog" title="Fork Hypervideo">'
                          + '    <div class="message active">By forking a hypervideo, you create a copy for yourself that you are able to edit.</div>'
-                         + '    <form method="POST" id="ForkHypervideoForm">'
+                         + '    <form method="POST" class="forkHypervideoForm">'
                          + '        <input type="text" name="name" placeholder="Name of new Hypervideo" value="'+ thisHypervideo.name +'"><br>'
                          + '        <textarea name="description" placeholder="Description for new Hypervideo">'+ thisHypervideo.description +'</textarea><br>'
                          + '        <div class="message error"></div>'
                          + '    </form>'
                          + '</div>');
 
-        forkDialog.find('#ForkHypervideoForm').ajaxForm({
+        forkDialog.find('.forkHypervideoForm').ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
             dataType:   'json',
@@ -111,8 +111,8 @@ FrameTrail.defineModule('Sidebar', function(){
                 var currentData = FrameTrail.module("Database").convertToDatabaseFormat(thisID);
 
                 //console.log(currentData);
-                currentData.meta.name = $('#ForkHypervideoForm').find('input[name="name"]').val();
-                currentData.meta.description = $('#ForkHypervideoForm').find('textarea[name="description"]').val();
+                currentData.meta.name = $('.forkHypervideoForm').find('input[name="name"]').val();
+                currentData.meta.description = $('.forkHypervideoForm').find('textarea[name="description"]').val();
                 currentData.meta.creator = FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name;
                 currentData.meta.creatorId = FrameTrail.module('UserManagement').userID;
                 
@@ -152,7 +152,7 @@ FrameTrail.defineModule('Sidebar', function(){
                 { text: 'Fork Hypervideo',
                     click: function() {
                         
-                        $('#ForkHypervideoForm').submit();
+                        $('.forkHypervideoForm').submit();
 
                     }
                 },
@@ -179,18 +179,18 @@ FrameTrail.defineModule('Sidebar', function(){
             hypervideos = FrameTrail.module('Database').hypervideos,
             projectID = FrameTrail.module('RouteNavigation').projectID;
 
-        var deleteDialog = $('<div id="DeleteHypervideoDialog" title="Delete Hypervideo">'
+        var deleteDialog = $('<div class="deleteHypervideoDialog" title="Delete Hypervideo">'
                            + '<div>Do you really want to delete the this Hypervideo?</div>'
-                           + '    <input id="thisHypervideoName" type="text" value="'+ hypervideos[thisID]['name'] +'" readonly>'
+                           + '    <input class="thisHypervideoName" type="text" value="'+ hypervideos[thisID]['name'] +'" readonly>'
                            + '    <div class="message active">Please paste / re-enter the name:</div>'
-                           + '    <form method="POST" id="DeleteHypervideoForm">'
+                           + '    <form method="POST" class="deleteHypervideoForm">'
                            + '        <input type="text" name="hypervideoName" placeholder="Name of Hypervideo"><br>'
                            + '        <div class="message error"></div>'
                            + '    </form>'
                            + '</div>');
 
 
-        deleteDialog.find('#DeleteHypervideoForm').ajaxForm({
+        deleteDialog.find('.deleteHypervideoForm').ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
             dataType:   'json',
@@ -237,7 +237,7 @@ FrameTrail.defineModule('Sidebar', function(){
                 modal: true,
                 resizable: false,
                 open: function() {
-                    deleteDialog.find('#thisHypervideoName').focus().select();
+                    deleteDialog.find('.thisHypervideoName').focus().select();
                 },
                 close: function() {
                     $(this).dialog('close');
@@ -246,7 +246,7 @@ FrameTrail.defineModule('Sidebar', function(){
                 buttons: [
                     { text: 'Delete Hypervideo',
                         click: function() {
-                            $('#DeleteHypervideoForm').submit();
+                            $('.deleteHypervideoForm').submit();
                         }
                     },
                     { text: 'Cancel',
@@ -314,10 +314,10 @@ FrameTrail.defineModule('Sidebar', function(){
      */
     function changeViewSize(arrayWidthAndHeight) {
 
-        var controlsHeight          = domElement.find('#SidebarContainer > div.active > .viewmodeControls').height(),
+        var controlsHeight          = domElement.find('.sidebarContainer > div.active > .viewmodeControls').height(),
             viewModeInfoHeight      = domElement.height() - FrameTrail.module('Titlebar').height - controlsHeight;
 
-        domElement.find('#SidebarContainer > div.active > .viewmodeInfo').css('max-height', viewModeInfoHeight - 80);
+        domElement.find('.sidebarContainer > div.active > .viewmodeInfo').css('max-height', viewModeInfoHeight - 80);
 
     };
 

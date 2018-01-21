@@ -128,21 +128,21 @@ FrameTrail.defineType(
 
             var controlsContainer = $('<div class="controlsWrapper"></div>'),
                 manualInputMode   = true,
-                defaultControls   = $('<div id="TimeControls">'
+                defaultControls   = $('<div class="timeControls">'
                 					+ '    <div class="propertiesTypeIcon" data-type="' + overlay.data.type + '"><span class="icon-doc-inv"></span></div>'
-                                    + '    <button id="DeleteOverlay">Delete</button>'
+                                    + '    <button class="deleteOverlay">Delete</button>'
                                     + '    <label for="TimeStart">Start</label>'
                                     + '    <input id="TimeStart" value="' + overlay.data.start + '">'
                                     + '    <label for="TimeEnd">End</label>'
                                     + '    <input id="TimeEnd" value="' + overlay.data.end + '">'
                                     + '</div>'
-                                    + '<div id="PositionControls">'
-                                    + '    <input id="PositionTop" value="' + overlay.data.position.top + '">'
-                                    + '    <input id="PositionLeft" value="' + overlay.data.position.left + '">'
-                                    + '    <input id="PositionWidth" value="' + overlay.data.position.width + '">'
-                                    + '    <input id="PositionHeight" value="' + overlay.data.position.height + '">'
+                                    + '<div class="positionControls">'
+                                    + '    <input class="positionTop" value="' + overlay.data.position.top + '">'
+                                    + '    <input class="positionLeft" value="' + overlay.data.position.left + '">'
+                                    + '    <input class="positionWidth" value="' + overlay.data.position.width + '">'
+                                    + '    <input class="positionHeight" value="' + overlay.data.position.height + '">'
                                     + '</div>'
-                                    + '<div id="OverlayOptionsTabs">'
+                                    + '<div class="overlayOptionsTabs">'
                                     + '    <ul>'
                                     + '        <li><a href="#OverlayOptions">Options</a></li>'
                                     + '        <li><a href="#OverlayAppearance">Appearance</a></li>'
@@ -155,28 +155,28 @@ FrameTrail.defineType(
                                     + '    <div id="OverlayOptions"></div>'
                                     + '    <div id="OverlayAppearance">'
                                     + '        <div style="clear: both;">Opacity</div>'
-                                    + '        <div id="OpacitySlider"></div>'
+                                    + '        <div class="opacitySlider"></div>'
                                     //+ '        <div>Arrange</div>'
-                                    //+ '        <button id="ArrangeTop">Move to top</button>'
-                                    //+ '        <button id="ArrangeBottom">Move to bottom</button>'
+                                    //+ '        <button class="arrangeTop">Move to top</button>'
+                                    //+ '        <button class="arrangeBottom">Move to bottom</button>'
                                     + '    </div>'
                                     + '    <div id="ActionOnReady">'
-                                    + '        <textarea id="OnReadyAction" class="codeTextarea" data-eventname="onReady">' + (overlay.data.events.onReady ? overlay.data.events.onReady : '') + '</textarea>'
+                                    + '        <textarea class="onReadyAction codeTextarea" data-eventname="onReady">' + (overlay.data.events.onReady ? overlay.data.events.onReady : '') + '</textarea>'
                                     + '        <button class="executeActionCode">Run Code</button>'
                                     + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
                                     + '    </div>'
                                     + '    <div id="ActionOnClick">'
-                                    + '        <textarea id="OnClickAction" class="codeTextarea" data-eventname="onClick">' + (overlay.data.events.onClick ? overlay.data.events.onClick : '') + '</textarea>'
+                                    + '        <textarea class="onClickAction codeTextarea" data-eventname="onClick">' + (overlay.data.events.onClick ? overlay.data.events.onClick : '') + '</textarea>'
                                     + '        <button class="executeActionCode">Run Code</button>'
                                     + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
                                     + '    </div>'
                                     + '    <div id="ActionOnStart">'
-                                    + '        <textarea id="OnStartAction" class="codeTextarea" data-eventname="onStart">' + (overlay.data.events.onStart ? overlay.data.events.onStart : '') + '</textarea>'
+                                    + '        <textarea class="onStartAction codeTextarea" data-eventname="onStart">' + (overlay.data.events.onStart ? overlay.data.events.onStart : '') + '</textarea>'
                                     + '        <button class="executeActionCode">Run Code</button>'
                                     + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
                                     + '    </div>'
                                     + '    <div id="ActionOnEnd">'
-                                    + '        <textarea id="OnEndAction" class="codeTextarea" data-eventname="onEnd">' + (overlay.data.events.onEnd ? overlay.data.events.onEnd : '') + '</textarea>'
+                                    + '        <textarea class="onEndAction codeTextarea" data-eventname="onEnd">' + (overlay.data.events.onEnd ? overlay.data.events.onEnd : '') + '</textarea>'
                                     + '        <button class="executeActionCode">Run Code</button>'
                                     + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
                                     + '    </div>'
@@ -184,7 +184,7 @@ FrameTrail.defineType(
                                   
             controlsContainer.append(defaultControls);
 
-            controlsContainer.find('#OverlayOptionsTabs').tabs({
+            controlsContainer.find('.overlayOptionsTabs').tabs({
                 heightStyle: 'auto',
                 activate: function(event, ui) {
                     if (ui.newPanel.find('.CodeMirror').length != 0) {
@@ -259,12 +259,12 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#PositionTop').spinner({
+            controlsContainer.find('.positionTop').spinner({
                 step: 0.1,
                 numberFormat: 'n',
                 icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
-                	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+                	$(evt.target).parent().attr('data-input-id', 'PositionTop');
                 },
                 spin: function(evt, ui) {
 
@@ -286,12 +286,12 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#PositionLeft').spinner({
+            controlsContainer.find('.positionLeft').spinner({
                 step: 0.1,
                 numberFormat: 'n',
                 icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
-                	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+                	$(evt.target).parent().attr('data-input-id', 'PositionLeft');
                 },
                 spin: function(evt, ui) {
 
@@ -313,12 +313,12 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#PositionWidth').spinner({
+            controlsContainer.find('.positionWidth').spinner({
                 step: 0.1,
                 numberFormat: 'n',
                 icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
-                	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+                	$(evt.target).parent().attr('data-input-id', 'PositionWidth');
                 },
                 spin: function(evt, ui) {
 
@@ -340,12 +340,12 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#PositionHeight').spinner({
+            controlsContainer.find('.positionHeight').spinner({
                 step: 0.1,
                 numberFormat: 'n',
                 icons: { down: "icon-angle-down", up: "icon-angle-up" },
                 create: function(evt, ui) {
-                	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+                	$(evt.target).parent().attr('data-input-id', 'PositionHeight');
                 },
                 spin: function(evt, ui) {
 
@@ -367,7 +367,7 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#OpacitySlider').slider({
+            controlsContainer.find('.opacitySlider').slider({
                 value: (overlay.data.attributes.opacity || 1),
                 step: 0.01,
                 orientation: "horizontal",
@@ -391,17 +391,17 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#ArrangeTop').click( function() {
+            controlsContainer.find('.arrangeTop').click( function() {
                 // Move to top
                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
             });
 
-            controlsContainer.find('#ArrangeBottom').click( function() {
+            controlsContainer.find('.arrangeBottom').click( function() {
                 // Move to bottom
                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
             });
             
-            controlsContainer.find('#DeleteOverlay').click(function(){
+            controlsContainer.find('.deleteOverlay').click(function(){
 
                 FrameTrail.module('OverlaysController').deleteOverlay(overlay);
 
@@ -463,10 +463,10 @@ FrameTrail.defineType(
 
                 changeDimensions: function(val) {
                     manualInputMode = false;
-                    controlsContainer.find('#PositionTop').spinner('value', val.top);
-                    controlsContainer.find('#PositionLeft').spinner('value', val.left);
-                    controlsContainer.find('#PositionWidth').spinner('value', val.width);
-                    controlsContainer.find('#PositionHeight').spinner('value', val.height);
+                    controlsContainer.find('.positionTop').spinner('value', val.top);
+                    controlsContainer.find('.positionLeft').spinner('value', val.left);
+                    controlsContainer.find('.positionWidth').spinner('value', val.width);
+                    controlsContainer.find('.positionHeight').spinner('value', val.height);
                     manualInputMode = true;
                 }
 
@@ -501,15 +501,15 @@ FrameTrail.defineType(
 
             var controlsContainer = $('<div class="controlsWrapper"></div>'),
                 manualInputMode   = true,
-                defaultControls   = $('<div id="TimeControls">'
+                defaultControls   = $('<div class="timeControls">'
                                     + '    <div class="propertiesTypeIcon" data-type="' + annotation.data.type + '"><span class="icon-doc-inv"></span></div>'
-                                    + '    <button id="DeleteAnnotation">Delete</button>'
+                                    + '    <button class="deleteAnnotation">Delete</button>'
                                     + '    <label for="TimeStart">Start</label>'
                                     + '    <input id="TimeStart" value="' + annotation.data.start + '">'
                                     + '    <label for="TimeEnd">End</label>'
                                     + '    <input id="TimeEnd" value="' + annotation.data.end + '">'
                                     + '</div>'),
-                thumbContainer    = $('<div id="PreviewThumbContainer"></div>'),
+                thumbContainer    = $('<div class="previewThumbContainer"></div>'),
                 tagManagementUI   = $('<div class="tagManagementUI">'
                                     + '    <hr>'
                                     + '    <label>Manage Tags:</label>'
@@ -655,7 +655,7 @@ FrameTrail.defineType(
                 }
             });
 
-            controlsContainer.find('#DeleteAnnotation').click(function(){
+            controlsContainer.find('.deleteAnnotation').click(function(){
 
                 FrameTrail.module('AnnotationsController').deleteAnnotation(annotation);
 

@@ -17,31 +17,31 @@ FrameTrail.defineModule('Titlebar', function(){
 
 
     var projectID = FrameTrail.module('RouteNavigation').projectID,
-        domElement = $(   '<div id="Titlebar">'
-                            + '  <div id="SidebarToggleWidget" class=""><button id="SidebarToggleButton"><span class="icon-menu"></span></button></div>'
-                            + '  <div id="TitlebarViewMode">'
+        domElement = $(   '<div class="titlebar">'
+                            + '  <div class="sidebarToggleWidget" class=""><button class="sidebarToggleButton"><span class="icon-menu"></span></button></div>'
+                            + '  <div class="titlebarViewMode">'
                             + '      <button data-viewmode="overview" data-tooltip-bottom-left="Overview"><span class="icon-overview"></span></button>'
                             + '      <button data-viewmode="video"><span class="icon-hypervideo"></span></button>'
                             + '  </div>'
-                            + '  <div id="TitlebarTitle"></div>'
-                            + '  <div id="TitlebarActionButtonContainer">'
-                            + '      <button id="NewHypervideoButton" data-tooltip-bottom-left="New Hypervideo"><span class="icon-hypervideo-add"></span></button>'
-                            + '      <button id="ManageResourcesButton" class="resourceManagerIcon" data-tooltip-bottom-left="Manage Resources"><span class="icon-folder-open"></span></button>'
+                            + '  <div class="titlebarTitle"></div>'
+                            + '  <div class="titlebarActionButtonContainer">'
+                            + '      <button class="newHypervideoButton" data-tooltip-bottom-left="New Hypervideo"><span class="icon-hypervideo-add"></span></button>'
+                            + '      <button class="manageResourcesButton resourceManagerIcon" data-tooltip-bottom-left="Manage Resources"><span class="icon-folder-open"></span></button>'
                             + '      <button class="startEditButton" data-tooltip-bottom-left="Edit"><span class="icon-edit"></span></button>'
                             + '      <button class="leaveEditModeButton" data-tooltip-bottom-left="Stop Editing"><span class="icon-edit-circled"></span></button>'
                             + '      <button class="userSettingsButton" data-tooltip-bottom-right="User Management"><span class="icon-user"></span></button>'
-                            + '      <button id="LogoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
+                            + '      <button class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                             + '  </div>'
-                            + '  <div id="SharingWidget"><button id="SharingWidgetButton" data-tooltip-bottom-right="Share"><span class="icon-share"></span></button></div>'
+                            + '  <div class="sharingWidget"><button class="sharingWidgetButton" data-tooltip-bottom-right="Share"><span class="icon-share"></span></button></div>'
                             + '</div>'
                           ),
-    TitlebarViewMode        = domElement.find('#TitlebarViewMode'),
-    NewHypervideoButton     = domElement.find('#NewHypervideoButton'),
-    ManageResourcesButton   = domElement.find('#ManageResourcesButton'),
+    TitlebarViewMode        = domElement.find('.titlebarViewMode'),
+    NewHypervideoButton     = domElement.find('.newHypervideoButton'),
+    ManageResourcesButton   = domElement.find('.manageResourcesButton'),
     StartEditButton         = domElement.find('.startEditButton'),
     LeaveEditModeButton     = domElement.find('.leaveEditModeButton'),
     UserSettingsButton      = domElement.find('.userSettingsButton'),
-    SharingWidget           = domElement.find('#SharingWidget');
+    SharingWidget           = domElement.find('.sharingWidget');
 
 
     StartEditButton.click(function(){
@@ -63,7 +63,7 @@ FrameTrail.defineModule('Titlebar', function(){
         FrameTrail.module('UserManagement').showAdministrationBox();
     });
 
-    domElement.find('#SidebarToggleButton').click(function(){
+    domElement.find('.sidebarToggleButton').click(function(){
 
         FrameTrail.changeState('sidebarOpen', ! FrameTrail.getState('sidebarOpen'));
 
@@ -79,7 +79,7 @@ FrameTrail.defineModule('Titlebar', function(){
 
 
 
-    SharingWidget.find('#SharingWidgetButton').click(function(){
+    SharingWidget.find('.sharingWidgetButton').click(function(){
 
         var RouteNavigation = FrameTrail.module('RouteNavigation'),
             baseUrl = window.location.href.split('?'),
@@ -94,7 +94,7 @@ FrameTrail.defineModule('Titlebar', function(){
             label = 'Hypervideo'
         }
 
-        var shareDialog = $('<div id="ShareDialog" title="Share / Embed '+ label +'">'
+        var shareDialog = $('<div class="shareDialog" title="Share / Embed '+ label +'">'
                         + '    <div>Link</div>'
                         + '    <input type="text" value="'+ url +'"/>'
                         + '    <div>Embed Code</div>'
@@ -126,7 +126,7 @@ FrameTrail.defineModule('Titlebar', function(){
         
     });
 
-    domElement.find('#LogoutButton').click(function(){
+    domElement.find('.logoutButton').click(function(){
 
         FrameTrail.module('HypervideoModel').leaveEditMode(true);
         
@@ -135,8 +135,8 @@ FrameTrail.defineModule('Titlebar', function(){
 
     NewHypervideoButton.click(function(evt) {
 
-        var newDialog = $('<div id="NewHypervideoDialog" title="New Hypervideo">'
-                        + '    <form id="NewHypervideoForm" method="post">'
+        var newDialog = $('<div class="newHypervideoDialog" title="New Hypervideo">'
+                        + '    <form class="newHypervideoForm" method="post">'
                         + '        <div class="formColumn column2">'
                         + '            <label for="name">Hypervideo Name</label>'
                         + '            <input type="text" name="name" placeholder="Name" value=""><br>'
@@ -177,14 +177,14 @@ FrameTrail.defineModule('Titlebar', function(){
                         */
                         + '        <div style="clear: both;"></div>'
                         + '        <hr>'
-                        + '        <div id="NewHypervideoTabs">'
+                        + '        <div class="newHypervideoTabs">'
                         + '            <ul>'
                         + '                <li><a href="#ChooseVideo">Choose Video</a></li>'
                         + '                <li><a href="#EmptyVideo">Empty Video</a></li>'
                         + '            </ul>'
                         + '            <div id="ChooseVideo">'
-                        + '                <button type="button" id="UploadNewVideoResource">Upload new video</button>'
-                        + '                <div id="NewHypervideoDialogResources"></div>'
+                        + '                <button type="button" class="uploadNewVideoResource">Upload new video</button>'
+                        + '                <div class="newHypervideoDialogResources"></div>'
                         + '                <input type="hidden" name="resourcesID">'
                         + '            </div>'
                         + '            <div id="EmptyVideo">'
@@ -197,7 +197,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '</div>');
         
         // Manage Subtitles
-        newDialog.find('#SubtitlesPlus').on('click', function() {
+        newDialog.find('.subtitlesPlus').on('click', function() {
             var langOptions, languageSelect;
 
             for (var lang in FrameTrail.module('Database').subtitlesLangMapping) {
@@ -209,20 +209,20 @@ FrameTrail.defineModule('Titlebar', function(){
                             + langOptions
                             + '</select>';
 
-            newDialog.find('#NewSubtitlesContainer').append('<span class="subtitlesItem">'+ languageSelect +'<input type="file" name="subtitles[]"><button class="subtitlesRemove" type="button">x</button><br></span>');
+            newDialog.find('.newSubtitlesContainer').append('<span class="subtitlesItem">'+ languageSelect +'<input type="file" name="subtitles[]"><button class="subtitlesRemove" type="button">x</button><br></span>');
         });
 
-        newDialog.find('#NewSubtitlesContainer').on('click', '.subtitlesRemove', function(evt) {
+        newDialog.find('.newSubtitlesContainer').on('click', '.subtitlesRemove', function(evt) {
             $(this).parent().remove();
         });
 
-        newDialog.find('#NewSubtitlesContainer').on('change', '.subtitlesTmpKeySetter', function() {
+        newDialog.find('.newSubtitlesContainer').on('change', '.subtitlesTmpKeySetter', function() {
             $(this).parent().find('input[type="file"]').attr('name', 'subtitles['+$(this).val()+']');
         });
 
 
 
-        FrameTrail.module('ResourceManager').renderList(newDialog.find('#NewHypervideoDialogResources'), true,
+        FrameTrail.module('ResourceManager').renderList(newDialog.find('.newHypervideoDialogResources'), true,
             FrameTrail.module('RouteNavigation').projectID,
             'type',
             'contains',
@@ -237,7 +237,7 @@ FrameTrail.defineModule('Titlebar', function(){
 
         });
 
-        newDialog.find('#NewHypervideoTabs').tabs({
+        newDialog.find('.newHypervideoTabs').tabs({
             activate: function(event, ui) {
                 if ( ui.newPanel.attr('id') == 'EmptyVideo' ) {
                     newDialog.find('input[name="resourcesID"]').prop('disabled',true);
@@ -250,18 +250,18 @@ FrameTrail.defineModule('Titlebar', function(){
             }
         });
 
-        newDialog.find('#NewHypervideoForm').ajaxForm({
+        newDialog.find('.newHypervideoForm').ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
             beforeSubmit: function (array, form, options) {
                 
-                var selectedResourcesID = $('#NewHypervideoForm').find('input[name="resourcesID"]').val();
+                var selectedResourcesID = $('.newHypervideoForm').find('input[name="resourcesID"]').val();
                 //console.log(FrameTrail.module('Database').resources[parseInt(selectedResourcesID)]);
 
                 var hypervideoData = {
                     "meta": {
-                        "name": $('#NewHypervideoForm').find('input[name="name"]').val(),
-                        "description": $('#NewHypervideoForm').find('textarea[name="description"]').val(),
+                        "name": $('.newHypervideoForm').find('input[name="name"]').val(),
+                        "description": $('.newHypervideoForm').find('textarea[name="description"]').val(),
                         "thumb": (selectedResourcesID.length > 0) ? FrameTrail.module('Database').resources[parseInt(selectedResourcesID)].thumb : null,
                         "creator": FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name,
                         "creatorId": FrameTrail.module('UserManagement').userID,
@@ -274,7 +274,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         "theme": "",
                         "autohideControls": true,
                         "captionsVisible": false,
-                        "hidden": $('#NewHypervideoForm').find('input[name="hidden"]').is(':checked'),
+                        "hidden": $('.newHypervideoForm').find('input[name="hidden"]').is(':checked'),
                         "theme": (FrameTrail.module('Database').project.theme) ? FrameTrail.module('Database').project.theme : null,
                         "layoutArea": {
                             "areaTop": [],
@@ -286,7 +286,7 @@ FrameTrail.defineModule('Titlebar', function(){
                     "clips": [
                         {
                             "resourceId": (selectedResourcesID.length > 0) ? selectedResourcesID : null,
-                            "duration": ($('#NewHypervideoForm').find('input[name="duration"]').val().length > 0) ? parseFloat($('#NewHypervideoForm').find('input[name="duration"]').val()) : 0,
+                            "duration": ($('.newHypervideoForm').find('input[name="duration"]').val().length > 0) ? parseFloat($('.newHypervideoForm').find('input[name="duration"]').val()) : 0,
                             "start": 0,
                             "end": 0,
                             "in": 0,
@@ -305,7 +305,7 @@ FrameTrail.defineModule('Titlebar', function(){
                 };
 
                 for (var configKey in hypervideoData.config) {
-                    var newConfigVal = $('#NewHypervideoForm').find('input[data-configkey=' + configKey + ']').val();
+                    var newConfigVal = $('.newHypervideoForm').find('input[data-configkey=' + configKey + ']').val();
                     newConfigVal = (newConfigVal === 'true')
                                     ? true
                                     : (newConfigVal === 'false')
@@ -316,7 +316,7 @@ FrameTrail.defineModule('Titlebar', function(){
                     hypervideoData.config[configKey] = newConfigVal;
                 }
 
-                $('#NewHypervideoForm').find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
+                $('.newHypervideoForm').find('.newSubtitlesContainer').find('input[type=file]').each(function () {
                     
                     var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
                     
@@ -384,11 +384,11 @@ FrameTrail.defineModule('Titlebar', function(){
         });
 
 
-        newDialog.find('#UploadNewVideoResource').click(function(){
+        newDialog.find('.uploadNewVideoResource').click(function(){
 
             FrameTrail.module('ResourceManager').uploadResource(function(){
 
-                var NewHypervideoDialogResources = newDialog.find('#NewHypervideoDialogResources');
+                var NewHypervideoDialogResources = newDialog.find('.newHypervideoDialogResources');
                 NewHypervideoDialogResources.empty();
 
                 FrameTrail.module('ResourceManager').renderList(NewHypervideoDialogResources, true,
@@ -419,7 +419,7 @@ FrameTrail.defineModule('Titlebar', function(){
             buttons: [
                 { text: 'Add Hypervideo',
                     click: function() {
-                        $('#NewHypervideoForm').submit();
+                        $('.newHypervideoForm').submit();
                     }
                 },
                 { text: 'Cancel',
@@ -471,12 +471,12 @@ FrameTrail.defineModule('Titlebar', function(){
         if (opened) {
 
             domElement.addClass('sidebarOpen');
-            domElement.find('#SidebarToggleWidget').addClass('sidebarActive');
+            domElement.find('.sidebarToggleWidget').addClass('sidebarActive');
 
         } else {
 
             domElement.removeClass('sidebarOpen');
-            domElement.find('#SidebarToggleWidget').removeClass('sidebarActive');
+            domElement.find('.sidebarToggleWidget').removeClass('sidebarActive');
 
         }
 
@@ -585,12 +585,12 @@ FrameTrail.defineModule('Titlebar', function(){
         
         if (loggedIn) {
             
-            domElement.find('#LogoutButton').show();
+            domElement.find('.logoutButton').show();
             UserSettingsButton.show();
 
         } else {
 
-            domElement.find('#LogoutButton').hide();
+            domElement.find('.logoutButton').hide();
             UserSettingsButton.hide();
 
         }
@@ -641,7 +641,7 @@ FrameTrail.defineModule('Titlebar', function(){
          * @writeOnly
          */
         set title(aString) {
-            domElement.find('#TitlebarTitle').text(aString);
+            domElement.find('.titlebarTitle').text(aString);
         },
 
         /**

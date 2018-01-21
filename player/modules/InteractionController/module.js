@@ -68,7 +68,7 @@ FrameTrail.defineModule('InteractionController', function(){
 
     	});
 
-        $('body').off('mousewheel', '#ViewVideo').on('mousewheel', '#ViewVideo', function(evt) {
+        $('body').off('mousewheel', '.viewVideo').on('mousewheel', '.viewVideo', function(evt) {
             
             if (evt.deltaY >= scrollThreshold && !scrollUpBlocked) {
                 

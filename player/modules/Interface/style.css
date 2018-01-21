@@ -1,4 +1,4 @@
-#MainContainer {
+.mainContainer {
 	order: 1;
     flex: 1 1 auto;
     align-self: auto;
@@ -16,17 +16,17 @@
 }
 
 
-#MainContainer.sidebarOpen {
+.mainContainer.sidebarOpen {
 	width: calc(100vw - 164px);
 	margin-left: 164px;
 }
 
-#MainContainer.inFullscreen {
+.mainContainer.inFullscreen {
 	width: 100%;
 	top: 0px;
 }
 
-#MainContainer.editActive {
+.mainContainer.editActive {
 	border-top: 1px solid var(--secondary-bg-color);
 	color: var(--primary-bg-color);
 }

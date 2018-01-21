@@ -349,16 +349,16 @@ FrameTrail.defineType(
             
             var propertiesControls = $('<div>'
                                      + '    <div class="propertiesTypeIcon" data-type="codesnippet"><span class="icon-code"></span></div>'
-                                     + '    <textarea id="CodeSnippetCode">' + this.data.snippet + '</textarea>'
-                                     + '    <button id="DeleteCodeSnippet">Delete</button>'
-                                     + '    <button id="ExecuteCodeSnippet">Run Code</button>'
+                                     + '    <textarea class="codeSnippetCode">' + this.data.snippet + '</textarea>'
+                                     + '    <button class="deleteCodeSnippet">Delete</button>'
+                                     + '    <button class="executeCodeSnippet">Run Code</button>'
                                      + '</div>');
 
-            propertiesControls.find('#DeleteCodeSnippet').click(function() {
+            propertiesControls.find('.deleteCodeSnippet').click(function() {
                 FrameTrail.module('CodeSnippetsController').deleteCodeSnippet(self);
             });
 
-            propertiesControls.find('#ExecuteCodeSnippet').click(function() {
+            propertiesControls.find('.executeCodeSnippet').click(function() {
                 try {
                     var testRun = new Function(self.data.snippet);
                     testRun();
@@ -370,7 +370,7 @@ FrameTrail.defineType(
             EditPropertiesContainer.addClass('active').append(propertiesControls);
 
 
-            var snippetElement = propertiesControls.find('#CodeSnippetCode'),
+            var snippetElement = propertiesControls.find('.codeSnippetCode'),
                 snippet = snippetElement.val();
 
             var codeEditor = CodeMirror.fromTextArea(snippetElement[0], {

@@ -168,7 +168,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
             events      = FrameTrail.module('HypervideoModel').events,
             customCSS   = FrameTrail.module('HypervideoModel').customCSS,
 
-            codeSnippetEditingOptions = $('<div id="CodeSnippetEditingTabs">'
+            codeSnippetEditingOptions = $('<div class="codeSnippetEditingTabs">'
                                     +   '    <ul>'
                                     +   '        <li><a href="#CodeSnippetList">Add Code Snippets</a></li>'
                                     +   '        <li><a href="#CustomCSS">Custom CSS</a></li>'
@@ -179,24 +179,24 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                                     +   '        <li class="ui-tabs-right tab-label">Events: </li>'
                                     +   '    </ul>'
                                     +   '    <div id="CustomCSS">'
-                                    +   '        <textarea id="CustomCSS" class="cssTextarea">' + (customCSS ? customCSS : '') + '</textarea>'
+                                    +   '        <textarea class="customCSS cssTextarea">' + (customCSS ? customCSS : '') + '</textarea>'
                                     +   '    </div>'
                                     +   '    <div id="CodeSnippetList">'
                                     +   '    </div>'
                                     +   '    <div id="EventOnReady">'
-                                    +   '        <textarea id="OnReadyCode" class="codeTextarea" data-eventname="onReady">' + (events.onReady ? events.onReady : '') + '</textarea>'
+                                    +   '        <textarea class="onReadyCode codeTextarea" data-eventname="onReady">' + (events.onReady ? events.onReady : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '    <div id="EventOnPlay">'
-                                    +   '        <textarea id="OnPlayCode" class="codeTextarea" data-eventname="onPlay">' + (events.onPlay ? events.onPlay : '') + '</textarea>'
+                                    +   '        <textarea class="onPlayCode codeTextarea" data-eventname="onPlay">' + (events.onPlay ? events.onPlay : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '    <div id="EventOnPause">'
-                                    +   '        <textarea id="OnPauseCode" class="codeTextarea" data-eventname="onPause">' + (events.onPause ? events.onPause : '') + '</textarea>'
+                                    +   '        <textarea class="onPauseCode codeTextarea" data-eventname="onPause">' + (events.onPause ? events.onPause : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '    <div id="EventOnEnded">'
-                                    +   '        <textarea id="OnEndedCode" class="codeTextarea" data-eventname="onEnded">' + (events.onEnded ? events.onEnded : '') + '</textarea>'
+                                    +   '        <textarea class="onEndedCode codeTextarea" data-eventname="onEnded">' + (events.onEnded ? events.onEnded : '') + '</textarea>'
                                     +   '        <button class="executeEventCode">Run Code</button>'
                                     +   '    </div>'
                                     +   '</div>')
@@ -231,7 +231,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                    + '              </div>');
 
         codeSnippetElement.draggable({
-            containment:    '#MainContainer',
+            containment:    '.mainContainer',
             helper:         'clone',
             revert:         'invalid',
             revertDuration: 100,
@@ -582,7 +582,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      */
     function initCustomCSS(cssString) {
 
-        $('head').append('<style id="FrameTrailCustomCSS" type="text/css">'+ cssString +'</style>');
+        $('head').append('<style class="FrameTrailCustomCSS" type="text/css">'+ cssString +'</style>');
 
     }
 
@@ -594,7 +594,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      * @param {String} cssString
      */
     function updateCustomCSS(cssString) {
-        $('head > style#FrameTrailCustomCSS').html(cssString);
+        $('head > style.FrameTrailCustomCSS').html(cssString);
 
     }
 

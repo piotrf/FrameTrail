@@ -1,4 +1,4 @@
-#Titlebar {
+.titlebar {
 	background: var(--primary-bg-color);
 	font-weight: 200;
     height: 40px;
@@ -9,7 +9,7 @@
 	line-height: 38px;
 }
 
-#Titlebar #LogoutButton {
+.titlebar .logoutButton {
 	float: right;
 	background-color: transparent;
     border: medium none;

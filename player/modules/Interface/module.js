@@ -35,7 +35,7 @@ FrameTrail.defineModule('Interface', function(){
 
   	FrameTrail.initModule('ViewResources');
 
-  	var mainContainer = $('<div id="MainContainer"></div>');
+  	var mainContainer = $('<div class="mainContainer"></div>');
 
 
 

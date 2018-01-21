@@ -28,27 +28,27 @@ FrameTrail.defineModule('UserManagement', function(){
 		userBoxCallback 		= null,
 		userBoxCallbackCancel 	= null,
 		
-		domElement 	= $(	'<div id="UserBox" title="User Management">'
-						+   '    <div id="UserStatusMessage" class="message">'
+		domElement 	= $(	'<div class="UserBox" title="User Management">'
+						+   '    <div class="userStatusMessage message">'
 						+	'    </div>'
-						+   '    <div id="UserTabs">'
-						+	'        <ul id="UserTabMenu">'
-						+	'            <li id="UserTabSettingsMenu">'
+						+   '    <div class="userTabs">'
+						+	'        <ul class="userTabMenu">'
+						+	'            <li class="userTabSettingsMenu">'
 						+   '                <a href="#UserTabSettings">My Settings</a>'
 						+   '            </li>'
-						+	'            <li id="UserTabRegistrationMenu">'
+						+	'            <li class="userTabRegistrationMenu">'
 						+   '                <a href="#UserTabRegistration">Register Users</a>'
 						+   '            </li>'
-						+	'            <li id="UserTabAdministrationMenu">'
+						+	'            <li class="userTabAdministrationMenu">'
 						+   '                <a href="#UserTabAdministration">User Administration</a>'
 						+   '            </li>'
 						+	'        </ul>'
 						+	'        <div id="UserTabSettings">'
-						+   '             <form id="SettingsForm" method="post">'
-						+	'             	<p id="SettingsFormStatus" class="message"></p>'
+						+   '             <form class="settingsForm" method="post">'
+						+	'             	<p class="settingsFormStatus message"></p>'
 						+   '             	<input type="text" name="name" id="SettingsForm_name" placeholder="Your Name">'
 						+   '             	<input type="text" name="mail" id="SettingsForm_mail" placeholder="Mail"><br>'
-						+	'				<div id="userColor"></div>'
+						+	'				<div class="userColor"></div>'
 						+   '             	<input type="password" name="passwd" id="SettingsForm_passwd" placeholder="New password"><br>'
 						+   '             	<br>'
 						+   '             	<input type="hidden" name="a" value="userChange">'
@@ -58,8 +58,8 @@ FrameTrail.defineModule('UserManagement', function(){
 						+   '             </form>'
 						+	'        </div>'
 						+	'        <div id="UserTabRegistration">'
-						+	'             <form id="RegistrationForm" method="post">'
-						+	'             	<p id="RegistrationFormStatus" class="message"></p>'
+						+	'             <form class="registrationForm" method="post">'
+						+	'             	<p class="registrationFormStatus message"></p>'
 						+	'             	<input type="text" name="name" placeholder="Your Name">'
 						+	'             	<input type="text" name="mail" placeholder="Mail"><br>'
 						+	'             	<input type="password" name="passwd" placeholder="Password"><br>'
@@ -69,15 +69,15 @@ FrameTrail.defineModule('UserManagement', function(){
 						+	'             </form>'
 						+	'        </div>'
 						+	'        <div id="UserTabAdministration">'
-						+	'             <p id="AdministrationFormStatus" class="message"></p>'
-						+   '             <button id="AdministrationFormRefresh">Refresh</button>'
-						+   '             <form id="AdministrationForm" method="post">'
-                        +   '               <div id="SelectUserContainer" class="ui-front">'
+						+	'             <p class="administrationFormStatus message"></p>'
+						+   '             <button class="administrationFormRefresh">Refresh</button>'
+						+   '             <form class="administrationForm" method="post">'
+                        +   '               <div class="selectUserContainer" class="ui-front">'
 						+   '                   <select name="userID" id="user_change_user">'
 						+  	'                       <option value="" selected disabled>Select a User</option>'
 			            +   '                   </select>'
                         +   '               </div>'
-                        +   '               <div id="UserDataContainer">'
+                        +   '               <div class="userDataContainer">'
 						+   '             	    <input type="text" name="name" id="user_change_name" placeholder="Name">'
 						+   '             	    <input type="text" name="mail" id="user_change_mail" placeholder="Mail"><br>'
 						+	'					<div id="user_change_colorContainer"></div>'
@@ -99,16 +99,16 @@ FrameTrail.defineModule('UserManagement', function(){
                         +   '    </div>'
 						+	'</div>'),
 	
-	loginBox = $(	'<div id="UserLoginOverlay" class="ui-blocking-overlay">'
-				+   '    <div id="LoginBox" class="ui-overlay-box">'
+	loginBox = $(	'<div class="userLoginOverlay ui-blocking-overlay">'
+				+   '    <div class="loginBox ui-overlay-box">'
 				+   '        <div class="boxTitle">'
-				+   '            <span id="LoginTabButton" class="loginBoxTabButton">Login</span>'
+				+   '            <span class="loginTabButton loginBoxTabButton">Login</span>'
 				+   '            <span style="color: #888; font-size: 17px;">or</span>'
-				+   '            <span id="CreateAccountTabButton" class="loginBoxTabButton inactive">Create an Account</span>'
+				+   '            <span class="createAccountTabButton loginBoxTabButton inactive">Create an Account</span>'
 				+   '        </div>'
-				+	'        <div id="UserTabLogin">'
-				+	'             <form id="LoginForm" method="post">'
-				+	'             	<p id="LoginFormStatus" class="message"></p>'
+				+	'        <div class="userTabLogin">'
+				+	'             <form class="loginForm" method="post">'
+				+	'             	<p class="loginFormStatus message"></p>'
 				+	'             	<input type="text" name="mail" placeholder="Mail"><br>'
 				+	'             	<input type="password" name="passwd" placeholder="Password"><br>'
 				+	'             	<input type="hidden" name="a" value="userLogin">'
@@ -117,9 +117,9 @@ FrameTrail.defineModule('UserManagement', function(){
 				+	'             	<button type="button" class="loginBoxCancelButton">Cancel</button>'
 				+	'             </form>'
 				+	'        </div>'
-				+	'        <div id="UserTabRegister">'
-				+	'             <form id="UserRegistrationForm" method="post">'
-				+	'             	<p id="UserRegistrationFormStatus" class="message"></p>'
+				+	'        <div class="userTabRegister">'
+				+	'             <form class="userRegistrationForm" method="post">'
+				+	'             	<p class="userRegistrationFormStatus" class="message"></p>'
 				+	'             	<input type="text" name="name" placeholder="Your Name">'
 				+	'             	<input type="text" name="mail" placeholder="Mail"><br>'
 				+	'             	<input type="password" name="passwd" placeholder="Password"><br>'
@@ -135,12 +135,12 @@ FrameTrail.defineModule('UserManagement', function(){
 
 	/* Administration Box */
 
-	domElement.find('#UserTabs').tabs({
+	domElement.find('.userTabs').tabs({
         heightStyle: "fill"
     });
 
 
-	domElement.find('#RegistrationForm').ajaxForm({
+	domElement.find('.registrationForm').ajaxForm({
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
@@ -149,16 +149,16 @@ FrameTrail.defineModule('UserManagement', function(){
 
 			switch(response.code){
 				case 0:
-					domElement.find('#RegistrationFormStatus').removeClass('error').addClass('active success').text('Your are registered, please login now.');
+					domElement.find('.registrationFormStatus').removeClass('error').addClass('active success').text('Your are registered, please login now.');
 					break;
 				case 1:
-					domElement.find('#RegistrationFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields! Is the mail adress valid?');
+					domElement.find('.registrationFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields! Is the mail adress valid?');
 					break;
 				case 2:
-					domElement.find('#RegistrationFormStatus').removeClass('success').addClass('active error').text('Email already exists in this project.');
+					domElement.find('.registrationFormStatus').removeClass('success').addClass('active error').text('Email already exists in this project.');
 					break;
 				case 3:
-					domElement.find('#RegistrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin!');
+					domElement.find('.registrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin!');
 					break;
 				
 			}
@@ -166,7 +166,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	});
 
 
-	domElement.find('#SettingsForm').ajaxForm({
+	domElement.find('.settingsForm').ajaxForm({
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
@@ -178,25 +178,25 @@ FrameTrail.defineModule('UserManagement', function(){
 					FrameTrail.changeState('username', response.response.name);
 					FrameTrail.changeState('userColor', response.response.color);
 					
-					domElement.find('#SettingsFormStatus').removeClass('error').addClass('active success').text('Your settings were successfully changed.');
+					domElement.find('.settingsFormStatus').removeClass('error').addClass('active success').text('Your settings were successfully changed.');
 					break;
 				case 1:
-					domElement.find('#SettingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: User database could not be found.');
+					domElement.find('.settingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: User database could not be found.');
 					break;
 				case 2:
-					domElement.find('#SettingsFormStatus').removeClass('success').addClass('active error').text('Fatal Error: You are not you anymore!');
+					domElement.find('.settingsFormStatus').removeClass('success').addClass('active error').text('Fatal Error: You are not you anymore!');
 					break;
 				case 3:
-					domElement.find('#SettingsFormStatus').removeClass('success error').addClass('active').text('Your settings were saved, except your mail adress, because it was not valid!');
+					domElement.find('.settingsFormStatus').removeClass('success error').addClass('active').text('Your settings were saved, except your mail adress, because it was not valid!');
 					break;
 				case 4:
-					domElement.find('#SettingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: You are not logged in anymore!');
+					domElement.find('.settingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: You are not logged in anymore!');
 					break;
 				case 5:
-					domElement.find('#SettingsFormStatus').removeClass('success').addClass('active error').text('Your account was deactivated. Contact an admin!');
+					domElement.find('.settingsFormStatus').removeClass('success').addClass('active error').text('Your account was deactivated. Contact an admin!');
 					break;
 				case 6:
-					domElement.find('#SettingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
+					domElement.find('.settingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
 					break;
 				
 			}
@@ -207,8 +207,8 @@ FrameTrail.defineModule('UserManagement', function(){
 	var refreshAdministrationForm = function(){
 
 
-		domElement.find('#AdministrationForm')[0].reset();
-        domElement.find('#UserDataContainer').hide();
+		domElement.find('.administrationForm')[0].reset();
+        domElement.find('.userDataContainer').hide();
 
 
 		$.ajax({
@@ -245,14 +245,14 @@ FrameTrail.defineModule('UserManagement', function(){
 							domElement.find("#user_change_mail").val(ret["response"]["mail"]);
 							domElement.find("#user_change_color").val(ret["response"]["color"]);
 							domElement.find("#user_change_passwd").val("");
-							domElement.find("#AdministrationForm input[name='role']").prop("checked",false).removeAttr("checked");
-							domElement.find("#AdministrationForm input#user_change_role_"+ret["response"]["role"]).prop("checked",true).attr("checked","checked");
-							domElement.find("#AdministrationForm input[name='active']").prop("checked",false).removeAttr("checked");
-							domElement.find("#AdministrationForm input#user_change_active_"+ret["response"]["active"]).prop("checked",true).attr("checked","checked");
+							domElement.find(".administrationForm input[name='role']").prop("checked",false).removeAttr("checked");
+							domElement.find(".administrationForm input#user_change_role_"+ret["response"]["role"]).prop("checked",true).attr("checked","checked");
+							domElement.find(".administrationForm input[name='active']").prop("checked",false).removeAttr("checked");
+							domElement.find(".administrationForm input#user_change_active_"+ret["response"]["active"]).prop("checked",true).attr("checked","checked");
 							getUserColorCollection(function() {
 								renderUserColorCollectionForm(ret["response"]["color"],"#user_change_colorContainer");
 							});
-                            domElement.find('#UserDataContainer').show();
+                            domElement.find('.userDataContainer').show();
 						}
 					});
 					
@@ -265,14 +265,14 @@ FrameTrail.defineModule('UserManagement', function(){
 	}
 
 
-	domElement.find('#AdministrationFormRefresh').click(refreshAdministrationForm);
+	domElement.find('.administrationFormRefresh').click(refreshAdministrationForm);
 	
 	if (FrameTrail.module('RouteNavigation').environment.server) {
         refreshAdministrationForm();
     }
 
 
-	domElement.find("#AdministrationForm").ajaxForm({
+	domElement.find(".administrationForm").ajaxForm({
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType: 	"json",
@@ -283,25 +283,25 @@ FrameTrail.defineModule('UserManagement', function(){
 
 			switch(response.code){
 				case 0:
-					domElement.find('#AdministrationFormStatus').removeClass('error').addClass('active success').text('The settings were successfully changed.');
+					domElement.find('.administrationFormStatus').removeClass('error').addClass('active success').text('The settings were successfully changed.');
 					break;
 				case 1:
-					domElement.find('#AdministrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: User database could not be found.');
+					domElement.find('.administrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: User database could not be found.');
 					break;
 				case 2:
-					domElement.find('#AdministrationFormStatus').removeClass('success').addClass('active error').text('Fatal Error: You are not an admin (or even not you) anymore!');
+					domElement.find('.administrationFormStatus').removeClass('success').addClass('active error').text('Fatal Error: You are not an admin (or even not you) anymore!');
 					break;
 				case 3:
-					domElement.find('#AdministrationFormStatus').removeClass('error success').addClass('active').text('The settings were saved, except the mail adress, because it was not valid!');
+					domElement.find('.administrationFormStatus').removeClass('error success').addClass('active').text('The settings were saved, except the mail adress, because it was not valid!');
 					break;
 				case 4:
-					domElement.find('#AdministrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: You are not logged in anymore!');
+					domElement.find('.administrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: You are not logged in anymore!');
 					break;
 				case 5:
-					domElement.find('#AdministrationFormStatus').removeClass('success').addClass('active error').text('Your account was deactivated. Contact an admin!');
+					domElement.find('.administrationFormStatus').removeClass('success').addClass('active error').text('Your account was deactivated. Contact an admin!');
 					break;
 				case 6:
-					domElement.find('#AdministrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
+					domElement.find('.administrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
 					break;
 				
 			}
@@ -343,9 +343,9 @@ FrameTrail.defineModule('UserManagement', function(){
 		width: 600,
 		height: 460,
         open: function() {
-            domElement.find('#UserTabs').tabs('refresh');
+            domElement.find('.userTabs').tabs('refresh');
 			getUserColorCollection(function() {
-				renderUserColorCollectionForm(userColor,"#userColor")
+				renderUserColorCollectionForm(userColor,".userColor")
 			});
         },
         close: function() {
@@ -372,23 +372,23 @@ FrameTrail.defineModule('UserManagement', function(){
 
     	loginBox.find('.loginBoxTabButton').removeClass('inactive');
     	
-    	if ( $(this).attr('id') == 'LoginTabButton' ) {
+    	if ( $(this).hasClass('loginTabButton') ) {
     		
-    		loginBox.find('#CreateAccountTabButton').addClass('inactive');
-    		loginBox.find('#UserTabRegister').hide();
-    		loginBox.find('#UserTabLogin').show();
+    		loginBox.find('.createAccountTabButton').addClass('inactive');
+    		loginBox.find('.userTabRegister').hide();
+    		loginBox.find('.userTabLogin').show();
 
     	} else {
     		
-    		loginBox.find('#LoginTabButton').addClass('inactive');
-    		loginBox.find('#UserTabLogin').hide();
-    		loginBox.find('#UserTabRegister').show();
+    		loginBox.find('.loginTabButton').addClass('inactive');
+    		loginBox.find('.userTabLogin').hide();
+    		loginBox.find('.userTabRegister').show();
 
     	}
 
     });
 
-    loginBox.find('#LoginForm').ajaxForm({
+    loginBox.find('.loginForm').ajaxForm({
 
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
@@ -402,7 +402,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				case 0:
 					userSessionLifetime = parseInt(response.session_lifetime);
 					login(response.userdata);
-					loginBox.find('#LoginFormStatus').removeClass('active error success').text('');
+					loginBox.find('.loginFormStatus').removeClass('active error success').text('');
 					updateView(true);
 					if(typeof userBoxCallback === 'function'){
 						userBoxCallback.call();
@@ -411,19 +411,19 @@ FrameTrail.defineModule('UserManagement', function(){
 					break;
 				
 				case 1:
-					loginBox.find('#LoginFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields');
+					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields');
 					break;
 				case 2:
-					loginBox.find('#LoginFormStatus').removeClass('success').addClass('active error').text('User not known');
+					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('User not known');
 					break;
 				case 3:
-					loginBox.find('#LoginFormStatus').removeClass('success').addClass('active error').text('Incorrect Password');
+					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Incorrect Password');
 					break;
 				case 4:
-					loginBox.find('#LoginFormStatus').removeClass('success').addClass('active error').text('Fatal error: Could not find user database. Project deleted?');
+					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Fatal error: Could not find user database. Project deleted?');
 					break;
 				case 5:
-					loginBox.find('#LoginFormStatus').removeClass('success').addClass('active error').text('User is not active. Please contact an admin!');
+					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('User is not active. Please contact an admin!');
 					break;
 			}
 			
@@ -432,7 +432,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	});
 
 
-	loginBox.find('#UserRegistrationForm').ajaxForm({
+	loginBox.find('.userRegistrationForm').ajaxForm({
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
@@ -441,8 +441,8 @@ FrameTrail.defineModule('UserManagement', function(){
 
 			switch(response.code){
 				case 0:
-					loginBox.find('#LoginFormStatus').removeClass('error').addClass('active success').text('Your are registered, please login now.');
-					loginBox.find('#LoginTabButton').click();
+					loginBox.find('.loginFormStatus').removeClass('error').addClass('active success').text('Your are registered, please login now.');
+					loginBox.find('.loginTabButton').click();
 					FrameTrail.module('InterfaceModal').showStatusMessage('Updating Client Data ...');
 					FrameTrail.module('Database').loadData(function() {
 						FrameTrail.module('InterfaceModal').showStatusMessage('Client Data updated');
@@ -452,13 +452,13 @@ FrameTrail.defineModule('UserManagement', function(){
 					});
 					break;
 				case 1:
-					loginBox.find('#UserRegistrationFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields! Is the mail adress valid?');
+					loginBox.find('.userRegistrationFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields! Is the mail adress valid?');
 					break;
 				case 2:
-					loginBox.find('#UserRegistrationFormStatus').removeClass('success').addClass('active error').text('Email already exists in this project.');
+					loginBox.find('.userRegistrationFormStatus').removeClass('success').addClass('active error').text('Email already exists in this project.');
 					break;
 				case 3:
-					loginBox.find('#UserRegistrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin before you can login!');
+					loginBox.find('.userRegistrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin before you can login!');
 					break;
 				
 			}
@@ -607,7 +607,7 @@ FrameTrail.defineModule('UserManagement', function(){
 			success: function(data) {
 				
 				if (userID != '') {
-					var loggedOutDialog = $('<div id="loggedOutDialog" title="Logged Out">'
+					var loggedOutDialog = $('<div class="loggedOutDialog" title="Logged Out">'
                                       + '    <div class="message success active">You have been logged out.</div>'
                                       + '</div>');
 
@@ -662,19 +662,19 @@ FrameTrail.defineModule('UserManagement', function(){
 
 			//domElement.find('#UserStatusMessage').addClass('active').text('Hello! Your are logged in, '+ FrameTrail.getState('username') +'.');
 
-			domElement.find('#UserTabSettingsMenu').show();
+			domElement.find('.userTabSettingsMenu').show();
 			updateSettings();
 
 			if (userRole === 'admin'){
-				domElement.find('#UserTabAdministrationMenu').show();
+				domElement.find('.userTabAdministrationMenu').show();
 				updateAdministration();
 			}
 
 
 		} else {
 
-			domElement.find('#UserTabSettingsMenu').hide();
-			domElement.find('#UserTabAdministrationMenu').hide();
+			domElement.find('.userTabSettingsMenu').hide();
+			domElement.find('.userTabAdministrationMenu').hide();
 
 		}
 
@@ -729,8 +729,8 @@ FrameTrail.defineModule('UserManagement', function(){
 		}
 
 		loginBox.find('.message').removeClass('active error').text('');
-		loginBox.find('#LoginForm').resetForm();
-		loginBox.find('#UserRegistrationForm').resetForm();
+		loginBox.find('.loginForm').resetForm();
+		loginBox.find('.userRegistrationForm').resetForm();
 
 		loginBox.fadeIn();
 

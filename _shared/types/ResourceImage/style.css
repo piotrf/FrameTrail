@@ -24,6 +24,6 @@
 
 /* Edit Image Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="image"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="image"] [class*=" icon-"]::before {
+.editPropertiesContainer .propertiesTypeIcon[data-type="image"] [class^="icon-"]::before, .editPropertiesContainer .propertiesTypeIcon[data-type="image"] [class*=" icon-"]::before {
 	content: "\e809";
 }

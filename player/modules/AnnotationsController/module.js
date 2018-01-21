@@ -464,7 +464,7 @@
 
         ViewVideo.EditingOptions.empty();
 
-        var annotationsEditingOptions = $('<div id="OverlayEditingTabs">'
+        var annotationsEditingOptions = $('<div class="overlayEditingTabs">'
                                   +   '    <ul>'
                                   +   '        <li><a href="#ResourceList">Choose Resource</a></li>'
                                   +   '        <li><a href="#OtherUsers">Choose Annotations of other Users</a></li>'
@@ -472,14 +472,14 @@
                                   +   '    <div id="ResourceList"></div>'
                                   +   '    <div id="OtherUsers">'
                                   +   '        <div class="message active">Drag Annotations from the User Timelines to your Annotation Timeline</div>'
-                                  +   '        <div id="TimelineList"></div>'
+                                  +   '        <div class="timelineList"></div>'
                                   +   '    </div>'
                                   +   '</div>')
                                   .tabs({
                                       heightStyle: "fill"
                                   }),
 
-            timelineList        = annotationsEditingOptions.find('#TimelineList')
+            timelineList        = annotationsEditingOptions.find('.timelineList')
             annotationAllSets   = FrameTrail.module('HypervideoModel').annotationAllSets;
 
 

@@ -48,7 +48,7 @@
                     
                     appendTitlebar();
 
-                    $('body').append($('<div id="MainContainer"></div>'));
+                    $('body').append($('<div class="mainContainer"></div>'));
 
                     FrameTrail.module('ViewResources').create(true);
 
@@ -77,14 +77,14 @@
      */
     function appendTitlebar() {
 
-        var titlebar = $(  '<div id="Titlebar">Resource Manager - Project: '
+        var titlebar = $(  '<div class="titlebar">Resource Manager - Project: '
                          + FrameTrail.module('Database').project.name 
-                         + '    <button type="button" id="LogoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
+                         + '    <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
     
         titlebar.appendTo($('body'));
 
-        titlebar.find('#LogoutButton').click(function(){
+        titlebar.find('.logoutButton').click(function(){
             FrameTrail.module('UserManagement').logout();
             location.reload();
         });
@@ -107,10 +107,10 @@
             var width   = _window.width(),
                 height  = _window.height();
 
-            $('#MainContainer').height( height );
-            $('#ViewResources').css({
+            $('.mainContainer').height( height );
+            $('.viewResources').css({
                 margin: 10 + 'px',
-                height: height - 20 - $('#Titlebar').height() + 'px'
+                height: height - 20 - $('.titlebar').height() + 'px'
             });
             FrameTrail.changeState('viewSize', [width, height])
 

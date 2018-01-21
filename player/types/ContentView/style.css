@@ -317,7 +317,7 @@
 
 /* View Layout Manager */
 
-#LayoutManager .layoutArea .contentViewPreview {
+.layoutManager .layoutArea .contentViewPreview {
 	position: absolute;
 	top: 46px;
 	width: calc(100% - 20px);
@@ -325,29 +325,29 @@
 	display: none;
 }
 
-#LayoutManager .layoutArea[data-area="areaTop"] .contentViewPreview {
+.layoutManager .layoutArea[data-area="areaTop"] .contentViewPreview {
 	top: 10px;
 }
 
-#LayoutManager .layoutArea[data-area="areaLeft"] .contentViewPreview {
+.layoutManager .layoutArea[data-area="areaLeft"] .contentViewPreview {
 	top: 10px;
 	right: 46px;
 	height: calc(100% - 20px);
 	width: calc(100% - 56px);
 }
 
-#LayoutManager .layoutArea[data-area="areaRight"] .contentViewPreview {
+.layoutManager .layoutArea[data-area="areaRight"] .contentViewPreview {
 	top: 10px;
 	left: 46px;
 	height: calc(100% - 20px);
 	width: calc(100% - 56px);
 }
 
-#LayoutManager .layoutArea .contentViewPreview.active {
+.layoutManager .layoutArea .contentViewPreview.active {
 	display: block;
 }
 
-#LayoutManager .layoutArea .contentViewPreview .contentViewPreviewDescription {
+.layoutManager .layoutArea .contentViewPreview .contentViewPreviewDescription {
 	position: absolute;
 	top: 50%;
 	left: 0px;
@@ -357,7 +357,7 @@
 	pointer-events: none;
 }
 
-#LayoutManager .layoutArea .contentViewPreview, .contentViewAnimationDiv {
+.layoutManager .layoutArea .contentViewPreview, .contentViewAnimationDiv {
 	background: var(--secondary-bg-color);
 	padding: 10px;
 	box-sizing: border-box;
@@ -369,7 +369,7 @@
 	pointer-events: none;
 }
 
-#LayoutManager .layoutArea .contentViewPreview .contentViewOptions {
+.layoutManager .layoutArea .contentViewPreview .contentViewOptions {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -380,12 +380,12 @@
 	z-index: 2;
 }
 
-#LayoutManager .layoutArea .contentViewPreview:hover .contentViewOptions {
+.layoutManager .layoutArea .contentViewPreview:hover .contentViewOptions {
 	opacity: 1;
 	pointer-events: all;
 }
 
-#LayoutManager .layoutArea .contentViewPreview .contentViewOptions button {
+.layoutManager .layoutArea .contentViewPreview .contentViewOptions button {
 	color: var(--primary-fg-color);
 	border-color: var(--primary-fg-color);
 }

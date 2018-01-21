@@ -14,15 +14,15 @@
 
 FrameTrail.defineModule('ViewResources', function(){
 
-	var domElement = $(    '<div id="ViewResources" title="Manage Resources">'
-                        +  '    <div id="ResourcesControls">'
-                        +  '        <button id="ResourceUpload"><span class="icon-doc-new"></span>Add New</button>'
-                        +  '        <button id="ResourceDelete"><span class="icon-trash"></span>Delete</button>'
-                        +  '        <button id="ResourceDeleteConfirm">Confirm Delete</button>'
+	var domElement = $(    '<div class="viewResources" title="Manage Resources">'
+                        +  '    <div class="resourcesControls">'
+                        +  '        <button class="resourceUpload"><span class="icon-doc-new"></span>Add New</button>'
+                        +  '        <button class="resourceDelete"><span class="icon-trash"></span>Delete</button>'
+                        +  '        <button class="resourceDeleteConfirm">Confirm Delete</button>'
                         +  '        <div class="message"></div>'
                         +  '        <div style="clear: both;"></div>'
                         +  '    </div>'
-                        +  '    <div id="ResourcesFilter">'
+                        +  '    <div class="resourcesFilter">'
                         +  '        <input name="ResourceFilterType" type="radio" value="ALL" checked>All Types</input>'
                         +  '        <input name="ResourceFilterType" type="radio" value="video">Video</input>'
                         +  '        <input name="ResourceFilterType" type="radio" value="image">Image</input>'
@@ -32,16 +32,16 @@ FrameTrail.defineModule('ViewResources', function(){
                         +  '        <input name="ResourceFilterType" type="radio" value="youtube">Youtube</input>'
                         +  '        <input name="ResourceFilterType" type="radio" value="vimeo">Vimeo</input>'
                         +  '    </div>'
-                        +  '    <div id="ResourcesList"></div>'
+                        +  '    <div class="resourcesList"></div>'
                         +  '</div>'),
 
 
-        ResourcesControls      = domElement.find('#ResourcesControls'),
-        ResourcesFilter        = domElement.find('#ResourcesFilter'),
-        ResourcesList          = domElement.find('#ResourcesList'),
-        ResourceUpload         = domElement.find('#ResourceUpload'),
-        ResourceDelete         = domElement.find('#ResourceDelete'),
-        ResourceDeleteConfirm  = domElement.find('#ResourceDeleteConfirm'),
+        ResourcesControls      = domElement.find('.resourcesControls'),
+        ResourcesFilter        = domElement.find('.resourcesFilter'),
+        ResourcesList          = domElement.find('.resourcesList'),
+        ResourceUpload         = domElement.find('.resourceUpload'),
+        ResourceDelete         = domElement.find('.resourceDelete'),
+        ResourceDeleteConfirm  = domElement.find('.resourceDeleteConfirm'),
 
         deleteActive     = false,
 
@@ -76,7 +76,7 @@ FrameTrail.defineModule('ViewResources', function(){
      */
     function create(withoutDialog) {
 
-        $('#MainContainer').append(domElement);
+        $('.mainContainer').append(domElement);
 
         showAsDialog = ! withoutDialog;
 

@@ -14,19 +14,19 @@
 
 /* Edit Video Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="video"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="video"] [class*=" icon-"]::before {
+.editPropertiesContainer .propertiesTypeIcon[data-type="video"] [class^="icon-"]::before, .editPropertiesContainer .propertiesTypeIcon[data-type="video"] [class*=" icon-"]::before {
 	content: "\e8a7";
 }
 
-#EditPropertiesContainer #SyncedRadio {
+.editPropertiesContainer .syncedRadio {
 	margin: 10px 0;
 }
 
-#EditPropertiesContainer #SyncedRadio .ui-button {
+.editPropertiesContainer .syncedRadio .ui-button {
 	border: 1px solid rgba(47, 50, 58, .5);
 }
 
-#EditPropertiesContainer #SyncedRadio .ui-button.ui-state-active {
+.editPropertiesContainer .syncedRadio .ui-button.ui-state-active {
 	background: rgba(47, 50, 58, .2);
 	box-shadow: 0 0 2px 1px #888 inset;
 }

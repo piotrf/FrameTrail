@@ -269,9 +269,9 @@ FrameTrail.defineModule('ViewLayout', function(){
 
 
 	function initLayoutManager() {
-		var domElement = $('<div id="LayoutManagerContainer">'
-						+  '    <div id="LayoutManagerMain">'
-						+  '        <div id="LayoutManager">'
+		var domElement = $('<div class="layoutManagerContainer">'
+						+  '    <div class="layoutManagerMain">'
+						+  '        <div class="layoutManager">'
 						+  '            <div data-area="areaTop" class="layoutArea">'
 						+  '                <div class="layoutAreaTabs"></div>'
 						+  '                <div class="layoutAreaContent"></div>'
@@ -295,7 +295,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 						+  '            </div>'
 						+  '        </div>'
 						+  '    </div>'
-						+  '    <div id="LayoutManagerOptions">'
+						+  '    <div class="layoutManagerOptions">'
 						+  '        <div class="message active">Drag and Drop Content Views into Layout Areas</div>'
 						+  '        <div class="contentViewTemplate" data-type="TimedContent" data-size="small">'
 						+  '            <div class="contentViewTemplateType"><span class="icon-docs">Collection (Tile)</span></div>'
@@ -318,8 +318,8 @@ FrameTrail.defineModule('ViewLayout', function(){
 						+  '    </div>'
 						+  '</div>'),
 		
-		LayoutManager        = domElement.find('#LayoutManager'),
-		LayoutManagerOptions = domElement.find('#LayoutManagerOptions'),
+		LayoutManager        = domElement.find('.layoutManager'),
+		LayoutManagerOptions = domElement.find('.layoutManagerOptions'),
 		self = this;
 
 		HypervideoLayoutContainer.append(domElement);
@@ -579,7 +579,7 @@ FrameTrail.defineModule('ViewLayout', function(){
 
     	// TODO: find way to avoid jQuery selector
     	if ( newState == 'middle' ) {
-    		$('#ViewVideo').find('.collectionElement.open').removeClass('open');
+    		$('.viewVideo').find('.collectionElement.open').removeClass('open');
     	}
 
     }

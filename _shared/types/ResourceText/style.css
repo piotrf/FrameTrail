@@ -17,6 +17,6 @@
 
 /* Edit Text Overlay Properties */
 
-#EditPropertiesContainer .propertiesTypeIcon[data-type="text"] [class^="icon-"]::before, #EditPropertiesContainer .propertiesTypeIcon[data-type="text"] [class*=" icon-"]::before {
+.editPropertiesContainer .propertiesTypeIcon[data-type="text"] [class^="icon-"]::before, .editPropertiesContainer .propertiesTypeIcon[data-type="text"] [class*=" icon-"]::before {
 	content: "\f0f6";
 }

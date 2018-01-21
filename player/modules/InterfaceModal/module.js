@@ -19,11 +19,11 @@
 FrameTrail.defineModule('InterfaceModal', function(){
 
 
-	var loadingScreen = $('<div id="loadingScreen">'
-						+ '    <div id="LoadingTitle"></div>'
+	var loadingScreen = $('<div class="loadingScreen">'
+						+ '    <div class="loadingTitle"></div>'
 						+ '    <div class="workingSpinner"></div>'
 						+ '</div>'),
-		statusMessage = $('<div id="statusMessage" class="message"></div>');
+		statusMessage = $('<div class="statusMessage message"></div>');
 
 	$('body').append(loadingScreen);
    	$('body').append(statusMessage);
@@ -105,7 +105,7 @@ FrameTrail.defineModule('InterfaceModal', function(){
 				top: '',
 				backgroundColor: ''
 			});
-		}).children('#LoadingTitle').delay( 1000 ).animate({
+		}).children('.loadingTitle').delay( 1000 ).animate({
 			top: 20 + 'px',
 			fontSize: 10 + 'px'
 		}, 600, function() {
@@ -124,7 +124,7 @@ FrameTrail.defineModule('InterfaceModal', function(){
 	 */
 	function setLoadingTitle(title) {
 
-		loadingScreen.children('#LoadingTitle').text(title);
+		loadingScreen.children('.loadingTitle').text(title);
 
 	}
 

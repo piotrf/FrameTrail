@@ -834,7 +834,7 @@
                 if ( unsavedSettings ) {
 
                     //TODO: avoid this by adding a subtitles dialog to the settings tab
-                    $('#EditHypervideoForm').submit();
+                    $('.editHypervideoForm').submit();
 
                 } else if ( unsavedOverlays || unsavedCodeSnippets
                     || unsavedEvents || unsavedCustomCSS || unsavedLayout) {
@@ -916,7 +916,7 @@
 
         if (FrameTrail.getState('unsavedChanges')){
 
-                var confirmDialog = $('<div id="ConfirmSaveChanges" title="Save changes?">'
+                var confirmDialog = $('<div class="confirmSaveChanges" title="Save changes?">'
                                     + '    <div class="message active">Your changes in the current video will be lost if you don\'t save them.</div>'
                                     + '    <p>Do you want to save your changes?</p>'
                                     + '</div>');
@@ -998,7 +998,7 @@
         }
 
         //TODO: Implement proper destroy method
-        $('#MainContainer #ViewVideo').remove();
+        $('.mainContainer .viewVideo').remove();
         ra = false;
 
         FrameTrail.module('RouteNavigation').hypervideoID = newHypervideoID;
@@ -1072,7 +1072,7 @@
 
         EditingOptions.empty();
 
-        var settingsEditingOptions = $('<div id="SettingsEditingTabs">'
+        var settingsEditingOptions = $('<div class="settingsEditingTabs">'
                                     +  '    <ul>'
                                     +  '        <li>'
                                     +  '            <a href="#ChangeSettings">Change Settings</a>'
@@ -1102,7 +1102,7 @@
         /* Edit Hypervideo Form */
 
         
-        var EditHypervideoForm = $('<form method="POST" id="EditHypervideoForm">'
+        var EditHypervideoForm = $('<form method="POST" class="editHypervideoForm">'
                                   +'    <div class="message saveReminder">Please save your settings right now to update the subtitle settings.</div>'
                                   +'    <div class="formColumn column1">'
                                   +'        <label for="name">Hypervideo Name</label>'
@@ -1130,11 +1130,11 @@
                                   */
                                   +'        <div class="subtitlesSettingsWrapper">'
                                   +'            <div>Subtitles (also used for interactive transcripts)</div>'
-                                  +'            <button id="SubtitlesPlus" type="button">Add +</button>'
+                                  +'            <button class="subtitlesPlus" type="button">Add +</button>'
                                   +'            <input type="checkbox" name="config[captionsVisible]" id="captionsVisible" value="true" '+((hypervideo.config.captionsVisible && hypervideo.config.captionsVisible.toString() == 'true') ? "checked" : "")+'>'
                                   +'            <label for="captionsVisible">Show by default (if present)</label>'
-                                  +'            <div id="ExistingSubtitlesContainer"></div>'
-                                  +'            <div id="NewSubtitlesContainer"></div>'
+                                  +'            <div class="existingSubtitlesContainer"></div>'
+                                  +'            <div class="newSubtitlesContainer"></div>'
                                   +'        </div>'
                                   +'    </div>'
                                   +'    <div style="clear: both;"></div>'
@@ -1159,7 +1159,7 @@
                     updateDatabaseFromForm();
                 }).appendTo(existingSubtitlesItem);
 
-                EditHypervideoForm.find('#ExistingSubtitlesContainer').append(existingSubtitlesItem);
+                EditHypervideoForm.find('.existingSubtitlesContainer').append(existingSubtitlesItem);
             }
         }
 
@@ -1224,7 +1224,7 @@
         });
 
         // Manage Subtitles
-        EditHypervideoForm.find('#SubtitlesPlus').on('click', function() {
+        EditHypervideoForm.find('.subtitlesPlus').on('click', function() {
             var langOptions, languageSelect;
 
             for (var lang in FrameTrail.module('Database').subtitlesLangMapping) {
@@ -1236,17 +1236,17 @@
                             + langOptions
                             + '</select>';
 
-            EditHypervideoForm.find('#NewSubtitlesContainer').append('<span class="subtitlesItem">'+ languageSelect +'<input type="file" name="subtitles[]"><button class="subtitlesRemove" type="button">x</button><br></span>');
+            EditHypervideoForm.find('.newSubtitlesContainer').append('<span class="subtitlesItem">'+ languageSelect +'<input type="file" name="subtitles[]"><button class="subtitlesRemove" type="button">x</button><br></span>');
 
             updateDatabaseFromForm();
         });
 
-        EditHypervideoForm.find('#NewSubtitlesContainer').on('click', '.subtitlesRemove', function(evt) {
+        EditHypervideoForm.find('.newSubtitlesContainer').on('click', '.subtitlesRemove', function(evt) {
             $(this).parent().remove();
             updateDatabaseFromForm();
         });
 
-        EditHypervideoForm.find('#NewSubtitlesContainer').on('change', '.subtitlesTmpKeySetter', function() {
+        EditHypervideoForm.find('.newSubtitlesContainer').on('change', '.subtitlesTmpKeySetter', function() {
             $(this).parent().find('input[type="file"]').attr('name', 'subtitles['+$(this).val()+']');
             updateDatabaseFromForm();
         });
@@ -1289,7 +1289,7 @@
                 });
             });
 
-            EditHypervideoForm.find('#NewSubtitlesContainer').find('input[type=file]').each(function () {
+            EditHypervideoForm.find('.newSubtitlesContainer').find('input[type=file]').each(function () {
                 var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
                 console.log(match);
                 if (match) {
@@ -1442,7 +1442,7 @@
         
         /* Change Theme UI */
 
-        var ChangeThemeUI = $('<div id="ThemeContainer">'
+        var ChangeThemeUI = $('<div class="themeContainer">'
                             + '    <div class="message active">Select Color Theme</div>'
                             + '    <div class="themeItem" data-theme="default">'
                             + '        <div class="themeName">Default</div>'
@@ -1532,15 +1532,15 @@
 
         /* CSS Variables Editing UI */
 
-        var CSSVariablesEditingUI = $('<div id="CSSVariablesEditingUI" style="height: 110px;">'
-                                    + '    <textarea id="CSSVariables">/* Custom CSS Variables coming soon */</textarea>'
+        var CSSVariablesEditingUI = $('<div class="CSSVariablesEditingUI" style="height: 110px;">'
+                                    + '    <textarea class="CSSVariables">/* Custom CSS Variables coming soon */</textarea>'
                                     + '</div>');
         
         settingsEditingOptions.find('#ChangeCSSVariables').append(CSSVariablesEditingUI);
 
         // Init CodeMirror for CSS Variables
 
-        var textarea = settingsEditingOptions.find('#CSSVariables');
+        var textarea = settingsEditingOptions.find('.CSSVariables');
 
         var codeEditor = CodeMirror.fromTextArea(textarea[0], {
                 value: textarea[0].value,

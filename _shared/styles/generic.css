@@ -927,12 +927,12 @@ input[readonly], textarea[readonly] {
 
 /* Generic User Management CSS */
 
-#SelectUserContainer {
+.selectUserContainer {
     float: left;
     margin: 10px 0;
 }
 
-#UserDataContainer {
+.userDataContainer {
     display: none;
     float: left;
     margin-left: 25px;

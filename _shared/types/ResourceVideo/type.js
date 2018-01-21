@@ -117,7 +117,7 @@ FrameTrail.defineType(
 
             var syncedLabel = $('<div>Synchronization</div>'),
 
-                syncedRadio = $('<div id="SyncedRadio">'
+                syncedRadio = $('<div class="syncedRadio">'
                               + '    <input type="radio" id="SyncedTrue" name="radio" value="on" '
                               +      (overlay.data.attributes.autoPlay ? 'checked="checked"' : '')
                               + '    ><label for="SyncedTrue">Autoplay</label>'

@@ -1,18 +1,18 @@
-#UserLoginOverlay {
+.userLoginOverlay {
 	display: none;
 }
 
-#UserLoginOverlay .loginBoxCancelButton {
+.userLoginOverlay .loginBoxCancelButton {
 	margin-left: 10px;
 }
 
-#UserLoginOverlay .loginBoxTabButton.inactive {
+.userLoginOverlay .loginBoxTabButton.inactive {
 	font-size: 17px;
 	text-decoration: underline;
 	cursor: pointer;
 }
 
-#UserLoginOverlay #UserTabRegister {
+.userLoginOverlay .userTabRegister {
 	display: none;
 }
 

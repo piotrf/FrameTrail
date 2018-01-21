@@ -579,7 +579,7 @@ FrameTrail.defineType(
             );
 
             compareTimelineElement.draggable({
-                containment:    '#MainContainer',
+                containment:    '.mainContainer',
                 axis:           'y',
                 helper:         'clone',
                 appendTo:       'body',
@@ -596,7 +596,7 @@ FrameTrail.defineType(
 
                 drag: function( event, ui ) {
                     ui.helper.css({
-                        top: ui.position.top + ($('#SlideArea').css('margin-top')*2) + "px"
+                        top: ui.position.top + ($('.slideArea').css('margin-top')*2) + "px"
                     });
                 }
 

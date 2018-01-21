@@ -498,7 +498,7 @@ FrameTrail.defineModule('OverlaysController', function(){
         updateControlsEnd          = propertiesControlsInterface.changeEnd;
         updateControlsDimensions   = propertiesControlsInterface.changeDimensions;
 
-        ViewVideo.EditPropertiesContainer.find('#OverlayOptionsTabs').tabs('refresh');
+        ViewVideo.EditPropertiesContainer.find('.overlayOptionsTabs').tabs('refresh');
 
         if ( ViewVideo.EditPropertiesContainer.find('.CodeMirror').length != 0 ) {
             ViewVideo.EditPropertiesContainer.find('.CodeMirror')[0].CodeMirror.refresh();
@@ -557,7 +557,7 @@ FrameTrail.defineModule('OverlaysController', function(){
 
         ViewVideo.EditingOptions.empty();
 
-        var overlayEditingOptions = $('<div id="OverlayEditingTabs">'
+        var overlayEditingOptions = $('<div class="overlayEditingTabs">'
                                   +   '    <ul>'
                                   +   '        <li>'
                                   +   '            <a href="#ResourceList">Choose Resource</a>'
@@ -589,7 +589,7 @@ FrameTrail.defineModule('OverlaysController', function(){
                 + '              </div>');
 
         textElement.draggable({
-            containment:    '#MainContainer',
+            containment:    '.mainContainer',
             helper:         'clone',
             revert:         'invalid',
             revertDuration: 100,
