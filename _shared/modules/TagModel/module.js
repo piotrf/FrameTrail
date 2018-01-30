@@ -12,7 +12,7 @@
  * @static
  */
 
- FrameTrail.defineModule('TagModel', function(){
+ FrameTrail.defineModule('TagModel', function(FrameTrail){
 
 
     var projectID   = FrameTrail.module('RouteNavigation').projectID || '',
@@ -169,7 +169,7 @@
                     match = false;
                 }
             }
-            
+
             return match;
 
         });

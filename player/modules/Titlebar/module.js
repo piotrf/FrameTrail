@@ -4,7 +4,7 @@
 
 
 /**
- * I am the Titlebar. I provide a place for a title text, and for two buttons (opening the 
+ * I am the Titlebar. I provide a place for a title text, and for two buttons (opening the
  * {{#crossLink "Sidebar"}}Sidebar{{/crossLink}} and – YET TO IMPLEMENT – the social sharing widgets).
  *
  * @class Titlebar
@@ -13,7 +13,7 @@
 
 
 
-FrameTrail.defineModule('Titlebar', function(){
+FrameTrail.defineModule('Titlebar', function(FrameTrail){
 
 
     var projectID = FrameTrail.module('RouteNavigation').projectID,
@@ -47,7 +47,7 @@ FrameTrail.defineModule('Titlebar', function(){
     StartEditButton.click(function(){
         FrameTrail.module('UserManagement').ensureAuthenticated(
             function(){
-                
+
                 FrameTrail.changeState('editMode', 'preview');
 
             },
@@ -100,7 +100,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '    <div>Embed Code</div>'
                         + '    <textarea style="height: 100px;" readonly><iframe width="800" height="600" scrolling="no" src="'+ iframeUrl +'" frameborder="0" allowfullscreen></iframe></textarea>'
                         + '</div>');
-        
+
         shareDialog.find('input[type="text"], textarea').click(function() {
             $(this).focus();
             $(this).select();
@@ -123,13 +123,13 @@ FrameTrail.defineModule('Titlebar', function(){
                 }
             ]
         });
-        
+
     });
 
     domElement.find('.logoutButton').click(function(){
 
         FrameTrail.module('HypervideoModel').leaveEditMode(true);
-        
+
     });
 
 
@@ -195,7 +195,7 @@ FrameTrail.defineModule('Titlebar', function(){
                         + '        <div class="message error"></div>'
                         + '    </form>'
                         + '</div>');
-        
+
         // Manage Subtitles
         newDialog.find('.subtitlesPlus').on('click', function() {
             var langOptions, languageSelect;
@@ -254,7 +254,7 @@ FrameTrail.defineModule('Titlebar', function(){
             method:     'POST',
             url:        '../_server/ajaxServer.php',
             beforeSubmit: function (array, form, options) {
-                
+
                 var selectedResourcesID = $('.newHypervideoForm').find('input[name="resourcesID"]').val();
                 //console.log(FrameTrail.module('Database').resources[parseInt(selectedResourcesID)]);
 
@@ -317,9 +317,9 @@ FrameTrail.defineModule('Titlebar', function(){
                 }
 
                 $('.newHypervideoForm').find('.newSubtitlesContainer').find('input[type=file]').each(function () {
-                    
+
                     var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
-                    
+
                     if (match) {
                         hypervideoData.subtitles.push({
                             "src": match[1] +".vtt",
@@ -329,7 +329,7 @@ FrameTrail.defineModule('Titlebar', function(){
                 });
 
                 //console.log(hypervideoData);
-                
+
                 array.push({ name: 'src', value: JSON.stringify(hypervideoData, null, 4) });
 
             },
@@ -450,7 +450,7 @@ FrameTrail.defineModule('Titlebar', function(){
         toogleUnsavedChanges(FrameTrail.getState('unsavedChanges'));
         toggleViewMode(FrameTrail.getState('viewMode'));
         toggleEditMode(FrameTrail.getState('editMode'));
-        
+
         if ( FrameTrail.getState('embed') ) {
             //domElement.find('#SidebarToggleButton, #SharingWidgetButton').hide();
         }
@@ -460,7 +460,7 @@ FrameTrail.defineModule('Titlebar', function(){
     }
 
 
-    
+
     /**
      * I make changes to my CSS, when the global state "sidebarOpen" changes.
      * @method toggleSidebarOpen
@@ -496,7 +496,7 @@ FrameTrail.defineModule('Titlebar', function(){
         }else{
             TitlebarViewMode.find('[data-viewmode="video"]').removeClass('unsavedChanges');
         }
-        
+
     }
 
 
@@ -518,7 +518,7 @@ FrameTrail.defineModule('Titlebar', function(){
                     visibleCount++;
                 }
             }
-            
+
             // hide 'Overview' and 'Video' controls when there's only one hypervideo
             if (visibleCount == 1) {
                 TitlebarViewMode.addClass('hidden');
@@ -566,7 +566,7 @@ FrameTrail.defineModule('Titlebar', function(){
             if (!FrameTrail.module('RouteNavigation').environment.server) {
                 StartEditButton.hide();
             }
-            
+
             LeaveEditModeButton.hide();
             ManageResourcesButton.hide();
             SharingWidget.show();
@@ -582,9 +582,9 @@ FrameTrail.defineModule('Titlebar', function(){
      * @param {Boolean} loggedIn
      */
     function changeUserLogin(loggedIn) {
-        
+
         if (loggedIn) {
-            
+
             domElement.find('.logoutButton').show();
             UserSettingsButton.show();
 
@@ -620,9 +620,9 @@ FrameTrail.defineModule('Titlebar', function(){
     }
 
 
- 
 
-        
+
+
     return {
 
         onChange: {

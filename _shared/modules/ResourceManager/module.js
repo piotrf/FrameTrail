@@ -15,7 +15,7 @@
  */
 
 
-FrameTrail.defineModule('ResourceManager', function(){
+FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 	var maxUploadBytes,
         tmpObj;
@@ -579,7 +579,7 @@ FrameTrail.defineModule('ResourceManager', function(){
                                 }
                             }
                         });
-                        
+
                         return r;
                     } else {
                         return null;

@@ -4,18 +4,18 @@
 
 /**
  * I am the ProjectEditor. I provide an interface where the user can edit the settings of a selected poject, or register new users, or edit the user data of the selected project.
- * 
+ *
  * @class ProjectEditor
  * @static
  * @main
  */
 
- FrameTrail.defineModule('ProjectEditor', function(){
+ FrameTrail.defineModule('ProjectEditor', function(FrameTrail){
 
 
  	/**
 	 * I am the sole method of my module. I bring up a jeryUI dialog wich has several tabs to edit the configuration of a project.
-	 * 
+	 *
 	 * @method editProject
 	 * @param {String} projectId
 	 * @param {Function} success
@@ -146,7 +146,7 @@
 					case 3:
 						domElement.find('#RegistrationFormStatus').removeClass('success error').addClass('active').text('User has been registered, but you need to activate him via the User Administration panel!');
 						break;
-					
+
 				}
 			}
 		});
@@ -168,7 +168,7 @@
 					var allUsers = data.response.user;
 
 					domElement.find("#user_change_user").html('<option value="" selected disabled>Select a User</option>');
-					
+
 					for (var id in allUsers) {
 						domElement.find("#user_change_user").append('<option value="' + id + '">' + allUsers[id].name + '</option>');
 					}
@@ -176,7 +176,7 @@
 	                domElement.find("#user_change_user").selectmenu('refresh');
 
 	                domElement.find("#user_change_user").unbind('selectmenuchange').bind('selectmenuchange', function(evt){
-						
+
 						evt.preventDefault();
 
 						$.ajax({
@@ -203,8 +203,8 @@
 	                            domElement.find('#UserDataContainer').show();
 							}
 						});
-						
-						
+
+
 					});
 
 				}
@@ -227,9 +227,9 @@
 			dataType: 	"json",
 			data: {"projectID":projectId},
 			success: function(response) {
-				
+
 				refreshAdministrationForm();
-				
+
 				switch(response.code){
 					case 0:
 						domElement.find('#AdministrationFormStatus').removeClass('error').addClass('active success').text('The settings were successfully changed.');
@@ -249,7 +249,7 @@
 					case 6:
 						domElement.find('#AdministrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
 						break;
-					
+
 				}
 
 			}
@@ -285,20 +285,20 @@
 	        width:      725,
 	        height:     580,
 	        create: function() {
-	            
+
 	        },
 	        close: function() {
-	            
+
 	            $(this).dialog('close');
 	            $(this).remove();
 	            success.call();
 
 	        }
 	 	});
-	 	
+
  	}
 
-    
+
     return {
     	editProject: editProject
     };

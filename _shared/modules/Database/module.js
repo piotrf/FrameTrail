@@ -15,7 +15,7 @@
  * @static
  */
 
- FrameTrail.defineModule('Database', function(){
+ FrameTrail.defineModule('Database', function(FrameTrail){
 
 
     var projectID    = FrameTrail.module('RouteNavigation').projectID || '',
@@ -219,7 +219,7 @@
             mimeType: "application/json"
         }).done(function(data){
 
-            
+
             var countdown = Object.keys(data.hypervideos).length,
                 bufferedData = {};
 
@@ -228,7 +228,7 @@
                 success.call(this);
                 return;
             }
-            
+
             for (var key in data.hypervideos) {
                 (function (hypervideoID) {
 
@@ -1234,7 +1234,7 @@
                 }
             }
         }
-        
+
         return null;
     };
 

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
     <head class="html5">
-    
+
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="Expires" content="-1">
-        
+
         <title>Resource Management</title>
 
 
@@ -27,10 +27,10 @@
         <script type="text/javascript" src="../_lib/jquery.mousewheel/jquery.mousewheel.min.js"></script>
         <script type="text/javascript" src="../_lib/perfectscrollbar/perfect-scrollbar.min.js"></script>
         <script type="text/javascript" src="../_lib/openlayers/ol.js"></script>
-        
+
 
         <script type="text/javascript" src="../_shared/frametrail-core/frametrail-core.js"></script>
-        
+
         <!--
             [if lt IE 9]>
             <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -69,22 +69,33 @@
         <script type="text/javascript" src="../_shared/types/ResourceWikipedia/type.js"></script>
         <script type="text/javascript" src="../_shared/types/ResourceYoutube/type.js"></script>
         <script type="text/javascript" src="../_shared/types/ResourceText/type.js"></script>
-        
+
         <script type="text/javascript" src="../_shared/modules/Database/module.js"></script>
         <script type="text/javascript" src="../_shared/modules/ResourceManager/module.js"></script>
         <script type="text/javascript" src="../_shared/modules/RouteNavigation/module.js"></script>
         <script type="text/javascript" src="../_shared/modules/UserManagement/module.js"></script>
         <script type="text/javascript" src="../_shared/modules/ViewResources/module.js"></script>
-        
+
         <script type="text/javascript" src="./modules/ResourceManagerLauncher/module.js"></script>
-        
+
 
 
         <script type="text/javascript">
 
             $(document).ready( function() {
 
-                FrameTrail.start('ResourceManagerLauncher', {
+                window.myInstance = FrameTrail.init('ResourceManagerLauncher', {
+
+                    target:             'body',
+
+                    contentTargets:     {},
+                    contents:           {
+                                            hypervideo: '',
+                                            annotationsIndex: '',
+                                            annotations: [],
+                                            resources: [],
+                                            users: ''
+                                        },
 
                     loggedIn:           false,
                     username:           ''
@@ -95,7 +106,7 @@
 
         </script>
 
-        
+
     </head>
     <body style="background-color: var(--primary-fg-color)">
     </body>

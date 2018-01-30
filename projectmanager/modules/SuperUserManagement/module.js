@@ -4,13 +4,13 @@
 
 /**
  * I am the SuperUserManagement which ensures, that the ProjectManager is logged at the server with the password of the one-and-only super user.
- * 
+ *
  * @class SuperUserManagement
  * @static
  * @main
  */
 
- FrameTrail.defineModule('SuperUserManagement', function(){
+ FrameTrail.defineModule('SuperUserManagement', function(FrameTrail){
 
  	var domElement = $(   '<div id="SuperUserManagement" class="ui-blocking-overlay">'
  						+ '     <div id="SuperUserBox" class="ui-overlay-box">'
@@ -37,7 +37,7 @@
 
 	/**
 	 * I check wether the user is logged as the super user, and if not, provide the the login interface.
-	 * 
+	 *
 	 * @method ensureAdminAccess
 	 * @param {Function} success
 	 * @param {Function} fail
@@ -64,10 +64,10 @@
 
  	/**
 	 * I check if the master user is logged in and call the respective successCallback or failCallback
-	 * 
+	 *
 	 * @method isLoggedIn
 	 * @param {Function} success
-	 * @param {Function} fail 
+	 * @param {Function} fail
 	 */
  	function isLoggedIn(success, fail) {
 
@@ -77,7 +77,7 @@
 			dataType: 	'json',
             data: 		'a=superUserLogin',
 			success: 	function(response) {
-				
+
 				switch (response.code) {
 
 					case 0:
@@ -104,7 +104,7 @@
  	/**
 	 * I perform the login request to the server and call afterwards the respective successCallback or failCallback, which were previously stored in module variables
 	 * by {{crossLink "SuperUserManagement/ensureAdminAccess:method"}}SuperUserManagement/ensureAdminAccess(){{/crossLink}}.
-	 * 
+	 *
 	 * @method login
 	 */
  	function login() {
@@ -115,7 +115,7 @@
 			dataType: 	'json',
             data: 		'a=superUserLogin&password=' + domElement.find('#SuperUserPassword').val(),
 			success: 	function(response) {
-				
+
 				switch (response.code) {
 
 					case 0:
@@ -142,7 +142,7 @@
 
  	/**
 	 * I logout the user at the server and afterwards reload the page.
-	 * 
+	 *
 	 * @method logout
 	 */
  	function logout() {
@@ -161,7 +161,7 @@
 
  	}
 
-    
+
     return {
 
     	ensureAdminAccess: ensureAdminAccess,

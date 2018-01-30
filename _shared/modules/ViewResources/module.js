@@ -12,7 +12,7 @@
 
 
 
-FrameTrail.defineModule('ViewResources', function(){
+FrameTrail.defineModule('ViewResources', function(FrameTrail){
 
 	var domElement = $(    '<div class="viewResources" title="Manage Resources">'
                         +  '    <div class="resourcesControls">'
@@ -63,7 +63,7 @@ FrameTrail.defineModule('ViewResources', function(){
 
     domElement.find('input[name=ResourceFilterType]').change(updateList);
 
-    
+
 
 
 
@@ -88,7 +88,7 @@ FrameTrail.defineModule('ViewResources', function(){
                 height: 600,
                 modal: true,
                 close: function() {
-                    
+
                     domElement.dialog('close');
 
                     callback && callback.call();
@@ -107,7 +107,7 @@ FrameTrail.defineModule('ViewResources', function(){
      * I render the list of resource items. I check the radio boxes for the type of resources which shall be shown and call
      * {{#crossLink "ResourceManager/renderList:method"}}ResourceManager/renderList(){{/crossLink}}).
      * @method updateList
-     * @return 
+     * @return
      */
     function updateList() {
 
@@ -184,11 +184,11 @@ FrameTrail.defineModule('ViewResources', function(){
                 FrameTrail.module('ResourceManager').deleteResource(
                     FrameTrail.module('RouteNavigation').projectID,
                     deleteCollection[i],
-                    function(){ 
+                    function(){
                         callbackCollection.push(true);
                         deletionFinished();
                     },
-                    function(data){ 
+                    function(data){
                         ResourcesControls.find('.message').addClass('error active').text(data.string);
                         callbackCollection.push(false);
                         deletionFinished();
@@ -202,7 +202,7 @@ FrameTrail.defineModule('ViewResources', function(){
 
                 if (callbackCollection.length !== deleteCollection.length) return;
 
-                // delete finished; 
+                // delete finished;
                 // callbackCollection contains true/false for success/fail
 
                 if (callbackCollection[0] == true) {
@@ -222,7 +222,7 @@ FrameTrail.defineModule('ViewResources', function(){
     /**
      * I show the DOM element to the user and (optionally) set a callback, when I was opened not as a stand-alone element, but inside a jQuery UI dialog.
      * @method open
-     * @param {Function} closeCallback 
+     * @param {Function} closeCallback
      */
     function open(closeCallback) {
 
@@ -238,7 +238,7 @@ FrameTrail.defineModule('ViewResources', function(){
         FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
 
 
-        
+
 
     }
 
@@ -255,11 +255,11 @@ FrameTrail.defineModule('ViewResources', function(){
     }
 
 
-    
 
 
 
-		
+
+
    	return {
 
    		onChange: {

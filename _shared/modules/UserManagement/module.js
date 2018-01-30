@@ -14,7 +14,7 @@
 
 
 
-FrameTrail.defineModule('UserManagement', function(){
+FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 
 	var userID                  = '',
@@ -27,7 +27,7 @@ FrameTrail.defineModule('UserManagement', function(){
 
 		userBoxCallback 		= null,
 		userBoxCallbackCancel 	= null,
-		
+
 		domElement 	= $(	'<div class="UserBox" title="User Management">'
 						+   '    <div class="userStatusMessage message">'
 						+	'    </div>'
@@ -98,7 +98,7 @@ FrameTrail.defineModule('UserManagement', function(){
 						+	'        </div>'
                         +   '    </div>'
 						+	'</div>'),
-	
+
 	loginBox = $(	'<div class="userLoginOverlay ui-blocking-overlay">'
 				+   '    <div class="loginBox ui-overlay-box">'
 				+   '        <div class="boxTitle">'
@@ -160,7 +160,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				case 3:
 					domElement.find('.registrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin!');
 					break;
-				
+
 			}
 		}
 	});
@@ -177,7 +177,7 @@ FrameTrail.defineModule('UserManagement', function(){
 					FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].color = response.response.color;
 					FrameTrail.changeState('username', response.response.name);
 					FrameTrail.changeState('userColor', response.response.color);
-					
+
 					domElement.find('.settingsFormStatus').removeClass('error').addClass('active success').text('Your settings were successfully changed.');
 					break;
 				case 1:
@@ -198,7 +198,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				case 6:
 					domElement.find('.settingsFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
 					break;
-				
+
 			}
 		}
 	});
@@ -221,7 +221,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				var allUsers = data.response.user;
 
 				domElement.find("#user_change_user").html('<option value="" selected disabled>Select a User</option>');
-				
+
 				for (var id in allUsers) {
 					domElement.find("#user_change_user").append('<option value="' + id + '">' + allUsers[id].name + '</option>');
 				}
@@ -229,7 +229,7 @@ FrameTrail.defineModule('UserManagement', function(){
                 domElement.find("#user_change_user").selectmenu('refresh');
 
                 domElement.find("#user_change_user").unbind('selectmenuchange').bind('selectmenuchange', function(evt){
-					
+
 					evt.preventDefault();
 
 					$.ajax({
@@ -255,8 +255,8 @@ FrameTrail.defineModule('UserManagement', function(){
                             domElement.find('.userDataContainer').show();
 						}
 					});
-					
-					
+
+
 				});
 
 			}
@@ -266,7 +266,7 @@ FrameTrail.defineModule('UserManagement', function(){
 
 
 	domElement.find('.administrationFormRefresh').click(refreshAdministrationForm);
-	
+
 	if (FrameTrail.module('RouteNavigation').environment.server) {
         refreshAdministrationForm();
     }
@@ -303,7 +303,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				case 6:
 					domElement.find('.administrationFormStatus').removeClass('success').addClass('active error').text('Fatal error: your user was not found in the database.');
 					break;
-				
+
 			}
 
 		}
@@ -371,15 +371,15 @@ FrameTrail.defineModule('UserManagement', function(){
     loginBox.find('.loginBoxTabButton').click(function(evt) {
 
     	loginBox.find('.loginBoxTabButton').removeClass('inactive');
-    	
+
     	if ( $(this).hasClass('loginTabButton') ) {
-    		
+
     		loginBox.find('.createAccountTabButton').addClass('inactive');
     		loginBox.find('.userTabRegister').hide();
     		loginBox.find('.userTabLogin').show();
 
     	} else {
-    		
+
     		loginBox.find('.loginTabButton').addClass('inactive');
     		loginBox.find('.userTabLogin').hide();
     		loginBox.find('.userTabRegister').show();
@@ -398,7 +398,7 @@ FrameTrail.defineModule('UserManagement', function(){
 		success: function(response) {
 			//console.log(response);
 			switch(response.code){
-				
+
 				case 0:
 					userSessionLifetime = parseInt(response.session_lifetime);
 					login(response.userdata);
@@ -409,7 +409,7 @@ FrameTrail.defineModule('UserManagement', function(){
 						closeLoginBox();
 					}
 					break;
-				
+
 				case 1:
 					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields');
 					break;
@@ -426,7 +426,7 @@ FrameTrail.defineModule('UserManagement', function(){
 					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('User is not active. Please contact an admin!');
 					break;
 			}
-			
+
 		}
 
 	});
@@ -460,7 +460,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				case 3:
 					loginBox.find('.userRegistrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin before you can login!');
 					break;
-				
+
 			}
 		}
 	});
@@ -503,7 +503,7 @@ FrameTrail.defineModule('UserManagement', function(){
 				} else {
 					showLoginBox();
 				}
-				
+
 
 			}
 
@@ -572,7 +572,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 *
 	 * @method login
 	 * @param {} userData
-	 * @private 
+	 * @private
 	 */
 	function login(userData) {
 
@@ -586,9 +586,9 @@ FrameTrail.defineModule('UserManagement', function(){
 		FrameTrail.changeState('username', userData.name);
 		FrameTrail.changeState('userColor', userData.color);
 		FrameTrail.changeState('loggedIn', true);
-		
+
 		updateView(true);
-		
+
 	}
 
 
@@ -605,7 +605,7 @@ FrameTrail.defineModule('UserManagement', function(){
 			dataType: 	"json",
             data: 		"a=userLogout&projectID=" + FrameTrail.module('RouteNavigation').projectID,
 			success: function(data) {
-				
+
 				if (userID != '') {
 					var loggedOutDialog = $('<div class="loggedOutDialog" title="Logged Out">'
                                       + '    <div class="message success active">You have been logged out.</div>'
@@ -685,7 +685,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	/**
 	 * I update the UI elements of the tab Settings
 	 * @method updateSettings
-	 * @private 
+	 * @private
 	 */
 	function updateSettings() {
 
@@ -709,7 +709,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	function updateAdministration() {
 
 
-		
+
 	}
 
 
@@ -721,7 +721,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 * @param {Boolean} disallowCancel
 	 */
 	function showLoginBox(disallowCancel) {
-		
+
 		if (disallowCancel) {
 			loginBox.find('.loginBoxCancelButton').hide();
 		} else {
@@ -759,7 +759,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 * @method showAdministrationBox
 	 */
 	function showAdministrationBox() {
-		
+
 		ensureAuthenticated(function() {
 
 			updateView(true);
@@ -774,7 +774,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 * I close the user administration dialog (jQuery UI Dialog).
 	 *
 	 * @method closeAdministrationBox
-	 * @return 
+	 * @return
 	 */
 	function closeAdministrationBox() {
 
@@ -787,7 +787,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 * I start the (PHP) session timeout counter.
 	 *
 	 * @method startSessionTimeout
-	 * @return 
+	 * @return
 	 */
 	function startSessionTimeout() {
 
@@ -807,7 +807,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	 * I reset the (PHP) session timeout counter.
 	 *
 	 * @method resetSessionTimeout
-	 * @return 
+	 * @return
 	 */
 	function resetSessionTimeout() {
 
@@ -820,7 +820,7 @@ FrameTrail.defineModule('UserManagement', function(){
 	// Init the user model
 	isLoggedIn(function(){});
 
-	
+
 	return {
 
 		showLoginBox: 	        showLoginBox,

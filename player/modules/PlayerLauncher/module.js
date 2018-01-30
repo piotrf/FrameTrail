@@ -26,7 +26,7 @@
  * @main
  */
 
- FrameTrail.defineModule('PlayerLauncher', function(){
+ FrameTrail.defineModule('PlayerLauncher', function(FrameTrail){
 
 
     // Set up Overlay interface

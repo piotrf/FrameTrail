@@ -5,18 +5,18 @@
 
 /**
  * I am the ProjectCreator. I provide an interface where the user can input the settings for a new poject.
- * 
+ *
  * @class ProjectCreator
  * @static
  * @main
  */
 
- FrameTrail.defineModule('ProjectCreator', function(){
+ FrameTrail.defineModule('ProjectCreator', function(FrameTrail){
 
 
     /**
      * I am the sole method of my module. I bring up a jeryUI dialog where the settings for a new project can be entered.
-     * 
+     *
      * @method newProject
      * @param {Function} success
      */
@@ -44,14 +44,14 @@
                         + '        <div class="message error"></div>'
                         + '    </form>'
                         + '</div>');
-        
+
         newDialog.find('#NewProjectForm').ajaxForm({
             method:     'POST',
             url:        '../_server/ajaxServer.php',
             dataType:   'json',
             data: {'a': 'projectsNew'},
             success: function(response) {
-                
+
                 switch(response['code']) {
                     case 0:
                         newDialog.dialog('close');
@@ -63,7 +63,7 @@
                 }
             }
         });
-        
+
         newDialog.dialog({
             modal: true,
             resizable: false,
@@ -91,7 +91,7 @@
         });
 
     }
-    
+
     return {
 
     	newProject: newProject

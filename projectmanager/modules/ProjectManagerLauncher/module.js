@@ -21,7 +21,7 @@
  * * I ensure the user is logged
  * * I prepare the interface
  *
- * I am a "one-pass" module, this is: I don't export any public methods or properties, and 
+ * I am a "one-pass" module, this is: I don't export any public methods or properties, and
  * my sole purpose is to start other modules, after which I am discarded.
  *
  * @class ProjectManagerLauncher
@@ -29,7 +29,7 @@
  * @main
  */
 
- FrameTrail.defineModule('ProjectManagerLauncher', function(){
+ FrameTrail.defineModule('ProjectManagerLauncher', function(FrameTrail){
 
 
     // Set up the various data models
@@ -38,7 +38,7 @@
     FrameTrail.initModule('ProjectEditor');
     FrameTrail.initModule('ProjectsModel');
     FrameTrail.initModule('ProjectsView');
-    
+
 
     FrameTrail.module('ProjectsModel').loadDefaultConfig(function() {
 
@@ -46,7 +46,7 @@
 
                 FrameTrail.module('SuperUserManagement').ensureAdminAccess(
                     function(){
-                        
+
                         appendTitlebar();
 
                         $('body').append($('<div id="MainContainer"></div>'));
@@ -82,13 +82,13 @@
         var titlebar = $(  '<div id="Titlebar">Project Manager'
                          + '    <button type="button" id="LogoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
-    
+
         titlebar.appendTo($('body'));
 
         titlebar.find('#LogoutButton').click(function(){
 
             FrameTrail.module('SuperUserManagement').logout();
-                    
+
 
         });
 
@@ -118,11 +118,11 @@
 
         _window.resize();
 
-        
+
     }
 
 
-    
+
     return null;
 
 });

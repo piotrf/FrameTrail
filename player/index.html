@@ -47,7 +47,7 @@
         <script type="text/javascript" src="../_lib/codemirror/css-lint.js"></script>
         <script type="text/javascript" src="../_lib/codemirror/html-lint.js"></script>
 
-        
+
         <script type="text/javascript" src="../_shared/frametrail-core/frametrail-core.js"></script>
 
         <!--
@@ -113,7 +113,7 @@
         <script type="text/javascript" src="../_shared/modules/UserManagement/module.js"></script>
         <script type="text/javascript" src="../_shared/modules/ViewResources/module.js"></script>
         <script type="text/javascript" src="../_shared/modules/RouteNavigation/module.js"></script>
-        
+
         <script type="text/javascript" src="./modules/AnnotationsController/module.js"></script>
         <script type="text/javascript" src="./modules/PlayerLauncher/module.js"></script>
         <script type="text/javascript" src="./modules/HypervideoModel/module.js"></script>
@@ -136,7 +136,17 @@
 
             $(document).ready( function() {
 
-                FrameTrail.start('PlayerLauncher', {
+                window.myInstance = FrameTrail.init('PlayerLauncher', {
+
+                    target:             'body',
+                    contentTargets:     {},
+                    contents:           {
+                                            hypervideo: '',
+                                            annotationsIndex: '',
+                                            annotations: [],
+                                            resources: [],
+                                            users: ''
+                                        },
 
                     loggedIn:           false,
                     username:           '',
@@ -147,7 +157,6 @@
                     fullscreen:         false,
                     viewSize:           [0,0],
                     unsavedChanges:     false
-
 
                 });
 

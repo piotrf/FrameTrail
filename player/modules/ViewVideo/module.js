@@ -17,7 +17,7 @@
 
 
 
-FrameTrail.defineModule('ViewVideo', function(){
+FrameTrail.defineModule('ViewVideo', function(FrameTrail){
 
     var domElement  = $(  '<div class="viewVideo">'
                         + '    <div class="areaLeftDetails layoutAreaDetails" data-area="areaLeft"></div>'
@@ -134,7 +134,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
         AreaLeftDetails             = domElement.find('.areaLeftDetails'),
         AreaLeftContainer           = domElement.find('.areaLeftContainer'),
-        
+
         AreaRightDetails            = domElement.find('.areaRightDetails'),
         AreaRightContainer          = domElement.find('.areaRightContainer'),
 
@@ -309,17 +309,17 @@ FrameTrail.defineModule('ViewVideo', function(){
         };
 
         toggleViewMode(FrameTrail.getState('viewMode'));
-        
+
         toggleConfig_captionsVisible(FrameTrail.getState('hv_config_captionsVisible'))
 
         FrameTrail.changeState('hv_config_overlaysVisible', true);
-        
+
         changeSlidePosition('middle');
 
     }
 
     function fixGoddamnSafariBug() {
-        
+
         $($('.sidebar'), $('.mainContainer'), $('.viewVideo'), $('.slideArea') ).css({
             'transition-duration': '0ms',
             '-moz-transition-duration': '0ms',
@@ -328,7 +328,7 @@ FrameTrail.defineModule('ViewVideo', function(){
         });
 
         window.setTimeout(function() {
-            
+
             slidePositionDown();
             showDetails(false);
 
@@ -344,7 +344,7 @@ FrameTrail.defineModule('ViewVideo', function(){
                 });
             }, 300);
             */
-            
+
         }, 6000);
     }
 
@@ -451,7 +451,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             areaBottomVisible   = ( (editMode != false && editMode != 'preview' && editMode != 'settings') ? false : FrameTrail.getState('hv_config_areaBottomVisible') ),
             areaLeftVisible     = ( (editMode != false && editMode != 'preview' && editMode != 'settings') ? false : FrameTrail.getState('hv_config_areaLeftVisible') ),
             areaRightVisible    = ( (editMode != false && editMode != 'preview' && editMode != 'settings') ? false : FrameTrail.getState('hv_config_areaRightVisible') );
-            
+
         if (slidingMode == 'overlay') {
             PlayerContainer.css({
                 'flex-grow': 0,
@@ -689,7 +689,7 @@ FrameTrail.defineModule('ViewVideo', function(){
             videoContainerWidth = mainContainerWidth - domElement.find('.infoAreaRight').outerWidth();
         } else {
             videoContainerWidth = mainContainerWidth
-            - (FrameTrail.getState('hv_config_areaLeftVisible') ? AreaLeftContainer.outerWidth() : 0) 
+            - (FrameTrail.getState('hv_config_areaLeftVisible') ? AreaLeftContainer.outerWidth() : 0)
             - (FrameTrail.getState('hv_config_areaRightVisible') ? AreaRightContainer.outerWidth() : 0);
         }
 
@@ -912,7 +912,7 @@ FrameTrail.defineModule('ViewVideo', function(){
      * @method enterSettingsMode
      */
     function enterSettingsMode() {
-        
+
         EditingOptions.addClass('active');
 
         toggleConfig_areaTopVisible(FrameTrail.getState('hv_config_areaTopVisible'));
@@ -1301,7 +1301,7 @@ FrameTrail.defineModule('ViewVideo', function(){
 
     /**
      * This method is used to show the details (aka the content) of either the LayoutArea top or bottom.
-     * 
+     *
      * @method showDetails
      * @param {String} area
      */
@@ -1639,7 +1639,7 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get AreaBottomContainer()     { return AreaBottomContainer     },
-        
+
         /**
          * I contain the AreaLeftDetails element.
          * @attribute AreaLeftDetails
@@ -1672,7 +1672,7 @@ FrameTrail.defineModule('ViewVideo', function(){
          * @type HTMLElement
          */
         get AnnotationTimeline()  { return AnnotationTimeline  },
-        
+
         /**
          * I contain the EditPropertiesContainer element (where properties of an overlay/annotation can be viewed and – in the case ov overlays – changed).
          * @attribute EditPropertiesContainer

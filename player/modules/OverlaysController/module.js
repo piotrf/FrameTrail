@@ -12,7 +12,7 @@
  */
 
 
-FrameTrail.defineModule('OverlaysController', function(){
+FrameTrail.defineModule('OverlaysController', function(FrameTrail){
 
 
     var ViewVideo               = FrameTrail.module('ViewVideo'),
