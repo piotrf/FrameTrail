@@ -12,10 +12,10 @@
 
 
 
-FrameTrail.defineModule('Sidebar', function(){
+FrameTrail.defineModule('Sidebar', function(FrameTrail){
 
 
-    
+
 
     var domElement  = $(      '<div class="sidebar">'
                             + '    <div class="sidebarContainer">'
@@ -73,7 +73,7 @@ FrameTrail.defineModule('Sidebar', function(){
         ForkButton             = domElement.find('.forkButton'),
         ExportButton           = domElement.find('.exportButton'),
         DeleteButton           = domElement.find('.hypervideoDeleteButton'),
-        
+
         ProjectDescription     = sidebarContainer.find('.projectDescription'),
         VideoDescription       = sidebarContainer.find('.videoDescription');
 
@@ -83,7 +83,7 @@ FrameTrail.defineModule('Sidebar', function(){
     });
 
     ForkButton.click(function(evt) {
-        
+
         evt.preventDefault();
         evt.stopPropagation();
 
@@ -107,7 +107,7 @@ FrameTrail.defineModule('Sidebar', function(){
             thisID: thisID,
             data: {'a': 'hypervideoClone', 'projectID': projectID, 'hypervideoID': thisID},
             beforeSubmit: function (array, form, options) {
-                
+
                 var currentData = FrameTrail.module("Database").convertToDatabaseFormat(thisID);
 
                 //console.log(currentData);
@@ -115,7 +115,7 @@ FrameTrail.defineModule('Sidebar', function(){
                 currentData.meta.description = $('.forkHypervideoForm').find('textarea[name="description"]').val();
                 currentData.meta.creator = FrameTrail.module('Database').users[FrameTrail.module('UserManagement').userID].name;
                 currentData.meta.creatorId = FrameTrail.module('UserManagement').userID;
-                
+
                 array.push({ name: 'src', value: JSON.stringify(currentData, null, 4) });
 
             },
@@ -151,7 +151,7 @@ FrameTrail.defineModule('Sidebar', function(){
             buttons: [
                 { text: 'Fork Hypervideo',
                     click: function() {
-                        
+
                         $('.forkHypervideoForm').submit();
 
                     }
@@ -349,7 +349,7 @@ FrameTrail.defineModule('Sidebar', function(){
             domElement.find('button.editMode').removeClass('unsavedChanges')
             SaveButton.removeClass('unsavedChanges')
         }
-        
+
     };
 
     /**
@@ -419,7 +419,7 @@ FrameTrail.defineModule('Sidebar', function(){
         } else {
 
             domElement.removeClass('editActive');
-            
+
             //ExportButton.show();
             SaveButton.hide();
 

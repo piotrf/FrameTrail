@@ -17,7 +17,7 @@
  */
 
 
-FrameTrail.defineModule('HypervideoController', function(){
+FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 
 

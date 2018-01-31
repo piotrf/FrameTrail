@@ -21,7 +21,7 @@
  * * I ensure the user is logged
  * * I prepare the interface
  *
- * I am a "one-pass" module, this is: I don't export any public methods or properties, and 
+ * I am a "one-pass" module, this is: I don't export any public methods or properties, and
  * my sole purpose is to start other modules, after which I am discarded.
  *
  * @class ResourceManagerLauncher
@@ -29,7 +29,7 @@
  * @main
  */
 
- FrameTrail.defineModule('ResourceManagerLauncher', function(){
+ FrameTrail.defineModule('ResourceManagerLauncher', function(FrameTrail){
 
 
     // Set up the various data models
@@ -45,7 +45,7 @@
 
             FrameTrail.module('UserManagement').ensureAuthenticated(
                 function(){
-                    
+
                     appendTitlebar();
 
                     $('body').append($('<div class="mainContainer"></div>'));
@@ -78,10 +78,10 @@
     function appendTitlebar() {
 
         var titlebar = $(  '<div class="titlebar">Resource Manager - Project: '
-                         + FrameTrail.module('Database').project.name 
+                         + FrameTrail.module('Database').project.name
                          + '    <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
-    
+
         titlebar.appendTo($('body'));
 
         titlebar.find('.logoutButton').click(function(){
@@ -118,11 +118,11 @@
 
         _window.resize();
 
-        
+
     }
 
 
-    
+
     return null;
 
 });

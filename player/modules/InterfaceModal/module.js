@@ -16,7 +16,7 @@
  */
 
 
-FrameTrail.defineModule('InterfaceModal', function(){
+FrameTrail.defineModule('InterfaceModal', function(FrameTrail){
 
 
 	var loadingScreen = $('<div class="loadingScreen">'

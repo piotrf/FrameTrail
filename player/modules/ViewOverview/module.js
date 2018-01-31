@@ -11,7 +11,7 @@
  */
 
 
-FrameTrail.defineModule('ViewOverview', function(){
+FrameTrail.defineModule('ViewOverview', function(FrameTrail){
 
     var domElement = $(    '<div class="viewOverview">'
                         +  '    <div class="overviewList"></div>'
@@ -380,9 +380,9 @@ FrameTrail.defineModule('ViewOverview', function(){
     function toggleEditMode(editMode) {
 
         if (editMode) {
-            
+
         } else {
-            
+
         }
 
         initList();

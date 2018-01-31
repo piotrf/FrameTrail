@@ -10,7 +10,7 @@
  * @main
  */
 
- FrameTrail.defineModule('ProjectsModel', function(){
+ FrameTrail.defineModule('ProjectsModel', function(FrameTrail){
 
  	var projectsIndex = {},
  		projects = {},
@@ -70,7 +70,7 @@
         }).done(function(data){
 
             var countdown = Object.keys(data.projects).length;
-            
+
             if (countdown == 0) {
                 // no projects yet
                 success.call();

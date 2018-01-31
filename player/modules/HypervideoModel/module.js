@@ -10,7 +10,7 @@
  * @static
  */
 
- FrameTrail.defineModule('HypervideoModel', function(){
+ FrameTrail.defineModule('HypervideoModel', function(FrameTrail){
 
 
     var hasHTML5Video           = true,
@@ -650,15 +650,15 @@
      * @private
      */
     function getAllAnnotations() {
-        
+
         var userSets = getAnnotationSets(),
             allAnnotations = new Array();
-        
+
         for (var i=0; i<userSets.length; i++) {
             var userSet = annotationSets[userSets[i].id];
             allAnnotations = allAnnotations.concat(userSet);
         }
-        
+
         return allAnnotations.sort(function(a, b){
 
             if(a.data.start > b.data.start) {
@@ -1057,9 +1057,9 @@
     /**
      * Initialize Hypervideo Settings
      * (triggered when global state editMode changes to 'settings')
-     * 
+     *
      * TODO: Move to separate module
-     * 
+     *
      * @method initHypervideoSettings
      */
     function initHypervideoSettings() {
@@ -1101,7 +1101,7 @@
 
         /* Edit Hypervideo Form */
 
-        
+
         var EditHypervideoForm = $('<form method="POST" class="editHypervideoForm">'
                                   +'    <div class="message saveReminder">Please save your settings right now to update the subtitle settings.</div>'
                                   +'    <div class="formColumn column1">'
@@ -1438,8 +1438,8 @@
                 }
             }
         });
-        
-        
+
+
         /* Change Theme UI */
 
         var ChangeThemeUI = $('<div class="themeContainer">'
@@ -1501,7 +1501,7 @@
                             + '        </div>'
                             + '    </div>'
                             + '</div>');
-        
+
         ChangeThemeUI.find('.themeItem').each(function() {
             if ( hypervideo.config.theme == $(this).attr('data-theme') ) {
                 $(this).addClass('active');
@@ -1514,7 +1514,7 @@
         settingsEditingOptions.find('#ChangeTheme').append(ChangeThemeUI);
 
         ChangeThemeUI.find('.themeItem').click(function() {
-            
+
             $(this).siblings('.themeItem').removeClass('active');
             $(this).addClass('active');
 
@@ -1535,7 +1535,7 @@
         var CSSVariablesEditingUI = $('<div class="CSSVariablesEditingUI" style="height: 110px;">'
                                     + '    <textarea class="CSSVariables">/* Custom CSS Variables coming soon */</textarea>'
                                     + '</div>');
-        
+
         settingsEditingOptions.find('#ChangeCSSVariables').append(CSSVariablesEditingUI);
 
         // Init CodeMirror for CSS Variables
@@ -1553,17 +1553,17 @@
                 theme: 'hopscotch'
             });
         codeEditor.on('change', function(instance, changeObj) {
-            
+
             var thisTextarea = $(instance.getTextArea());
-                            
+
             // TODO: Update CSS Variables (instance.getValue()) in Database
 
             thisTextarea.val(instance.getValue());
-            
+
 
         });
         codeEditor.setSize(null, '100%');
-        
+
 
     }
 
@@ -1779,7 +1779,7 @@
 
         removeOverlay:          removeOverlay,
         newOverlay:             newOverlay,
-        
+
         removeCodeSnippet:      removeCodeSnippet,
         newCodeSnippet:         newCodeSnippet,
 

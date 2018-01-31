@@ -4,7 +4,7 @@
 
 
 /**
- * I am the AnnotationsController who mediates between the data model of 
+ * I am the AnnotationsController who mediates between the data model of
  * all {{#crossLink "Annotation"}}annotations{{/crossLink}} (stored in {{#crossLink "HypervideoModel"}}HypervideoModel{{/crossLink}})
  * and their various User Interface elements (e.g. in {{#crossLink "ViewVideo"}}ViewVideo{{/crossLink}})
  *
@@ -12,7 +12,7 @@
  * @static
  */
 
- FrameTrail.defineModule('AnnotationsController', function(){
+ FrameTrail.defineModule('AnnotationsController', function(FrameTrail){
 
 
     var HypervideoModel   = FrameTrail.module('HypervideoModel'),
@@ -36,11 +36,11 @@
      * @method initController
      */
     function initController() {
-        
+
         annotations = HypervideoModel.annotations;
 
         initAnnotations();
-        
+
     }
 
 
@@ -57,14 +57,14 @@
         // update references
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
-        
+
         initAnnotations();
-        
+
     }
 
 
     /**
-     * I first empty all DOM elements, and then ask all 
+     * I first empty all DOM elements, and then ask all
      * annotations of the current data model, to append new DOM elements,
      * which I the arrange and prepare for view.
      *
@@ -84,7 +84,7 @@
         // update references
         annotations = FrameTrail.module('HypervideoModel').annotations;
         ViewVideo = FrameTrail.module('ViewVideo');
-        
+
         ViewVideo.AnnotationTimeline.empty();
 
         for (var i = 0; i < annotations.length; i++) {
@@ -93,9 +93,9 @@
 
     }
 
-    
+
     /**
-     * When the global state viewSize changes, I re-arrange 
+     * When the global state viewSize changes, I re-arrange
      * the annotationElements and tiles, to fit the new
      * width of the browser.
      *
@@ -109,7 +109,7 @@
 
     /**
      * I react to changes in the global state viewSizeChanged.
-     * The state changes after a window resize event 
+     * The state changes after a window resize event
      * and is meant to be used for performance-heavy operations.
      *
      * @method onViewSizeChanged
@@ -126,7 +126,7 @@
      * @method stackTimelineView
      */
     function stackTimelineView() {
-        
+
         ViewVideo.AnnotationTimeline.CollisionDetection({spacing:0, includeVerticalMargins:true});
         ViewVideo.adjustLayout();
         ViewVideo.adjustHypervideo();
@@ -143,7 +143,7 @@
      * @private
      */
     function resetTimelineView() {
-        
+
         ViewVideo.AnnotationTimeline.css('height', '');
         ViewVideo.AnnotationTimeline.children('.timelineElement').css({
             top:    '',
@@ -258,7 +258,7 @@
 
         var currentTime = FrameTrail.module('HypervideoController').currentTime,
             annotations = FrameTrail.module('HypervideoModel').annotations;
-        
+
         return (function(){
 
             var allActiveAnnotations = [];
@@ -273,7 +273,7 @@
                 }
 
             }
-            
+
 
             if (allActiveAnnotations.length === 0) {
                 if (annotations.length === 0) {
@@ -299,10 +299,10 @@
 
 
     /**
-     * When an annotation is set into focus, I have to tell 
+     * When an annotation is set into focus, I have to tell
      * the old annotation in the var annotationInFocus, that it
      * is no longer in focus. Then I store the Annotation (or null)
-     * from my parameter in the var annotationInFocus, and inform it 
+     * from my parameter in the var annotationInFocus, and inform it
      * about it.
      * @method setAnnotationInFocus
      * @param {Annotation or null} annotation
@@ -313,7 +313,7 @@
 
 
         if (annotationInFocus) {
-            
+
             annotationInFocus.permanentFocusState = false;
             annotationInFocus.removedFromFocus();
 
@@ -321,7 +321,7 @@
         }
 
         annotationInFocus = annotation;
-        
+
         if (annotationInFocus) {
             annotationInFocus.gotInFocus();
         }
@@ -360,10 +360,10 @@
      */
     function removePropertiesControls() {
 
-        
+
         updateControlsStart      = function(){};
         updateControlsEnd        = function(){};
-                
+
         ViewVideo.EditPropertiesContainer.removeClass('active').empty();
 
     }
@@ -371,7 +371,7 @@
 
     /**
      * Listens to global state 'editMode'.
-     * The AnnotationsController has to react on a change of the 
+     * The AnnotationsController has to react on a change of the
      * editMode.
      * First it checks, wether we are entering or leaving the edit mode
      * in general (editMode is false, when not the editor is not active, otherwise
@@ -385,10 +385,10 @@
      * @param {String or false} editMode
      * @param {String or false} oldEditMode
      */
-    function toggleEditMode(editMode, oldEditMode) {        
+    function toggleEditMode(editMode, oldEditMode) {
 
         var HypervideoModel     = FrameTrail.module('HypervideoModel');
-            
+
 
 
         if ( editMode === false && oldEditMode !== false ) {
@@ -398,7 +398,7 @@
         } else if ( editMode && oldEditMode === false ) {
 
             HypervideoModel.annotationSet = '#myAnnotationSet';
-            
+
             //console.log('HIDE SEARCH BUTTON');
 
             window.setTimeout(function() {
@@ -408,11 +408,11 @@
         } else if ( editMode === false ) {
 
             //console.log('SHOW SEARCH BUTTON');
-            
+
         } else {
 
             //console.log('HIDE SEARCH BUTTON');
-            
+
         }
 
 
@@ -429,7 +429,7 @@
             stackTimelineView();
             initEditOptions();
             makeTimelineDroppable(true);
-            
+
 
 
         } else if (oldEditMode === 'annotations' && editMode !== 'annotations') {
@@ -535,7 +535,7 @@
 
 
     /**
-     * When the editMode 'annotations' has been entered, the 
+     * When the editMode 'annotations' has been entered, the
      * annotation timeline should be droppable for new items
      * (from the ResourcePicker or from other users' timelines).
      * A drop event should trigger the process of creating a new annotation.
@@ -565,7 +565,7 @@
 
                     var resourceID      = ui.helper.attr('data-resourceID'),
                         videoDuration   = FrameTrail.module('HypervideoModel').duration,
-                        startTime, 
+                        startTime,
                         endTime;
 
                         if (ui.helper.hasClass('compareTimelineElement')) {
@@ -576,12 +576,12 @@
                         } else {
 
                             startTime   = FrameTrail.module('HypervideoController').currentTime;
-                            endTime     = (startTime + 4 > videoDuration) 
+                            endTime     = (startTime + 4 > videoDuration)
                                             ? videoDuration
                                             : startTime + 4;
                         }
 
-                        
+
 
                         newAnnotation = FrameTrail.module('HypervideoModel').newAnnotation({
                             "start":        startTime,
@@ -594,14 +594,14 @@
                     updateStatesOfAnnotations(FrameTrail.module('HypervideoController').currentTime);
 
                     stackTimelineView();
-                    
-                    
+
+
                     ViewVideo.PlayerProgress.find('.ui-slider-handle').removeClass('highlight');
 
                 }
 
 
-            });          
+            });
 
         } else {
 
@@ -613,7 +613,7 @@
 
 
     /**
-     * I am the starting point for the process of deleting 
+     * I am the starting point for the process of deleting
      * an annotation.
      * @method deleteAnnotation
      * @param {Annotation} annotation
@@ -655,7 +655,7 @@
 
     }
 
-        
+
     return {
 
         onChange: {
@@ -669,7 +669,7 @@
         updateController:           updateController,
         updateStatesOfAnnotations:  updateStatesOfAnnotations,
         stackTimelineView:          stackTimelineView,
-        
+
         deleteAnnotation:           deleteAnnotation,
 
         findTopMostActiveAnnotation: findTopMostActiveAnnotation,
@@ -687,24 +687,24 @@
         get annotationInFocus()           { return annotationInFocus                },
 
         /**
-         * I hold the callback function for start time (annotation.data.start) of the properties controls interface 
+         * I hold the callback function for start time (annotation.data.start) of the properties controls interface
          * (see {{#crossLink "AnnotationsController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
          *
          * I am called from the "drag" event handler in {{#crossLink "Annotation/makeTimelineElementDraggable:method"}}Annotation/makeTimelineElementDraggable(){{/crossLink}}
          * and from the "resize" event handler in {{#crossLink "Annotation/makeTimelineElementResizeable:method"}}Annotation/makeTimelineElementResizeable(){{/crossLink}}.
-         * 
+         *
          * @attribute updateControlsStart
          * @type Function
          * @readOnly
          */
         get updateControlsStart()      {  return updateControlsStart     },
         /**
-         * I hold the callback function for end time (annotation.data.end) of the properties controls interface 
+         * I hold the callback function for end time (annotation.data.end) of the properties controls interface
          * (see {{#crossLink "AnnotationsController/renderPropertiesControls:method"}}renderPropertiesControls{{/crossLink}}).
          *
          * I am called from the "drag" event handler in {{#crossLink "Annotation/makeTimelineElementDraggable:method"}}Annotation/makeTimelineElementDraggable(){{/crossLink}}
          * and from the "resize" event handler in {{#crossLink "Annotation/makeTimelineElementResizeable:method"}}Annotation/makeTimelineElementResizeable(){{/crossLink}}.
-         * 
+         *
          * @attribute updateControlsEnd
          * @type Function
          * @readOnly

@@ -20,7 +20,7 @@
  */
 
 
-FrameTrail.defineModule('Interface', function(){
+FrameTrail.defineModule('Interface', function(FrameTrail){
 
 
 	FrameTrail.initModule('Titlebar');
@@ -64,7 +64,7 @@ FrameTrail.defineModule('Interface', function(){
 		FrameTrail.module('Sidebar').create();
 
 
-		$('body').append(mainContainer);
+		$(FrameTrail.getState('target')).append(mainContainer);
 
 
 		FrameTrail.module('ViewOverview').create();

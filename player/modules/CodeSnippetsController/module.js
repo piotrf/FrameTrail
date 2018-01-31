@@ -13,7 +13,7 @@
 
 
 
-FrameTrail.defineModule('CodeSnippetsController', function(){
+FrameTrail.defineModule('CodeSnippetsController', function(FrameTrail){
 
 
     var codeSnippets       = FrameTrail.module('HypervideoModel').codeSnippets, // can be shadowed be function local vars
@@ -22,7 +22,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
     /**
-     * I tell all codeSnippets in the 
+     * I tell all codeSnippets in the
      * {{#crossLink "HypervideoModel/codeSnippets:attribute"}}HypervideoModel/codeSnippets attribute{{/crossLink}}
      * to render their elements into the DOM.
      * @method initController
@@ -30,7 +30,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
     function initController() {
 
         var hypervideoModel = FrameTrail.module('HypervideoModel');
-        
+
         for (var i = 0; i < hypervideoModel.codeSnippets.length; i++) {
 
             hypervideoModel.codeSnippets[i].renderTimelineInDOM();
@@ -56,7 +56,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
     function rearrangeTilesAndContent() {
 
         var codeSnippets = FrameTrail.module('HypervideoModel').codeSnippets;
-        
+
         for (var i = 0; i < codeSnippets.length; i++) {
 
             codeSnippets[i].initCodeSnippetFunction();
@@ -119,7 +119,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      * @method stackTimelineView
      */
     function stackTimelineView() {
-        
+
         ViewVideo.CodeSnippetTimeline.CollisionDetection({spacing:0, includeVerticalMargins:true});
         ViewVideo.adjustLayout();
         ViewVideo.adjustHypervideo();
@@ -136,7 +136,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      * @private
      */
     function resetTimelineView() {
-        
+
         ViewVideo.CodeSnippetTimeline.css('height', '');
         ViewVideo.CodeSnippetTimeline.children('.timelineElement').css({
             top:    '',
@@ -151,7 +151,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
     /**
      * When the editMode 'codesnippets' was entered, the #EditingOptions area
-     * should show two tabs: 
+     * should show two tabs:
      * * a list of (draggable) thumbnails with available hypervideos
      * * a text form, where the user can manually input a link URL
      *
@@ -248,7 +248,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                 });
                 $(event.currentTarget).addClass('dragPlaceholder');
             },
-            
+
             stop: function( event, ui ) {
                 $(event.target).removeClass('dragPlaceholder');
             }
@@ -274,14 +274,14 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                     theme: 'hopscotch'
                 });
             codeEditor.on('change', function(instance, changeObj) {
-                
+
                 var thisTextarea = $(instance.getTextArea()),
                     currentEvents = FrameTrail.module('HypervideoModel').events;
-                
+
                 currentEvents[thisTextarea.data('eventname')] = instance.getValue();
                 FrameTrail.module('HypervideoModel').events = currentEvents;
                 thisTextarea.val(instance.getValue());
-                
+
             });
             codeEditor.setSize(null, '100%');
         }
@@ -303,14 +303,14 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                     theme: 'hopscotch'
                 });
             codeEditor.on('change', function(instance, changeObj) {
-                
+
                 var thisTextarea = $(instance.getTextArea());
-                                
+
                 FrameTrail.module('HypervideoModel').customCSS = instance.getValue();
                 thisTextarea.val(instance.getValue());
-                
+
                 updateCustomCSS(instance.getValue());
-                
+
 
             });
             codeEditor.setSize(null, '100%');
@@ -321,7 +321,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
     /**
-     * When the editMode 'codesnippets' has been entered, the 
+     * When the editMode 'codesnippets' has been entered, the
      * codeSnippet timeline should be droppable for new items
      * (from the tab of available hypervideos, see {{#crossLink "CodeSnippetsController/initEditOptions:method"}}CodeSnippetsController/initEditOptions{{/crossLink}}).
      * A drop event should trigger the process of creating a new codeSnippet.
@@ -358,7 +358,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                             "snippet": 'console.log("Hello, I am a Code Snippet");'
                         });
 
-                    
+
                     newCodeSnippet.renderTimelineInDOM();
                     rearrangeTilesAndContent();
 
@@ -367,7 +367,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
                     setCodeSnippetInFocus(newCodeSnippet);
 
                     stackTimelineView();
-                    
+
                     ViewVideo.PlayerProgress.find('.ui-slider-handle').removeClass('highlight');
 
                     //TODO: Check if this is the right place
@@ -391,10 +391,10 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
     /**
-     * When a codeSnippet is set into focus, I have to tell 
+     * When a codeSnippet is set into focus, I have to tell
      * the old codeSnippet in the var codeSnippetInFocus, that it
      * is no longer in focus. Then I store the codeSnippet (or null)
-     * from my parameter in the var codeSnippetInFocus, and inform it 
+     * from my parameter in the var codeSnippetInFocus, and inform it
      * about it.
      * @method setCodeSnippetInFocus
      * @param {CodeSnippet} codeSnippet
@@ -404,14 +404,14 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
         if (codeSnippetInFocus) {
-            
+
             codeSnippetInFocus.permanentFocusState = false;
             codeSnippetInFocus.removedFromFocus();
 
         }
 
         codeSnippetInFocus = codeSnippet;
-        
+
         if (codeSnippetInFocus) {
             codeSnippetInFocus.gotInFocus();
         }
@@ -423,7 +423,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
     };
 
-    
+
 
 
     /**
@@ -454,7 +454,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
             stackTimelineView();
             initEditOptions();
             makeTimelineDroppable(true);
-            
+
 
 
         } else if (oldEditMode === 'codesnippets' && editMode !== 'codesnippets') {
@@ -468,7 +468,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
             setCodeSnippetInFocus(null);
             resetTimelineView();
             rearrangeTilesAndContent();
-            makeTimelineDroppable(false);       
+            makeTimelineDroppable(false);
 
         }
 
@@ -481,14 +481,14 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      */
     function changeViewSize() {
 
-        
+
 
     }
 
 
     /**
      * I react to changes in the global state viewSizeChanged.
-     * The state changes after a window resize event 
+     * The state changes after a window resize event
      * and is meant to be used for performance-heavy operations.
      *
      * @method onViewSizeChanged
@@ -510,7 +510,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      */
     function toggleSidebarOpen() {
 
-        
+
 
     }
 
@@ -542,7 +542,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
             var randomVersion  = Math.round(Math.random() * (100 - 1) + 1),
                 fragmentSplit  = codeSnippet.data.href.split('#'),
                 randomizedLink = fragmentSplit[0] + '&v=' + randomVersion + '#' + fragmentSplit[1];
-            
+
             codeSnippet.codeSnippetElement.children('iframe').attr('src', randomizedLink);
 
             codeSnippet.codeSnippetElement.addClass('open');
@@ -559,7 +559,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
     /**
-     * I am the starting point for the process of deleting 
+     * I am the starting point for the process of deleting
      * a codeSnippet. I call other necessary methods for it.
      * @method deleteCodeSnippet
      * @param {CodeSnippet} codeSnippet
@@ -575,8 +575,8 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
     /**
-     * I initialize the custom CSS rules. 
-     * 
+     * I initialize the custom CSS rules.
+     *
      * @method initCustomCSS
      * @param {String} cssString
      */
@@ -588,8 +588,8 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
 
     /**
-     * I dynamically update the custom CSS rules. 
-     * 
+     * I dynamically update the custom CSS rules.
+     *
      * @method updateCustomCSS
      * @param {String} cssString
      */
@@ -598,7 +598,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
 
     }
 
-        
+
     /**
      * I react to changes in the global state "viewMode".
      *
@@ -608,7 +608,7 @@ FrameTrail.defineModule('CodeSnippetsController', function(){
      */
     function toggleViewMode(viewMode, oldViewMode){
 
-        
+
 
     }
 
