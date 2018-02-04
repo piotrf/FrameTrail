@@ -17,7 +17,7 @@
 
 
 .mainContainer.sidebarOpen {
-	width: calc(100vw - 164px);
+	width: calc(100% - 164px);
 	margin-left: 164px;
 }
 

@@ -60,7 +60,10 @@
 
     	function _start(mainModule, runtimeConfig) {
 
-    		state = runtimeConfig || {};
+    		// TODO: Check if this belongs here
+            $(runtimeConfig.target).addClass('frametrail');
+
+            state = runtimeConfig || {};
     		_initModule(mainModule);
 
     	}

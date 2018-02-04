@@ -644,10 +644,10 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
 
 
         var editBorder = (FrameTrail.getState('editMode') != false) ? (parseInt(domElement.css('borderTopWidth'))*2) : 0;
-            mainContainerWidth  = $(window).width()
+            mainContainerWidth  = $(FrameTrail.getState('target')).width()
                                     - ((FrameTrail.getState('sidebarOpen') && !FrameTrail.getState('fullscreen')) ? FrameTrail.module('Sidebar').width : 0)
                                     - editBorder,
-            mainContainerHeight = $(window).height()
+            mainContainerHeight = $(FrameTrail.getState('target')).height()
                                     - $('.titlebar').height()
                                     - editBorder,
             _video              = $(Video);

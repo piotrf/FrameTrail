@@ -278,7 +278,7 @@ FrameTrail.defineModule('Sidebar', function(FrameTrail){
         toggleViewMode(FrameTrail.getState('viewMode'));
         toggleEditMode(FrameTrail.getState('editMode'));
 
-        $('body').append(domElement);
+        $(FrameTrail.getState('target')).append(domElement);
 
         if ( FrameTrail.getState('embed') ) {
             //domElement.find('.viewmodeControls').hide();

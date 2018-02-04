@@ -25,8 +25,8 @@ FrameTrail.defineModule('InterfaceModal', function(FrameTrail){
 						+ '</div>'),
 		statusMessage = $('<div class="statusMessage message"></div>');
 
-	$('body').append(loadingScreen);
-   	$('body').append(statusMessage);
+	$(FrameTrail.getState('target')).append(loadingScreen);
+   	$(FrameTrail.getState('target')).append(statusMessage);
 
 
 

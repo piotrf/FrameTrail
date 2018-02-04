@@ -245,7 +245,7 @@ FrameTrail.defineModule('ViewOverview', function(FrameTrail){
 
         var overviewListHeight = $('.mainContainer').outerHeight()
                                     - (FrameTrail.getState('editMode') ? 24 : 0),
-            overviewListWidth = $(window).width()
+            overviewListWidth = $(FrameTrail.getState('target')).width()
                                     - (FrameTrail.getState('sidebarOpen') ? $('.sidebar').width() : 0);
 
         OverviewList.height( overviewListHeight );

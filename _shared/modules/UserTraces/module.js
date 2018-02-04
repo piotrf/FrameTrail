@@ -14,7 +14,7 @@
 
 
 
-FrameTrail.defineModule('UserTraces', function(){
+FrameTrail.defineModule('UserTraces', function(FrameTrail){
 
 
 	var sessions = {},

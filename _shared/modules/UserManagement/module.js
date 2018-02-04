@@ -310,7 +310,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 	});
 
 
-	$('body').append(domElement);
+	$(FrameTrail.getState('target')).append(domElement);
 
 
 	function renderUserColorCollectionForm(selectedColor, targetElement) {
@@ -465,7 +465,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 		}
 	});
 
-	$('body').append(loginBox);
+	$(FrameTrail.getState('target')).append(loginBox);
 
 
 

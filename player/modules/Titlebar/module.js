@@ -455,7 +455,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
             //domElement.find('#SidebarToggleButton, #SharingWidgetButton').hide();
         }
 
-        $('body').append(domElement);
+        $(FrameTrail.getState('target')).append(domElement);
 
     }
 

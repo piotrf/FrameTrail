@@ -16,8 +16,9 @@
     src: url("../fonts/Titillium_Web/TitilliumWeb-Light.ttf") format("truetype");
 }
 
-body {
-	background: var(--primary-bg-color);
+.frametrail {
+	position: relative;
+    background: var(--primary-bg-color);
 	font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
     font-weight: 400;
@@ -29,6 +30,21 @@ body {
     justify-content: flex-start;
     align-content: stretch;
     align-items: flex-start;
+}
+
+.frametrail.editActive {
+    position: fixed !important;
+    top: 0px !important;
+    left: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+body > .ui-dialog {
+    background: var(--primary-bg-color);
+    font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 button, input[type="submit"], input[type="button"], .button {
