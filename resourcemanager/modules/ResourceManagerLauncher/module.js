@@ -48,7 +48,7 @@
 
                     appendTitlebar();
 
-                    $('body').append($('<div class="mainContainer"></div>'));
+                    $(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
 
                     FrameTrail.module('ViewResources').create(true);
 
@@ -77,12 +77,12 @@
      */
     function appendTitlebar() {
 
-        var titlebar = $(  '<div class="titlebar">Resource Manager - Project: '
+        var titlebar = $(  '<div class="titlebar editActive">Resource Manager - Project: '
                          + FrameTrail.module('Database').project.name
                          + '    <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
 
-        titlebar.appendTo($('body'));
+        titlebar.appendTo($(FrameTrail.getState('target')));
 
         titlebar.find('.logoutButton').click(function(){
             FrameTrail.module('UserManagement').logout();
