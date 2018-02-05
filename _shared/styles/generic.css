@@ -170,6 +170,7 @@ input[readonly], textarea[readonly] {
     position: absolute;
     font-size: 26px;
     background: var(--primary-bg-color);
+    color: var(--primary-fg-color);
     opacity: .7;
     overflow: hidden;
 }

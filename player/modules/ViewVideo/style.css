@@ -783,9 +783,9 @@ path {
     transition-duration: 600ms;
     transition-property: opacity;
     color: var(--primary-fg-color);
-    font-size: 80px;
-    margin-top: 0px;
-    margin-left: 0px;
+    font-size: 86px;
+    margin-top: -3px;
+    margin-left: -3px;
     opacity: .7;
 }
 
