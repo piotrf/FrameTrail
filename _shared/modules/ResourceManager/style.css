@@ -24,6 +24,10 @@
     width: 40px;
 }
 
+.resourcePicker .resourcePickerControls button:hover {
+	background-color: var(--primary-bg-color);
+}
+
 .resourcePicker .resourcePickerControls button [class^="icon-"]::before, .resourcePicker .resourcePickerControls button [class*=" icon-"]::before {
 	font-size: 18px;
 	margin-left: 1px;
