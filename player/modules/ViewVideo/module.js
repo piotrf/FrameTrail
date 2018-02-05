@@ -934,6 +934,9 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
      * @method enterLayoutMode
      */
     function enterLayoutMode() {
+        AreaTopDetails.hide();
+        AreaBottomDetails.hide();
+        
         FrameTrail.module('ViewLayout').initLayoutManager();
         HypervideoLayoutContainer.addClass('active');
     }
