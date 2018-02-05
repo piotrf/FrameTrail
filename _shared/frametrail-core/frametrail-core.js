@@ -61,7 +61,7 @@
     	function _start(mainModule, runtimeConfig) {
 
     		// TODO: Check if this belongs here
-            $(runtimeConfig.target).addClass('frametrail');
+            $(runtimeConfig.target).addClass('frametrail-body');
 
             state = runtimeConfig || {};
     		_initModule(mainModule);

@@ -25,7 +25,7 @@ path {
 }
 
 .mainContainer.editActive .viewVideo {
-    border: 10px solid var(--primary-fg-color);
+    border: 10px solid #FFFFFF;
     box-sizing: border-box;
 }
 
@@ -915,6 +915,7 @@ path {
     position: relative;
     width: 100%;
     overflow: hidden;
+    color: var(--primary-bg-color);
     background: var(--primary-fg-color);
     box-shadow: 0 0 1px 2px var(--primary-bg-color);
     z-index: 1;

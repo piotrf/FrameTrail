@@ -16,7 +16,7 @@
     src: url("../fonts/Titillium_Web/TitilliumWeb-Light.ttf") format("truetype");
 }
 
-.frametrail {
+.frametrail-body {
 	position: relative;
     background: var(--primary-bg-color);
 	font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -32,7 +32,7 @@
     align-items: flex-start;
 }
 
-.frametrail.editActive {
+.frametrail-body.editActive {
     position: fixed !important;
     top: 0px !important;
     left: 0px !important;

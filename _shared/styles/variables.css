@@ -1,5 +1,5 @@
 /* CSS Variables / Custom Properties */
-html, .themeItem {
+html, .titlebar, .editingOptions, .themeItem {
 	--primary-bg-color: rgba(47, 50, 58, 1); /* Backgrounds */
 	--secondary-bg-color: rgba(73, 76, 81, .6); /* Secondary Backgrounds, Timelines, Tile-BG, Panels etc. NEEDS TO BE SEMI-TRANSPARENT */
 	--semi-transparent-bg-color: rgba(47, 50, 58, .8); 
@@ -14,7 +14,7 @@ html, .themeItem {
 	--video-background-color: #000;
 }
 
-html.dark, .themeItem[data-theme="dark"] {
+html.dark .mainContainer:not([data-edit-mode="layout"]):not([data-edit-mode="overlays"]):not([data-edit-mode="codesnippets"]):not([data-edit-mode="annotations"]), html.dark .loadingScreen, html.dark .userLoginOverlay, html.dark .titlebar:not(.editActive), .themeItem[data-theme="dark"] {
 	--primary-bg-color: rgba(0, 0, 0, 1);
 	--secondary-bg-color: rgba(50, 50, 50, .6);
 	--semi-transparent-bg-color: rgba(50, 50, 50, .8);
@@ -29,7 +29,7 @@ html.dark, .themeItem[data-theme="dark"] {
 	--video-background-color: #000;
 }
 
-html.bright, .themeItem[data-theme="bright"] {
+html.bright .mainContainer:not([data-edit-mode="layout"]):not([data-edit-mode="overlays"]):not([data-edit-mode="codesnippets"]):not([data-edit-mode="annotations"]), html.bright .loadingScreen, html.bright .userLoginOverlay, html.bright .titlebar:not(.editActive), .themeItem[data-theme="bright"] {
 	--primary-bg-color: rgba(255, 255, 255, 1);
 	--secondary-bg-color: rgba(235, 235, 235, .6);
 	--semi-transparent-bg-color: rgba(255, 255, 255, .8);
@@ -44,7 +44,7 @@ html.bright, .themeItem[data-theme="bright"] {
 	--video-background-color: var(--secondary-bg-color);
 }
 
-html.blue, .themeItem[data-theme="blue"] {
+html.blue .mainContainer:not([data-edit-mode="layout"]):not([data-edit-mode="overlays"]):not([data-edit-mode="codesnippets"]):not([data-edit-mode="annotations"]), html.blue .loadingScreen, html.blue .userLoginOverlay, html.blue .titlebar:not(.editActive), .themeItem[data-theme="blue"] {
 	--primary-bg-color: rgba(80, 93, 110, 1);
 	--secondary-bg-color: rgba(107, 125, 148, .6);
 	--semi-transparent-bg-color: rgba(44, 62, 80, .8);
@@ -59,7 +59,7 @@ html.blue, .themeItem[data-theme="blue"] {
 	--video-background-color: #000;
 }
 
-html.green, .themeItem[data-theme="green"] {
+html.green .mainContainer:not([data-edit-mode="layout"]):not([data-edit-mode="overlays"]):not([data-edit-mode="codesnippets"]):not([data-edit-mode="annotations"]), html.green .loadingScreen, html.green .userLoginOverlay, html.green .titlebar:not(.editActive), .themeItem[data-theme="green"] {
 	--primary-bg-color: rgba(22, 160, 133, 1);
 	--secondary-bg-color: rgba(30, 139, 115, .6);
 	--semi-transparent-bg-color: rgba(22, 160, 133, .8);
@@ -74,7 +74,7 @@ html.green, .themeItem[data-theme="green"] {
 	--video-background-color: #000;
 }
 
-html.orange, .themeItem[data-theme="orange"] {
+html.orange .mainContainer:not([data-edit-mode="layout"]):not([data-edit-mode="overlays"]):not([data-edit-mode="codesnippets"]):not([data-edit-mode="annotations"]), html.orange .loadingScreen, html.orange .userLoginOverlay, html.orange .titlebar:not(.editActive), .themeItem[data-theme="orange"] {
 	--primary-bg-color: rgba(255, 255, 255, 1);
 	--secondary-bg-color: rgba(234, 225, 211, .6);
 	--semi-transparent-bg-color: rgba(250, 250, 250, .8);
@@ -89,7 +89,7 @@ html.orange, .themeItem[data-theme="orange"] {
 	--video-background-color: #000;
 }
 
-html.grey, .themeItem[data-theme="grey"] {
+html.grey .mainContainer:not([data-edit-mode="layout"]):not([data-edit-mode="overlays"]):not([data-edit-mode="codesnippets"]):not([data-edit-mode="annotations"]), html.grey .loadingScreen, html.grey .userLoginOverlay, html.grey .titlebar:not(.editActive), .themeItem[data-theme="grey"] {
 	--primary-bg-color: rgba(210, 210, 210, 1);
 	--secondary-bg-color: rgba(240, 240, 240, .6);
 	--semi-transparent-bg-color: rgba(210, 210, 210, .8);
