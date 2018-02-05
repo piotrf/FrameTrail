@@ -1075,18 +1075,22 @@
         var settingsEditingOptions = $('<div class="settingsEditingTabs">'
                                     +  '    <ul>'
                                     +  '        <li>'
-                                    +  '            <a href="#ChangeSettings">Change Settings</a>'
+                                    +  '            <a href="#ChangeSettings">Video Settings</a>'
                                     +  '        </li>'
                                     +  '        <li>'
-                                    +  '            <a href="#ChangeTheme">Change Color Theme</a>'
+                                    +  '            <a href="#ChangeTheme">Color Theme</a>'
                                     +  '        </li>'
                                     +  '        <li>'
-                                    +  '            <a href="#ChangeCSSVariables">Edit CSS Variables</a>'
+                                    +  '            <a href="#ChangeCSSVariables">CSS Variables</a>'
+                                    +  '        </li>'
+                                    +  '        <li>'
+                                    +  '            <a href="#SitePreferences">Site Preferences</a>'
                                     +  '        </li>'
                                     +  '    </ul>'
                                     +  '    <div id="ChangeSettings"></div>'
                                     +  '    <div id="ChangeTheme"></div>'
                                     +  '    <div id="ChangeCSSVariables"></div>'
+                                    +  '    <div id="SitePreferences"></div>'
                                     +  '</div>')
                                     .tabs({
                                         heightStyle: "fill",
@@ -1105,7 +1109,7 @@
         var EditHypervideoForm = $('<form method="POST" class="editHypervideoForm">'
                                   +'    <div class="message saveReminder">Please save your settings right now to update the subtitle settings.</div>'
                                   +'    <div class="formColumn column1">'
-                                  +'        <label for="name">Hypervideo Name</label>'
+                                  +'        <label for="name">Name</label>'
                                   +'        <input type="text" name="name" placeholder="Name of Hypervideo" value="'+ hypervideoName +'"><br>'
                                   +'        <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((hidden.toString() == "true") ? "checked" : "")+'>'
                                   +'        <label for="hypervideo_hidden">Hidden from other users?</label>'
@@ -1521,7 +1525,7 @@
             var selectedTheme = $(this).attr('data-theme');
 
             if (selectedTheme != hypervideo.config.theme) {
-                $('html').attr('class', selectedTheme);
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', selectedTheme);
 
                 FrameTrail.module('Database').hypervideos[thisID].config.theme = selectedTheme;
                 newUnsavedChange('settings');
