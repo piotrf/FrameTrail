@@ -78,9 +78,9 @@
 
                 // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
                 if (project.theme) {
-                    $('html').attr('class', project.theme);
+                    $(FrameTrail.getState('target')).attr('data-frametrail-theme', project.theme);
                 } else {
-                    $('html').attr('class', '');
+                    $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
                 }
                 // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
 
@@ -321,9 +321,9 @@
 
         // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
         if (hypervideos[hypervideoID].config.theme) {
-            $('html').attr('class', hypervideos[hypervideoID].config.theme);
+            $(FrameTrail.getState('target')).attr('data-frametrail-theme', hypervideos[hypervideoID].config.theme);
         } else {
-            $('html').attr('class', '');
+            $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
         }
         // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
 
