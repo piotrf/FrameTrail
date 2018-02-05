@@ -40,8 +40,8 @@
     height: 100% !important;
 }
 
-body > .ui-dialog {
-    background: var(--primary-bg-color);
+body > .ui-dialog, body > .ui-draggable {
+    background-color: var(--primary-bg-color);
     font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     font-weight: 400;
