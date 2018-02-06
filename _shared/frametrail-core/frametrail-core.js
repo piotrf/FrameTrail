@@ -96,6 +96,7 @@
 
             get duration()    { return FrameTrail.module('HypervideoModel').duration },
             get currentTime() { return FrameTrail.module('HypervideoController').currentTime },
+            set currentTime(aNumber) { return FrameTrail.module('HypervideoController').currentTime = aNumber },
 
             onReady: null,
             onTimeupdate: null,
