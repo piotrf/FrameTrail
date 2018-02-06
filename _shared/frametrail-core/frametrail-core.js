@@ -125,7 +125,17 @@
             get codeSnippets()   { return FrameTrail.module('HypervideoModel').codeSnippets },
             get annotationSets() { return FrameTrail.module('HypervideoModel').annotationSets },
             get annotations()    { return FrameTrail.module('HypervideoModel').annotations },
-            get allAnnotations() { return FrameTrail.module('HypervideoModel').allAnnotations }
+            get allAnnotations() { return FrameTrail.module('HypervideoModel').allAnnotations },
+
+            traces: {
+                startTrace:     FrameTrail.module('UserTraces').startTrace,
+                endTrace:       FrameTrail.module('UserTraces').endTrace,
+                addTraceEvent:  FrameTrail.module('UserTraces').addTraceEvent,
+                deleteTraces:   FrameTrail.module('UserTraces').deleteTraces,
+                get data()      { return FrameTrail.module('UserTraces').traces }
+            }
+            
+
         }
 
         instances.push(publicInstanceAPI);

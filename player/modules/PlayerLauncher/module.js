@@ -52,6 +52,9 @@
         FrameTrail.initModule('HypervideoController');
     }
 
+    // Set up User Traces
+    FrameTrail.initModule('UserTraces');
+
 
 
     // start the actual init process

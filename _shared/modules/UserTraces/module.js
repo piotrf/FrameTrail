@@ -21,37 +21,71 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 		currentSessionID = null;
 
 	/**
-	 * I init saved sessions from localstorage.
+	 * I init saved traces from localstorage.
 	 *
-	 * @method initSessions
+	 * @method initTraces
 	 * @return 
 	 */
-	function initSessions() {
-		sessions = {
-			1516793040278: {
-				'sessionStartTime': 1516793040278,
-				'sessionEndTime': 1516800014980,
-				'duration': null,
-				'user': null
-				'traces': []
-			},
-			1516800014986: {
-				'sessionStartTime': 1516800014986,
-				'sessionEndTime': null,
-				'duration': null,
-				'user': null
-				'traces': []
+	function initTraces() {
+		
+		var savedTraces = localStorage.getItem('frametrail-traces');
+		
+		if (savedTraces) {
+			sessions = JSON.parse(savedTraces);
+		} else {
+			sessions = {
+				1516793040278: {
+					'sessionStartTime': 1516793040278,
+					'sessionEndTime': 1516800014980,
+					'duration': null,
+					'user': null,
+					'traces': []
+				},
+				1516800014986: {
+					'sessionStartTime': 1516800014986,
+					'sessionEndTime': null,
+					'duration': null,
+					'user': null,
+					'traces': []
+				}
 			}
 		}
+
+	}
+
+	initTraces();
+
+	/**
+	 * I save all traces in localstorage.
+	 *
+	 * @method saveTraces
+	 * @return 
+	 */
+	function saveTraces() {
+		
+		localStorage.setItem('frametrail-traces', JSON.stringify(sessions));
+
+	}
+
+	/**
+	 * I delete all traces from localstorage.
+	 *
+	 * @method deleteTraces
+	 * @return 
+	 */
+	function deleteTraces() {
+		
+		localStorage.removeItem('frametrail-traces');
+		
 	}
 
 	/**
 	 * I start a session trace.
 	 *
-	 * @method startSession
+	 * @method startTrace
 	 * @return 
 	 */
-	function startSession() {
+	function startTrace() {
 
 		var sessionID = Date.now(),
 			sessionData = {
@@ -71,10 +105,10 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	/**
 	 * I end a session trace.
 	 *
-	 * @method endSession
+	 * @method endTrace
 	 * @return 
 	 */
-	function endSession() {
+	function endTrace() {
 
 		var timeNow = Date.now(),
 			sessionTime = getTimeDifference(sessions[currentSessionID].sessionStartTime, timeNow);
@@ -83,6 +117,8 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 		sessions[currentSessionID].duration = sessionTime.hours +':'+ sessionTime.minutes +':'+ sessionTime.seconds;
 
 		currentSessionID = null;
+
+		saveTraces();
 
 	}
 
@@ -97,7 +133,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	function addTraceEvent(traceType, attributes) {
 
 		if (!currentSessionID) {
-			console.log('Could not add trace event. Please start session first.');
+			console.warn('Could not add trace event. Please start session first.');
 			return;
 		}
 
@@ -167,24 +203,25 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 		var secondsDifference = Math.floor(difference/1000);
 
 		return {
-			'hours': hoursDifference,
-			'minutes': minutesDifference,
-			'seconds': secondsDifference
+			'hours': (hoursDifference >= 10) ? hoursDifference : '0' + hoursDifference,
+			'minutes': (minutesDifference >= 10) ? minutesDifference : '0' + minutesDifference,
+			'seconds': (secondsDifference >= 10) ? secondsDifference : '0' + secondsDifference
 		}
 
 	}
 	
 	return {
 
-		startSession: 		startSession,
-		endSession: 		endSession,
-		addTraceEvent: 		addTraceEvent
+		startTrace: 		startTrace,
+		endTrace: 			endTrace,
+		addTraceEvent: 		addTraceEvent,
+		deleteTraces: 		deleteTraces,
 
 		/**
-		 * The current session data.
-		 * @attribute sessionData
+		 * The current trace session data.
+		 * @attribute traces
 		 */
-		get traceData()    { return getTraceData() },
+		get traces()    { return getTraceData() }
 
 	};
 
