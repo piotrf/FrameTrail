@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "name": "sdfsdf",
+        "description": "sdfsdf",
+        "thumb": null,
+        "creator": "FooBar",
+        "creatorId": "2",
+        "created": 1518001002915,
+        "lastchanged": 1518001002915
+    },
+    "config": {
+        "slidingMode": "adjust",
+        "slidingTrigger": "key",
+        "theme": null,
+        "autohideControls": true,
+        "captionsVisible": false,
+        "hidden": false,
+        "layoutArea": {
+            "areaTop": [],
+            "areaBottom": [],
+            "areaLeft": [],
+            "areaRight": []
+        }
+    },
+    "clips": [
+        {
+            "resourceId": null,
+            "duration": 234234,
+            "start": 0,
+            "end": 0,
+            "in": 0,
+            "out": 0
+        }
+    ],
+    "globalEvents": {
+        "onReady": "",
+        "onPlay": "",
+        "onPause": "",
+        "onEnded": ""
+    },
+    "customCSS": "",
+    "contents": [],
+    "subtitles": []
+}

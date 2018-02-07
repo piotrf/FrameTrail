@@ -1,0 +1,1 @@
+<?php $masterpassword = 'test123'; // Needs to have 5 chars min. ?>

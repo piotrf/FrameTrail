@@ -1,0 +1,9 @@
+{
+    "name": "TestProject1",
+    "description": "TestProject1 Descr",
+    "created": 1518000863,
+    "userNeedsConfirmation": false,
+    "defaultUserRole": "admin",
+    "defaultHypervideoHidden": false,
+    "theme": null
+}
