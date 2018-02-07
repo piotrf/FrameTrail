@@ -40,36 +40,24 @@
     FrameTrail.initModule('ViewResources');
 
 
-    FrameTrail.module('Database').loadProjectData(
-        function(){
+	FrameTrail.module('UserManagement').ensureAuthenticated(
+		function(){
 
-            FrameTrail.module('UserManagement').ensureAuthenticated(
-                function(){
+			appendTitlebar();
 
-                    appendTitlebar();
+			$(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
 
-                    $(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
+			FrameTrail.module('ViewResources').create(true);
 
-                    FrameTrail.module('ViewResources').create(true);
+			FrameTrail.module('ViewResources').open();
 
-                    FrameTrail.module('ViewResources').open();
+			initWindowResizeHandler();
 
-                    initWindowResizeHandler();
-
-                },
-                function(){
-                    alert('Log in was aborted... :(')
-                }, true
-            );
-
-
-        },
-        function(){
-
-            alert('Project does not exist!');
-
-        }
-    );
+		},
+		function(){
+			alert('Log in was aborted... :(')
+		}, true
+	);
 
     /**
      * I append the title bar.
@@ -77,8 +65,7 @@
      */
     function appendTitlebar() {
 
-        var titlebar = $(  '<div class="titlebar editActive">Resource Manager - Project: '
-                         + FrameTrail.module('Database').project.name
+        var titlebar = $(  '<div class="titlebar editActive">Resource Manager'
                          + '    <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
 

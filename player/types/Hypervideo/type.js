@@ -39,9 +39,7 @@ FrameTrail.defineType(
 
                     var hypervideoID    = FrameTrail.module('Database').getIdOfHypervideo(this.data),
 
-                        href            =     '?project='
-                                            + FrameTrail.module('RouteNavigation').projectID
-                                            + '&hypervideo='
+                        href            =     '?hypervideo='
                                             + hypervideoID,
 
                         thumbBackground = (this.data.thumb ?

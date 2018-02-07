@@ -1067,7 +1067,6 @@
         var database   = FrameTrail.module('Database'),
             hypervideo = database.hypervideo,
             thisID     = FrameTrail.module('RouteNavigation').hypervideoID,
-            projectID  = FrameTrail.module('RouteNavigation').projectID,
             EditingOptions = FrameTrail.module('ViewVideo').EditingOptions;
 
         EditingOptions.empty();
@@ -1354,8 +1353,7 @@
             thisID: thisID,
             data: {
                 'a': 'hypervideoChange',
-                'projectID': projectID,
-                'hypervideoID': thisID,
+                'hypervideoID': thisID
             },
             success: function(response) {
 
@@ -1582,7 +1580,7 @@
      */
     function exportIt() {
 
-        alert('The Export-Feature is currently being implemented. When finished, it will give you a handy ZIP file which includes a standalone version of your Hypervideo / entire Project.');
+        alert('The Export-Feature is currently being implemented. When finished, it will give you a handy ZIP file which includes a standalone version of your Hypervideo.');
 
     }
 

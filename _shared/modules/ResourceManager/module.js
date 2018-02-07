@@ -72,8 +72,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
                     maxUploadBytes = response.maxuploadbytes;
 
-                    var projectID = FrameTrail.module('RouteNavigation').projectID,
-                        uploadDialog =  $('<div class="uploadDialog" title="Add New Resource">'
+                    var uploadDialog =  $('<div class="uploadDialog" title="Add New Resource">'
                                         + '    <form class="uploadForm" method="post">'
                                         + '        <div class="resourceInputTabContainer">'
                                         + '            <ul class="resourceInputTabList">'
@@ -112,7 +111,6 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                         + '            <div class="nameInputMessage">Name</div>'
                                         + '            <input type="text" name="name" placeholder="Enter a name for the new resource" class="resourceNameInput">'
                                         + '            <input type="hidden" name="a" value="fileUpload">'
-                                        + '            <input type="hidden" name="projectID" value="'+ projectID +'">'
                                         + '            <input type="hidden" name="attributes" value="">'
                                         + '            <input type="hidden" name="type" value="url">'
                                         + '        </div>'
@@ -306,7 +304,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                                 $.ajax({
                                                     url:        '../_server/ajaxServer.php',
                                                     type:       'post',
-                                                    data:       {'a':'fileUploadThumb','projectID':projectID,'resourcesID':respText['response']['resId'],'type':respText['response']['resource']['type'],'thumb':canvas.toDataURL()},
+                                                    data:       {'a':'fileUploadThumb','resourcesID':respText['response']['resId'],'type':respText['response']['resource']['type'],'thumb':canvas.toDataURL()},
                                                     /**
                                                      * Description
                                                      * @method success
@@ -361,7 +359,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                                 $.ajax({
                                                     url:        '../_server/ajaxServer.php',
                                                     type:       'post',
-                                                    data:       {'a':'fileUploadThumb','projectID':projectID,'resourcesID':respText['response']['resId'],'type':respText['response']['resource']['type'],'thumb':canvas.toDataURL()},
+                                                    data:       {'a':'fileUploadThumb','resourcesID':respText['response']['resId'],'type':respText['response']['resource']['type'],'thumb':canvas.toDataURL()},
                                                     success: function() {
                                                         $(image).remove();
                                                         $(canvas).remove();
@@ -683,7 +681,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 * @param {Function} successCallback
 	 * @param {Function} cancelCallback
 	 */
-	function deleteResource(projectID, resourceID, successCallback, cancelCallback) {
+	function deleteResource(resourceID, successCallback, cancelCallback) {
 
 		$.ajax({
 			type:   'POST',
@@ -691,7 +689,6 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 			cache:  false,
 			data: {
 				a: 			'fileDelete',
-				projectID: 	projectID,
 				resourcesID: resourceID
 			}
 		}).done(function(data) {
@@ -728,7 +725,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 * @param {String} condition
 	 * @param {String} value
 	 */
-	function renderList(targetElement, filter, projectID, key, condition, value) {
+	function renderList(targetElement, filter, key, condition, value) {
 
 		targetElement.empty();
 		targetElement.append('<div class="loadingScreen"><div class="workingSpinner dark"></div></div>');
@@ -736,7 +733,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 		if (filter) {
 
-			getFilteredList(targetElement, projectID, key, condition, value)
+			getFilteredList(targetElement, key, condition, value)
 
 		} else {
 
@@ -834,7 +831,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 * @param {String} value
 	 * @private
 	 */
-	function getFilteredList(targetElement, projectID, key, condition, value) {
+	function getFilteredList(targetElement, key, condition, value) {
 
 		$.ajax({
 
@@ -844,7 +841,6 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
             data: {
             	a: 			'fileGetByFilter',
-            	projectID: 	projectID,
             	key: 		key,
             	condition: 	condition,
             	value: 		value

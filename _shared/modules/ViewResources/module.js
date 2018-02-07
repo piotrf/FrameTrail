@@ -120,7 +120,6 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
         } else {
 
             FrameTrail.module('ResourceManager').renderList(ResourcesList, true,
-                FrameTrail.module('RouteNavigation').projectID,
                 'type',
                 'contains',
                 type
@@ -182,7 +181,6 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
 
             for (var i in deleteCollection) {
                 FrameTrail.module('ResourceManager').deleteResource(
-                    FrameTrail.module('RouteNavigation').projectID,
                     deleteCollection[i],
                     function(){
                         callbackCollection.push(true);

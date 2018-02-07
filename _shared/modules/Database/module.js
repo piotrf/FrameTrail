@@ -18,9 +18,7 @@
  FrameTrail.defineModule('Database', function(FrameTrail){
 
 
-    var projectID    = FrameTrail.module('RouteNavigation').projectID || '',
-        hypervideoID = '',
-        project      = {},
+    var hypervideoID = '',
         hypervideos  = {},
         hypervideo   = {},
         sequence     = {},
@@ -45,59 +43,7 @@
 
 
 
-    /**
-     * I load the project index data (../_data/projects/_index.json) from the server
-     * and save the data for my projectID (from {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}})
-     * in my attribute {{#crossLink "Database/project:attribute"}}Database/project{{/crossLink}}.
-     * I call my success or fail callback respectively.
-     *
-     * @method loadProjectData
-     * @param {Function} success
-     * @param {Function} fail
-     * @private
-     */
-    function loadProjectData(success, fail) {
 
-        $.ajax({
-            type:     "GET",
-            url:      '../_data/projects/_index.json',
-            cache:    false,
-            dataType: "json",
-            mimeType: "application/json"
-        }).done(function(data){
-
-            $.ajax({
-                type:     "GET",
-                url:      '../_data/projects/' + data.projects[projectID] + '/project.json',
-                cache:    false,
-                dataType: "json",
-                mimeType: "application/json"
-            }).done(function (projectData) {
-                project = projectData;
-                //console.log('project', project);
-
-                // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
-                if (project.theme) {
-                    $(FrameTrail.getState('target')).attr('data-frametrail-theme', project.theme);
-                } else {
-                    $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
-                }
-                // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
-
-                success.call(this);
-            }).fail(function () {
-                fail('No project.json file.');
-            });
-
-
-        }).fail(function(){
-
-            fail('No project index file.');
-
-        });
-
-
-    };
 
 
     /**
@@ -114,7 +60,7 @@
         $.ajax({
 
             type:   "GET",
-            url:    ('../_data/projects/' + projectID + '/resources/_index.json'),
+            url:    ('../_data/resources/_index.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -148,7 +94,7 @@
 
             $.ajax({
                 type:   "GET",
-                url:    ('../_data/projects/' + projectID + '/users.json'),
+                url:    ('../_data/users.json'),
                 cache:  false,
                 dataType: "json",
                 mimeType: "application/json"
@@ -174,8 +120,7 @@
                 mimeType: "application/json",
                 data:   {
 
-                    a:          'userGet',
-                    projectID:  projectID
+                    a:          'userGet'
 
                 }
 
@@ -213,7 +158,7 @@
         $.ajax({
 
             type:   "GET",
-            url:    ('../_data/projects/' + projectID + '/hypervideos/_index.json'),
+            url:    ('../_data/hypervideos/_index.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -234,7 +179,7 @@
 
                     $.ajax({
                         type:   "GET",
-                        url:    ('../_data/projects/' + projectID + '/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
+                        url:    ('../_data/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
                         cache:  false,
                         dataType: "json",
                         mimeType: "application/json"
@@ -242,7 +187,7 @@
 
                         $.ajax({
                             type:   "GET",
-                            url:    ('../_data/projects/' + projectID + '/hypervideos/' + data.hypervideos[key] + '/annotations/_index.json'),
+                            url:    ('../_data/hypervideos/' + data.hypervideos[key] + '/annotations/_index.json'),
                             cache:  false,
                             dataType: "json",
                             mimeType: "application/json"
@@ -454,7 +399,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/annotations/' + id + '.json'),
+                    url: ('../_data/hypervideos/' + hypervideoID + '/annotations/' + id + '.json'),
                     cache: false,
                     dataType: "json",
                     mimeType: "application/json"
@@ -564,7 +509,7 @@
                     $.ajax({
 
                         type: "GET",
-                        url: ('../_data/projects/' + projectID + '/hypervideos/' + hypervideoID + '/subtitles/' + currentSubtitles.src),
+                        url: ('../_data/hypervideos/' + hypervideoID + '/subtitles/' + currentSubtitles.src),
                         cache: false
 
                     }).done(function(data){
@@ -644,18 +589,10 @@
     function loadData(success, fail) {
 
 
-        projectID    = FrameTrail.module('RouteNavigation').projectID;
         hypervideoID = FrameTrail.module('RouteNavigation').hypervideoID;
 
 
-        if(projectID === undefined){
-
-            return fail('No Project was selected.');
-
-        }
-
-
-        if(hypervideoID === undefined){
+       if(hypervideoID === undefined){
 
             //FrameTrail.module('InterfaceModal').showStatusMessage('No Hypervideo is selected.');
 
@@ -665,71 +602,63 @@
             overlays     = [];
             codeSnippets = {};
 
-            return  loadProjectData(function(){
+            return  loadResourceData(function(){
 
-                        loadResourceData(function(){
+						loadUserData(function(){
 
-                            loadUserData(function(){
+							loadHypervideoData(function(){
 
-                                loadHypervideoData(function(){
+								success.call();
 
-                                    success.call();
+							}, fail);
 
-                                }, fail);
+						}, fail);
 
-                            }, fail);
-
-                        }, fail);
-
-                    }, fail);
-
+					}, fail);
         }
 
 
-        loadProjectData(function(){
 
-            loadResourceData(function(){
+		loadResourceData(function(){
 
-                loadUserData(function(){
+			loadUserData(function(){
 
-                    loadHypervideoData(function(){
-
-
-                        hypervideo = hypervideos[hypervideoID];
-
-                        if(!hypervideo){
-
-                            return fail('This hypervideo does not exist.');
-
-                        }
-
-                        loadSequenceData(function(){
-
-                            loadSubtitleData(function(){
-
-                                loadContentData(function(){
-
-                                    loadAnnotationData(function(){
-
-                                        success.call();
-
-                                    }, fail);
-
-                                }, fail);
-
-                            }, fail);
-
-                        }, fail);
+				loadHypervideoData(function(){
 
 
-                    }, fail);
+					hypervideo = hypervideos[hypervideoID];
+
+					if(!hypervideo){
+
+						return fail('This hypervideo does not exist.');
+
+					}
+
+					loadSequenceData(function(){
+
+						loadSubtitleData(function(){
+
+							loadContentData(function(){
+
+								loadAnnotationData(function(){
+
+									success.call();
+
+								}, fail);
+
+							}, fail);
+
+						}, fail);
+
+					}, fail);
 
 
-                }, fail);
+				}, fail);
 
-            }, fail);
 
-        }, fail);
+			}, fail);
+
+		}, fail);
 
 
     };
@@ -992,7 +921,6 @@
 
             data: {
                 a:              'hypervideoChange',
-                projectID:      projectID,
                 hypervideoID:   thisHypervideoID,
                 src:            JSON.stringify(saveData, null, 4)
             }
@@ -1164,7 +1092,6 @@
             data: {
 
                 a:                'annotationfileSave',
-                projectID:        projectID,
                 hypervideoID:     hypervideoID,
                 action:           action,
                 annotationfileID: annotationfileID,
@@ -1261,12 +1188,6 @@
     return {
 
         /**
-         * I store the project index data (from the server's ../_data/projects/_index.json)
-         * @attribute project
-         */
-        get project()       { return project },
-
-        /**
          * I store the hypervideo index data (from the server's ../_data/projects/<ID>/hypervideos/_index.json)
          * @attribute hypervideos
          */
@@ -1354,7 +1275,6 @@
         getIdOfHypervideo:     getIdOfHypervideo,
 
         loadData:              loadData,
-        loadProjectData:       loadProjectData,
         loadResourceData:      loadResourceData,
 
         loadHypervideoData:    loadHypervideoData,

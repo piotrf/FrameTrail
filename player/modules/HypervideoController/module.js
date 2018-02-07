@@ -72,7 +72,6 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	function initController(callback, failCallback, update) {
 
 		var RouteNavigation = FrameTrail.module('RouteNavigation'),
-			projectID 	    = RouteNavigation.projectID,
 			hypervideoID    = RouteNavigation.hypervideoID,
 			_video		    = $(videoElement);
 
@@ -90,7 +89,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			// if ( videoElement.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/^no$/, '') || videoElement.canPlayType('video/webm; codecs="vp9"').replace(/^no$/, '') ) {
 			// 	_video.append('<source src="../_data/projects/' + projectID + '/resources/' + HypervideoModel.sourceFiles.webm +'" type="video/webm"></source>');
 			// } else {
-				_video.append('<source src="../_data/projects/' + projectID + '/resources/' + HypervideoModel.sourceFiles.mp4  +'" type="video/mp4"></source>');
+				_video.append('<source src="../_data/resources/' + HypervideoModel.sourceFiles.mp4  +'" type="video/mp4"></source>');
 			// }
 
 			_video.on('play',  _play);
@@ -374,8 +373,6 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					hour: '2-digit',
 					minute: '2-digit'
 				}).replace(/\./g, '.');
-
-		FrameTrail.module('Sidebar').ProjectDescription = FrameTrail.module('Database').project.description;
 
 		FrameTrail.module('Sidebar').VideoDescription   = (	'<div>' + HypervideoModel.description + '</div>'
 													  +	'<div class="descriptionLabel">Author</div>'

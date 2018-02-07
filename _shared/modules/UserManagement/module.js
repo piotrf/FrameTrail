@@ -52,7 +52,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						+   '             	<input type="password" name="passwd" id="SettingsForm_passwd" placeholder="New password"><br>'
 						+   '             	<br>'
 						+   '             	<input type="hidden" name="a" value="userChange">'
-						+	'             	<input type="hidden" name="projectID" value="">'
 						+	'             	<input type="hidden" name="userID" id="SettingsForm_userID" value="">'
 						+   '             	<input type="submit" value="Change my settings!">'
 						+   '             </form>'
@@ -64,7 +63,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						+	'             	<input type="text" name="mail" placeholder="Mail"><br>'
 						+	'             	<input type="password" name="passwd" placeholder="Password"><br>'
 						+	'             	<input type="hidden" name="a" value="userRegister">'
-						+	'             	<input type="hidden" name="projectID" value=""><br>'
 						+	'             	<input type="submit" value="Register new user!">'
 						+	'             </form>'
 						+	'        </div>'
@@ -91,7 +89,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						+   '             	    <input type="radio" name="active" id="user_change_active_0" value="0">'
                         +   '                   <label for="user_change_active_0">Inactive</label><br><br>'
 						+   '             	    <input type="hidden" name="a" value="userChange">'
-						+	'             	    <input type="hidden" name="projectID" value="">'
 						+   '             	    <input type="submit" value="Change this user\'s settings.">'
                         +   '               </div>'
 						+   '             </form>'
@@ -112,7 +109,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 				+	'             	<input type="text" name="mail" placeholder="Mail"><br>'
 				+	'             	<input type="password" name="passwd" placeholder="Password"><br>'
 				+	'             	<input type="hidden" name="a" value="userLogin">'
-				+	'             	<input type="hidden" name="projectID" value=""><br>'
 				+	'             	<input type="submit" value="Login">'
 				+	'             	<button type="button" class="loginBoxCancelButton">Cancel</button>'
 				+	'             </form>'
@@ -123,8 +119,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 				+	'             	<input type="text" name="name" placeholder="Your Name">'
 				+	'             	<input type="text" name="mail" placeholder="Mail"><br>'
 				+	'             	<input type="password" name="passwd" placeholder="Password"><br>'
-				+	'             	<input type="hidden" name="a" value="userRegister">'
-				+	'             	<input type="hidden" name="projectID" value=""><br>'
+				+	'             	<input type="hidden" name="a" value="userRegister"><br>'
 				+	'             	<input type="submit" value="Create Account">'
 				+	'             	<button type="button" class="loginBoxCancelButton">Cancel</button>'
 				+	'             </form>'
@@ -144,7 +139,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
-		data:       { "projectID":FrameTrail.module('RouteNavigation').projectID },
 		success: function(response) {
 
 			switch(response.code){
@@ -170,7 +164,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
-		data:       { "projectID":FrameTrail.module('RouteNavigation').projectID },
 		success: function(response) {
 			switch(response.code){
 				case 0:
@@ -215,7 +208,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 			method: 	"POST",
 			url: 		"../_server/ajaxServer.php",
 			dataType: 	"json",
-            data: 		"a=userGet&projectID=" + FrameTrail.module('RouteNavigation').projectID,
+            data: 		"a=userGet",
 			success: function(data) {
 
 				var allUsers = data.response.user;
@@ -236,7 +229,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						method: "POST",
 						url: 	"../_server/ajaxServer.php",
 						data: 	{	"a": "userGet",
-									"projectID": FrameTrail.module('RouteNavigation').projectID,
 									"userID": $("#user_change_user option:selected").val()
 								},
 
@@ -276,7 +268,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType: 	"json",
-		data: {"projectID":FrameTrail.module('RouteNavigation').projectID},
 		success: function(response) {
 			// TODO: Update client userData Object if Admin edited himself via this view instead of "Settings" Tab
 			refreshAdministrationForm();
@@ -393,7 +384,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
-		data:       { "projectID":FrameTrail.module('RouteNavigation').projectID },
 
 		success: function(response) {
 			//console.log(response);
@@ -436,7 +426,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 		method: 	"POST",
 		url: 		"../_server/ajaxServer.php",
 		dataType:   "json",
-		data:       { "projectID":FrameTrail.module('RouteNavigation').projectID },
 		success: function(response) {
 
 			switch(response.code){
@@ -539,7 +528,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 			method: 	"POST",
 			url: 		"../_server/ajaxServer.php",
 			dataType: 	"json",
-            data: 		"a=userCheckLogin&projectID=" + FrameTrail.module('RouteNavigation').projectID,
+            data: 		"a=userCheckLogin",
 			success: function(response) {
 				switch(response.code){
 
@@ -603,7 +592,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 			method: 	"POST",
 			url: 		"../_server/ajaxServer.php",
 			dataType: 	"json",
-            data: 		"a=userLogout&projectID=" + FrameTrail.module('RouteNavigation').projectID,
+            data: 		"a=userLogout",
 			success: function(data) {
 
 				if (userID != '') {

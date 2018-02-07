@@ -16,8 +16,7 @@
 FrameTrail.defineModule('Titlebar', function(FrameTrail){
 
 
-    var projectID = FrameTrail.module('RouteNavigation').projectID,
-        domElement = $(   '<div class="titlebar">'
+    var domElement = $(   '<div class="titlebar">'
                             + '  <div class="sidebarToggleWidget" class=""><button class="sidebarToggleButton"><span class="icon-menu"></span></button></div>'
                             + '  <div class="titlebarViewMode">'
                             + '      <button data-viewmode="overview" data-tooltip-bottom-left="Overview"><span class="icon-overview"></span></button>'
@@ -83,10 +82,10 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
 
         var RouteNavigation = FrameTrail.module('RouteNavigation'),
             baseUrl = window.location.href.split('?'),
-            url = baseUrl[0] + '?project=' + projectID,
+            url = baseUrl[0] + '?',
             secUrl = '//'+ window.location.host + window.location.pathname,
-            iframeUrl = secUrl + '?project=' + projectID,
-            label = 'Project';
+            iframeUrl = secUrl + '?',
+            label = 'Site';
 
         if ( FrameTrail.getState('viewMode') == 'video' && RouteNavigation.hypervideoID ) {
             url += '&hypervideo='+ RouteNavigation.hypervideoID;
@@ -140,7 +139,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                         + '        <div class="formColumn column2">'
                         + '            <label for="name">Hypervideo Name</label>'
                         + '            <input type="text" name="name" placeholder="Name" value=""><br>'
-                        + '            <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((FrameTrail.module('Database').project.defaultHypervideoHidden.toString() == "true") ? "checked" : "")+'>'
+                        + '            <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+(("TODO" == "true") ? "checked" : "")+'><!--TODO: comes from config.json not project settings-->'
                         + '            <label for="hypervideo_hidden">Hidden from other users?</label>'
                         + '        </div>'
                         + '        <div class="formColumn column2">'
@@ -223,7 +222,6 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
 
 
         FrameTrail.module('ResourceManager').renderList(newDialog.find('.newHypervideoDialogResources'), true,
-            FrameTrail.module('RouteNavigation').projectID,
             'type',
             'contains',
             'video'
@@ -275,7 +273,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                         "autohideControls": true,
                         "captionsVisible": false,
                         "hidden": $('.newHypervideoForm').find('input[name="hidden"]').is(':checked'),
-                        "theme": (FrameTrail.module('Database').project.theme) ? FrameTrail.module('Database').project.theme : null,
+                        "theme": ("TODO") ? "TODO" : null,
                         "layoutArea": {
                             "areaTop": [],
                             "areaBottom": [],
@@ -364,7 +362,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
 
             },
             dataType:   'json',
-            data: {'a': 'hypervideoAdd', 'projectID': projectID},
+            data: {'a': 'hypervideoAdd'},
             success: function(response) {
                 switch(response['code']) {
                     case 0:
@@ -392,7 +390,6 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                 NewHypervideoDialogResources.empty();
 
                 FrameTrail.module('ResourceManager').renderList(NewHypervideoDialogResources, true,
-                    FrameTrail.module('RouteNavigation').projectID,
                     'type',
                     'contains',
                     'video'

@@ -15,8 +15,7 @@
  FrameTrail.defineModule('TagModel', function(FrameTrail){
 
 
-    var projectID   = FrameTrail.module('RouteNavigation').projectID || '',
-        tags        = {};
+    var tags        = {};
 
 
 
@@ -31,7 +30,7 @@
 
         $.ajax({
             type:     "GET",
-            url:      '../_data/projects/' + projectID + '/tagdefinitions.json',
+            url:      '../_data/tagdefinitions.json',
             cache:    false,
             dataType: "json",
             mimeType: "application/json"
@@ -70,7 +69,6 @@
             cache:  false,
             data: {
                 a:              'tagSet',
-                projectID:      projectID,
                 tagName:        tagname,
                 lang:           language,
                 label:          label,
@@ -91,7 +89,6 @@
             cache:  false,
             data: {
                 a:              'tagLangDelete',
-                projectID:      projectID,
                 tagName:        tagname,
                 language:       language
             }
@@ -110,7 +107,6 @@
             cache:  false,
             data: {
                 a:              'tagDelete',
-                projectID:      projectID,
                 tagName:        tagname
             }
 
