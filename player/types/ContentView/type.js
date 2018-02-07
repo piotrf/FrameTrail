@@ -526,7 +526,7 @@ FrameTrail.defineType(
 
                     self.contentViewPreviewElement.attr('data-type', self.contentViewData.type);
                     self.contentViewPreviewElement.attr('data-size', self.contentViewData.contentSize);
-                    self.contentViewPreviewElement.find('.contentViewPreviewDescription').html(''+ ((self.contentViewData.type == 'TimedContent') ? 'Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'');
+                    self.contentViewPreviewElement.find('.contentViewPreviewDescription').html(''+ ((self.contentViewData.type == 'TimedContent') ? 'Annotation Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'');
 
                     self.resizeLayoutAreaPreview();
 
@@ -721,7 +721,7 @@ FrameTrail.defineType(
                                     +   '        <button class="editContentView"><span class="icon-pencil"></span></button>'
                                     +   '        <button class="deleteContentView"><span class="icon-trash"></span></button>'
                                     +   '    </div>'
-                                    +   '    <div class="contentViewPreviewDescription">'+ ((self.contentViewData.type == 'TimedContent') ? 'Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'</div>'
+                                    +   '    <div class="contentViewPreviewDescription">'+ ((self.contentViewData.type == 'TimedContent') ? 'Annotation Collection' : self.contentViewData.type) +'<br>Size: '+ self.contentViewData.contentSize +'</div>'
                                     +   '</div>');
 
                     previewElement.find('.editContentView').click(function() {
@@ -1579,10 +1579,13 @@ FrameTrail.defineType(
                                     +'        <div class="message active">Items in collection: <span class="collectionCounter"></span></div>'
                                     +'        <hr>'
                                     +'    </div>'
-                                    +'    <div class="typeSpecific codeEditorSmall '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
-                                    +'        <label>onClickContentItem:</label>'
-                                    +'        <div class="message active">This code gets executed whenever an item in the collection is clicked. <br>"this" contains the current item / annotation object (data, ui elements & states). Example: console.log(this.data).</div>'
-                                    +'        <textarea class="contentViewData" data-property="onClickContentItem" data-value="'+ contentViewData.onClickContentItem +'" placeholder="(optional)">'+ contentViewData.onClickContentItem +'</textarea>'
+                                    +'    <div class="typeSpecific advanced codeEditorSmall '+ (contentViewData.type == 'TimedContent' ? 'active' : '') +'" data-type="TimedContent">'
+                                    +'        <h3>Advanced Options</h3>'
+                                    +'        <div>'
+                                    +'            <label>onClickContentItem:</label>'
+                                    +'            <div class="message active">This code gets executed whenever an item in the collection is clicked. <br>"this" contains the current item / annotation object (data, ui elements & states). Example: console.log(this.data).</div>'
+                                    +'            <textarea class="contentViewData" data-property="onClickContentItem" data-value="'+ contentViewData.onClickContentItem +'" placeholder="(optional)">'+ contentViewData.onClickContentItem +'</textarea>'
+                                    +'        </div>'
                                     +'    </div>'
                                     +'    <div class="typeSpecific codeEditorLarge '+ (contentViewData.type == 'CustomHTML' ? 'active' : '') +'" data-type="CustomHTML">'
                                     +'        <label>Custom HTML:</label>'
@@ -1622,6 +1625,12 @@ FrameTrail.defineType(
                             });
                         }
 
+                    });
+
+                    editingUI.find('.advanced').accordion({
+                        collapsible: true,
+                        active: false,
+                        heightStyle: 'content'
                     });
 
                     // Transcripts

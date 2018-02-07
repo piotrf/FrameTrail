@@ -358,14 +358,14 @@
 }
 
 .layoutManager .layoutArea .contentViewPreview, .contentViewAnimationDiv {
-	background: var(--secondary-bg-color);
+	background: var(--secondary-bg-color) !important;
 	padding: 10px;
 	box-sizing: border-box;
 }
 
 .contentViewAnimationDiv {
 	border: 2px solid var(--primary-bg-color);
-	color: var(--primary-fg-color);
+	color: transparent;
 	pointer-events: none;
 }
 
@@ -420,7 +420,7 @@
 }
 
 .contentViewEditingUI .typeSpecific.codeEditorSmall {
-	height: 100px;
+	height: 80px;
 }
 
 .contentViewEditingUI .typeSpecific.codeEditorLarge {
