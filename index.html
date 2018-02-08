@@ -64,86 +64,10 @@
 						if (ret["code"] != "1") {
 							$("#setupForm").show();
 						} else {
-							var projectUrl = window.location.href.replace('index.html', '') + '/player';
-							window.location.replace(projectUrl);
+							var playerUrl = window.location.href.replace('index.html', '') + '/player';
+							window.location.replace(playerUrl);
 						}
 
-
-						/*content.html('<form id="initSetup">' +
-						'<input name="mail" placeholder="Admin Mail-Address (login name)" type="text">' +
-						'<input name="name" placeholder="Admin Username" type="text">' +
-						'<input name="passwd" placeholder="Admin Password" type="password">' +
-						'<button type="submit" id="submitBtn">OK</button>' +
-						'<div id="returnFromSetup" class="message error" style="margin-top: 10px;">' +
-						'</div>' +
-						'</form>');
-
-						$("input[name='ignorePassword']").val("0");
-
-						$("#initSetup").ajaxForm({
-							url: "_server/ajaxServer.php",
-							type: "POST",
-							data: {"a": "setupInit"},
-							dataType: "json",
-							success: function (ret) {
-								if ((ret["code"] == 2) || (ret["code"] == 3)) {
-									$("#returnFromSetup").show().append(ret["string"] + "<br>");
-								} else {
-									location.reload();
-								}
-							}
-						});
-
-
-						/*switch(ret["code"]) {
-							case 1:
-								var projectUrl = window.location.href.replace('index.html', '') + 'player';
-								window.location.replace(projectUrl);
-							break;
-							case 2:
-								title.html('Server does not fulfil requirements').show();
-								message.html('Your server uses an <b>outdated PHP version</b>. <br><br>In order to perform certain JSON operations, FrameTrail requires at least <b>PHP 5.6.20</b> <br>(see <a href="http://frametrail.org/installation.html"></a>). <br><br>Please update PHP or ask your admin to do so.').show();
-								content.html('');
-							case 3:
-							case 4:
-							case 5:
-							case 6:
-								//title.html('Setup Error').show();
-								//message.html(ret["string"]).show();
-							//break;
-							default:
-								title.html('Setup Frametrail').show();
-								//message.html("").show();
-								content.html('<form id="initSetup">' +
-								'<input name="mail" placeholder="Admin Mail-Address (login name)" type="text">' +
-								'<input name="name" placeholder="Admin Username" type="text">' +
-								'<input name="passwd" placeholder="Admin Password" type="password">' +
-								'<button type="button" id="submitBtn">OK</button>' +
-								'<div id="returnFromSetup" class="message error" style="margin-top: 10px;">' +
-								'</div>' +
-								'</form>');
-
-								$("input[name='ignorePassword']").val("0");
-
-									$("#submitBtn").on("click", function() {
-										$("#initSetup").ajaxSubmit();
-									})
-
-								$("#initSetup").ajaxForm({
-									url: "_server/ajaxServer.php",
-									method:"POST",
-									data: {"a": "setupInit"},
-									dataType:"json",
-									success: function(ret) {
-										if ((ret["code"] == 2) || (ret["code"] == 3)) {
-											$("#returnFromSetup").show().append(ret["string"]+"<br>");
-										} else {
-											location.reload();
-										}
-									}
-								});
-							break;
-						}*/
 					}
 				})
 
