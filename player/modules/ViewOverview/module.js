@@ -362,7 +362,7 @@ FrameTrail.defineModule('ViewOverview', function(FrameTrail){
             listWidthState = false;
             changeViewSize();
             domElement.addClass('active');
-            FrameTrail.module('Titlebar').title = "TODO";
+            FrameTrail.module('Titlebar').title = 'Overview';
         } else if (viewMode != 'resources') {
             domElement.removeClass('active');
         }

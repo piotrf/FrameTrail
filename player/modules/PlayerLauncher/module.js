@@ -127,7 +127,7 @@
 
             function(){
 
-                FrameTrail.module('InterfaceModal').setLoadingTitle("TODO");
+                FrameTrail.module('InterfaceModal').setLoadingTitle('Overview');
 
                 FrameTrail.module('Interface').create(function(){
 
