@@ -25,3 +25,6 @@ pids
 
 #data folder
 _data/
+
+#prevent commit of obsolete project manager folder
+projectmanager/
