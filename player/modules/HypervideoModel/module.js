@@ -48,6 +48,8 @@
         unsavedCustomCSS        = false,
         unsavedAnnotations      = false;
         unsavedLayout           = false;
+        unsavedConfig           = false;
+        unsavedGlobalCSS        = false;
 
 
 
@@ -87,7 +89,7 @@
         // Read in config of Hypervideo
         for (var key in hypervideo.config) {
 
-            if (key === 'layoutArea' || key === 'theme') { continue; }
+            if (key === 'layoutArea') { continue; }
 
             FrameTrail.changeState('hv_config_' + key, hypervideo.config[key]);
         }
@@ -787,6 +789,15 @@
         } else if (category === 'layout') {
 
             unsavedLayout = true;
+
+        } else if (category === 'config') {
+
+            unsavedConfig = true;
+
+        } else if (category === 'globalCSS') {
+
+            unsavedGlobalCSS = true;
+
         }
 
         FrameTrail.module('Sidebar').newUnsavedChange(category);
@@ -849,6 +860,18 @@
                     });
                 }
 
+                if (unsavedConfig) {
+                    saveRequests.push(function(){
+                        FrameTrail.module('Database').saveConfig(databaseCallback);
+                    });
+                }
+
+                if (unsavedGlobalCSS) {
+                    saveRequests.push(function(){
+                        FrameTrail.module('Database').saveGlobalCSS(databaseCallback);
+                    });
+                }
+
                 for (var i in saveRequests) {
                     saveRequests[i].call();
                 }
@@ -890,6 +913,8 @@
             unsavedCustomCSS    = false;
             unsavedAnnotations  = false;
             unsavedLayout       = false;
+            unsavedConfig       = false;
+            unsavedGlobalCSS    = false;
             FrameTrail.changeState('unsavedChanges', false)
 
             if (callback) {
@@ -1074,22 +1099,29 @@
         var settingsEditingOptions = $('<div class="settingsEditingTabs">'
                                     +  '    <ul>'
                                     +  '        <li>'
-                                    +  '            <a href="#ChangeSettings">Video Settings</a>'
+                                    +  '            <a href="#ChangeSettings">Hypervideo Settings</a>'
                                     +  '        </li>'
-                                    +  '        <li>'
+                                    +  '        <li class="ui-tabs-right">'
+                                    +  '            <a href="#Configuration">Manage Options</a>'
+                                    +  '        </li>'
+                                    +  '        <li class="ui-tabs-right">'
+                                    +  '            <a href="#TagDefinitions">Manage Tags</a>'
+                                    +  '        </li>'
+                                    +  '        <li class="ui-tabs-right">'
+                                    +  '            <a href="#ChangeGlobalCSS">Global CSS</a>'
+                                    +  '        </li>'
+                                    +  '        <li class="ui-tabs-right">'
                                     +  '            <a href="#ChangeTheme">Color Theme</a>'
                                     +  '        </li>'
-                                    +  '        <li>'
-                                    +  '            <a href="#ChangeCSSVariables">CSS Variables</a>'
-                                    +  '        </li>'
-                                    +  '        <li>'
-                                    +  '            <a href="#SitePreferences">Site Preferences</a>'
-                                    +  '        </li>'
+                                    +  '        <li class="ui-tabs-right tab-label">Generic settings: </li>'
                                     +  '    </ul>'
                                     +  '    <div id="ChangeSettings"></div>'
+                                    +  '    <div id="Configuration"></div>'
                                     +  '    <div id="ChangeTheme"></div>'
-                                    +  '    <div id="ChangeCSSVariables"></div>'
-                                    +  '    <div id="SitePreferences"></div>'
+                                    +  '    <div id="ChangeGlobalCSS"></div>'
+                                    +  '    <div id="TagDefinitions">'
+                                    +  '        <div class="message active">Coming soon. Right now you can manage tags by manually editing /_data/tagdefinitions.json</div></div>'
+                                    +  '    </div>'
                                     +  '</div>')
                                     .tabs({
                                         heightStyle: "fill",
@@ -1108,7 +1140,7 @@
         var EditHypervideoForm = $('<form method="POST" class="editHypervideoForm">'
                                   +'    <div class="message saveReminder">Please save your settings right now to update the subtitle settings.</div>'
                                   +'    <div class="formColumn column1">'
-                                  +'        <label for="name">Name</label>'
+                                  +'        <label for="name">Hypervideo Name</label>'
                                   +'        <input type="text" name="name" placeholder="Name of Hypervideo" value="'+ hypervideoName +'"><br>'
                                   +'        <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((hidden.toString() == "true") ? "checked" : "")+'>'
                                   +'        <label for="hypervideo_hidden">Hidden from other users?</label>'
@@ -1505,10 +1537,10 @@
                             + '</div>');
 
         ChangeThemeUI.find('.themeItem').each(function() {
-            if ( hypervideo.config.theme == $(this).attr('data-theme') ) {
+            if ( FrameTrail.module('Database').config.theme == $(this).attr('data-theme') ) {
                 $(this).addClass('active');
             }
-            if ( !hypervideo.config.theme && $(this).attr('data-theme') == 'default' ) {
+            if ( !FrameTrail.module('Database').config.theme && $(this).attr('data-theme') == 'default' ) {
                 $(this).addClass('active');
             }
         });
@@ -1522,27 +1554,29 @@
 
             var selectedTheme = $(this).attr('data-theme');
 
-            if (selectedTheme != hypervideo.config.theme) {
+            if (selectedTheme != FrameTrail.module('Database').config.theme) {
                 $(FrameTrail.getState('target')).attr('data-frametrail-theme', selectedTheme);
 
-                FrameTrail.module('Database').hypervideos[thisID].config.theme = selectedTheme;
-                newUnsavedChange('settings');
+                FrameTrail.module('Database').config.theme = selectedTheme;
+                newUnsavedChange('config');
             }
 
         });
 
 
-        /* CSS Variables Editing UI */
+        /* Global CSS Editing UI */
 
-        var CSSVariablesEditingUI = $('<div class="CSSVariablesEditingUI" style="height: 110px;">'
-                                    + '    <textarea class="CSSVariables">/* Custom CSS Variables coming soon */</textarea>'
-                                    + '</div>');
+        var cssText = ($('head > style.FrameTrailGlobalCustomCSS').length != 0) ? $('head > style.FrameTrailGlobalCustomCSS').html() : '';
+        
+        var globalCSSEditingUI = $('<div class="globalCSSEditingUI" style="height: 110px;">'
+                                 + '    <textarea class="globalCSS">'+ cssText +'</textarea>'
+                                 + '</div>');
 
-        settingsEditingOptions.find('#ChangeCSSVariables').append(CSSVariablesEditingUI);
+        settingsEditingOptions.find('#ChangeGlobalCSS').append(globalCSSEditingUI);
 
         // Init CodeMirror for CSS Variables
 
-        var textarea = settingsEditingOptions.find('.CSSVariables');
+        var textarea = settingsEditingOptions.find('.globalCSS');
 
         var codeEditor = CodeMirror.fromTextArea(textarea[0], {
                 value: textarea[0].value,
@@ -1558,14 +1592,28 @@
 
             var thisTextarea = $(instance.getTextArea());
 
-            // TODO: Update CSS Variables (instance.getValue()) in Database
-
             thisTextarea.val(instance.getValue());
 
+            $('head > style.FrameTrailGlobalCustomCSS').html(instance.getValue());
+
+            newUnsavedChange('globalCSS');
 
         });
         codeEditor.setSize(null, '100%');
 
+        // this is necessary to be able to manipulate the css live
+
+        if ( $('head > style.FrameTrailGlobalCustomCSS').length == 0 && $('head link[href$="custom.css"]').length != 0 ) {
+            
+            $.get($('head link[href$="custom.css"]').attr('href'))
+                .done(function (cssString) {
+                    codeEditor.setValue(cssString);
+                    $('head').append('<style class="FrameTrailGlobalCustomCSS" type="text/css">'+ cssString +'</style>');
+                    $('head link[href$="custom.css"]').remove();
+                }).fail(function() {
+                    console.log('Could not retrieve custom CSS contents (custom.css needs to be on same domain).')
+                });
+        }
 
     }
 

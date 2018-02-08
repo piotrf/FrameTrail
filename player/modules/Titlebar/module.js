@@ -139,7 +139,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                         + '        <div class="formColumn column2">'
                         + '            <label for="name">Hypervideo Name</label>'
                         + '            <input type="text" name="name" placeholder="Name" value=""><br>'
-                        + '            <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+(("TODO" == "true") ? "checked" : "")+'><!--TODO: comes from config.json not project settings-->'
+                        + '            <input type="checkbox" name="hidden" id="hypervideo_hidden" value="hidden" '+((FrameTrail.module('Database').config.defaultHypervideoHidden.toString() == "true") ? "checked" : "")+'>'
                         + '            <label for="hypervideo_hidden">Hidden from other users?</label>'
                         + '        </div>'
                         + '        <div class="formColumn column2">'
@@ -245,7 +245,6 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                         "autohideControls": true,
                         "captionsVisible": false,
                         "hidden": $('.newHypervideoForm').find('input[name="hidden"]').is(':checked'),
-                        "theme": ("TODO") ? "TODO" : null,
                         "layoutArea": {
                             "areaTop": [],
                             "areaBottom": [],

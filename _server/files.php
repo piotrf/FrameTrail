@@ -548,4 +548,93 @@ function parse_size($size) {
 	}
 }
 
+/**
+ * @param $configstring
+ * @return mixed
+ *
+ * Returning Code:
+ * 0	=	Success. Config file saved.
+ * 1	=	failed. User is not logged in or is inactive or not admin (see resp["string"])
+ * 2	=	failed. Config file not found or not writable
+ * 3	= 	failed. Config string must be > 3 characters
+ *
+ */
+function updateConfigFile($configstring) {
+	
+	global $conf;
+	$login = userCheckLogin("admin");
+	if ($login["code"] != 1) {
+		$return["status"] = "fail";
+		$return["code"] = 1;
+		$return["string"] = $login["string"];
+		return $return;
+	} else {
+
+		if (!is_writable($conf["dir"]["data"]."/config.json")) {
+			$return["status"] = "fail";
+			$return["code"] = 2;
+			$return["string"] = "Config file (config.json) not writable.";
+			return $return;
+		}
+
+		if ((strlen($_REQUEST["src"]) <3)) {
+			$return["status"] = "fail";
+			$return["code"] = 3;
+			$return["string"] = "Config string length must be > 3 characters.";
+			return $return;
+		}
+
+		$file = new sharedFile($conf["dir"]["data"]."/config.json");
+		$src = json_decode($configstring, true);
+		$jsonsrc = json_encode($src,$conf["settings"]["json_flags"]);
+		$file->writeClose($jsonsrc);
+
+		$return["status"] = "success";
+		$return["code"] = 0;
+		$return["string"] = "Config successfully saved.";
+		return $return;
+
+	}
+}
+
+/**
+ * @param $cssstring
+ * @return mixed
+ *
+ * Returning Code:
+ * 0	=	Success. CSS file saved.
+ * 1	=	failed. User is not logged in or is inactive or not admin (see resp["string"])
+ * 2	=	failed. CSS file not found or not writable
+ *
+ */
+function updateCSSFile($cssstring) {
+	
+	global $conf;
+	$login = userCheckLogin("admin");
+	if ($login["code"] != 1) {
+		$return["status"] = "fail";
+		$return["code"] = 1;
+		$return["string"] = $login["string"];
+		return $return;
+	} else {
+
+		if (!is_writable($conf["dir"]["data"]."/custom.css")) {
+			$return["status"] = "fail";
+			$return["code"] = 2;
+			$return["string"] = "CSS file (custom.css) not writable.";
+			return $return;
+		}
+
+		$file = new sharedFile($conf["dir"]["data"]."/custom.css");
+		$file->writeClose($cssstring);
+
+		$return["status"] = "success";
+		$return["code"] = 0;
+		$return["string"] = "CSS file successfully saved.";
+		return $return;
+
+	}
+}
+
+
 ?>

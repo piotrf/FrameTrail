@@ -32,8 +32,8 @@
 		$(document).ready( function() {
 
 			var title = $('.boxTitle'),
-					message = $('#message'),
-					content = $('#content');
+				message = $('#message'),
+				content = $('#content');
 
 			//TODO
 
@@ -60,11 +60,10 @@
 					dataType: "json",
 					success: function(ret) {
 
-
 						if (ret["code"] != "1") {
 							$("#setupForm").show();
 						} else {
-							var playerUrl = window.location.href.replace('index.html', '') + '/player';
+							var playerUrl = window.location.href.replace('index.html', '') + 'player';
 							window.location.replace(playerUrl);
 						}
 
@@ -92,7 +91,7 @@
 		<div class="boxTitle" style="display: none;"></div>
 		<div id="message" class="message"></div>
 		<div id="content">
-			<div id="setupForm" style="display: none">
+			  <div id="setupForm" style="display: none">
 				<form id="initSetup">
 					<input name="mail" placeholder="Admin Mail-Address (login name)" type="text">
 					<input name="name" placeholder="Admin Username" type="text">

@@ -359,6 +359,8 @@ FrameTrail.defineModule('Sidebar', function(FrameTrail){
         if (category == 'codeSnippets' || category == 'events' || category == 'customCSS') {
             // camelCase not valid in attributes
             domElement.find('button[data-editmode="codesnippets"]').addClass('unsavedChanges');
+        } else if (category == 'config' || category == 'globalCSS') {
+            domElement.find('button[data-editmode="settings"]').addClass('unsavedChanges');
         } else {
             domElement.find('button[data-editmode="'+category+'"]').addClass('unsavedChanges');
         }

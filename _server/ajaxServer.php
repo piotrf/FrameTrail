@@ -158,6 +158,25 @@ switch($_REQUEST["a"]) {
 		$return = tagLangDelete($_REQUEST["lang"]);
 		break;
 
+	/*#########################################
+	 ############ Config File Handling
+	 #########################################*/
+
+	case "configChange":
+		
+		include_once("files.php");
+		$return = updateConfigFile($_REQUEST["src"]);
+		break;
+
+	/*#########################################
+	 ############ CSS File Handling
+	 #########################################*/
+
+	case "globalCSSChange":
+		
+		include_once("files.php");
+		$return = updateCSSFile($_REQUEST["src"]);
+		break;
 
 	/*#########################################
 	 ############ Setup Handling
@@ -244,22 +263,7 @@ switch($_REQUEST["a"]) {
 			echo json_encode($return);
 			exit;
 		}
-		/*
-
-		if (!file_exists($conf["dir"]["data"]."/masterpassword.php")) {
-			if (!$_REQUEST["masterpassword"] || (strlen($_REQUEST["masterpassword"]) < 5)) {
-				$return["status"] = "fail";
-				$return["code"] = 2;
-				$return["string"] = "Masterpassword missing or too short.";
-				echo json_encode($return,$conf["settings"]["json_flags"]);
-				exit;
-			} else {
-				if (!file_put_contents($conf["dir"]["data"] . "/masterpassword.php", "<?php \$masterpassword = '" . $_REQUEST["masterpassword"] . "'; // Needs to have 5 chars min. ?>")) {
-					$errorCnt++;
-				}
-			}
-		}*/
-
+		
 		if (!file_exists($conf["dir"]["data"]."/config.json")) {
 			$tmpColors = array("597081", "339966", "16a09c", "cd4436", "0073a6", "8b5180", "999933", "CC3399", "7f8c8d", "ae764d", "cf910d", "b85e02");
 
@@ -267,6 +271,7 @@ switch($_REQUEST["a"]) {
 				"updateServiceURL"=> "https://update.frametrail.org",
 				"autoUpdate"=> false,
 				"defaultUserRole"=> "user",
+				"captureUserTraces"=> false,
 				"userNeedsConfirmation"=> false,
 				"allowUploads"=> true,
 				"theme"=> "",
@@ -283,6 +288,7 @@ switch($_REQUEST["a"]) {
 		file_put_contents($conf["dir"]["data"]."/hypervideos/_index.json", json_encode(array("hypervideo-increment"=>0,"hypervideos"=>array())),$conf["settings"]["json_flags"]);
 		file_put_contents($conf["dir"]["data"]."/resources/_index.json", json_encode(array("resources-increment"=>0,"resources"=>array())),$conf["settings"]["json_flags"]);
 		file_put_contents($conf["dir"]["data"]."/tagdefinitions.json", "{}");
+		file_put_contents($conf["dir"]["data"]."/custom.css", "");
 		include_once("user.php");
 		$userSuccess = userRegister($_REQUEST["name"],$_REQUEST["mail"],$_REQUEST["passwd"]);
 		if ($userSuccess["code"] != 0) {

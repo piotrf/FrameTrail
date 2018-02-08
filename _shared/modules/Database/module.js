@@ -26,6 +26,7 @@
         overlays     = [],
         codeSnippets = {},
         resources    = {},
+        config       = {},
 
         annotations            = {},
         annotationfileIDs      = {},
@@ -41,9 +42,44 @@
 
 
 
+    /**
+     * I load the config data (../_data/config.json) from the server
+     * and save the data in my attribute {{#crossLink "Database/config:attribute"}}Database/config{{/crossLink}}.
+     * I call my success or fail callback respectively.
+     *
+     * @method loadConfigData
+     * @param {Function} success
+     * @param {Function} fail
+     */
+    function loadConfigData(success, fail) {
 
+        $.ajax({
 
+            type:   "GET",
+            url:    ('../_data/config.json'),
+            cache:  false,
+            dataType: "json",
+            mimeType: "application/json"
+        }).done(function(data){
 
+            config = data;
+
+            // TODO: Check if this makes sense here
+            if (config.theme) {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', config.theme);
+            } else {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
+            }
+
+            success.call(this);
+
+        }).fail(function(){
+
+            fail('No resources index file.');
+
+        });
+
+    };
 
 
     /**
@@ -263,14 +299,6 @@
             clips: hypervideos[hypervideoID].clips
         }
         //console.log('sequence', sequence);
-
-        // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
-        if (hypervideos[hypervideoID].config.theme) {
-            $(FrameTrail.getState('target')).attr('data-frametrail-theme', hypervideos[hypervideoID].config.theme);
-        } else {
-            $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
-        }
-        // TODO: MOVE WHERE IT ACTUALLY MAKES SENSE
 
         success();
     };
@@ -599,63 +627,71 @@
             overlays     = [];
             codeSnippets = {};
 
-            return  loadResourceData(function(){
+            return  loadConfigData(function(){
 
-						loadUserData(function(){
+                        loadResourceData(function(){
 
-							loadHypervideoData(function(){
+    						loadUserData(function(){
 
-								success.call();
+    							loadHypervideoData(function(){
 
-							}, fail);
+    								success.call();
 
-						}, fail);
+    							}, fail);
 
-					}, fail);
+    						}, fail);
+
+    					}, fail);
+
+                    }, fail);
         }
 
 
 
-		loadResourceData(function(){
+		loadConfigData(function(){
 
-			loadUserData(function(){
+            loadResourceData(function(){
 
-				loadHypervideoData(function(){
+    			loadUserData(function(){
 
-
-					hypervideo = hypervideos[hypervideoID];
-
-					if(!hypervideo){
-
-						return fail('This hypervideo does not exist.');
-
-					}
-
-					loadSequenceData(function(){
-
-						loadSubtitleData(function(){
-
-							loadContentData(function(){
-
-								loadAnnotationData(function(){
-
-									success.call();
-
-								}, fail);
-
-							}, fail);
-
-						}, fail);
-
-					}, fail);
+    				loadHypervideoData(function(){
 
 
-				}, fail);
+    					hypervideo = hypervideos[hypervideoID];
+
+    					if(!hypervideo){
+
+    						return fail('This hypervideo does not exist.');
+
+    					}
+
+    					loadSequenceData(function(){
+
+    						loadSubtitleData(function(){
+
+    							loadContentData(function(){
+
+    								loadAnnotationData(function(){
+
+    									success.call();
+
+    								}, fail);
+
+    							}, fail);
+
+    						}, fail);
+
+    					}, fail);
 
 
-			}, fail);
+    				}, fail);
 
-		}, fail);
+
+    			}, fail);
+
+    		}, fail);
+
+        }, fail);
 
 
     };
@@ -733,7 +769,6 @@
         		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
         		"hidden": hypervideos[thisHypervideoID].hidden,
-                "theme": hypervideos[thisHypervideoID].config.theme,
                 "layoutArea": FrameTrail.module('ViewLayout').getLayoutAreaData()
         	},
         	"clips": hypervideos[thisHypervideoID].clips,
@@ -893,6 +928,112 @@
 
 
     /**
+     * I save the config data back to the server.
+     *
+     * My success callback gets one argument, which is either
+     *
+     *     { success: true }
+     * or
+     *     { failed: 'config', error: ... }
+     *
+     * @method saveConfig
+     * @param {Function} callback
+     */
+    function saveConfig(callback) {
+
+        $.ajax({
+            type:   'POST',
+            url:    '../_server/ajaxServer.php',
+            cache:  false,
+
+            data: {
+                a:              'configChange',
+                src:            JSON.stringify(config, null, 4)
+            }
+
+        }).done(function(data) {
+
+            if (data.code === 0) {
+
+                callback.call(window, { success: true });
+
+            } else {
+
+                callback.call(window, {
+                    failed: 'config',
+                    error: 'ServerError',
+                    code: data.code
+                });
+
+            }
+
+        }).fail(function(error){
+
+            callback.call(window, {
+                failed: 'config',
+                error: error
+            });
+
+        });
+
+    };
+
+
+    /**
+     * I save the global custom CSS back to the server (/_data/custom.css).
+     *
+     * My success callback gets one argument, which is either
+     *
+     *     { success: true }
+     * or
+     *     { failed: 'globalcss', error: ... }
+     *
+     * @method saveGlobalCSS
+     * @param {Function} callback
+     */
+    function saveGlobalCSS(callback) {
+
+        var styles = $('head > style.FrameTrailGlobalCustomCSS').html();
+
+        $.ajax({
+            type:   'POST',
+            url:    '../_server/ajaxServer.php',
+            cache:  false,
+
+            data: {
+                a:              'globalCSSChange',
+                src:            styles
+            }
+
+        }).done(function(data) {
+
+            if (data.code === 0) {
+
+                callback.call(window, { success: true });
+
+            } else {
+
+                callback.call(window, {
+                    failed: 'globalcss',
+                    error: 'ServerError',
+                    code: data.code
+                });
+
+            }
+
+        }).fail(function(error){
+
+            callback.call(window, {
+                failed: 'globalcss',
+                error: error
+            });
+
+        });
+
+    };
+
+
+    /**
      * I save the complete hypervideo data back to the server.
      *
      * My success callback gets one argument, which is either
@@ -904,7 +1045,7 @@
      * @method saveOverlays
      * @param {Function} callback
      */
-    function saveHypervideo (callback, thisHypervideoID) {
+    function saveHypervideo(callback, thisHypervideoID) {
 
         thisHypervideoID = thisHypervideoID || hypervideoID;
 
@@ -948,7 +1089,6 @@
         });
 
     };
-
 
 
     /**
@@ -1267,6 +1407,12 @@
          */
         get users()     { return users },
 
+        /**
+         * I store the config data (config.json).
+         * @attribute users
+         */
+        get config()     { return config },
+
 
         getIdOfResource:       getIdOfResource,
         getIdOfHypervideo:     getIdOfHypervideo,
@@ -1281,6 +1427,8 @@
 
         saveHypervideo:        saveHypervideo,
         saveAnnotations:       saveAnnotations,
+        saveConfig:            saveConfig,
+        saveGlobalCSS:         saveGlobalCSS,
 
         //TODO only shortcut for now
         convertToDatabaseFormat: convertToDatabaseFormat
