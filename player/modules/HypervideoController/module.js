@@ -87,7 +87,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			FrameTrail.changeState('videoWorking', true);
 
 			// if ( videoElement.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/^no$/, '') || videoElement.canPlayType('video/webm; codecs="vp9"').replace(/^no$/, '') ) {
-			// 	_video.append('<source src="../_data/projects/' + projectID + '/resources/' + HypervideoModel.sourceFiles.webm +'" type="video/webm"></source>');
+			// 	_video.append('<source src="../_data/resources/' + HypervideoModel.sourceFiles.webm +'" type="video/webm"></source>');
 			// } else {
 				_video.append('<source src="../_data/resources/' + HypervideoModel.sourceFiles.mp4  +'" type="video/mp4"></source>');
 			// }
@@ -353,7 +353,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 
 	/**
-	 * I update the descriptions of the hypervideo and of the current project, which is shown in the UI in the {{#crossLink "Sidebar"}}Sidebar{{/crossLink}}
+	 * I update the descriptions of the hypervideo, which is shown in the UI in the {{#crossLink "Sidebar"}}Sidebar{{/crossLink}}
 	 * @method updateDescriptions
 	 */
 	function updateDescriptions() {

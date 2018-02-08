@@ -47,7 +47,7 @@
 
 
     /**
-     * I load the resource index data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}} /resources/_index.json) from the server
+     * I load the resource index data (../_data/resources/_index.json) from the server
      * and save the data in my attribute {{#crossLink "Database/resources:attribute"}}Database/resources{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -80,7 +80,7 @@
 
 
     /**
-     * I load the user.json of the current project from the server
+     * I load the user.json from the server
      * and save the  data in my attribute {{#crossLink "Database/users:attribute"}}Database/users{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -144,7 +144,7 @@
 
 
     /**
-     * I load the hypervideo index data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}} /hypervideos/_index.json) from the server
+     * I load the hypervideo index data (../_data/hypervideos/_index.json) from the server
      * and save the data in my attribute {{#crossLink "Database/hypervideos:attribute"}}Database/hypervideos{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -247,9 +247,9 @@
 
 
     /**
-     * I load the hypervideo sequence data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}}
-     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
-     * and save the data in my attribute {{#crossLink "Database/hypervideo:attribute"}}Database/hypervideos{{/crossLink}}.
+     * I load the hypervideo sequence data (../_data/hypervideos/ 
+     * {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) 
+     * from the server and save the data in my attribute {{#crossLink "Database/hypervideo:attribute"}}Database/hypervideos{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
      * @method loadSequenceData
@@ -371,8 +371,7 @@
 
 
     /**
-     * I load the annotation data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}}
-     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
+     * I load the annotation data (../_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
      * and save the data in my attribute {{#crossLink "Database/annotations:attribute"}}Database/annotations{{/crossLink}},
      * and the respective annotationfileIDs in my attribute {{#crossLink "Database/annotationfileIDs:attribute"}}Database/annotationfileIDs{{/crossLink}},
      *
@@ -477,8 +476,7 @@
 
 
     /**
-     * I load the subtitles data (../_data/projects/ {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}}
-     * /hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /subtitles/...) from the server
+     * I load the subtitles data (../_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /subtitles/...) from the server
      * and save the data in my attribute {{#crossLink "Database/subtitles:attribute"}}Database/subtitles{{/crossLink}}
      *
      * I call my success or fail callback respectively.
@@ -576,8 +574,7 @@
     /**
      * I initialise the load process of the database
      *
-     * First I look for the {{#crossLink "RouteNavigation/projectID:attribute"}}RouteNavigation/projectID{{/crossLink}} and
-     * {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}}.
+     * First I look for the {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}}.
      *
      * Then I call the nested load functions to fetch all data from the server.
      * I call my success or fail callback respectively.
@@ -1188,7 +1185,7 @@
     return {
 
         /**
-         * I store the hypervideo index data (from the server's ../_data/projects/<ID>/hypervideos/_index.json)
+         * I store the hypervideo index data (from the server's ../_data/hypervideos/_index.json)
          * @attribute hypervideos
          */
         get hypervideos()   { return hypervideos },
@@ -1202,23 +1199,23 @@
         set hypervideo(data) { return hypervideo = data },
 
         /**
-         * I store the hypervideo sequence data (from the server's ../_data/projects/<ID>/hypervideos/<ID>/hypervideo.json)
+         * I store the hypervideo sequence data (from the server's ../_data/hypervideos/<ID>/hypervideo.json)
          * @attribute sequence
          */
         get sequence()      { return sequence },
         /**
-         * I store the overlays data (from the server's ../_data/projects/<ID>/hypervideos/<ID>/overlays.json)
+         * I store the overlays data (from the server's ../_data/hypervideos/<ID>/overlays.json)
          * @attribute overlays
          */
         get overlays()      { return overlays },
         /**
-         * I store the code snippets data (from the server's ../_data/projects/<ID>/hypervideos/<ID>/codeSnippets.json)
+         * I store the code snippets data (from the server's ../_data/hypervideos/<ID>/codeSnippets.json)
          * @attribute codesnippets
          */
         get codeSnippets()         { return codeSnippets },
 
         /**
-         * I store the annotation data (from all json files from the server's ../_data/projects/<ID>/hypervideos/<ID>/annotationfiles/).
+         * I store the annotation data (from all json files from the server's ../_data/hypervideos/<ID>/annotationfiles/).
          *
          * I am a map of keys (userIDs) to an array of all annotations from that user.
          *
@@ -1245,7 +1242,7 @@
         get annotationfileIDs()  { return annotationfileIDs },
 
         /**
-         * I store the subtitle data (from all .vtt files from the server's ../_data/projects/<ID>/hypervideos/<ID>/subtitles/).
+         * I store the subtitle data (from all .vtt files from the server's ../_data/hypervideos/<ID>/subtitles/).
          *
          * @attribute annotations
          */
@@ -1259,13 +1256,13 @@
         get subtitlesLangMapping() { return subtitlesLangMapping },
 
         /**
-         * I store the resource index data (from the server's ../_data/projects/<ID>/resources/_index.json)
+         * I store the resource index data (from the server's ../_data/resources/_index.json)
          * @attribute resources
          */
         get resources()     { return resources },
 
         /**
-         * I store the user data (from the projects user.json). The keys are the userIDs, and the values are maps of the user's attributes.
+         * I store the user data (user.json). The keys are the userIDs, and the values are maps of the user's attributes.
          * @attribute users
          */
         get users()     { return users },

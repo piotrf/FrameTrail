@@ -27,7 +27,7 @@ FrameTrail.defineModule('Sidebar', function(FrameTrail){
                             + '                </div>'
                             + '            </div>'
                             + '            <div class="viewmodeInfo">'
-                            + '                <span class="projectDescription"><!--TODO--></span>'
+                            + '                <span class="siteDescription"><!--TODO--></span>'
                             + '            </div>'
                             + '        </div>'
                             + '        <div data-viewmode="video">'
@@ -213,7 +213,7 @@ FrameTrail.defineModule('Sidebar', function(FrameTrail){
                         deleteDialog.find('.message.error').addClass('active').html('User not active');
                     break;
                     case 3:
-                        deleteDialog.find('.message.error').addClass('active').html('Could not find the projects hypervideosID folder TODO');
+                        deleteDialog.find('.message.error').addClass('active').html('Could not find the hypervideos/ID folder');
                     break;
                     case 4:
                         deleteDialog.find('.message.error').addClass('active').html('hypervideoID could not be found in database.');

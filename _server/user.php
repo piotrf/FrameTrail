@@ -216,7 +216,6 @@ function userLogout() {
  * 3 = yes, but inactive
  * 4 = yes, but has not given user role
  *
-
  */
 function userCheckLogin($userRole = false) {
 	global $conf;

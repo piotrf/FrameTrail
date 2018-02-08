@@ -407,7 +407,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                 case 3:
                                     uploadDialog.find('.progress').hide();
                                     uploadDialog.find('.newResourceConfirm').prop('disabled', false);
-                                    $('.uploadDialog').append('<div class="message active error">Could not find the projects resources folder.</div>');
+                                    $('.uploadDialog').append('<div class="message active error">Could not find resources folder.</div>');
                                     break;
                                 case 4:
                                     uploadDialog.find('.progress').hide();
@@ -676,7 +676,6 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 * I delete a resource from the server.
 	 *
 	 * @method deleteResource
-	 * @param {String} projectID
 	 * @param {String} resourceID
 	 * @param {Function} successCallback
 	 * @param {Function} cancelCallback
@@ -707,7 +706,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 
 	/**
-	 * I render a list of thumbnails for either all resource items of the project,
+	 * I render a list of thumbnails for either all resource items,
 	 * or a narrowed down set of them.
 	 *
 	 * The targetElement should be a &lt;div&gt; or likewise, and will afterwards contain
@@ -715,12 +714,9 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 *
 	 * If filter is true, then the method will ask the server only for a list of resources which meet the key-condition-value requirements (e.g. "type" "==" "video"). See also server docs!
 	 *
-	 * Note: projectID must be set!
-	 *
 	 * @method renderList
 	 * @param {HTMLElement} targetElement
 	 * @param {Boolean} filter
-	 * @param {String} projectID
 	 * @param {String} key
 	 * @param {String} condition
 	 * @param {String} value
@@ -825,7 +821,6 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 *
 	 * @method getFilteredList
 	 * @param {HTMLElement} targetElement
-	 * @param {String} projectID
 	 * @param {String} key
 	 * @param {String} condition
 	 * @param {String} value

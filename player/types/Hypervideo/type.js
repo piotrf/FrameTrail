@@ -4,7 +4,7 @@
 
 
 /**
- * I am the type definition of an Hypervideo (as an item in the overview mode or in project manager).
+ * I am the type definition of an Hypervideo (as an item in the overview mode).
  * __Do not confuse me__ with the data model of the current hypervideo stored
  * in {{#crossLink "HypervideoModel"}}HypervideoModel{{/crossLink}}!
  *

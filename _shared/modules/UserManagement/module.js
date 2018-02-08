@@ -149,7 +149,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 					domElement.find('.registrationFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields! Is the mail adress valid?');
 					break;
 				case 2:
-					domElement.find('.registrationFormStatus').removeClass('success').addClass('active error').text('Email already exists in this project.');
+					domElement.find('.registrationFormStatus').removeClass('success').addClass('active error').text('Email already exists.');
 					break;
 				case 3:
 					domElement.find('.registrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin!');
@@ -410,7 +410,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Incorrect Password');
 					break;
 				case 4:
-					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Fatal error: Could not find user database. Project deleted?');
+					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('Fatal error: Could not find user database.');
 					break;
 				case 5:
 					loginBox.find('.loginFormStatus').removeClass('success').addClass('active error').text('User is not active. Please contact an admin!');
@@ -444,7 +444,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 					loginBox.find('.userRegistrationFormStatus').removeClass('success').addClass('active error').text('Please fill out all fields! Is the mail adress valid?');
 					break;
 				case 2:
-					loginBox.find('.userRegistrationFormStatus').removeClass('success').addClass('active error').text('Email already exists in this project.');
+					loginBox.find('.userRegistrationFormStatus').removeClass('success').addClass('active error').text('Email already exists.');
 					break;
 				case 3:
 					loginBox.find('.userRegistrationFormStatus').removeClass('success error').addClass('active').text('You are registered, but you need to get activated by an admin before you can login!');
@@ -544,7 +544,15 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						break;
 
 					case 2:
-						throw new Error('Project could not be found.');
+						throw new Error('User file is missing.');
+						break;
+
+					case 3:
+						throw new Error('Logged in but user not active');
+						break;
+
+					case 4:
+						throw new Error('Logged in but not with required role.');
 						break;
 
 				}

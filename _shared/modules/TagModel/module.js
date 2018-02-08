@@ -4,7 +4,7 @@
 
 /**
  * I am the TagModel.
- * I manage the tag definitions stored on the server for each project, and localize their labels and descriptions.
+ * I manage the tag definitions stored on the server, and localize their labels and descriptions.
  *
  * I query the {{#crossLink "HypervideoModel"}}HypervideoModel{{/crossLink}} for filtered collections of Overlays and Annotations
  *

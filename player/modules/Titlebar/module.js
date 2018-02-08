@@ -146,34 +146,6 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                         + '            <label for="description">Description</label>'
                         + '            <textarea name="description" placeholder="Description"></textarea><br>'
                         + '        </div>'
-                        /*
-                        + '        <div class="hypervideoLayout">'
-                        + '            <div>Player Layout:</div>'
-                        + '            <div class="settingsContainer">'
-                        + '                <div class="layoutSettingsWrapper">'
-                        + '                    <div data-config="areaTopVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['areaTopVisible'].toString() == 'true') ? 'active' : '') +'">LayoutArea Top</div>'
-                        + '                    <div class="playerWrapper">'
-                        + '                        <div data-config="overlaysVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['overlaysVisible'].toString() == 'true') ? 'active' : '') +'">Overlays</div>'
-                        + '                        <div data-config="areaRightVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['areaRightVisible'].toString() == 'true') ? 'active' : '') +'">LayoutArea Right</div>'
-                        + '                    </div>'
-                        + '                    <div data-config="areaBottomVisible" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['areaBottomVisible'].toString() == 'true') ? 'active' : '') +'">LayoutArea Bottom</div>'
-                        + '                </div>'
-                        + '                <div class="genericSettingsWrapper">Layout Mode'
-                        + '                    <div data-config="slidingMode" class="'+ ((FrameTrail.module('Database').project.defaultHypervideoConfig['slidingMode'].toString() == 'overlay') ? 'active' : '') +'">'
-                        + '                        <div class="slidingMode" data-value="adjust">Adjust</div>'
-                        + '                        <div class="slidingMode" data-value="overlay">Overlay</div>'
-                        + '                    </div>'
-                        + '                </div>'
-                        + '            </div>'
-                        + '            <div class="subtitlesSettingsWrapper">'
-                        + '                <span>Subtitles</span>'
-                        + '                <button id="SubtitlesPlus" type="button">Add +</button>'
-                        + '                <input type="checkbox" name="config[captionsVisible]" id="captionsVisible" value="true">'
-                        + '                <label for="captionsVisible">Show by default (if present)</label>'
-                        + '                <div id="NewSubtitlesContainer"></div>'
-                        + '            </div>'
-                        + '        </div>'
-                        */
                         + '        <div style="clear: both;"></div>'
                         + '        <hr>'
                         + '        <div class="newHypervideoTabs">'
@@ -507,7 +479,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
         if (FrameTrail.module('RouteNavigation').hypervideoID) {
             domElement.find('button[data-viewmode="video"]').show();
 
-            // count visible hypervideos in project
+            // count visible hypervideos
             var hypervideos = FrameTrail.module('Database').hypervideos,
                 visibleCount = 0;
             for (var id in hypervideos) {

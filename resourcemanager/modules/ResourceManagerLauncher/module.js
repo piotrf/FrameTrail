@@ -17,8 +17,7 @@
  *
  * I perform the following tasks:
  * * I init the necessary modules
- * * I load the project data from the server
- * * I ensure the user is logged
+ * * I ensure the user is logged in
  * * I prepare the interface
  *
  * I am a "one-pass" module, this is: I don't export any public methods or properties, and
