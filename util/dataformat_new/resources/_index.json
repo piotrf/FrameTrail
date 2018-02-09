@@ -4,7 +4,7 @@
         "3": {
             "name": "Sintel",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1458908274,
             "description": null,
             "src": "2_1458908274_sintel.mp4",
@@ -15,7 +15,7 @@
         "4": {
             "name": "Big Buck Bunny",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1458909015,
             "description": null,
             "src": "2_1458909015_big-buck-bunny.mp4",
@@ -26,7 +26,7 @@
         "5": {
             "name": "Testvideo Blue",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459152893,
             "description": null,
             "src": "2_1459152893_testvideo-blue.mp4",
@@ -37,7 +37,7 @@
         "6": {
             "name": "Testvideo Green",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459152919,
             "description": null,
             "src": "2_1459152919_testvideo-green.mp4",
@@ -48,7 +48,7 @@
         "7": {
             "name": "Testvideo Red",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459152938,
             "description": null,
             "src": "2_1459152938_testvideo-red.mp4",
@@ -59,7 +59,7 @@
         "8": {
             "name": "Berlin, Germany",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459152979,
             "description": null,
             "type": "location",
@@ -78,7 +78,7 @@
         "9": {
             "name": "About Hypertext",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153070,
             "description": null,
             "src": "https://en.wikipedia.org/wiki/Hypertext",
@@ -89,7 +89,7 @@
         "10": {
             "name": "Vannevar Bush",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153123,
             "description": null,
             "src": "https://en.wikipedia.org/wiki/Vannevar_Bush",
@@ -100,7 +100,7 @@
         "11": {
             "name": " Why Open Education Matters",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153406,
             "description": null,
             "src": "//www.youtube.com/embed/gJWbVt2Nc-I",
@@ -111,7 +111,7 @@
         "12": {
             "name": "Sample Image 1",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153728,
             "description": null,
             "src": "2_1459153728_sample-image-1.jpg",
@@ -122,7 +122,7 @@
         "13": {
             "name": "Sample Image 2",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153765,
             "description": null,
             "src": "2_1459153765_sample-image-2.jpg",
@@ -133,7 +133,7 @@
         "14": {
             "name": "Sample Image 3",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153782,
             "description": null,
             "src": "2_1459153782_sample-image-3.jpg",
@@ -144,7 +144,7 @@
         "15": {
             "name": "Sample Image 4",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153812,
             "description": null,
             "src": "2_1459153812_sample-image-4.JPG",
@@ -155,7 +155,7 @@
         "16": {
             "name": "Sample Image 5",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153837,
             "description": null,
             "src": "2_1459153837_sample-image-5.jpg",
@@ -166,7 +166,7 @@
         "17": {
             "name": "Sample Image 6",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153861,
             "description": null,
             "src": "2_1459153861_sample-image-6.jpg",
@@ -177,7 +177,7 @@
         "18": {
             "name": "Sample Image 7",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153883,
             "description": null,
             "src": "2_1459153883_sample-image-7.jpg",
@@ -188,7 +188,7 @@
         "19": {
             "name": "Sample Image 8",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153906,
             "description": null,
             "src": "2_1459153906_sample-image-8.jpg",
@@ -199,7 +199,7 @@
         "20": {
             "name": "Sample Image 9",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153923,
             "description": null,
             "src": "2_1459153923_sample-image-9.jpg",
@@ -210,7 +210,7 @@
         "21": {
             "name": "Sample Image 10",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459153945,
             "description": null,
             "src": "2_1459153945_sample-image-10.jpg",
@@ -221,7 +221,7 @@
         "22": {
             "name": "Everything is a Remix 4",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459154838,
             "description": null,
             "src": "2_1459154838_everything-is-a-remix-4.mp4",
@@ -232,7 +232,7 @@
         "23": {
             "name": "Big Buck Bunny Info",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1459246669,
             "description": null,
             "src": "https://en.wikipedia.org/wiki/Big_Buck_Bunny",
@@ -243,7 +243,7 @@
         "32": {
             "name": "Test",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1465554766,
             "description": null,
             "src": "https://en.wikipedia.org/wiki/History_of_Slovakia#Slovak_National_Movement",
@@ -254,7 +254,7 @@
         "35": {
             "name": "vimeo test",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1466683413,
             "description": null,
             "src": "//player.vimeo.com/video/170405381",
@@ -265,7 +265,7 @@
         "36": {
             "name": "Merz Akademie",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1466771416,
             "description": null,
             "src": "http://merz-akademie.de",
@@ -276,7 +276,7 @@
         "39": {
             "name": "Test mp4",
             "creator": "test",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1503622218,
             "description": null,
             "src": "2_1503622218_test-mp4.mp4",
@@ -287,7 +287,7 @@
         "40": {
             "name": "Website Prototypefund",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504118222,
             "description": null,
             "src": "https://prototypefund.de/",
@@ -298,7 +298,7 @@
         "41": {
             "name": "Sample Orange",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504118277,
             "description": null,
             "src": "2_1504118277_sample-orange.mp4",
@@ -309,7 +309,7 @@
         "42": {
             "name": "Sample Grey",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504118308,
             "description": null,
             "src": "2_1504118308_sample-grey.mp4",
@@ -320,7 +320,7 @@
         "43": {
             "name": "Sample Purple",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504118343,
             "description": null,
             "src": "2_1504118343_sample-purple.mp4",
@@ -331,7 +331,7 @@
         "44": {
             "name": "Sample Space",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504118425,
             "description": null,
             "src": "2_1504118425_sample-space.mp4",
@@ -342,7 +342,7 @@
         "45": {
             "name": "silent green Kulturquartier",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504155923,
             "description": null,
             "type": "location",
@@ -361,7 +361,7 @@
         "46": {
             "name": "Silent Green Website",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504155986,
             "description": null,
             "src": "https://www.silent-green.net/haus.html",
@@ -372,7 +372,7 @@
         "47": {
             "name": "Prototyping (Softwareentwicklung)",
             "creator": "demo",
-            "creatorId": "2",
+            "creatorId": "1",
             "created": 1504156099,
             "description": null,
             "src": "https://de.wikipedia.org/wiki/Prototyping_(Softwareentwicklung)",

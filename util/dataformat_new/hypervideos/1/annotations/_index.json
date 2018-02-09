@@ -5,10 +5,10 @@
             "name": "demo",
             "description": "demo's annotations",
             "created": 1490624549,
-            "lastchanged": 1509123232,
+            "lastchanged": 1518170347,
             "hidden": false,
             "owner": "demo",
-            "ownerId": 2
+            "ownerId": 1
         }
     },
     "annotation-increment": 1

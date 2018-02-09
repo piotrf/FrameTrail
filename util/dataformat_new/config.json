@@ -1,10 +1,15 @@
 {
     "updateServiceURL": "https://update.frametrail.org",
     "autoUpdate": false,
-    "defaultUserRole": "admin",
+    "defaultUserRole": "user",
+    "captureUserTraces": false,
+    "userTracesStartAction": "",
+    "userTracesEndAction": "",
     "userNeedsConfirmation": false,
+    "allowCollaboration": false,
     "allowUploads": true,
-    "theme": null,
+    "theme": "bright",
+    "defaultHypervideoHidden": false,
     "userColorCollection": [
         "597081",
         "339966",

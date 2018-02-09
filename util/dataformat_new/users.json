@@ -1,25 +1,25 @@
 {
-    "user-increment": 3,
+    "user-increment": 2,
     "user": {
         "1": {
-            "name": "test",
-            "mail": "test@test.de",
-            "registrationDate": 1490622933,
-            "passwd": "8c1bbc228cb3e8ed7b2390473f320d08",
+            "name": "demo",
+            "mail": "demo@frametrail.org",
+            "registrationDate": 1518077984,
+            "passwd": "7b12bfd06e653f158d95eb5b604318475083f872e04f1d71367a96da7ccc5649",
             "role": "admin",
             "active": 1,
-            "lastLogin": 1504118129,
+            "lastLogin": 1518183335,
             "color": "597081"
         },
         "2": {
-            "name": "demo",
-            "mail": "demo@frametrail.org",
-            "registrationDate": 1501091564,
-            "passwd": "ff942990fb24b9da5b72c7df2a04faa9",
-            "role": "admin",
+            "name": "test",
+            "mail": "test@test.de",
+            "registrationDate": 1518167854,
+            "passwd": "ddc8db195e6452a8c44cb3ad0731088e7f2f9fc57b431bf999606f399df44175",
+            "role": "user",
             "active": 1,
-            "lastLogin": 1509123093,
-            "color": "597081"
+            "lastLogin": 1518183251,
+            "color": "339966"
         }
     }
 }

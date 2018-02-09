@@ -4,9 +4,9 @@
         "description": "Lorem Ipsum Dolor Sit Amet",
         "thumb": "2_1458909015_thumb_big-buck-bunny.png",
         "creator": "demo",
-        "creatorId": "2",
+        "creatorId": "1",
         "created": 1490624549,
-        "lastchanged": 1509123232368
+        "lastchanged": 1518186225814
     },
     "config": {
         "slidingMode": "adjust",
@@ -14,7 +14,6 @@
         "autohideControls": true,
         "captionsVisible": false,
         "hidden": false,
-        "theme": "default",
         "layoutArea": {
             "areaTop": [
                 {
@@ -34,7 +33,24 @@
                     "transcriptSource": ""
                 }
             ],
-            "areaBottom": [],
+            "areaBottom": [
+                {
+                    "type": "TimedContent",
+                    "contentSize": "small",
+                    "name": "tiles small",
+                    "description": "",
+                    "cssClass": "",
+                    "collectionFilter": {
+                        "tags": [],
+                        "types": [],
+                        "users": [],
+                        "text": ""
+                    },
+                    "onClickContentItem": "",
+                    "html": "",
+                    "transcriptSource": ""
+                }
+            ],
             "areaLeft": [],
             "areaRight": [
                 {
@@ -88,7 +104,7 @@
                 "type": "Person",
                 "id": "2"
             },
-            "created": "Fri Oct 27 2017 17:53:26 GMT+0100 (BST)",
+            "created": "Fri Oct 27 2017 18:53:26 GMT+0200 (CEST)",
             "type": "Annotation",
             "frametrail:type": "Overlay",
             "frametrail:tags": [],
@@ -98,7 +114,7 @@
                 "selector": {
                     "conformsTo": "http://www.w3.org/TR/media-frags/",
                     "type": "FragmentSelector",
-                    "value": "t=25.264901698429163,29.264901698429163&xywh=percent:61.05949077413704,14.11721701150412,29.998147930722872,30"
+                    "value": "t=25.264901698429163,29.264901698429163&xywh=percent:16.373515278616484,41.686138260030305,29.99802989047603,29.999998573944946"
                 }
             },
             "body": {
@@ -106,9 +122,7 @@
                 "frametrail:type": "video",
                 "format": "video/mp4",
                 "source": "2_1459152938_testvideo-red.mp4",
-                "frametrail:name": "Testvideo Red",
-                "frametrail:thumb": "2_1459152938_thumb_testvideo-red.png",
-                "frametrail:resourceId": "7"
+                "frametrail:name": "Testvideo Red"
             },
             "frametrail:events": {},
             "frametrail:attributes": {}
@@ -125,7 +139,7 @@
                 "type": "Person",
                 "id": "2"
             },
-            "created": "Fri Oct 27 2017 17:53:31 GMT+0100 (BST)",
+            "created": "Fri Oct 27 2017 18:53:31 GMT+0200 (CEST)",
             "type": "Annotation",
             "frametrail:type": "Overlay",
             "frametrail:tags": [],
@@ -135,19 +149,17 @@
                 "selector": {
                     "conformsTo": "http://www.w3.org/TR/media-frags/",
                     "type": "FragmentSelector",
-                    "value": "t=19.6,23.6&xywh=percent:21.44314415188281,34.241758912474246,42.85537772403964,48.46153846153846"
+                    "value": "t=17.28251564149066,21.282174633535472&xywh=percent:21.44314415188281,34.241758912474246,42.85537772403964,48.46153846153846"
                 }
             },
             "body": {
                 "type": "Dataset",
                 "frametrail:type": "location",
                 "format": "application/x-frametrail-location",
-                "source": "",
                 "frametrail:name": "Berlin, Germany",
-                "frametrail:resourceId": "8",
-                "frametrail:lat": "52.5170365",
-                "frametrail:long": "13.3888599",
-                "frametrail:boundingBox": "52.3570365,52.6770365,13.2288599,13.5488599"
+                "frametrail:lat": null,
+                "frametrail:long": null,
+                "frametrail:boundingBox": "NaN"
             },
             "frametrail:events": {},
             "frametrail:attributes": {}
@@ -164,7 +176,7 @@
                 "type": "Person",
                 "id": "1"
             },
-            "created": "Wed Aug 09 2017 14:46:19 GMT+0100 (BST)",
+            "created": "Wed Aug 09 2017 15:46:19 GMT+0200 (CEST)",
             "type": "Annotation",
             "frametrail:type": "CodeSnippet",
             "target": {
@@ -173,7 +185,7 @@
                 "selector": {
                     "conformsTo": "http://www.w3.org/TR/media-frags/",
                     "type": "FragmentSelector",
-                    "value": "t=25.84"
+                    "value": "t=25.163580852685435"
                 }
             },
             "body": {
