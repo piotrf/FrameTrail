@@ -88,7 +88,7 @@ input[type="text"], input[type="password"], textarea {
 	font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	margin: 4px 8px 4px 0;
-    padding: 8px 6px;
+    padding: 3px 5px;
     border: 2px solid var(--semi-transparent-bg-color);
     background: var(--primary-fg-color);
     color: var(--primary-bg-color);
@@ -973,4 +973,9 @@ input[readonly], textarea[readonly] {
 .userColorCollectionItem.selected {
     outline: 3px solid var(--primary-bg-color);
     opacity: 1;
+}
+
+.admin-only {
+    opacity: .4;
+    pointer-events: none;
 }

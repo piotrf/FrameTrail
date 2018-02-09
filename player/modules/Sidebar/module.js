@@ -441,7 +441,9 @@ FrameTrail.defineModule('Sidebar', function(FrameTrail){
         if (loggedIn) {
 
             if ( FrameTrail.module('RouteNavigation').hypervideoID ) {
-                if (FrameTrail.module('UserManagement').userRole == 'admin') {
+                //console.log(FrameTrail.module('HypervideoModel').creatorId);
+                //console.log(FrameTrail.module('UserManagement').userID);
+                if (FrameTrail.module('UserManagement').userRole == 'admin' || parseInt(FrameTrail.module('HypervideoModel').creatorId) == FrameTrail.module('UserManagement').userID) {
 
                     videoContainerControls.find('.editMode').removeClass('disabled');
 

@@ -893,11 +893,11 @@
 
         function saveFinished() {
 
-            for (var result in callbackReturns) {
+            for (var i=0; i < callbackReturns.length; i++) {
 
+                var result = callbackReturns[i];
                 if (result.failed) {
-                    // to do: detailed error reporting to the user
-                    FrameTrail.module('InterfaceModal').showErrorMessage('Error: Could not save data.');
+                    FrameTrail.module('InterfaceModal').showErrorMessage('Error: Could not save data ('+ result.error +')');
                     return;
                 }
 
@@ -1102,7 +1102,7 @@
                                     +  '            <a href="#ChangeSettings">Hypervideo Settings</a>'
                                     +  '        </li>'
                                     +  '        <li class="ui-tabs-right">'
-                                    +  '            <a href="#Configuration">Manage Options</a>'
+                                    +  '            <a href="#Configuration">Configuration Options</a>'
                                     +  '        </li>'
                                     +  '        <li class="ui-tabs-right">'
                                     +  '            <a href="#TagDefinitions">Manage Tags</a>'
@@ -1113,7 +1113,7 @@
                                     +  '        <li class="ui-tabs-right">'
                                     +  '            <a href="#ChangeTheme">Color Theme</a>'
                                     +  '        </li>'
-                                    +  '        <li class="ui-tabs-right tab-label">Generic settings: </li>'
+                                    +  '        <li class="ui-tabs-right tab-label">Administration: </li>'
                                     +  '    </ul>'
                                     +  '    <div id="ChangeSettings"></div>'
                                     +  '    <div id="Configuration"></div>'
@@ -1134,6 +1134,10 @@
 
         EditingOptions.append(settingsEditingOptions);
 
+        if (FrameTrail.module('UserManagement').userRole != 'admin') {
+            settingsEditingOptions.find('.ui-tabs-right').not('.tab-label').addClass('admin-only');
+        }
+
         /* Edit Hypervideo Form */
 
 
@@ -1148,8 +1152,6 @@
                                   +'    <div class="formColumn column1">'
                                   +'        <label for="description">Description</label>'
                                   +'        <textarea name="description" placeholder="Description for Hypervideo">'+ description +'</textarea><br>'
-                                  +'    </div>'
-                                  +'    <div class="formColumn column2">'
                                   +'    </div>'
                                   +'    <div class="formColumn column2">'
                                   /*
@@ -1326,7 +1328,7 @@
 
             EditHypervideoForm.find('.newSubtitlesContainer').find('input[type=file]').each(function () {
                 var match = /subtitles\[(.+)\]/g.exec($(this).attr('name'));
-                console.log(match);
+                //console.log(match);
                 if (match) {
                     FrameTrail.module('Database').hypervideos[thisID].subtitles.push({
                         "src": match[1] +".vtt",
@@ -1596,7 +1598,9 @@
 
             $('head > style.FrameTrailGlobalCustomCSS').html(instance.getValue());
 
-            newUnsavedChange('globalCSS');
+            if (changeObj.origin != 'setValue') {
+                newUnsavedChange('globalCSS');
+            }
 
         });
         codeEditor.setSize(null, '100%');
@@ -1614,6 +1618,73 @@
                     console.log('Could not retrieve custom CSS contents (custom.css needs to be on same domain).')
                 });
         }
+
+
+        /* Configuration Editing UI */
+        
+        var configData = FrameTrail.module('Database').config,
+            configurationUI = $('<div class="configEditingForm">'
+                            +   '    <div class="formColumn column1">'
+                            +   '        <input type="checkbox" name="userNeedsConfirmation" id="userNeedsConfirmation" value="userNeedsConfirmation" '+((configData.userNeedsConfirmation.toString() == "true") ? "checked" : "")+'>'
+                            +   '        <label for="userNeedsConfirmation" data-tooltip-bottom-left="Require newly registered users to be confirmed by an admin">Only confirmed users</label><br>'
+                            +   '        <div style="margin-top: 5px; margin-bottom: 8px;" data-tooltip-left="User rule for newly registered users">Default user role: <br>'
+                            +   '            <input type="radio" name="defaultUserRole" id="user_role_admin" value="admin" '+((configData.defaultUserRole == "admin") ? "checked" : "")+'>'
+                            +   '            <label for="user_role_admin">Admin</label>'
+                            +   '            <input type="radio" name="defaultUserRole" id="user_role_user" value="user" '+((configData.defaultUserRole == "user") ? "checked" : "")+'>'
+                            +   '            <label for="user_role_user">User</label><br>'
+                            +   '        </div>'
+                            +   '        <input type="checkbox" name="allowCollaboration" id="allowCollaboration" value="allowCollaboration" '+((configData.allowCollaboration.toString() == "true") ? "checked" : "")+'>'
+                            +   '        <label for="allowCollaboration" data-tooltip-left="Allow multiple users / clients to edit at the same time">Allow collaboration</label><br>'
+                            +   '    </div>'
+                            +   '    <div class="formColumn column1">'
+                            +   '        <input type="checkbox" name="defaultHypervideoHidden" id="defaultHypervideoHidden" value="defaultHypervideoHidden" '+((configData.defaultHypervideoHidden.toString() == "true") ? "checked" : "")+'>'
+                            +   '        <label for="defaultHypervideoHidden" data-tooltip-bottom-left="Hide newly added Hypervideos in the overview">Hypervideos hidden by default</label><br>'
+                            +   '        <div class="message active" style="width: calc(100% - 50px)">Hidden Hypervideos are still accessible via direct link.</div>'
+                            +   '        <input type="checkbox" name="allowUploads" id="allowUploads" value="allowUploads" '+((configData.allowUploads.toString() == "true") ? "checked" : "")+'>'
+                            +   '        <label for="allowUploads" data-tooltip-left="Allow file uploads (Videos, Resources)">Allow uploads</label><br>'
+                            +   '    </div>'
+                            +   '    <div class="formColumn column1">'
+                            +   '        <input type="checkbox" name="captureUserTraces" id="captureUserTraces" value="captureUserTraces" '+((configData.captureUserTraces.toString() == "true") ? "checked" : "")+'>'
+                            +   '        <label for="captureUserTraces" data-tooltip-bottom-left="Capture user actions chronologically">Capture User Actions</label><br>'
+                            +   '        <div class="message active" style="width: calc(100% - 50px)">User actions are only saved locally in the browser, see <i>localStorage.getItem( "frametrail-traces" )</i></div>'
+                            +   '    </div>'
+                            +   '    <div class="formColumn column1">'
+                            +   '        <label for="userTracesStartAction" data-tooltip-bottom-right="Which action should start a captured session?">Start Action</label><br>'
+                            +   '        <input type="text" style="margin-top: 0px; margin-bottom: 2px;" name="userTracesStartAction" id="userTracesStartAction" placeholder="Start Action Name" value="'+ configData.userTracesStartAction +'"><br>'
+                            +   '        <label for="userTracesEndAction" data-tooltip-right="Which action should end a captured session?">End Action</label><br>'
+                            +   '        <input type="text" style="margin-top: 0px; margin-bottom: 2px;" name="userTracesEndAction" id="userTracesEndAction" placeholder="End Action Name" value="'+ configData.userTracesEndAction +'">'
+                            +   '    </div>'
+                            +   '</div>');
+
+        settingsEditingOptions.find('#Configuration').append(configurationUI);
+
+        configurationUI.find('input[type="text"]').on('keydown', function(evt) {
+            if (!evt.originalEvent.metaKey && evt.originalEvent.key != 'Meta') {
+                window.setTimeout(function() {
+                    var key = $(document.activeElement).attr('name'),
+                        value = $(document.activeElement).val();
+
+                    FrameTrail.module('Database').config[key] = value;
+                    newUnsavedChange('config');
+                }, 5)
+            }
+        });
+
+        configurationUI.find('input[type="checkbox"]').on('change', function(evt) {
+            var key = $(evt.currentTarget).attr('name'),
+                value = evt.currentTarget.checked;
+
+            FrameTrail.module('Database').config[key] = value;
+            newUnsavedChange('config');
+        });
+
+        configurationUI.find('input[type="radio"]').on('change', function(evt) {
+            var key = $(evt.currentTarget).attr('name'),
+                value = $(evt.currentTarget).val();
+
+            FrameTrail.module('Database').config[key] = value;
+            newUnsavedChange('config');
+        });
 
     }
 

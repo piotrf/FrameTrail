@@ -402,13 +402,13 @@
 
 .contentViewEditingUI input[type="text"] {
 	box-sizing: border-box;
-	height: 42px;
+	height: 32px;
 }
 .contentViewEditingUI textarea {
 	display: block;
 	box-sizing: border-box;
 	width: 96%;
-	height: 42px;
+	height: 32px;
 }
 .contentViewEditingUI .typeSpecific {
 	position: relative;

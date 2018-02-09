@@ -246,13 +246,13 @@ function userCheckLogin($userRole = false) {
 		if ($_SESSION["ohv"]["user"]["active"] == 0) {
 			$return["status"] = "success";
 			$return["code"] = 3;
-			$return["string"] = "user is logged in but not active";
+			$return["string"] = "User is logged in but not active";
 		}
 
 		if ($userRole && ($_SESSION["ohv"]["user"]["role"] != $userRole)) {
 			$return["status"] = "success";
 			$return["code"] = 4;
-			$return["string"] = "user is logged in but has not given user role";
+			$return["string"] = "User is logged in but does not have the required user role";
 		}
 
 

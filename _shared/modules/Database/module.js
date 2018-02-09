@@ -961,7 +961,7 @@
 
                 callback.call(window, {
                     failed: 'config',
-                    error: 'ServerError',
+                    error: data.string,
                     code: data.code
                 });
 
