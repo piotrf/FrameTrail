@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "name": "Empty Hypervideo",
+        "description": "Empty test video without a source file",
+        "thumb": null,
+        "creator": "demo",
+        "creatorId": "1",
+        "created": 1518078650268,
+        "lastchanged": 1518078650268
+    },
+    "config": {
+        "slidingMode": "adjust",
+        "slidingTrigger": "key",
+        "theme": "TODO",
+        "autohideControls": true,
+        "captionsVisible": false,
+        "hidden": false,
+        "layoutArea": {
+            "areaTop": [],
+            "areaBottom": [],
+            "areaLeft": [],
+            "areaRight": []
+        }
+    },
+    "clips": [
+        {
+            "resourceId": null,
+            "duration": 300,
+            "start": 0,
+            "end": 0,
+            "in": 0,
+            "out": 0
+        }
+    ],
+    "globalEvents": {
+        "onReady": "",
+        "onPlay": "",
+        "onPause": "",
+        "onEnded": ""
+    },
+    "customCSS": "",
+    "contents": [],
+    "subtitles": []
+}
