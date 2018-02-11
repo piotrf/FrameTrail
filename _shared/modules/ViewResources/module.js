@@ -76,11 +76,11 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
      */
     function create(withoutDialog) {
 
-        $('.mainContainer').append(domElement);
-
         showAsDialog = ! withoutDialog;
 
         if (showAsDialog) {
+
+            $('.mainContainer').append(domElement);
 
             domElement.dialog({
                 autoOpen: false,
@@ -96,6 +96,12 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
                 }
             });
 
+        } else {
+            
+            var wrapperElem = $('<div class="resourceManagerContent"></div>');
+            
+            wrapperElem.append(domElement)
+            $('.mainContainer').append(wrapperElem);
         }
 
         FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));

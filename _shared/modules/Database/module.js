@@ -63,10 +63,10 @@
         }).done(function(data){
 
             config = data;
-
+            
             // TODO: Check if this makes sense here
-            if (config.theme) {
-                $(FrameTrail.getState('target')).attr('data-frametrail-theme', config.theme);
+            if (data.theme) {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', data.theme);
             } else {
                 $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
             }
@@ -1419,6 +1419,7 @@
 
         loadData:              loadData,
         loadResourceData:      loadResourceData,
+        loadConfigData:        loadConfigData,
 
         loadHypervideoData:    loadHypervideoData,
         updateHypervideoData:  updateHypervideoData,

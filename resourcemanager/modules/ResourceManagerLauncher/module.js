@@ -39,7 +39,24 @@
     FrameTrail.initModule('ViewResources');
 
 
-	FrameTrail.module('UserManagement').ensureAuthenticated(
+	appendTitlebar();
+
+    $(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
+
+    FrameTrail.module('ViewResources').create(true);
+
+    FrameTrail.module('ViewResources').open();
+
+    FrameTrail.module('UserManagement').isLoggedIn(function(loginState) {
+        toggleLoginState(loginState);
+    });
+
+    FrameTrail.module('Database').loadConfigData(function() {});
+
+    initWindowResizeHandler();
+
+    /*
+    FrameTrail.module('UserManagement').ensureAuthenticated(
 		function(){
 
 			appendTitlebar();
@@ -57,6 +74,7 @@
 			alert('Log in was aborted... :(')
 		}, true
 	);
+    */
 
     /**
      * I append the title bar.
@@ -64,7 +82,8 @@
      */
     function appendTitlebar() {
 
-        var titlebar = $(  '<div class="titlebar editActive">Resource Manager'
+        var titlebar = $(  '<div class="titlebar">Resource Manager'
+                         + '    <button type="button" class="startEditButton" data-tooltip-bottom-left="Edit"><span class="icon-edit"></span></button>'
                          + '    <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
                          + '</div>');
 
@@ -72,10 +91,42 @@
 
         titlebar.find('.logoutButton').click(function(){
             FrameTrail.module('UserManagement').logout();
-            location.reload();
+            toggleLoginState(false);
         });
 
+        titlebar.find('.startEditButton').click(function(){
+            FrameTrail.module('UserManagement').ensureAuthenticated(function() {
+                
+                // login success
+                toggleLoginState(true);
 
+            }, function() {
+                // login aborted
+            });
+        });
+
+    }
+
+
+    /**
+     * I toggle the login state (hide / show editing UI).
+     * @method toggleLoginState
+     * @param {Boolean} loggedIn
+     * @private
+     */
+    function toggleLoginState(loggedIn) {
+
+        if (loggedIn) {
+            $('.resourcesControls, .logoutButton').show();
+            $('.startEditButton').hide();
+            $('.titlebar, .mainContainer').addClass('editActive');
+            $('.viewResources').removeClass('resourceManager');
+        } else {
+            $('.resourcesControls, .logoutButton').hide();
+            $('.startEditButton').show();
+            $('.titlebar, .mainContainer').removeClass('editActive');
+            $('.viewResources').addClass('resourceManager');
+        }
 
     }
 
