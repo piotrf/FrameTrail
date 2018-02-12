@@ -124,7 +124,7 @@ FrameTrail.defineType(
                     /* Add Panels and Text Areas */
                     
                     var htmlEditorTab = $('<div class="textEditorTab">HTML Editor</div>'),
-                        visualEditorTab = $('<div class="textEditorTab">Visual Editor</div>'),
+                        visualEditorTab = $('<div class="textEditorTab">Visual Editor (beta)</div>'),
                         htmlEditorContent = $('<div class="textEditorContent htmlEditorContent"></div>'),
                         visualEditorContent = $('<div class="textEditorContent visualEditorContent"></div>');
 
@@ -203,6 +203,14 @@ FrameTrail.defineType(
 
                         if (window.editor && changeObj.origin != 'setValue') {
                             window.editor.setValue(instance.getValue());
+                        } else if (changeObj.origin == 'setValue') {
+                            
+                            // auto-indent
+                            /*
+                            var totalLines = instance.lineCount();
+                            instance.autoFormatRange({line:0, ch:0}, {line:totalLines});
+                            instance.autoIndentRange({line:0, ch:0}, {line:totalLines});
+                            */
                         }
 
                         var escapeHelper = document.createElement('div'),
@@ -220,7 +228,6 @@ FrameTrail.defineType(
 
                     });
                     htmlCodeEditor.setSize(null, '100%');
-
 
                     /* Init WYSIHTML5 Visual Editor */
 
