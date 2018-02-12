@@ -260,8 +260,13 @@
     top: 50%;
 }
 
+.editPropertiesContainer .overlayOptionsWrapper {
+	clear: both;
+	height: calc(100% - 140px);
+}
 .editPropertiesContainer .overlayOptionsTabs {
 	clear: both;
+	height: 100%;
 }
 
 .editPropertiesContainer .opacitySlider {

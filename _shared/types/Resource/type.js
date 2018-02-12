@@ -141,51 +141,54 @@ FrameTrail.defineType(
                                             + '    <input class="positionWidth" value="' + overlay.data.position.width + '">'
                                             + '    <input class="positionHeight" value="' + overlay.data.position.height + '">'
                                             + '</div>'
-                                            + '<div class="overlayOptionsTabs">'
-                                            + '    <ul>'
-                                            + '        <li><a href="#OverlayOptions">Options</a></li>'
-                                            + '        <li><a href="#OverlayAppearance">Appearance</a></li>'
-                                            + '        <li class="ui-tabs-right"><a href="#ActionOnEnd">onEnd</a></li>'
-                                            + '        <li class="ui-tabs-right"><a href="#ActionOnStart">onStart</a></li>'
-                                            + '        <li class="ui-tabs-right"><a href="#ActionOnClick">onClick</a></li>'
-                                            + '        <li class="ui-tabs-right"><a href="#ActionOnReady">onReady</a></li>'
-                                            + '        <li class="ui-tabs-right tab-label">Actions: </li>'
-                                            + '    </ul>'
-                                            + '    <div id="OverlayOptions"></div>'
-                                            + '    <div id="OverlayAppearance">'
-                                            + '        <div style="clear: both;">Opacity</div>'
-                                            + '        <div class="opacitySlider"></div>'
-                                            //+ '        <div>Arrange</div>'
-                                            //+ '        <button class="arrangeTop">Move to top</button>'
-                                            //+ '        <button class="arrangeBottom">Move to bottom</button>'
-                                            + '    </div>'
-                                            + '    <div id="ActionOnReady">'
-                                            + '        <textarea class="onReadyAction codeTextarea" data-eventname="onReady">' + (overlay.data.events.onReady ? overlay.data.events.onReady : '') + '</textarea>'
-                                            + '        <button class="executeActionCode">Run Code</button>'
-                                            + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
-                                            + '    </div>'
-                                            + '    <div id="ActionOnClick">'
-                                            + '        <textarea class="onClickAction codeTextarea" data-eventname="onClick">' + (overlay.data.events.onClick ? overlay.data.events.onClick : '') + '</textarea>'
-                                            + '        <button class="executeActionCode">Run Code</button>'
-                                            + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
-                                            + '    </div>'
-                                            + '    <div id="ActionOnStart">'
-                                            + '        <textarea class="onStartAction codeTextarea" data-eventname="onStart">' + (overlay.data.events.onStart ? overlay.data.events.onStart : '') + '</textarea>'
-                                            + '        <button class="executeActionCode">Run Code</button>'
-                                            + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
-                                            + '    </div>'
-                                            + '    <div id="ActionOnEnd">'
-                                            + '        <textarea class="onEndAction codeTextarea" data-eventname="onEnd">' + (overlay.data.events.onEnd ? overlay.data.events.onEnd : '') + '</textarea>'
-                                            + '        <button class="executeActionCode">Run Code</button>'
-                                            + '        <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                            + '<div class="overlayOptionsWrapper">'
+                                            + '    <div class="overlayOptionsTabs">'
+                                            + '        <ul>'
+                                            + '            <li><a href="#OverlayOptions">Options</a></li>'
+                                            + '            <li><a href="#OverlayAppearance">Appearance</a></li>'
+                                            + '            <li class="ui-tabs-right"><a href="#ActionOnEnd">onEnd</a></li>'
+                                            + '            <li class="ui-tabs-right"><a href="#ActionOnStart">onStart</a></li>'
+                                            + '            <li class="ui-tabs-right"><a href="#ActionOnClick">onClick</a></li>'
+                                            + '            <li class="ui-tabs-right"><a href="#ActionOnReady">onReady</a></li>'
+                                            + '            <li class="ui-tabs-right tab-label">Actions: </li>'
+                                            + '        </ul>'
+                                            + '        <div id="OverlayOptions"></div>'
+                                            + '        <div id="OverlayAppearance">'
+                                            + '            <div style="clear: both;">Opacity</div>'
+                                            + '            <div class="opacitySlider"></div>'
+                                            //+ '            <div>Arrange</div>'
+                                            //+ '            <button class="arrangeTop">Move to top</button>'
+                                            //+ '            <button class="arrangeBottom">Move to bottom</button>'
+                                            + '        </div>'
+                                            + '        <div id="ActionOnReady">'
+                                            + '            <textarea class="onReadyAction codeTextarea" data-eventname="onReady">' + (overlay.data.events.onReady ? overlay.data.events.onReady : '') + '</textarea>'
+                                            + '            <button class="executeActionCode">Test Code</button>'
+                                            + '            <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                            + '        </div>'
+                                            + '        <div id="ActionOnClick">'
+                                            + '            <textarea class="onClickAction codeTextarea" data-eventname="onClick">' + (overlay.data.events.onClick ? overlay.data.events.onClick : '') + '</textarea>'
+                                            + '            <button class="executeActionCode">Test Code</button>'
+                                            + '            <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                            + '        </div>'
+                                            + '        <div id="ActionOnStart">'
+                                            + '            <textarea class="onStartAction codeTextarea" data-eventname="onStart">' + (overlay.data.events.onStart ? overlay.data.events.onStart : '') + '</textarea>'
+                                            + '            <button class="executeActionCode">Test Code</button>'
+                                            + '            <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                            + '        </div>'
+                                            + '        <div id="ActionOnEnd">'
+                                            + '            <textarea class="onEndAction codeTextarea" data-eventname="onEnd">' + (overlay.data.events.onEnd ? overlay.data.events.onEnd : '') + '</textarea>'
+                                            + '            <button class="executeActionCode">Test Code</button>'
+                                            + '            <div class="message active">"this" contains the current overlay object (data, ui elements & states). Example: console.log(this.overlayElement).</div>'
+                                            + '        </div>'
                                             + '    </div>'
                                             + '</div>');
 
                     controlsContainer.append(defaultControls);
 
                     controlsContainer.find('.overlayOptionsTabs').tabs({
-                        heightStyle: 'auto',
+                        heightStyle: 'fill',
                         activate: function(event, ui) {
+                            controlsContainer.find('.overlayOptionsTabs').tabs('refresh');
                             if (ui.newPanel.find('.CodeMirror').length != 0) {
                                 ui.newPanel.find('.CodeMirror')[0].CodeMirror.refresh();
                             }
@@ -430,7 +433,7 @@ FrameTrail.defineType(
 
                             FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
                         });
-                        codeEditor.setSize(null, 124);
+                        codeEditor.setSize(null, 'calc(100% - 40px)');
                     }
 
                     controlsContainer.find('.executeActionCode').click(function(evt) {
