@@ -6,12 +6,11 @@
         "creator": "demo",
         "creatorId": "1",
         "created": 1518078650268,
-        "lastchanged": 1518078650268
+        "lastchanged": 1518457877230
     },
     "config": {
         "slidingMode": "adjust",
         "slidingTrigger": "key",
-        "theme": "TODO",
         "autohideControls": true,
         "captionsVisible": false,
         "hidden": false,
@@ -39,6 +38,44 @@
         "onEnded": ""
     },
     "customCSS": "",
-    "contents": [],
+    "contents": [
+        {
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                {
+                    "frametrail": "http://frametrail.org/ns/"
+                }
+            ],
+            "creator": {
+                "nickname": "demo",
+                "type": "Person",
+                "id": "1"
+            },
+            "created": "Sun Feb 11 2018 18:24:26 GMT+0100 (CET)",
+            "type": "Annotation",
+            "frametrail:type": "Overlay",
+            "frametrail:tags": [],
+            "target": {
+                "type": "Video",
+                "source": "",
+                "selector": {
+                    "conformsTo": "http://www.w3.org/TR/media-frags/",
+                    "type": "FragmentSelector",
+                    "value": "t=91.04,95.04&xywh=percent:21.15993907502598,24.528898479253268,34.39231745704053,45.197943100736715"
+                }
+            },
+            "body": {
+                "type": "TextualBody",
+                "frametrail:type": "text",
+                "format": "text/html",
+                "value": "",
+                "frametrail:name": "Custom HTML"
+            },
+            "frametrail:events": {},
+            "frametrail:attributes": {
+                "text": "&lt;span style=\"color: rgb(255, 255, 255);\"&gt;test &lt;/span&gt;&lt;span style=\"color: rgb(158, 42, 42);\"&gt;text&lt;/span&gt;&lt;span style=\"color: rgb(255, 218, 119); font-size: 46px;\"&gt;w et&lt;/span&gt;&lt;span style=\"color: rgb(247, 246, 244); font-size: 46px;\"&gt;hw&lt;/span&gt;&lt;span style=\"color: rgb(255, 218, 119); font-size: 46px;\"&gt;et qwed &lt;/span&gt;&lt;span style=\"color: rgb(255, 218, 119);\"&gt;. wethweth&lt;/span&gt;&lt;br&gt;&lt;span style=\"color: rgb(255, 218, 119);\"&gt;wethw&lt;/span&gt;&lt;b&gt;&lt;span style=\"color: rgb(255, 218, 119);\"&gt;ethztetzherhwrhwrthw&lt;/span&gt;&lt;/b&gt;&lt;span style=\"color: rgb(255, 218, 119);\"&gt;terhrwterh&lt;/span&gt;&lt;span style=\"color: rgb(87, 64, 221);\"&gt;&lt;br&gt;&lt;/span&gt;"
+            }
+        }
+    ],
     "subtitles": []
 }

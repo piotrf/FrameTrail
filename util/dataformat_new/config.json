@@ -8,7 +8,7 @@
     "userNeedsConfirmation": false,
     "allowCollaboration": false,
     "allowUploads": true,
-    "theme": "bright",
+    "theme": "default",
     "defaultHypervideoHidden": false,
     "userColorCollection": [
         "597081",
