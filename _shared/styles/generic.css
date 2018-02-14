@@ -32,6 +32,23 @@
     align-items: flex-start;
 }
 
+.wysihtml5-editor {
+    height: 100%;
+    overflow: auto !important;
+    font-family: TitilliumWeb,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.wysihtml5-editor p {
+    margin: 0;
+}
+
+.wysihtml5-editor ol, .wysihtml5-editor ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
 .frametrail-body.editActive {
     position: fixed !important;
     top: 0px !important;

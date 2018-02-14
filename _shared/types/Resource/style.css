@@ -130,8 +130,8 @@
 
 .editPropertiesContainer .previewThumbContainer {
 	float: right;
-	height: 130px;
-	width: 200px;
+	height: 107px;
+	width: 160px;
 }
 
 .editPropertiesContainer .previewThumbContainer .resourceThumb {
@@ -260,11 +260,21 @@
     top: 50%;
 }
 
+.editPropertiesContainer .textContentEditorContainer {
+	height: 100%;
+}
+
 .editPropertiesContainer .overlayOptionsWrapper {
 	clear: both;
 	height: calc(100% - 140px);
 }
-.editPropertiesContainer .overlayOptionsTabs {
+
+.editPropertiesContainer .annotationOptionsWrapper {
+	clear: both;
+	height: calc(100% - 124px);
+}
+
+.editPropertiesContainer .overlayOptionsTabs, .editPropertiesContainer .annotationOptionsTabs {
 	clear: both;
 	height: 100%;
 }
@@ -289,4 +299,5 @@
 .editPropertiesContainer textarea {
 	box-sizing: border-box;
     width: 100%;
+    visibility: hidden;
 }

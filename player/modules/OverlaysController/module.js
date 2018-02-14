@@ -396,7 +396,7 @@ FrameTrail.defineModule('OverlaysController', function(FrameTrail){
                         if (ui.helper.attr('data-type') == 'text') {
 
                             newOverlay = FrameTrail.module('HypervideoModel').newOverlay({
-                                "name":         "Custom HTML",
+                                "name":         "Custom Text/HTML",
                                 "type":         ui.helper.attr('data-type'),
                                 "start":        startTime,
                                 "end":          endTime,
@@ -560,7 +560,7 @@ FrameTrail.defineModule('OverlaysController', function(FrameTrail){
         var overlayEditingOptions = $('<div class="overlayEditingTabs">'
                                   +   '    <ul>'
                                   +   '        <li>'
-                                  +   '            <a href="#ResourceList">Choose Resource</a>'
+                                  +   '            <a href="#ResourceList">Add Resource</a>'
                                   +   '        </li>'
                                   +   '        <li>'
                                   +   '            <a href="#CustomOverlay">Add Custom Overlay</a>'
@@ -585,7 +585,7 @@ FrameTrail.defineModule('OverlaysController', function(FrameTrail){
                 + '                  <div class="resourceOverlay">'
                 + '                      <div class="resourceIcon"></div>'
                 + '                  </div>'
-                + '                  <div class="resourceTitle">Custom HTML</div>'
+                + '                  <div class="resourceTitle">Custom Text/HTML</div>'
                 + '              </div>');
 
         textElement.draggable({

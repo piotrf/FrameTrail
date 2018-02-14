@@ -449,21 +449,38 @@
             database         = FrameTrail.module('Database'),
             resourceDatabase = database.resources,
             ownerId          = FrameTrail.module('UserManagement').userID,
+            newData;
 
-            newData = {
-                            "name":         resourceDatabase[protoData.resourceId].name,
-                            "creator":      FrameTrail.getState('username'),
-                            "creatorId":    FrameTrail.module('UserManagement').userID,
-                            "created":      Date.now(),
-                            "type":         resourceDatabase[protoData.resourceId].type,
-                            "src":          resourceDatabase[protoData.resourceId].src,
-                            "thumb":        resourceDatabase[protoData.resourceId].thumb,
-                            "start":        protoData.start,
-                            "end":          protoData.end,
-                            "resourceId":   protoData.resourceId,
-                            "attributes":   resourceDatabase[protoData.resourceId].attributes,
-                            "tags":         []
-                        };
+            // TODO: clean code
+            if ( protoData.type == 'text' ) {
+                newData = {
+                    "name":         protoData.name,
+                    "creator":      FrameTrail.getState('username'),
+                    "creatorId":    FrameTrail.module('UserManagement').userID,
+                    "created":      Date.now(),
+                    "type":         protoData.type,
+                    "src":          '',
+                    "start":        protoData.start,
+                    "end":          protoData.end,
+                    "attributes":   protoData.attributes,
+                    "tags":         []
+                }
+            } else {
+                newData = {
+                    "name":         resourceDatabase[protoData.resourceId].name,
+                    "creator":      FrameTrail.getState('username'),
+                    "creatorId":    FrameTrail.module('UserManagement').userID,
+                    "created":      Date.now(),
+                    "type":         resourceDatabase[protoData.resourceId].type,
+                    "src":          resourceDatabase[protoData.resourceId].src,
+                    "thumb":        resourceDatabase[protoData.resourceId].thumb,
+                    "start":        protoData.start,
+                    "end":          protoData.end,
+                    "resourceId":   protoData.resourceId,
+                    "attributes":   resourceDatabase[protoData.resourceId].attributes,
+                    "tags":         []
+                };
+            }
 
             if (!database.annotations[ownerId]) {
                 database.annotations[ownerId] = []

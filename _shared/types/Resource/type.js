@@ -65,7 +65,7 @@ FrameTrail.defineType(
                         width: 640 + 'px',
                         height: 400 + 'px'
                     }, 300, function() {
-                        var previewDialog   = $('<div class="resourcePreviewDialog" title="'+ self.resourceData.name +'"></div>')
+                        var previewDialog   = $('<div class="resourcePreviewDialog" title="'+ ((self.resourceData.type == 'text') ? '' : self.resourceData.name) +'"></div>')
                             .append(self.renderContent());
 
                         previewDialog.dialog({
@@ -511,22 +511,43 @@ FrameTrail.defineType(
                                             + '    <label for="TimeEnd">End</label>'
                                             + '    <input id="TimeEnd" value="' + annotation.data.end + '">'
                                             + '</div>'),
-                        thumbContainer    = $('<div class="previewThumbContainer"></div>'),
-                        tagManagementUI   = $('<div class="tagManagementUI">'
-                                            + '    <hr>'
-                                            + '    <label>Manage Tags:</label>'
-                                            + '    <div class="existingTags"></div>'
-                                            + '    <div class="button small contextSelectButton newTagButton">'
-                                            + '        <span class="icon-plus">Add</span>'
-                                            + '        <div class="contextSelectList"></div>'
+                        thumbContainer    = $('<div class="previewThumbContainer"></div>');
+
+                    var annotationOptions = $('<div class="annotationOptionsWrapper">'
+                                            + '    <div class="annotationOptionsTabs">'
+                                            + '        <ul>'
+                                            + '            <li><a href="#AnnotationOptions">Options</a></li>'
+                                            + '            <li><a href="#TagOptions">Tags</a></li>'
+                                            + '        </ul>'
+                                            + '        <div id="AnnotationOptions"></div>'
+                                            + '        <div id="TagOptions">'
+                                            + '            <label>Manage Tags:</label>'
+                                            + '            <div class="existingTags"></div>'
+                                            + '            <div class="button small contextSelectButton newTagButton">'
+                                            + '                <span class="icon-plus">Add</span>'
+                                            + '                <div class="contextSelectList"></div>'
+                                            + '            </div>'
+                                            + '        </div>'
                                             + '    </div>'
                                             + '</div>');
 
                     thumbContainer.append(annotation.resourceItem.renderThumb());
 
-                    controlsContainer.append(defaultControls, thumbContainer, tagManagementUI);
+                    controlsContainer.append(defaultControls, thumbContainer, annotationOptions);
+
+                    controlsContainer.find('.annotationOptionsTabs').tabs({
+                        heightStyle: 'fill',
+                        activate: function(event, ui) {
+                            controlsContainer.find('.annotationOptionsTabs').tabs('refresh');
+                            if (ui.newPanel.find('.CodeMirror').length != 0) {
+                                ui.newPanel.find('.CodeMirror')[0].CodeMirror.refresh();
+                            }
+                        }
+                    });
 
                     // Tag Management
+
+                    var tagManagementUI = annotationOptions.find('#TagOptions');
 
                     updateExistingTags();
 

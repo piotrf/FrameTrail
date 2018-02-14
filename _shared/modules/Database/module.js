@@ -452,10 +452,10 @@
                             "start": parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].target.selector.value)[1]),
                             "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(data[i].target.selector.value)[2]),
                             "resourceId": data[i].body["frametrail:resourceId"],
-                            "attributes": data[i]['frametrail:attributes'] || {},
+                            "attributes": data[i].body['frametrail:attributes'] || {},
                             "tags": data[i]['frametrail:tags']
                         });
-
+                        
                         if (annotationData[annotationData.length-1].type === 'location') {
                             var locationAttributes = annotationData[annotationData.length-1].attributes;
                             locationAttributes.lat = parseFloat(data[i].body['frametrail:lat']);
@@ -1207,7 +1207,8 @@
                             return undefined;
                         }
                     })(),
-                    "frametrail:resourceId": annotationItem.resourceId
+                    "frametrail:resourceId": annotationItem.resourceId,
+                    "frametrail:attributes": annotationItem.attributes
         		}
             });
             if (annotationsToSave[annotationsToSave.length-1].body['frametrail:type'] === 'location') {

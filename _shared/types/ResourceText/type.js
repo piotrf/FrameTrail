@@ -73,13 +73,16 @@ FrameTrail.defineType(
                  */
                 renderThumb: function() {
 
-                    var self = this;
+                    var self = this,
+                        unescapeHelper = document.createElement('div'),
+                        child,
+                        unescapedString;
 
                     var thumbElement = $('<div class="resourceThumb" data-type="'+ this.resourceData.type +'">'
                         + '                  <div class="resourceOverlay">'
                         + '                      <div class="resourceIcon"><span class="icon-doc-text"></span></div>'
                         + '                  </div>'
-                        + '                  <div class="resourceTitle">Custom Text</div>'
+                        + '                  <div class="resourceTitle">Custom Text/HTML</div>'
                         + '              </div>');
 
                     var previewButton = $('<div class="resourcePreviewButton"><span class="icon-eye"></span></div>').click(function(evt) {
@@ -89,6 +92,11 @@ FrameTrail.defineType(
                         evt.preventDefault();
                     });
                     thumbElement.append(previewButton);
+
+                    var decoded_string = $("<div/>").html(self.resourceData.attributes.text).text();
+                    var textOnly = $("<div/>").html(decoded_string).text();
+                                        
+                    thumbElement.append('<div class="resourceTextPreview">'+ textOnly +'</div>');
 
                     return thumbElement;
 
@@ -105,6 +113,42 @@ FrameTrail.defineType(
 
                     var basicControls = this.renderBasicPropertiesControls(overlay);
 
+                    basicControls.controlsContainer.find('#OverlayOptions').append(this.renderTextEditors(overlay));
+
+
+                    return basicControls;
+
+                },
+
+
+                /**
+                 * See {{#crossLink "Resource/renderBasicTimeControls:method"}}Resource/renderBasicTimeControls(){{/crossLink}}
+                 * @method renderTimeControls
+                 * @param {Annotation} annotation
+                 * @return &#123; controlsContainer: HTMLElement, changeStart: Function, changeEnd: Function &#125;
+                 */
+                renderTimeControls: function(annotation) {
+
+                    var timeControls = this.renderBasicTimeControls(annotation);
+
+                    timeControls.controlsContainer.find('#AnnotationOptions').append(this.renderTextEditors(annotation));
+
+                    return timeControls;
+
+                },
+
+
+                /**
+                 * I render visual and code editors for text content
+                 * @method renderTextEditors
+                 * @param {Object} overlayOrAnnotation
+                 * @return &#123; textContentEditorContainer: HTMLElement;
+                 */
+                renderTextEditors: function(overlayOrAnnotation) {
+
+                    delete window.editor;
+                    delete window.htmlCodeEditor;
+                    
                     /* Define HTML Type  Controls */
 
                     var editGroups = {
@@ -123,21 +167,11 @@ FrameTrail.defineType(
 
                     /* Add Panels and Text Areas */
                     
-                    var htmlEditorTab = $('<div class="textEditorTab">HTML Editor</div>'),
+                    var textContentEditorContainer = $('<div class="textContentEditorContainer"></div>'),
                         visualEditorTab = $('<div class="textEditorTab">Visual Editor (beta)</div>'),
-                        htmlEditorContent = $('<div class="textEditorContent htmlEditorContent"></div>'),
-                        visualEditorContent = $('<div class="textEditorContent visualEditorContent"></div>');
-
-                    htmlEditorTab.click(function() {
-                        visualEditorTab.removeClass('active');
-                        visualEditorContent.hide();
-                        $(this).addClass('active');
-                        htmlEditorContent.show();
-                        if (htmlCodeEditor) {
-                            htmlCodeEditor.refresh();
-                        }
-                    });
-                    htmlEditorTab.click();
+                        htmlEditorTab = $('<div class="textEditorTab">HTML Editor</div>'),
+                        visualEditorContent = $('<div class="textEditorContent visualEditorContent"></div>'),
+                        htmlEditorContent = $('<div class="textEditorContent htmlEditorContent"></div>');
 
                     visualEditorTab.click(function() {
                         htmlEditorTab.removeClass('active');
@@ -145,10 +179,21 @@ FrameTrail.defineType(
                         $(this).addClass('active');
                         visualEditorContent.show();
                     });
+                    visualEditorTab.click();
 
-                    basicControls.controlsContainer.find('#OverlayOptions').append(htmlEditorTab, visualEditorTab, htmlEditorContent, visualEditorContent);
-                                        
-                    var textarea = $('<textarea>' + overlay.data.attributes.text + '</textarea>');
+                    htmlEditorTab.click(function() {
+                        visualEditorTab.removeClass('active');
+                        visualEditorContent.hide();
+                        $(this).addClass('active');
+                        htmlEditorContent.show();
+                        if (window.htmlCodeEditor) {
+                            window.htmlCodeEditor.refresh();
+                        }
+                    });
+
+                    textContentEditorContainer.append(visualEditorTab, htmlEditorTab, visualEditorContent, htmlEditorContent);
+                    
+                    var textarea = $('<textarea>' + overlayOrAnnotation.data.attributes.text + '</textarea>');
                     htmlEditorContent.append(textarea);
 
                     /* Add Text Editor Toolbar */
@@ -176,7 +221,7 @@ FrameTrail.defineType(
                     initToolbarBindings();
 
                     var visualEditorWrapper = $('<div class="visualEditorWrapper"></div>'),
-                        visualTextarea = $('<textarea id="currentEditor">' + overlay.data.attributes.text + '</textarea>');
+                        visualTextarea = $('<textarea>' + overlayOrAnnotation.data.attributes.text + '</textarea>');
                     
                     visualEditorWrapper.append(visualTextarea);
                     visualEditorContent.append(visualEditorWrapper);
@@ -185,7 +230,7 @@ FrameTrail.defineType(
 
                     /* Init CodeMirror for Custom HTML */
 
-                    var htmlCodeEditor = CodeMirror.fromTextArea(textarea[0], {
+                    window.htmlCodeEditor = CodeMirror.fromTextArea(textarea[0], {
                             value: textarea[0].value,
                             lineNumbers: true,
                             mode:  'text/html',
@@ -195,7 +240,8 @@ FrameTrail.defineType(
                             tabSize: 2,
                             theme: 'hopscotch'
                         });
-                    htmlCodeEditor.on('change', function(instance, changeObj) {
+                    
+                    window.htmlCodeEditor.on('change', function(instance, changeObj) {
 
                         var thisTextarea = $(instance.getTextArea());
 
@@ -219,15 +265,39 @@ FrameTrail.defineType(
                         // save escaped html string
                         escapeHelper.appendChild(document.createTextNode(instance.getValue()));
                         escapedHtml = escapeHelper.innerHTML;
-                        overlay.data.attributes.text = escapedHtml;
+                        overlayOrAnnotation.data.attributes.text = escapedHtml;
 
-                        overlay.overlayElement.children('.resourceDetail').html(instance.getValue());
+                        if (overlayOrAnnotation.overlayElement) {
+                            
+                            overlayOrAnnotation.overlayElement.children('.resourceDetail').html(instance.getValue());
 
-                        FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+                            FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                        } else {
+                            
+                            // Update annotation elements in dom
+
+                            $(overlayOrAnnotation.contentViewDetailElements).each(function() {
+                                $(this).find('.resourceDetail').html(instance.getValue());
+                            });
+
+                            var decoded_string = $("<div/>").html(instance.getValue()).text();
+                            var textOnly = $("<div/>").html(decoded_string).text();
+
+                            $(overlayOrAnnotation.contentViewElements).each(function() {
+                                $(this).find('.resourceThumb .resourceTextPreview').html(textOnly);
+                            });
+
+                            $(FrameTrail.getState('target')).find('.editPropertiesContainer .resourceTextPreview').html(textOnly);
+
+                            FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                        }
+                        
 
 
                     });
-                    htmlCodeEditor.setSize(null, '100%');
+                    window.htmlCodeEditor.setSize(null, '100%');
 
                     /* Init WYSIHTML5 Visual Editor */
 
@@ -237,7 +307,7 @@ FrameTrail.defineType(
                       useLineBreaks: false,
                       parserRules:  wysihtml5ParserRules, // defined in parser rules set
                       cleanUp:      true, 
-                      stylesheets:  ['']
+                      stylesheets:  ['../_shared/styles/generic.css']
                     }).on('load', function() {
                         
                         visualEditorContent.find('.wysihtml5-sandbox').on('mouseenter', function() {
@@ -295,17 +365,21 @@ FrameTrail.defineType(
                         });
 
                         visualEditorContent.find('.wysihtml5-sandbox').contents().find('body').on('keyup',function() {
-                            htmlCodeEditor.getDoc().setValue(window.editor.getValue());
+                            window.htmlCodeEditor.getDoc().setValue(window.editor.getValue());
                         });
+
+                        window.setTimeout(function() {
+                            window.editor.on('aftercommand:composer', function(evt) {
+                                window.htmlCodeEditor.getDoc().setValue(window.editor.getValue());
+                            });
+                        }, 3000);
 
                         
                     }).on('change', function() {
-                        htmlCodeEditor.getDoc().setValue(window.editor.getValue());
-                    }).on('aftercommand:composer', function() {
-                        htmlCodeEditor.getDoc().setValue(window.editor.getValue());
+                        window.htmlCodeEditor.getDoc().setValue(window.editor.getValue());
                     }).on('blur', function() {
                         
-                        htmlCodeEditor.getDoc().setValue(window.editor.getValue());
+                        //window.htmlCodeEditor.getDoc().setValue(window.editor.getValue());
                         
                         visualEditorContent.find('.wysihtml5-sandbox').show();
                         visualTextarea.hide();
@@ -621,26 +695,9 @@ FrameTrail.defineType(
 
                     } // END initColorpicker
 
-
-                    return basicControls;
-
-                },
-
-
-                /**
-                 * See {{#crossLink "Resource/renderBasicTimeControls:method"}}Resource/renderBasicTimeControls(){{/crossLink}}
-                 * @method renderTimeControls
-                 * @param {Annotation} annotation
-                 * @return &#123; controlsContainer: HTMLElement, changeStart: Function, changeEnd: Function &#125;
-                 */
-                renderTimeControls: function(annotation) {
-
-                    return this.renderBasicTimeControls(annotation);
+                    return textContentEditorContainer;
 
                 }
-
-
-
 
 
 

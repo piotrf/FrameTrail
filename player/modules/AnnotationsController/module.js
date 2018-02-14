@@ -350,6 +350,12 @@
         updateControlsStart        = propertiesControlsInterface.changeStart;
         updateControlsEnd          = propertiesControlsInterface.changeEnd;
 
+        ViewVideo.EditPropertiesContainer.find('.annotationOptionsTabs').tabs('refresh');
+
+        if ( ViewVideo.EditPropertiesContainer.find('.CodeMirror').length != 0 ) {
+            ViewVideo.EditPropertiesContainer.find('.CodeMirror')[0].CodeMirror.refresh();
+        }
+
     }
 
 
@@ -466,10 +472,12 @@
 
         var annotationsEditingOptions = $('<div class="overlayEditingTabs">'
                                   +   '    <ul>'
-                                  +   '        <li><a href="#ResourceList">Choose Resource</a></li>'
+                                  +   '        <li><a href="#ResourceList">Add Resource</a></li>'
+                                  +   '        <li><a href="#CustomAnnotation">Add Custom Annotation</a></li>'
                                   +   '        <li><a href="#OtherUsers">Choose Annotations of other Users</a></li>'
                                   +   '    </ul>'
                                   +   '    <div id="ResourceList"></div>'
+                                  +   '    <div id="CustomAnnotation"></div>'
                                   +   '    <div id="OtherUsers">'
                                   +   '        <div class="message active">Drag Annotations from the User Timelines to your Annotation Timeline</div>'
                                   +   '        <div class="timelineList"></div>'
@@ -489,6 +497,43 @@
             annotationsEditingOptions.find('#ResourceList')
         );
 
+        /* Append custom text resource to 'Add Custom Annotation' tab */
+        // TODO: Move to separate function
+        var textElement = $('<div class="resourceThumb" data-type="text">'
+                + '                  <div class="resourceOverlay">'
+                + '                      <div class="resourceIcon"></div>'
+                + '                  </div>'
+                + '                  <div class="resourceTitle">Custom Text/HTML</div>'
+                + '              </div>');
+
+        textElement.draggable({
+            containment:    '.mainContainer',
+            helper:         'clone',
+            revert:         'invalid',
+            revertDuration: 100,
+            appendTo:       'body',
+            distance:       10,
+            zIndex:         1000,
+
+            start: function( event, ui ) {
+                ui.helper.css({
+                    top: $(event.currentTarget).offset().top + "px",
+                    left: $(event.currentTarget).offset().left + "px",
+                    width: $(event.currentTarget).width() + "px",
+                    height: $(event.currentTarget).height() + "px"
+                });
+                $(event.currentTarget).addClass('dragPlaceholder');
+            },
+
+            stop: function( event, ui ) {
+                $(event.target).removeClass('dragPlaceholder');
+            }
+
+        });
+
+        annotationsEditingOptions.find('#CustomAnnotation').append(textElement);
+
+        /* Choose Annotations of other users */
 
         for (var id in annotationAllSets) {
 
@@ -566,7 +611,8 @@
                     var resourceID      = ui.helper.attr('data-resourceID'),
                         videoDuration   = FrameTrail.module('HypervideoModel').duration,
                         startTime,
-                        endTime;
+                        endTime,
+                        newAnnotation;
 
                         if (ui.helper.hasClass('compareTimelineElement')) {
 
@@ -581,13 +627,27 @@
                                             : startTime + 4;
                         }
 
+                        if (ui.helper.attr('data-type') == 'text') {
 
+                            newAnnotation = FrameTrail.module('HypervideoModel').newAnnotation({
+                                "name":         "Custom Text/HTML",
+                                "type":         ui.helper.attr('data-type'),
+                                "start":        startTime,
+                                "end":          endTime,
+                                "attributes":   {
+                                    "text":         ""
+                                }
+                            });
 
-                        newAnnotation = FrameTrail.module('HypervideoModel').newAnnotation({
-                            "start":        startTime,
-                            "end":          endTime,
-                            "resourceId":   resourceID
-                        });
+                        } else {
+
+                            newAnnotation = FrameTrail.module('HypervideoModel').newAnnotation({
+                                "start":        startTime,
+                                "end":          endTime,
+                                "resourceId":   resourceID
+                            });
+
+                        }
 
                     newAnnotation.renderInDOM();
                     newAnnotation.startEditing();
