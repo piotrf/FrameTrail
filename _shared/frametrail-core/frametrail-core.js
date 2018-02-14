@@ -23,6 +23,30 @@
 
 
 
+    function _defineModule(name, definition) {
+
+        if (typeof definition !== 'function') {
+            throw new Error('Module definition must be a function object, which returns a public interface.');
+        }
+
+        defs_modules[name] = definition;
+
+    }
+
+    function _defineType(name, definition) {
+
+        if (typeof definition !== 'function') {
+            throw new Error('Type definition must be a function object, which returns type definition { parent constructor proto }.');
+        }
+
+        defs_types[name] = definition;
+
+    }
+
+
+
+
+
 
 
 
@@ -41,7 +65,10 @@
     		changeState: 	_changeState,
     		get types()		{ return types },
     		type: 			_type,
-    		newObject: 		_newObject
+    		newObject: 		_newObject,
+            triggerEvent:   triggerEvent,
+            addEventListener: addEventListener,
+            removeEventListener: removeEventListener
     	};
 
     	var state			= {},
@@ -108,8 +135,11 @@
             onEnded: null,
             onTimelineEvent: null,
             onUserAction: null,
-            on: null,
-            off: null,
+            on: addEventListener,
+            off: removeEventListener,
+            addEventListener: addEventListener,
+            removeEventListener: removeEventListener,
+            dispatchEvent: dispatchEvent,
 
             metadata: {
                 get creator()       { return FrameTrail.module('HypervideoModel').creator },
@@ -135,7 +165,7 @@
                 deleteTraces:   FrameTrail.module('UserTraces').deleteTraces,
                 get data()      { return FrameTrail.module('UserTraces').traces }
             }
-            
+
 
         }
 
@@ -342,42 +372,51 @@
 
 
 
+        var listeners = {};
+
+        function addEventListener(type, handler) {
+            if (!(type in listeners)) {
+                listeners[type] = [];
+            }
+            listeners[type].push(handler);
+        }
+
+        function removeEventListener(type, handler) {
+            if (!(type in listeners)) {
+                return;
+            }
+            var stack = listeners[type];
+            for (var i = 0; i < stack.length; i++) {
+                if (stack[i] === handler){
+                    stack.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function dispatchEvent(event) {
+            if (!(event.type in listeners)) {
+                return true;
+            }
+            var stack = listeners[event.type];
+            for (var i = 0, l = stack.length; i < l; i++) {
+                stack[i].call(this, event);
+            }
+            return !event.defaultPrevented;
+        }
+
+
+        function triggerEvent(eventType, eventData) {
+            return dispatchEvent(new CustomEvent(eventType, { detail: eventData }));
+        }
+
+
+
 
         return publicInstanceAPI;
 
 
-
     }
-
-
-
-
-
-
-    function _defineModule(name, definition) {
-
-        if (typeof definition !== 'function') {
-            throw new Error('Module definition must be a function object, which returns a public interface.');
-        }
-
-        defs_modules[name] = definition;
-
-    }
-
-    function _defineType(name, definition) {
-
-        if (typeof definition !== 'function') {
-            throw new Error('Type definition must be a function object, which returns type definition { parent constructor proto }.');
-        }
-
-        defs_types[name] = definition;
-
-    }
-
-
-
-
-
 
 
 }).call(this);
