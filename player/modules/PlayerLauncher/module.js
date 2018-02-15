@@ -28,12 +28,10 @@
 
  FrameTrail.defineModule('PlayerLauncher', function(FrameTrail){
 
-
     // Set up Overlay interface
     FrameTrail.initModule('InterfaceModal');
     FrameTrail.module('InterfaceModal').showStatusMessage('Loading Data ...');
     FrameTrail.module('InterfaceModal').showLoadingScreen();
-
 
     // Set up the various data models
     FrameTrail.initModule('RouteNavigation');
@@ -42,7 +40,6 @@
     FrameTrail.initModule('TagModel');
     FrameTrail.initModule('ResourceManager');
     FrameTrail.initModule('HypervideoModel');
-
 
     // Set up the interface
     FrameTrail.initModule('Interface');
@@ -55,8 +52,7 @@
     // Set up User Traces
     FrameTrail.initModule('UserTraces');
 
-
-
+    
     // start the actual init process
 
     if (FrameTrail.module('RouteNavigation').hypervideoID) {
@@ -64,6 +60,8 @@
         FrameTrail.module('Database').loadData(
 
             function () {
+
+                FrameTrail.module('UserTraces').initTraces();
 
                 FrameTrail.module('TagModel').initTagModel(
 
@@ -127,6 +125,8 @@
 
             function(){
 
+                FrameTrail.module('UserTraces').initTraces();
+                
                 FrameTrail.module('InterfaceModal').setLoadingTitle('Overview');
 
                 FrameTrail.module('Interface').create(function(){

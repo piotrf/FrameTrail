@@ -28,6 +28,15 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	 */
 	function initTraces() {
 		
+		// TEST
+		
+		/*
+		FrameTrail.addEventListener('play', function(evt) {
+			console.log('internal play');
+		});
+		*/
+		
+
 		var savedTraces = localStorage.getItem('frametrail-traces');
 		
 		if (savedTraces) {
@@ -52,8 +61,6 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 		}
 
 	}
-
-	initTraces();
 
 	/**
 	 * I save all traces in localstorage.
@@ -212,6 +219,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	
 	return {
 
+		initTraces: 		initTraces,
 		startTrace: 		startTrace,
 		endTrace: 			endTrace,
 		addTraceEvent: 		addTraceEvent,
