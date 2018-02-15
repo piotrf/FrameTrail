@@ -273,9 +273,11 @@ FrameTrail.defineType(
                     var self = this,
                         AnnotationsController = FrameTrail.module('AnnotationsController');
 
-                    this.makeTimelineElementDraggable();
-                    this.makeTimelineElementResizeable();
-
+                    window.setTimeout(function() {
+                        self.makeTimelineElementDraggable();
+                        self.makeTimelineElementResizeable();
+                    }, 50);
+                    
                     this.timelineElement.on('click', function(){
 
                         if (AnnotationsController.annotationInFocus === self){
