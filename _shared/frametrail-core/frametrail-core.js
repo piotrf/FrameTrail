@@ -7,8 +7,6 @@
 
         instances    = [];
 
-
-
     window.FrameTrail = {
         defineModule: 	_defineModule,
         defineType: 	_defineType,
@@ -18,9 +16,6 @@
         setActiveInstance: null,
         get instances() { return instances; }
     };
-
-
-
 
 
     function _defineModule(name, definition) {
@@ -44,16 +39,7 @@
     }
 
 
-
-
-
-
-
-
-
     function _init(tmp, options) {
-
-
 
     	var FrameTrail = {
     		start: 			_start,
@@ -83,8 +69,6 @@
         _start(tmp, options);
 
 
-
-
     	function _start(mainModule, runtimeConfig) {
 
     		// TODO: Check if this belongs here
@@ -94,9 +78,6 @@
     		_initModule(mainModule);
 
     	}
-
-
-
 
 
         var publicInstanceAPI = {
@@ -170,12 +151,6 @@
         }
 
         instances.push(publicInstanceAPI);
-
-
-
-
-
-
 
 
     	function _initModule(name) {
@@ -371,7 +346,6 @@
     	}
 
 
-
         var listeners = {};
 
         function addEventListener(type, handler) {
@@ -409,8 +383,6 @@
         function triggerEvent(eventType, eventData) {
             return dispatchEvent(new CustomEvent(eventType, { detail: eventData }));
         }
-
-
 
 
         return publicInstanceAPI;
