@@ -28,14 +28,58 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	 */
 	function initTraces() {
 		
-		// TEST
+		if (!FrameTrail.module('Database').config.captureUserTraces) {
+			return false;
+		}
 		
-		/*
-		FrameTrail.addEventListener('play', function(evt) {
-			console.log('internal play');
+		FrameTrail.addEventListener('userAction', function(evt) {
+			if (evt.detail.action == FrameTrail.module('Database').config.userTracesStartAction) {
+				startTrace();
+			} else if (evt.detail.action == FrameTrail.module('Database').config.userTracesEndAction) {
+				addTraceEvent(evt.detail.action);
+				endTrace();
+			}
 		});
-		*/
 		
+		// Add events / actions to be traced
+
+		FrameTrail.addEventListener('play', function(evt) {
+			addTraceEvent('VideoPlay');
+		});
+
+		FrameTrail.addEventListener('pause', function(evt) {
+			addTraceEvent('VideoPause');
+		});
+
+		FrameTrail.addEventListener('userAction', function(evt) {
+			var attributes = {};
+			switch(evt.detail.action) {
+				case 'VideoJumpTime':
+					attributes.fromTime = evt.detail.fromTime;
+					attributes.toTime = evt.detail.toTime;
+					break;
+				case 'UserLogin':
+					attributes.userID = evt.detail.userID;
+					attributes.userName = evt.detail.userName;
+					attributes.userRole = evt.detail.userRole;
+					attributes.userMail = evt.detail.userMail;
+					break;
+				case 'UserLogout':
+					//
+					break;
+				case 'WaitStart':
+					//
+					break;
+				case 'WaitEnd':
+					//
+					break;
+				default:
+					// default case
+			}
+			addTraceEvent(evt.detail.action, attributes);
+		});
+
+		// Init saved traces
 
 		var savedTraces = localStorage.getItem('frametrail-traces');
 		
@@ -94,6 +138,13 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	 */
 	function startTrace() {
 
+		if (!FrameTrail.module('Database').config.captureUserTraces) {
+			console.warn('Could not start user trace. Capturing user traces not allowed.');
+			return false;
+		}
+
+		console.log('Start Trace');
+
 		var sessionID = Date.now(),
 			sessionData = {
 				'sessionStartTime': sessionID,
@@ -116,6 +167,13 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	 * @return 
 	 */
 	function endTrace() {
+
+		if (!currentSessionID) {
+			console.warn('Could not end user trace. Please start a session first.');
+			return;
+		}
+
+		console.log('EndTrace');
 
 		var timeNow = Date.now(),
 			sessionTime = getTimeDifference(sessions[currentSessionID].sessionStartTime, timeNow);
@@ -165,6 +223,8 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 		if (FrameTrail.module('UserManagement').userID.length > 0) {
 			sessions[currentSessionID].user = FrameTrail.module('UserManagement').userID;
 		}
+
+		console.log(traceData);
 
 		sessions[currentSessionID].traces.push(traceData);
 		

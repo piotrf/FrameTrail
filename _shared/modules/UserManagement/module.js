@@ -392,6 +392,15 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 				case 0:
 					userSessionLifetime = parseInt(response.session_lifetime);
 					login(response.userdata);
+
+					FrameTrail.triggerEvent('userAction', {
+						action: 'UserLogin',
+						userID: response.userdata.id,
+						userName: response.userdata.name,
+						userRole: response.userdata.role,
+						userMail: response.userdata.mail
+					});
+
 					loginBox.find('.loginFormStatus').removeClass('active error success').text('');
 					updateView(true);
 					if(typeof userBoxCallback === 'function'){
@@ -636,6 +645,10 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 				});
 
 				updateView(false);
+
+				FrameTrail.triggerEvent('userAction', {
+					action: 'UserLogout'
+				});
 
 			}
 

@@ -61,7 +61,8 @@
     		modules 		= {},
             types           = {},
     		updateQueue 	= [],
-    		inUpdateThread  = false;
+    		inUpdateThread  = false,
+            listeners       = {};
 
 
 
@@ -344,9 +345,6 @@
     		return new types[name](param1, param2, param3, param4, param5, param6, param7);
 
     	}
-
-
-        var listeners = {};
 
         function addEventListener(type, handler) {
             if (!(type in listeners)) {

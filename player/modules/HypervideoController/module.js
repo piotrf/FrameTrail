@@ -37,6 +37,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
         isStalled              = false,
         stallRequestedBy       = [],
 		currentTime 		   = 0,
+		previousTime		   = 0,
 		muted 				   = false,
 		nullVideoStartDate     = 0,
 
@@ -112,6 +113,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			});
 
 			_video.on('ended', function() {
+				
+				FrameTrail.triggerEvent('ended', {});
+
 				if (HypervideoModel.events.onEnded) {
 					try {
 		            	var endedEvent = new Function(HypervideoModel.events.onEnded);
@@ -121,6 +125,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		                console.warn('Event handler contains errors: '+ exception.message);
 		            }
 		        }
+
 			});
 
 			_video.attr('preload', 'auto');
@@ -146,6 +151,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 					InteractionController.initController();
 
+					FrameTrail.triggerEvent('ready', {});
+
 					if (HypervideoModel.events.onReady) {
 						try {
 		                	var readyEvent = new Function(HypervideoModel.events.onReady);
@@ -157,9 +164,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					}
 
 					if (RouteNavigation.hashTime) {
-						setCurrentTime(RouteNavigation.hashTime);
+						setCurrentTime(RouteNavigation.hashTime, true);
 					} else {
-						setCurrentTime(0);
+						setCurrentTime(0, true);
 					}
 
 					FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -190,6 +197,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 			InteractionController.initController();
 
+			FrameTrail.triggerEvent('ready', {});
+			
 			if (HypervideoModel.events.onReady) {
 				try {
                 	var readyEvent = new Function(HypervideoModel.events.onReady);
@@ -201,9 +210,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			}
 
 			if (RouteNavigation.hashTime) {
-				setCurrentTime(RouteNavigation.hashTime);
+				setCurrentTime(RouteNavigation.hashTime, true);
 			} else {
-				setCurrentTime(0);
+				setCurrentTime(0, true);
 			}
 
 			FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -334,17 +343,15 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					},
 
 			slide:  function(evt, ui) {
-
-						setCurrentTime(ui.value);
-
+						setCurrentTime(ui.value, true);
 					},
 
 			start: 	function(evt, ui) {
-
+						previousTime = currentTime;
 					},
 
 			stop: 	function(evt, ui) {
-
+						setCurrentTime(ui.value);
 					}
 		});
 
@@ -557,6 +564,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			ViewVideo.VideoStartOverlay.addClass('inactive').fadeOut();
 		}
 
+		FrameTrail.triggerEvent('play', {});
+
 		if (HypervideoModel.events.onPlay) {
 			try {
             	var playEvent = new Function(HypervideoModel.events.onPlay);
@@ -595,25 +604,35 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 		}
 
-		if (HypervideoModel.events.onPause && currentTime !== HypervideoModel.duration) {
-			try {
-            	var pauseEvent = new Function(HypervideoModel.events.onPause);
-            	pauseEvent();
-            } catch (exception) {
-                // could not parse and compile JS code!
-                console.warn('Event handler contains errors: '+ exception.message);
-            }
-		}
+		if (currentTime !== HypervideoModel.duration) {
 
-		// Hack to fire ended event in NullVideo
-		if (!HypervideoModel.hasHTML5Video && currentTime == HypervideoModel.duration && HypervideoModel.events.onEnded) {
-			try {
-            	var endedEvent = new Function(HypervideoModel.events.onEnded);
-            	endedEvent();
-            } catch (exception) {
-                // could not parse and compile JS code!
-                console.warn('Event handler contains errors: '+ exception.message);
-            }
+			FrameTrail.triggerEvent('pause', {});
+
+			if (HypervideoModel.events.onPause) {
+				try {
+	            	var pauseEvent = new Function(HypervideoModel.events.onPause);
+	            	pauseEvent();
+	            } catch (exception) {
+	                // could not parse and compile JS code!
+	                console.warn('Event handler contains errors: '+ exception.message);
+	            }
+			}
+
+		} else if (!HypervideoModel.hasHTML5Video && currentTime == HypervideoModel.duration) {
+
+			FrameTrail.triggerEvent('ended', {});
+
+			// Hack to fire ended event in NullVideo
+			if (HypervideoModel.events.onEnded) {
+				try {
+	            	var endedEvent = new Function(HypervideoModel.events.onEnded);
+	            	endedEvent();
+	            } catch (exception) {
+	                // could not parse and compile JS code!
+	                console.warn('Event handler contains errors: '+ exception.message);
+	            }
+			}
+
 		}
 
 	};
@@ -755,10 +774,11 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 *
 	 * @method setCurrentTime
 	 * @param {Number} aNumber
+	 * @param {Boolean} suppressEvent
 	 * @return Number
 	 * @private
 	 */
-	function setCurrentTime(aNumber) {
+	function setCurrentTime(aNumber, suppressEvent) {
 
         var aNumberAsFloat = parseFloat(aNumber);
 
@@ -781,7 +801,14 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		lowPriorityUpdater();
 
 		OverlaysController.syncMedia();
-
+		
+		if (!suppressEvent) {
+			FrameTrail.triggerEvent('userAction', {
+				action: 'VideoJumpTime',
+				fromTime: previousTime,
+				toTime: aNumberAsFloat
+			});
+		}
 
 		return aNumberAsFloat;
 
@@ -899,8 +926,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		 *
 		 * @attribute currentTime
 		 */
-		get currentTime()        { return currentTime             },
-		set currentTime(aNumber) { return setCurrentTime(aNumber) },
+		get currentTime()         				{ return currentTime             },
+		set currentTime(aNumber) 				{ return setCurrentTime(aNumber) },
 
 		/**
 		 * These attributes store the muted state of the hypervideo.
