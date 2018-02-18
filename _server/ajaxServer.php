@@ -275,6 +275,7 @@ switch($_REQUEST["a"]) {
 				"userTracesStartAction"=> "",
 				"userTracesEndAction"=> "",
 				"userNeedsConfirmation"=> false,
+				"alwaysForceLogin"=> false,
 				"allowCollaboration"=> false,
 				"allowUploads"=> true,
 				"theme"=> "",

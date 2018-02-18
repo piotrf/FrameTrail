@@ -61,51 +61,65 @@
 
             function () {
 
-                FrameTrail.module('UserTraces').initTraces();
+                if (FrameTrail.module('Database').config.alwaysForceLogin) {
+                    FrameTrail.module('InterfaceModal').hideMessage();
+                    FrameTrail.module('UserManagement').ensureAuthenticated(function() {
+                        initHypervideo();
+                    }, function() {}, true);
+                } else {
+                    initHypervideo();
+                }
+                
+                function initHypervideo() {
 
-                FrameTrail.module('TagModel').initTagModel(
+                    FrameTrail.module('UserTraces').initTraces();
 
-                    function () {
+                    FrameTrail.module('TagModel').initTagModel(
 
-                        FrameTrail.module('InterfaceModal').setLoadingTitle(FrameTrail.module('Database').hypervideo.name);
+                        function () {
 
-                        FrameTrail.module('HypervideoModel').initModel(function(){
+                            FrameTrail.module('InterfaceModal').setLoadingTitle(FrameTrail.module('Database').hypervideo.name);
 
-                            FrameTrail.module('Interface').create(function(){
+                            FrameTrail.module('HypervideoModel').initModel(function(){
 
-                                FrameTrail.module('InterfaceModal').hideLoadingScreen();
+                                FrameTrail.module('Interface').create(function(){
 
-                                FrameTrail.module('HypervideoController').initController(
+                                    FrameTrail.module('InterfaceModal').hideLoadingScreen();
 
-                                    function(){
+                                    FrameTrail.module('HypervideoController').initController(
 
-                                        // Finished
-                                        FrameTrail.module('InterfaceModal').hideMessage();
+                                        function(){
 
-                                    },
+                                            // Finished
+                                            FrameTrail.module('InterfaceModal').hideMessage();
 
-                                    function(errorMsg){
+                                        },
 
-                                        // Fail: Init thread was aborted with:
-                                        FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
+                                        function(errorMsg){
 
-                                    }
+                                            // Fail: Init thread was aborted with:
+                                            FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
 
-                                );
+                                        }
+
+                                    );
+
+                                });
+
 
                             });
 
 
-                        });
+                        },
 
+                        function () {
+                            FrameTrail.module('InterfaceModal').showErrorMessage('Could not init TagModel.');
+                        }
 
-                    },
+                    );
 
-                    function () {
-                        FrameTrail.module('InterfaceModal').showErrorMessage('Could not init TagModel.');
-                    }
+                }
 
-                );
             },
 
             function(errorMsg){
@@ -125,17 +139,30 @@
 
             function(){
 
-                FrameTrail.module('UserTraces').initTraces();
-                
-                FrameTrail.module('InterfaceModal').setLoadingTitle('Overview');
-
-                FrameTrail.module('Interface').create(function(){
-
-                    // Finished
+                if (FrameTrail.module('Database').config.alwaysForceLogin) {
                     FrameTrail.module('InterfaceModal').hideMessage();
-                    FrameTrail.module('InterfaceModal').hideLoadingScreen();
+                    FrameTrail.module('UserManagement').ensureAuthenticated(function() {
+                        initOverview();
+                    }, function() {}, true);
+                } else {
+                    initOverview();
+                }
 
-                });
+                function initOverview() {
+
+                    FrameTrail.module('UserTraces').initTraces();
+                
+                    FrameTrail.module('InterfaceModal').setLoadingTitle('Overview');
+
+                    FrameTrail.module('Interface').create(function(){
+
+                        // Finished
+                        FrameTrail.module('InterfaceModal').hideMessage();
+                        FrameTrail.module('InterfaceModal').hideLoadingScreen();
+
+                    });
+
+                }
 
             },
 

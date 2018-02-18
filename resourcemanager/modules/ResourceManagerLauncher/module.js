@@ -39,42 +39,33 @@
     FrameTrail.initModule('ViewResources');
 
 
-	appendTitlebar();
-
-    $(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
-
-    FrameTrail.module('ViewResources').create(true);
-
-    FrameTrail.module('ViewResources').open();
-
-    FrameTrail.module('UserManagement').isLoggedIn(function(loginState) {
-        toggleLoginState(loginState);
+	FrameTrail.module('Database').loadConfigData(function() {
+        if (FrameTrail.module('Database').config.alwaysForceLogin) {
+            FrameTrail.module('UserManagement').ensureAuthenticated(function() {
+                initResourceManager();
+            }, function() {}, true);
+        } else {
+            initResourceManager();
+        }
     });
 
-    FrameTrail.module('Database').loadConfigData(function() {});
+    function initResourceManager() {
 
-    initWindowResizeHandler();
+        appendTitlebar();
 
-    /*
-    FrameTrail.module('UserManagement').ensureAuthenticated(
-		function(){
+        $(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
 
-			appendTitlebar();
+        FrameTrail.module('ViewResources').create(true);
 
-			$(FrameTrail.getState('target')).append($('<div class="mainContainer"></div>'));
+        FrameTrail.module('ViewResources').open();
 
-			FrameTrail.module('ViewResources').create(true);
+        FrameTrail.module('UserManagement').isLoggedIn(function(loginState) {
+            toggleLoginState(loginState);
+        });
 
-			FrameTrail.module('ViewResources').open();
+        initWindowResizeHandler();
 
-			initWindowResizeHandler();
-
-		},
-		function(){
-			alert('Log in was aborted... :(')
-		}, true
-	);
-    */
+    }
 
     /**
      * I append the title bar.
