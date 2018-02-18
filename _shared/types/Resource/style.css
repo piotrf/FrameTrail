@@ -59,6 +59,7 @@
 	height: 16px;
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
+	z-index: 2;
 }
 
 .resourceThumb .resourceOverlay .resourceIcon [class^="icon-"]::before, .resourceThumb .resourceOverlay .resourceIcon [class*=" icon-"]::before {
@@ -130,8 +131,8 @@
 
 .editPropertiesContainer .previewThumbContainer {
 	float: right;
-	height: 107px;
-	width: 160px;
+	height: 100px;
+	width: 140px;
 }
 
 .editPropertiesContainer .previewThumbContainer .resourceThumb {
@@ -162,7 +163,7 @@
 
 .editPropertiesContainer .ui-spinner {
 	border: 1px solid var(--primary-bg-color);
-    margin-right: 10px;
+    margin-right: 0px;
     padding: 2px;
     width: 53px;
     background: var(--primary-fg-color);
@@ -201,18 +202,24 @@
 .editPropertiesContainer .timeControls {
 	float: left;
 	position: relative;
-	width: 132px;
+	width: 126px;
 	overflow: hidden;
 }
 
-.editPropertiesContainer .timeControls label, .editPropertiesContainer .timeControls .ui-spinner {
-	width: 120px;
+.editPropertiesContainer .timeControls .ui-spinner {
+	width: 70px;
+	margin: 5px 0 5px 0;
+	display: inline-block;
+}
+
+.editPropertiesContainer .timeControls label {
+	width: 40px;
 	margin-bottom: 0px;
-	display: block;
+	display: inline-block;
 }
 
 .editPropertiesContainer .timeControls .ui-spinner input {
-	width: 100px;
+	width: 52px;
 	overflow: hidden;
 }
 
@@ -224,7 +231,7 @@
 }
 
 .editPropertiesContainer .positionControls {
-	float: left;
+	float: right;
 	position: relative;
 	margin-bottom: 10px;
 	width: 232px;
@@ -271,7 +278,7 @@
 
 .editPropertiesContainer .annotationOptionsWrapper {
 	clear: both;
-	height: calc(100% - 124px);
+	height: calc(100% - 104px);
 }
 
 .editPropertiesContainer .overlayOptionsTabs, .editPropertiesContainer .annotationOptionsTabs {

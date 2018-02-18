@@ -28,6 +28,18 @@
 	padding: 8px;
 	box-sizing: border-box;
 	color: var(--primary-fg-color);
+	opacity: .6;
+	overflow: hidden;
+}
+
+.resourceThumb[data-type="text"] .resourceTextPreview:after {
+	content: '';
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	height: 40%;
+	background-image: linear-gradient(to top, var(--primary-bg-color) 0%, var(--primary-bg-color) 30%, transparent 100%);
+	width: 100%;
 }
 
 .editingOptions .resourceThumb[data-type="text"] {
