@@ -61,6 +61,8 @@
 
             function () {
 
+                FrameTrail.module('UserTraces').initTraces();
+
                 if (FrameTrail.module('Database').config.alwaysForceLogin) {
                     FrameTrail.module('InterfaceModal').hideMessage();
                     FrameTrail.module('UserManagement').ensureAuthenticated(function() {
@@ -71,8 +73,6 @@
                 }
                 
                 function initHypervideo() {
-
-                    FrameTrail.module('UserTraces').initTraces();
 
                     FrameTrail.module('TagModel').initTagModel(
 
@@ -139,6 +139,8 @@
 
             function(){
 
+                FrameTrail.module('UserTraces').initTraces();
+                
                 if (FrameTrail.module('Database').config.alwaysForceLogin) {
                     FrameTrail.module('InterfaceModal').hideMessage();
                     FrameTrail.module('UserManagement').ensureAuthenticated(function() {
@@ -150,8 +152,6 @@
 
                 function initOverview() {
 
-                    FrameTrail.module('UserTraces').initTraces();
-                
                     FrameTrail.module('InterfaceModal').setLoadingTitle('Overview');
 
                     FrameTrail.module('Interface').create(function(){
