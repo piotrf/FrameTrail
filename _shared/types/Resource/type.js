@@ -195,6 +195,8 @@ FrameTrail.defineType(
                         }
                     });
 
+                    var oldOverlayData;
+
                     controlsContainer.find('#TimeStart').spinner({
                         step: 0.1,
                         min: 0,
@@ -203,6 +205,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                         	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+
+                            oldOverlayData = jQuery.extend({}, overlay.data);
                         },
                         spin: function(evt, ui) {
 
@@ -211,6 +215,18 @@ FrameTrail.defineType(
                                 overlay.updateTimelineElement();
                                 FrameTrail.module('HypervideoController').currentTime = overlay.data.start;
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'start',
+                                            oldValue: oldOverlayData.start,
+                                            newValue: overlay.data.start
+                                        }
+                                    ]
+                                });
                             }
 
 
@@ -224,6 +240,18 @@ FrameTrail.defineType(
                                 FrameTrail.module('HypervideoController').currentTime = overlay.data.start;
                                 FrameTrail.module('OverlaysController').stackTimelineView();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'start',
+                                            oldValue: oldOverlayData.start,
+                                            newValue: overlay.data.start
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -237,6 +265,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                         	$(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+
+                            oldOverlayData = jQuery.extend({}, overlay.data);
                         },
                         spin: function(evt, ui) {
 
@@ -245,6 +275,18 @@ FrameTrail.defineType(
                                 overlay.updateTimelineElement();
                                 FrameTrail.module('HypervideoController').currentTime = overlay.data.end;
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'end',
+                                            oldValue: oldOverlayData.end,
+                                            newValue: overlay.data.end
+                                        }
+                                    ]
+                                });
                             }
 
                         },
@@ -256,6 +298,18 @@ FrameTrail.defineType(
                                 FrameTrail.module('HypervideoController').currentTime = overlay.data.end;
                                 FrameTrail.module('OverlaysController').stackTimelineView();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'end',
+                                            oldValue: oldOverlayData.end,
+                                            newValue: overlay.data.end
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -267,6 +321,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                         	$(evt.target).parent().attr('data-input-id', 'PositionTop');
+
+                            oldOverlayData = jQuery.extend({}, overlay.data);
                         },
                         spin: function(evt, ui) {
 
@@ -274,6 +330,18 @@ FrameTrail.defineType(
                                 overlay.data.position.top = ui.value;
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.top',
+                                            oldValue: oldOverlayData.position.top,
+                                            newValue: overlay.data.position.top
+                                        }
+                                    ]
+                                });
                             }
 
                         },
@@ -283,6 +351,18 @@ FrameTrail.defineType(
                                 overlay.data.position.top = $(evt.target).val();
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.top',
+                                            oldValue: oldOverlayData.position.top,
+                                            newValue: overlay.data.position.top
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -294,6 +374,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                         	$(evt.target).parent().attr('data-input-id', 'PositionLeft');
+
+                            oldOverlayData = jQuery.extend({}, overlay.data);
                         },
                         spin: function(evt, ui) {
 
@@ -301,6 +383,18 @@ FrameTrail.defineType(
                                 overlay.data.position.left = ui.value;
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.left',
+                                            oldValue: oldOverlayData.position.left,
+                                            newValue: overlay.data.position.left
+                                        }
+                                    ]
+                                });
                             }
 
                         },
@@ -310,6 +404,18 @@ FrameTrail.defineType(
                                 overlay.data.position.left = $(evt.target).val();
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.left',
+                                            oldValue: oldOverlayData.position.left,
+                                            newValue: overlay.data.position.left
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -321,6 +427,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                         	$(evt.target).parent().attr('data-input-id', 'PositionWidth');
+
+                            oldOverlayData = jQuery.extend({}, overlay.data);
                         },
                         spin: function(evt, ui) {
 
@@ -328,6 +436,18 @@ FrameTrail.defineType(
                                 overlay.data.position.width = ui.value;
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.width',
+                                            oldValue: oldOverlayData.position.width,
+                                            newValue: overlay.data.position.width
+                                        }
+                                    ]
+                                });
                             }
 
                         },
@@ -337,6 +457,18 @@ FrameTrail.defineType(
                                 overlay.data.position.width = $(evt.target).val();
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.width',
+                                            oldValue: oldOverlayData.position.width,
+                                            newValue: overlay.data.position.width
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -348,6 +480,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                         	$(evt.target).parent().attr('data-input-id', 'PositionHeight');
+
+                            oldOverlayData = jQuery.extend({}, overlay.data);
                         },
                         spin: function(evt, ui) {
 
@@ -355,6 +489,18 @@ FrameTrail.defineType(
                                 overlay.data.position.height = ui.value;
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.height',
+                                            oldValue: oldOverlayData.position.height,
+                                            newValue: overlay.data.position.height
+                                        }
+                                    ]
+                                });
                             }
 
                         },
@@ -364,6 +510,18 @@ FrameTrail.defineType(
                                 overlay.data.position.height = $(evt.target).val();
                                 overlay.updateOverlayElement();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'OverlayChange',
+                                    overlay: overlay.data,
+                                    changes: [
+                                        {
+                                            property: 'position.height',
+                                            oldValue: oldOverlayData.position.height,
+                                            newValue: overlay.data.position.height
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -612,6 +770,8 @@ FrameTrail.defineType(
 
                     // Timing
 
+                    var oldAnnotationData;
+
                     controlsContainer.find('#TimeStart').spinner({
                         step: 0.1,
                         min: 0,
@@ -620,6 +780,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                             $(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+
+                            oldAnnotationData = jQuery.extend({}, annotation.data);
                         },
                         spin: function(evt, ui) {
 
@@ -628,6 +790,18 @@ FrameTrail.defineType(
                                 annotation.updateTimelineElement();
                                 FrameTrail.module('HypervideoController').currentTime = annotation.data.start;
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'AnnotationChange',
+                                    annotation: annotation.data,
+                                    changes: [
+                                        {
+                                            property: 'start',
+                                            oldValue: oldAnnotationData.start,
+                                            newValue: annotation.data.start
+                                        }
+                                    ]
+                                });
                             }
 
 
@@ -641,6 +815,18 @@ FrameTrail.defineType(
                                 FrameTrail.module('HypervideoController').currentTime = annotation.data.start;
                                 FrameTrail.module('AnnotationsController').stackTimelineView();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'AnnotationChange',
+                                    annotation: annotation.data,
+                                    changes: [
+                                        {
+                                            property: 'start',
+                                            oldValue: oldAnnotationData.start,
+                                            newValue: annotation.data.start
+                                        }
+                                    ]
+                                });
                             }
 
                         }
@@ -654,6 +840,8 @@ FrameTrail.defineType(
                         icons: { down: "icon-angle-down", up: "icon-angle-up" },
                         create: function(evt, ui) {
                             $(evt.target).parent().attr('data-input-id', $(evt.target).attr('id'));
+
+                            oldAnnotationData = jQuery.extend({}, annotation.data);
                         },
                         spin: function(evt, ui) {
 
@@ -662,6 +850,18 @@ FrameTrail.defineType(
                                 annotation.updateTimelineElement();
                                 FrameTrail.module('HypervideoController').currentTime = annotation.data.end;
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'AnnotationChange',
+                                    annotation: annotation.data,
+                                    changes: [
+                                        {
+                                            property: 'end',
+                                            oldValue: oldAnnotationData.end,
+                                            newValue: annotation.data.end
+                                        }
+                                    ]
+                                });
                             }
 
                         },
@@ -673,6 +873,18 @@ FrameTrail.defineType(
                                 FrameTrail.module('HypervideoController').currentTime = annotation.data.end;
                                 FrameTrail.module('AnnotationsController').stackTimelineView();
                                 FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'AnnotationChange',
+                                    annotation: annotation.data,
+                                    changes: [
+                                        {
+                                            property: 'end',
+                                            oldValue: oldAnnotationData.end,
+                                            newValue: annotation.data.end
+                                        }
+                                    ]
+                                });
                             }
 
                         }

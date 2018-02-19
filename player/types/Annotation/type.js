@@ -244,8 +244,7 @@ FrameTrail.defineType(
                     this.timelineElement.addClass('open');
 
                     ViewVideo.ExpandButton.one('click', this.closeAnnotation.bind(this));
-
-
+                    
                 },
 
                 /**
@@ -318,7 +317,8 @@ FrameTrail.defineType(
                  */
                 makeTimelineElementDraggable: function () {
 
-                    var self = this;
+                    var self = this,
+                        oldAnnotationData;
 
                     this.timelineElement.draggable({
                         axis:        'x',
@@ -365,6 +365,8 @@ FrameTrail.defineType(
                                 FrameTrail.module('AnnotationsController').annotationInFocus = self;
                             }
 
+                            oldAnnotationData = jQuery.extend({}, self.data);
+
                         },
 
                         stop: function(event, ui) {
@@ -387,6 +389,23 @@ FrameTrail.defineType(
 
                             FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
 
+                            FrameTrail.triggerEvent('userAction', {
+                                action: 'AnnotationChange',
+                                annotation: self.data,
+                                changes: [
+                                    {
+                                        property: 'start',
+                                        oldValue: oldAnnotationData.start,
+                                        newValue: self.data.start
+                                    },
+                                    {
+                                        property: 'end',
+                                        oldValue: oldAnnotationData.end,
+                                        newValue: self.data.end
+                                    }
+                                ]
+                            });
+
                         }
                     });
 
@@ -404,7 +423,8 @@ FrameTrail.defineType(
                 makeTimelineElementResizeable: function () {
 
                     var self = this,
-                        endHandleGrabbed;
+                        endHandleGrabbed,
+                        oldAnnotationData;
 
                     this.timelineElement.resizable({
 
@@ -471,7 +491,9 @@ FrameTrail.defineType(
                                 FrameTrail.module('AnnotationsController').annotationInFocus = self;
                             }
 
-                            endHandleGrabbed = $(event.originalEvent.target).hasClass('ui-resizable-e')
+                            endHandleGrabbed = $(event.originalEvent.target).hasClass('ui-resizable-e');
+
+                            oldAnnotationData = jQuery.extend({}, self.data);
 
                         },
 
@@ -493,6 +515,23 @@ FrameTrail.defineType(
                             FrameTrail.module('AnnotationsController').stackTimelineView();
 
                             FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                            FrameTrail.triggerEvent('userAction', {
+                                action: 'AnnotationChange',
+                                annotation: self.data,
+                                changes: [
+                                    {
+                                        property: 'start',
+                                        oldValue: oldAnnotationData.start,
+                                        newValue: self.data.start
+                                    },
+                                    {
+                                        property: 'end',
+                                        oldValue: oldAnnotationData.end,
+                                        newValue: self.data.end
+                                    }
+                                ]
+                            });
 
                         }
                     });

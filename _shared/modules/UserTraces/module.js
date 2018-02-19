@@ -67,6 +67,39 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 				case 'UserLogout':
 					//
 					break;
+				case 'AnnotationOpen':
+					attributes.annotation = evt.detail.annotation;
+					break;
+				case 'AnnotationAdd':
+					attributes.annotation = evt.detail.annotation;
+					break;
+				case 'AnnotationChange':
+					attributes.annotation = evt.detail.annotation;
+					attributes.changes = evt.detail.changes;
+					break;
+				case 'AnnotationDelete':
+					attributes.annotation = evt.detail.annotation;
+					break;
+				case 'OverlayAdd':
+					attributes.overlay = evt.detail.overlay;
+					break;
+				case 'OverlayChange':
+					attributes.overlay = evt.detail.overlay;
+					attributes.changes = evt.detail.changes;
+					break;
+				case 'OverlayDelete':
+					attributes.overlay = evt.detail.overlay;
+					break;
+				case 'CodeSnippetAdd':
+					attributes.codesnippet = evt.detail.codesnippet;
+					break;
+				case 'CodeSnippetChange':
+					attributes.codesnippet = evt.detail.codesnippet;
+					attributes.changes = evt.detail.changes;
+					break;
+				case 'CodeSnippetDelete':
+					attributes.codesnippet = evt.detail.codesnippet;
+					break;
 				case 'WaitStart':
 					//
 					break;
@@ -143,7 +176,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 			return false;
 		}
 
-		console.log('Start Trace');
+		//console.log('Start Trace');
 
 		var sessionID = Date.now(),
 			sessionData = {
@@ -173,7 +206,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 			return;
 		}
 
-		console.log('EndTrace');
+		//console.log('EndTrace');
 
 		var timeNow = Date.now(),
 			sessionTime = getTimeDifference(sessions[currentSessionID].sessionStartTime, timeNow);
@@ -224,7 +257,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 			sessions[currentSessionID].user = FrameTrail.module('UserManagement').userID;
 		}
 
-		console.log(traceData);
+		//console.log(traceData);
 
 		sessions[currentSessionID].traces.push(traceData);
 		

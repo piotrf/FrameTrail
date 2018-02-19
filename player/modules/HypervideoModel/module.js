@@ -270,7 +270,8 @@
      */
     function removeOverlay(overlay) {
 
-        var idx;
+        var idx,
+            overlayData = overlay.data;
 
         idx = overlays.indexOf(overlay);
         overlays.splice(idx, 1);
@@ -279,6 +280,11 @@
         FrameTrail.module('Database').overlays.splice(idx, 1);
 
         newUnsavedChange('overlays');
+
+        FrameTrail.triggerEvent('userAction', {
+            action: 'OverlayDelete',
+            overlay: overlayData
+        });
 
     };
 
@@ -292,7 +298,8 @@
      */
     function removeCodeSnippet(codeSnippet) {
 
-        var idx;
+        var idx,
+            codesnippetData = codeSnippet.data;
 
         idx = codeSnippets.indexOf(codeSnippet);
         codeSnippets.splice(idx, 1);
@@ -301,6 +308,11 @@
         FrameTrail.module('Database').codeSnippets.timebasedEvents.splice(idx, 1);
 
         newUnsavedChange('codeSnippets');
+
+        FrameTrail.triggerEvent('userAction', {
+            action: 'CodeSnippetDelete',
+            codesnippet: codesnippetData
+        });
 
     };
 
@@ -316,7 +328,8 @@
     function removeAnnotation(annotation) {
 
         var database = FrameTrail.module('Database'),
-            idx;
+            idx,
+            annotationData = annotation.data;
 
         idx = annotationSets[selectedAnnotationSet].indexOf(annotation);
         annotationSets[selectedAnnotationSet].splice(idx, 1);
@@ -327,6 +340,11 @@
         }
 
         newUnsavedChange('annotations');
+        
+        FrameTrail.triggerEvent('userAction', {
+            action: 'AnnotationDelete',
+            annotation: annotationData
+        });
 
     };
 
@@ -395,6 +413,12 @@
 
             newUnsavedChange('overlays');
 
+            var overlayData = newData;
+            FrameTrail.triggerEvent('userAction', {
+                action: 'OverlayAdd',
+                overlay: overlayData
+            });
+
             return newOverlay;
 
     };
@@ -428,6 +452,12 @@
             codeSnippets.push(newCodeSnippet);
 
             newUnsavedChange('codeSnippets');
+
+            var codesnippetData = newData;
+            FrameTrail.triggerEvent('userAction', {
+                action: 'CodeSnippetAdd',
+                codesnippet: codesnippetData
+            });
 
             return newCodeSnippet;
 
@@ -495,6 +525,12 @@
             annotationSets[ownerId].push(newAnnotation);
 
             newUnsavedChange('annotations');
+
+            var annoData = newData;
+            FrameTrail.triggerEvent('userAction', {
+                action: 'AnnotationAdd',
+                annotation: annoData
+            });
 
             return newAnnotation;
 

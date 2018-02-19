@@ -220,6 +220,13 @@ FrameTrail.defineType(
                                 self.updateCollectionSlider(true);
 
                                 FrameTrail.module('ViewVideo').shownDetails = self.whichArea;
+
+                                var annoData = contentItem.data;
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'AnnotationOpen',
+                                    annotation: annoData
+                                });
+
                             } else {
                                 $(this).removeClass('open');
                                 self.contentViewDetailsContainer.find('.collectionElement').removeClass('open');
@@ -232,6 +239,12 @@ FrameTrail.defineType(
                         collectionElement.click(function() {
                             if ( self.contentViewData.contentSize == 'small' ) {
                                 $(this).find('.resourcePreviewButton').click();
+
+                                var annoData = contentItem.data;
+                                FrameTrail.triggerEvent('userAction', {
+                                    action: 'AnnotationOpen',
+                                    annotation: annoData
+                                });
                             }
                         });
                     }

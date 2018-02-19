@@ -148,7 +148,10 @@ FrameTrail.defineType(
 
                     delete window.editor;
                     delete window.htmlCodeEditor;
-                    
+                    delete window.oldTextContent;
+
+                    window.oldTextContent = overlayOrAnnotation.data.attributes.text;
+
                     /* Define HTML Type  Controls */
 
                     var editGroups = {
@@ -240,7 +243,9 @@ FrameTrail.defineType(
                             tabSize: 2,
                             theme: 'hopscotch'
                         });
-                    
+
+                    var delayTimer;
+
                     window.htmlCodeEditor.on('change', function(instance, changeObj) {
 
                         var thisTextarea = $(instance.getTextArea());
@@ -273,24 +278,62 @@ FrameTrail.defineType(
 
                             FrameTrail.module('HypervideoModel').newUnsavedChange('overlays');
 
+                            if (window.oldTextContent != overlayOrAnnotation.data.attributes.text) {
+                                clearTimeout(delayTimer);
+                                delayTimer = setTimeout(function() {
+                                    FrameTrail.triggerEvent('userAction', {
+                                        action: 'OverlayChange',
+                                        overlay: overlayOrAnnotation.data,
+                                        changes: [
+                                            {
+                                                property: 'attributes.text',
+                                                oldValue: window.oldTextContent,
+                                                newValue: overlayOrAnnotation.data.attributes.text
+                                            }
+                                        ]
+                                    });
+                                    window.oldTextContent = overlayOrAnnotation.data.attributes.text;
+                                }, 3000);
+                            }
+
                         } else {
                             
                             // Update annotation elements in dom
 
-                            $(overlayOrAnnotation.contentViewDetailElements).each(function() {
-                                $(this).find('.resourceDetail').html(instance.getValue());
-                            });
-
-                            var decoded_string = $("<div/>").html(instance.getValue()).text();
-                            var textOnly = $("<div/>").html(decoded_string).text();
-
-                            $(overlayOrAnnotation.contentViewElements).each(function() {
-                                $(this).find('.resourceThumb .resourceTextPreview').html(textOnly);
-                            });
-
                             $(FrameTrail.getState('target')).find('.editPropertiesContainer .resourceTextPreview').html(textOnly);
 
                             FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
+
+                            if (window.oldTextContent != overlayOrAnnotation.data.attributes.text) {
+                                clearTimeout(delayTimer);
+                                delayTimer = setTimeout(function() {
+                                    
+                                    $(overlayOrAnnotation.contentViewDetailElements).each(function() {
+                                        $(this).find('.resourceDetail').html(instance.getValue());
+                                    });
+
+                                    var decoded_string = $("<div/>").html(instance.getValue()).text();
+                                    var textOnly = $("<div/>").html(decoded_string).text();
+
+                                    $(overlayOrAnnotation.contentViewElements).each(function() {
+                                        $(this).find('.resourceThumb .resourceTextPreview').html(textOnly);
+                                    });
+
+                                    FrameTrail.triggerEvent('userAction', {
+                                        action: 'AnnotationChange',
+                                        annotation: overlayOrAnnotation.data,
+                                        changes: [
+                                            {
+                                                property: 'attributes.text',
+                                                oldValue: window.oldTextContent,
+                                                newValue: overlayOrAnnotation.data.attributes.text
+                                            }
+                                        ]
+                                    });
+                                    window.oldTextContent = overlayOrAnnotation.data.attributes.text;
+                                }, 3000);
+                                
+                            }
 
                         }
                         

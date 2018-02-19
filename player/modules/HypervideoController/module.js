@@ -164,9 +164,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					}
 
 					if (RouteNavigation.hashTime) {
-						setCurrentTime(RouteNavigation.hashTime, true);
+						setCurrentTime(RouteNavigation.hashTime);
 					} else {
-						setCurrentTime(0, true);
+						setCurrentTime(0);
 					}
 
 					FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -210,9 +210,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			}
 
 			if (RouteNavigation.hashTime) {
-				setCurrentTime(RouteNavigation.hashTime, true);
+				setCurrentTime(RouteNavigation.hashTime);
 			} else {
-				setCurrentTime(0, true);
+				setCurrentTime(0);
 			}
 
 			FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -222,7 +222,15 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		}
 
 		FrameTrail.module('RouteNavigation').onHashTimeChange = function() {
+			previousTime = currentTime;
+
 			setCurrentTime(RouteNavigation.hashTime);
+
+			FrameTrail.triggerEvent('userAction', {
+				action: 'VideoJumpTime',
+				fromTime: previousTime,
+				toTime: RouteNavigation.hashTime
+			});
 		};
 
 
@@ -343,7 +351,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					},
 
 			slide:  function(evt, ui) {
-						setCurrentTime(ui.value, true);
+						setCurrentTime(ui.value);
 					},
 
 			start: 	function(evt, ui) {
@@ -352,6 +360,12 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 			stop: 	function(evt, ui) {
 						setCurrentTime(ui.value);
+
+						FrameTrail.triggerEvent('userAction', {
+							action: 'VideoJumpTime',
+							fromTime: previousTime,
+							toTime: ui.value
+						});
 					}
 		});
 
@@ -774,11 +788,10 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 *
 	 * @method setCurrentTime
 	 * @param {Number} aNumber
-	 * @param {Boolean} suppressEvent
 	 * @return Number
 	 * @private
 	 */
-	function setCurrentTime(aNumber, suppressEvent) {
+	function setCurrentTime(aNumber) {
 
         var aNumberAsFloat = parseFloat(aNumber);
 
@@ -802,14 +815,6 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 		OverlaysController.syncMedia();
 		
-		if (!suppressEvent) {
-			FrameTrail.triggerEvent('userAction', {
-				action: 'VideoJumpTime',
-				fromTime: previousTime,
-				toTime: aNumberAsFloat
-			});
-		}
-
 		return aNumberAsFloat;
 
 	};
