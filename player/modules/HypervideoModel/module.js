@@ -1018,7 +1018,9 @@
                                 FrameTrail.module('UserManagement').logout();
                             }
 
-                            window.location.reload();
+                            window.setTimeout(function() {
+                                window.location.reload();
+                            }, 100);
 
                             if (logoutAfterLeaving) {
                                 FrameTrail.module('UserManagement').logout();
@@ -1035,7 +1037,9 @@
                             FrameTrail.module('UserManagement').logout();
                         }
 
-                        window.location.reload();
+                        window.setTimeout(function() {
+                            window.location.reload();
+                        }, 100);
 
                     },
                     Cancel: function() {

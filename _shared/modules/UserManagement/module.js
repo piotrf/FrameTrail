@@ -618,17 +618,22 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
                                       + '</div>');
 
 	                loggedOutDialog.dialog({
-	                  resizable: false,
-	                  modal: true,
-	                  close: function() {
-	                    loggedOutDialog.remove();
-	                    document.location.reload();
-	                  },
-	                  buttons: {
-				        "OK": function() {
-				          $( this ).dialog( "close" );
-				        }
-				      }
+						resizable: false,
+						modal: true,
+						close: function() {
+							loggedOutDialog.remove();
+							window.setTimeout(function() {
+                                window.location.reload();
+                            }, 100);
+						},
+						buttons: {
+							"OK": function() {
+								FrameTrail.triggerEvent('userAction', {
+									action: 'UserLogout'
+								});
+								$( this ).dialog( "close" );
+							}
+						}
 	                });
 				}
 
