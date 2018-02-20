@@ -53,6 +53,38 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 
 		FrameTrail.addEventListener('userAction', function(evt) {
 			var attributes = {};
+
+			// clean objects
+			if (evt.detail.annotation) {
+				var newObject = {};
+
+				newObject.name = evt.detail.annotation.name;
+				newObject.type = evt.detail.annotation.type;
+				newObject.start = evt.detail.annotation.start;
+				newObject.end = evt.detail.annotation.end;
+				
+				if (evt.detail.annotation.type == 'text') {
+					newObject.text = evt.detail.annotation.attributes.text;
+				} else if (evt.detail.annotation.src) {
+					newObject.source = evt.detail.annotation.src;
+				}
+				evt.detail.annotation = newObject;
+			} else if (evt.detail.overlay) {
+				var newObject = {};
+
+				newObject.name = evt.detail.overlay.name;
+				newObject.type = evt.detail.overlay.type;
+				newObject.start = evt.detail.overlay.start;
+				newObject.end = evt.detail.overlay.end;
+				
+				if (evt.detail.overlay.type == 'text') {
+					newObject.text = evt.detail.overlay.attributes.text;
+				} else if (evt.detail.overlay.src) {
+					newObject.source = evt.detail.overlay.src;
+				}
+				evt.detail.overlay = newObject;
+			}
+
 			switch(evt.detail.action) {
 				case 'VideoJumpTime':
 					attributes.fromTime = evt.detail.fromTime;
