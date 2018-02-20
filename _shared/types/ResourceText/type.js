@@ -300,8 +300,6 @@ FrameTrail.defineType(
                             
                             // Update annotation elements in dom
 
-                            $(FrameTrail.getState('target')).find('.editPropertiesContainer .resourceTextPreview').html(textOnly);
-
                             FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
 
                             if (window.oldTextContent != overlayOrAnnotation.data.attributes.text) {
@@ -318,6 +316,8 @@ FrameTrail.defineType(
                                     $(overlayOrAnnotation.contentViewElements).each(function() {
                                         $(this).find('.resourceThumb .resourceTextPreview').html(textOnly);
                                     });
+
+                                    $(FrameTrail.getState('target')).find('.editPropertiesContainer .resourceTextPreview').html(textOnly);
 
                                     FrameTrail.triggerEvent('userAction', {
                                         action: 'AnnotationChange',
