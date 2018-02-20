@@ -968,7 +968,11 @@
             unsavedLayout       = false;
             unsavedConfig       = false;
             unsavedGlobalCSS    = false;
-            FrameTrail.changeState('unsavedChanges', false)
+            FrameTrail.changeState('unsavedChanges', false);
+
+            FrameTrail.triggerEvent('userAction', {
+                action: 'EditSave'
+            });
 
             if (callback) {
                 callback.call();
@@ -1012,6 +1016,11 @@
 
                         save(function(){
                             FrameTrail.changeState('editMode', false);
+
+                            FrameTrail.triggerEvent('userAction', {
+                                action: 'EditEnd'
+                            });
+
                             confirmDialog.dialog('close');
 
                             if (logoutAfterLeaving) {
@@ -1033,6 +1042,10 @@
                         FrameTrail.changeState('unsavedChanges', false);
                         confirmDialog.dialog('close');
 
+                        FrameTrail.triggerEvent('userAction', {
+                            action: 'EditEnd'
+                        });
+
                         if (logoutAfterLeaving) {
                             FrameTrail.module('UserManagement').logout();
                         }
@@ -1051,6 +1064,10 @@
         } else {
 
             FrameTrail.changeState('editMode', false);
+
+            FrameTrail.triggerEvent('userAction', {
+                action: 'EditEnd'
+            });
 
             if (logoutAfterLeaving) {
                 FrameTrail.module('UserManagement').logout();

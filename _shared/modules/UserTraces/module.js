@@ -132,6 +132,15 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 				case 'CodeSnippetDelete':
 					attributes.codesnippet = evt.detail.codesnippet;
 					break;
+				case 'EditStart':
+					//
+					break;
+				case 'EditSave':
+					//
+					break;
+				case 'EditEnd':
+					//
+					break;
 				case 'WaitStart':
 					//
 					break;

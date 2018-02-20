@@ -49,6 +49,10 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
 
                 FrameTrail.changeState('editMode', 'preview');
 
+                FrameTrail.triggerEvent('userAction', {
+                    action: 'EditStart'
+                });
+
             },
             function(){ /* Start edit mode canceled */ }
         );
