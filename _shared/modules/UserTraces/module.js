@@ -87,8 +87,14 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 
 			switch(evt.detail.action) {
 				case 'VideoJumpTime':
+					if (evt.detail.fromTime > evt.detail.toTime) {
+						evt.detail.action = 'VideoJumpBackward';
+					} else {
+						evt.detail.action = 'VideoJumpForward';
+					}
 					attributes.fromTime = evt.detail.fromTime;
 					attributes.toTime = evt.detail.toTime;
+					attributes.secondsDistance = Math.round(Math.abs(evt.detail.toTime - evt.detail.fromTime));
 					break;
 				case 'UserLogin':
 					attributes.userID = evt.detail.userID;
@@ -106,6 +112,11 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 					attributes.annotation = evt.detail.annotation;
 					break;
 				case 'AnnotationChange':
+					if (evt.detail.changes[0].property == 'attributes.text') {
+						evt.detail.action = 'AnnotationChangeText';
+					} else {
+						evt.detail.action = 'AnnotationChangeTime';
+					}
 					attributes.annotation = evt.detail.annotation;
 					attributes.changes = evt.detail.changes;
 					break;
