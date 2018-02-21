@@ -100,8 +100,8 @@
 
             },
 
-            play: FrameTrail.module('HypervideoController').play,
-            pause: FrameTrail.module('HypervideoController').pause,
+            play: (FrameTrail.module('HypervideoController')) ? FrameTrail.module('HypervideoController').play : null,
+            pause: (FrameTrail.module('HypervideoController')) ? FrameTrail.module('HypervideoController').pause : null,
 
             get duration()    { return FrameTrail.module('HypervideoModel').duration },
             get currentTime() { return FrameTrail.module('HypervideoController').currentTime },
@@ -141,10 +141,10 @@
             get allAnnotations() { return FrameTrail.module('HypervideoModel').allAnnotations },
 
             traces: {
-                startTrace:     FrameTrail.module('UserTraces').startTrace,
-                endTrace:       FrameTrail.module('UserTraces').endTrace,
-                addTraceEvent:  FrameTrail.module('UserTraces').addTraceEvent,
-                deleteTraces:   FrameTrail.module('UserTraces').deleteTraces,
+                startTrace:     (FrameTrail.module('UserTraces')) ? FrameTrail.module('UserTraces').startTrace : null,
+                endTrace:       (FrameTrail.module('UserTraces')) ? FrameTrail.module('UserTraces').endTrace : null,
+                addTraceEvent:  (FrameTrail.module('UserTraces')) ? FrameTrail.module('UserTraces').addTraceEvent : null,
+                deleteTraces:   (FrameTrail.module('UserTraces')) ? FrameTrail.module('UserTraces').deleteTraces : null,
                 get data()      { return FrameTrail.module('UserTraces').traces }
             }
 
