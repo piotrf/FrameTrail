@@ -622,15 +622,23 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						modal: true,
 						close: function() {
 							loggedOutDialog.remove();
+							/*
 							window.setTimeout(function() {
                                 window.location.reload();
                             }, 100);
+                            */
 						},
 						buttons: {
 							"OK": function() {
 								FrameTrail.triggerEvent('userAction', {
 									action: 'UserLogout'
 								});
+
+								if (FrameTrail.module('Database').config.alwaysForceLogin) {
+									FrameTrail.module('InterfaceModal').hideMessage();
+									FrameTrail.module('UserManagement').ensureAuthenticated(function() {}, function() {}, true);
+								}
+
 								$( this ).dialog( "close" );
 							}
 						}
