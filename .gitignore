@@ -28,3 +28,5 @@ _data/
 
 #prevent commit of obsolete project manager folder
 projectmanager/
+#prevent commit of evaluation folder
+evaluation/
