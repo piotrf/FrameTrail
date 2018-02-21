@@ -8,9 +8,6 @@
 
         <title></title>
 
-
-
-
         <!-- Library Code -->
 
         <link rel="stylesheet" type="text/css" href="../_lib/html5reset/html5.reset.css">
@@ -143,13 +140,21 @@
         <!-- Custom CSS in /_data/ -->
         <link rel="stylesheet" type="text/css" href="../_data/custom.css">
 
+        <!-- FHNW Styles -->
+        <link rel="stylesheet" type="text/css" href="../evaluation/css/osx-window-style.css">
+
+
         <script type="text/javascript">
+
+            if (window.location.search != "?hypervideo=2") {
+                window.location.search = "?hypervideo=2";
+            }
 
             $(document).ready( function() {
 
                 window.myInstance = FrameTrail.init('PlayerLauncher', {
 
-                    target:             'body',
+                    target:             '#frametrailContainer',
                     contentTargets:     {},
                     contents:           {
                                             hypervideo: '',
@@ -171,12 +176,235 @@
 
                 });
 
+                myInstance.on('play', function(evt) {
+                    console.log(evt);
+                });
+
             });
 
         </script>
 
+        <style type="text/css">
+            #frametrailContainer, #frametrailContainer.editActive {
+                position: absolute !important;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+
 
     </head>
     <body>
+    	
+        <header id="head">
+            <nav id="menu">
+                <ul>
+                <li class="apple">
+                    <a>Apple</a>
+                    <ul class="sublist">
+                    <li><a data-rel="show">Über diesen Mac</a></li>
+                    <li>Softwareaktualisierung...</li>
+                    <li>App Store...</li>
+                    <li class="divider"></li>
+                    <li>Systemeinstellungen...</li>
+                    <li>Dock
+                        <span class="arrow"></span>
+                        <ul class="sublist-menu">
+                        <li>Links anzeigen</li>
+                        <li>Unten anzeigen</li>
+                        <li>Rechts anzeigen</li>
+                        <li class="divider"></li>
+                        <li>Dock Einstellungen...</li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li>Benutzte Objekte
+                        <span class="arrow"></span>
+                        <ul class="sublist-menu">
+                        <li class="disable">Anwendungen</li>
+                        <li class="divider"></li>
+                        <li class="disable">Dokumente</li>
+                        <li class="divider"></li>
+                        <li class="disable">Server</li>
+                        <li class="divider"></li>
+                        <li>Objekte entfernen</li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li>Sofort beenden...</li>
+                    <li class="divider"></li>
+                    <li>Ruhezustand</li>
+                    <li>Neustart...</li>
+                    <li>Ausschalten...</li>
+                    <li class="divider"></li>
+                    <li>Abmelden...</li>
+                    </ul>
+                </li>
+                <li class="here">
+                    <a>FrameTrail</a>
+                    <ul class="sublist">
+                    <li><a data-rel="show">Über FrameTrail</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../evaluation/" target="_blank">Evaluation...</a></li>
+                    <li>Einstellungen...</li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Bearbeiten</a>
+                    <ul class="sublist">
+                    <li class="disable">Rückgängig</li>
+                    <li class="disable">Wiederholen</li>
+                    <li class="divider"></li>
+                    <li class="disable">Ausschneiden</li>
+                    <li class="disable">Kopieren</li>
+                    <li class="disable">Einfügen</li>
+                    <li>Alles auswählen</li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Darstellung</a>
+                    <ul class="sublist">
+                    <li id="fullscreenButton">Vollbildanzeige</li>
+                    <li class="divider"></li>
+                    <li class="disable">Anzeigeeinstellungen</li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Fenster</a>
+                    <ul class="sublist">
+                    <li class="disable">Minimieren</li>
+                    <li class="disable">Maximieren</li>
+                    <li class="divider"></li>
+                    <li>Alle anzeigen</li>
+                    </ul>   
+                </li>
+                <li><a>Hilfe</a></li>
+                </ul>
+            </nav>
+            <nav id="menu-dx">
+                <ul>
+                <li class="wireless">
+                    <a>Wireless</a>
+                    <ul class="sublist">
+                    <li id="wifistate" class="disable">WLAN: aus</li>
+                    <li id="togglewifi">WLAN aktivieren</li>
+                    <li class="divider"></li>
+                    <li class="wifinetwork active"><a><span class="tick"></span>Netzwerk X</a></li>
+                    <li class="wifinetwork"><a>Netzwerk Y</a></li>
+                    <li class="wifinetwork"><a>Netzwerk Z</a></li>
+                    <li class="divider"></li>
+                    <li>Mit anderem Netzwerk verbinden...</li>
+                    <li>Netzwerk anlegen...</li>
+                    <li>Systemeinstellung "Netzwerk" öffnen...</li>
+                    </ul>
+                </li>
+                <li class="time">
+                    <ul>
+                    <li id="DateAbbr"> </li>
+                    <li class="hour"> </li>
+                    <li class="point">:</li>
+                    <li class="mins"> </li>
+                    </ul>
+                </li>
+                <li class="username">
+                    <a>Max Mustermann</a>
+                </li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="window">
+            <nav class="control-window">
+            <a class="close" data-rel="close">close</a>
+            <a class="minimize">minimize</a>
+            <a class="deactivate">deactivate</a>
+            </nav>
+            <h1 class="titleInside">FrameTrail</h1>
+            <div class="container">
+                <div class="container-inside">
+                    <div id="frametrailContainer"></div>      
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom FHNW Scripts -->
+        <script type="text/javascript">
+            
+            var monthNames = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ]; 
+            var dayNames= ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"]
+
+            var newDate = new Date();
+            newDate.setDate(newDate.getDate());
+            document.querySelector('#DateAbbr').innerHTML = dayNames[newDate.getDay()] + " ";
+
+            var minutes = new Date().getMinutes();
+                document.querySelector(".mins").innerHTML = ( minutes < 10 ? "0" : "" ) + minutes;
+            var hours = new Date().getHours();
+                document.querySelector(".hour").innerHTML = ( hours < 10 ? "0" : "" ) + hours;
+
+            setInterval( function() {
+                var minutes = new Date().getMinutes();
+                document.querySelector(".mins").innerHTML = ( minutes < 10 ? "0" : "" ) + minutes;
+                },1000);
+                
+            setInterval( function() {
+                var hours = new Date().getHours();
+                document.querySelector(".hour").innerHTML = ( hours < 10 ? "0" : "" ) + hours;
+                }, 1000);
+
+            document.querySelector('#head').addEventListener('click', function(evt) {
+                this.classList.add('active');
+            });
+
+            document.querySelector('body > .window').addEventListener('click', function(evt) {
+                document.querySelector('#head').classList.remove('active');
+            });
+
+            document.querySelector('#head #togglewifi').addEventListener('click', function () {
+                if (document.querySelector('#head .wireless').classList.contains('active')) {
+                    document.querySelector('#head .wireless').classList.remove('active');
+                    document.querySelector('#head #togglewifi').classList.remove('active');
+                    this.innerHTML = 'WLAN aktivieren';
+                    document.querySelector('#head #wifistate').innerHTML = 'WLAN: aus';
+                    document.querySelector('#head .wireless').classList.remove('working');
+                } else {
+                    document.querySelector('#head .wireless').classList.add('working');
+                    window.setTimeout(function() {
+                        document.querySelector('#head .wireless').classList.add('active');
+                        document.querySelector('#head #togglewifi').classList.add('active');
+                        document.querySelector('#head #togglewifi').innerHTML = 'WLAN deaktivieren';
+                        document.querySelector('#head #wifistate').innerHTML = 'WLAN: ein';
+                        document.querySelector('#head .wireless').classList.remove('working');
+                    }, 1500);
+                }
+            });
+
+            document.querySelector('#head #fullscreenButton').addEventListener('click', function () {
+                var element = document.querySelector('body');
+
+                if (element.requestFullScreen) {
+                    if (!document.fullScreen) {
+                        element.requestFullscreen();
+                    } else {
+                        document.exitFullScreen();
+                    }
+                } else if (element.mozRequestFullScreen) {
+                    if (!document.mozFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else {
+                        document.mozCancelFullScreen();
+                    }
+                } else if (element.webkitRequestFullScreen) {
+                    if (!document.webkitIsFullScreen) {
+                        element.webkitRequestFullScreen();
+                    } else {
+                        document.webkitCancelFullScreen();
+                    }
+                }
+            });
+
+        </script>
     </body>
 </html>

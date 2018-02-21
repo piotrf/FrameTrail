@@ -79,6 +79,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                         + '                <li data-type="url"><a href="#resourceInputTabURL">Paste URL</a></li>'
                                         + '                <li data-type="image"><a href="#resourceInputTabImage">Upload Image</a></li>'
                                         + '                <li data-type="video"><a href="#resourceInputTabVideo">Upload Video</a></li>'
+                                        + '                <li data-type="pdf"><a href="#resourceInputTabPDF">Upload PDF</a></li>'
                                         + '                <li data-type="map"><a href="#resourceInputTabMap">Add Map</a></li>'
                                         + '            </ul>'
                                         + '            <div id="resourceInputTabURL">'
@@ -88,6 +89,10 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                         + '            <div id="resourceInputTabImage">'
                                         + '                <div class="message active">Add image file in the format <b>jpg, jpeg, gif, png</b>. Maximum File Size: <b>3 MB</b></div>'
                                         + '                <input type="file" name="image">'
+                                        + '            </div>'
+                                        + '            <div id="resourceInputTabPDF">'
+                                        + '                <div class="pdfInputMessage message active">Add video file in <b>PDF</b> format. Maximum File Size: <b>3 MB</b>.</div>'
+                                        + '                <input type="file" name="pdf"> .pdf'
                                         + '            </div>'
                                         + '            <div id="resourceInputTabVideo">'
                                         + '                <div class="videoInputMessage message active">Add video file in <b>mp4</b> format. Maximum File Size: <b>'+ bytesToSize(maxUploadBytes) +'</b>.<br>For more info on video conversion see http://www.mirovideoconverter.com.</div>'
@@ -215,10 +220,17 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
                             else if (tmpType == 'image') {
                                 uploadDialog.find('#resourceInputTabVideo input').prop('disabled',true);
+                                uploadDialog.find('#resourceInputTabPDF input').prop('disabled',true);
                             }
 
                             else if (tmpType == 'video') {
                                 uploadDialog.find('#resourceInputTabImage input').prop('disabled',true);
+                                uploadDialog.find('#resourceInputTabPDF input').prop('disabled',true);
+                            }
+
+                            else if (tmpType == 'pdf') {
+                                uploadDialog.find('#resourceInputTabImage input').prop('disabled',true);
+                                uploadDialog.find('#resourceInputTabVideo input').prop('disabled',true);
                             }
 
                             var percentVal = '0%';
@@ -234,7 +246,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                         beforeSend: function(xhr) {
                             var tmpType = uploadDialog.find('.nameInputContainer input[name="type"]').val();
 
-                            // client side pre-validation to prevent upload of one file (server checks again)
+                            // client side pre-validation (server checks again)
                             if (tmpType == 'video') {
                                 if( uploadDialog.find('[name="mp4"]').val().length < 4) {
                                     uploadDialog.find('.progress').hide();

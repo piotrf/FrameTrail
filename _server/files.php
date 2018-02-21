@@ -130,12 +130,49 @@ function fileUpload($type, $name, $description="", $attributes, $files, $lat, $l
 			}
 			*/
 
-			$filetype = array_pop(preg_split("/\./", $files["image"]["name"]));
+			$filearray = preg_split("/\./", $files["image"]["name"]);
+			$filetype = array_pop($filearray);
 			$filename = substr($_SESSION["ohv"]["user"]["id"]."_".$cTime."_".sanitize($name),0,90).".".$filetype;
 			$newResource["src"] = $filename;
 			$newResource["type"] = "image";
 			$newResource["attributes"] = ($attributes) ? $attributes : Array();
 			move_uploaded_file($files["image"]["tmp_name"], $conf["dir"]["data"]."/resources/".$filename);
+		break;
+		case "pdf":
+			if ($uploadsAllowed === false) {
+				$return["status"] = "fail";
+				$return["code"] = 20;
+				$return["string"] = "User not allowed to upload files";
+				return $return;
+				exit;
+			}
+
+			if ((!$files["pdf"]) || (!$files["pdf"]["size"])) {
+				$return["status"] = "fail";
+				$return["code"] = 4;
+				$return["string"] = "No PDF file to upload";
+				return $return;
+				exit;
+			}
+
+			/* TODO: Check file size correctly */
+			/*
+			if ( $_FILES["pdf"]["size"] >= $upload_mb ) {
+				$return["status"] = "fail";
+				$return["code"] = 10;
+				$return["string"] = "File too big";
+				return $return;
+				exit;
+			}
+			*/
+
+			$filearray = preg_split("/\./", $files["pdf"]["name"]);
+			$filetype = array_pop($filearray);
+			$filename = substr($_SESSION["ohv"]["user"]["id"]."_".$cTime."_".sanitize($name),0,90).".".$filetype;
+			$newResource["src"] = $filename;
+			$newResource["type"] = "pdf";
+			$newResource["attributes"] = ($attributes) ? $attributes : Array();
+			move_uploaded_file($files["pdf"]["tmp_name"], $conf["dir"]["data"]."/resources/".$filename);
 		break;
 		case "video":
 			if ($uploadsAllowed === false) {
@@ -441,6 +478,13 @@ function fileDelete($resourcesID) {
 			unlink($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["thumb"]);
 		}
 	} else if ($res["resources"][$resourcesID]["type"] == "image") {
+		if (file_exists($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["src"])) {
+			unlink($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["src"]);
+		}
+		if (file_exists($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["thumb"])) {
+			unlink($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["thumb"]);
+		}
+	} else if ($res["resources"][$resourcesID]["type"] == "pdf") {
 		if (file_exists($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["src"])) {
 			unlink($conf["dir"]["data"]."/resources/".$res["resources"][$resourcesID]["src"]);
 		}
