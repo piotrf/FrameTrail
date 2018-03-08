@@ -343,7 +343,7 @@ FrameTrail.defineType(
                 setSyncedMedia: function (synced) {
 
                     if (synced) {
-                        this.videoElement = this.overlayElement.find('video.resourceDetail')[0];
+                        this.videoElement = this.overlayElement.find('.resourceDetail video')[0];
                         this.videoElement.removeAttribute('controls');
                     } else {
                         this.videoElement.setAttribute('controls', 'controls');

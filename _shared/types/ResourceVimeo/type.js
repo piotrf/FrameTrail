@@ -46,7 +46,7 @@ FrameTrail.defineType(
                             '<iframe class="resourceDetail" data-type="'+ this.resourceData.type +'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
                         +   this.resourceData.src
                         +   '?color=ffffff&portrait=0&byline=0&title=0&badge=0">'
-                        +    '</iframe>'
+                        +   '</iframe>'
                     ).bind('error', function() {
                         return true;
                     });

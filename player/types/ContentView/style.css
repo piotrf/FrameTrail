@@ -276,6 +276,24 @@
 	opacity: 1;
 }
 
+.layoutArea .contentViewContainer .contentViewContents .customhtmlContainer {
+	margin: 0px 4px 4px 4px;
+	max-height: calc(100% - 8px);
+	box-sizing: border-box;
+	position: relative;
+	padding: 7px;
+	overflow: auto;
+}
+
+.layoutArea .contentViewContainer .contentViewContents .customhtmlContainer .timebased {
+	background-color: rgba(100,100,100,.1);
+}
+
+.layoutArea .contentViewContainer .contentViewContents .customhtmlContainer .timebased:hover, .layoutArea .contentViewContainer .contentViewContents .customhtmlContainer .timebased.active {
+	background-color: rgba(100,110,100,.3);
+	cursor: pointer;
+}
+
 /* Content View Details */
 
 .layoutAreaDetails .contentViewDetailsContainer {

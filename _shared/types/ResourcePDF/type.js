@@ -63,6 +63,8 @@ FrameTrail.defineType(
 
                     resourceDetail.append(iFrame);
 
+                    resourceDetail.append('<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>');
+
                     return resourceDetail;
 
                 },

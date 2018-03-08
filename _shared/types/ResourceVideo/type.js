@@ -44,14 +44,12 @@ FrameTrail.defineType(
                  */
                 renderContent: function() {
 
-                    return $(
-                            '<video class="resourceDetail" data-type="'+ this.resourceData.type +'" controls autobuffer>'
-                        +       '<source src="../_data/'
-                        +       '/resources/'
-                        +       this.resourceData.src
-                        +       '" type="video/mp4">'
-                        +    '</video>'
-                    );
+                    return $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'">'
+                           + '    <video controls autobuffer>'
+                           +        '<source src="'+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) +'" type="video/mp4">'
+                           + '    </video>'
+                           + '    <div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>'
+                           + '</div>');
 
                 },
 

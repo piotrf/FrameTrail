@@ -47,6 +47,7 @@ FrameTrail.defineType(
                         +       '<img src="'+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) +'" title="'
                         +       this.resourceData.name
                         +       '">'
+                        +       '<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>'
                         +    '</div>'
                     ).perfectScrollbar({
                         wheelSpeed: 4,

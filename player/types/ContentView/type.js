@@ -123,7 +123,15 @@ FrameTrail.defineType(
                                 self.removeContentCollectionElements(contentItem);
                             });
 
-                            self.contentViewContainer.find('.contentViewContents').html('<div class="customhtmlContainer">'+ self.contentViewData.html +'</div>');
+                            var customhtmlContainer = $('<div class="customhtmlContainer">'+ self.contentViewData.html +'</div>');
+
+                            self.contentViewContainer.find('.contentViewContents').empty().append(customhtmlContainer);
+
+                            customhtmlContainer.click(function(evt) {
+                                if ( $(evt.target).hasClass('timebased') ) {
+                                    FrameTrail.module('HypervideoController').currentTime = $(evt.target).attr('data-start') - 0.5;
+                                }
+                            });
 
                             break;
 
@@ -410,6 +418,48 @@ FrameTrail.defineType(
 
                             break;
                         case 'CustomHTML':
+
+                            var timebasedElements = self.contentViewContainer.find('.customhtmlContainer').find('.timebased');
+
+                            if ( timebasedElements.length != 0 ) {
+                                timebasedElements.each(function() {
+                                    var startTime = parseFloat($(this).attr('data-start')),
+                                        endTime = parseFloat($(this).attr('data-end'));
+                                    if ( startTime-0.5 <= currentTime && endTime-0.5 >= currentTime ) {
+                                        if ( !$(this).hasClass('active') ) {
+                                            $(this).addClass('active');
+                                            scrollTimebasedElements();
+                                        }
+                                    } else if ( $(this).hasClass('active') ) {
+                                        $(this).removeClass('active');
+                                    }
+                                });
+                            }
+
+                            function scrollTimebasedElements() {
+                                
+                                if (self.isMouseOver) {
+                                    return;
+                                }
+                                var customhtmlContainer = self.contentViewContainer.find('.customhtmlContainer'),
+                                    firstActiveElement = customhtmlContainer.find('.timebased.active').eq(0);
+
+
+                                if ( !self.contentViewContainer.hasClass('active') || firstActiveElement.length == 0 ) {
+                                    return;
+                                }
+
+                                var activeElementPosition = firstActiveElement.position();
+
+                                if ( activeElementPosition.top <
+                                    customhtmlContainer.height()/2 + customhtmlContainer.scrollTop()
+                                    || activeElementPosition.top > customhtmlContainer.height()/2 + customhtmlContainer.scrollTop() ) {
+
+                                    var newPos = activeElementPosition.top + customhtmlContainer.scrollTop() - customhtmlContainer.height()/2;
+                                    customhtmlContainer.stop().animate({scrollTop : newPos},400);
+                                }
+
+                            }
 
                             break;
                         case 'Transcript':

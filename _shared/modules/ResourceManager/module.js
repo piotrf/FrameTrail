@@ -627,6 +627,19 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                     return null;
                 },
                 function (src, name) {
+                    // Video
+                    if (/\.(mp4)$/i.exec(src)) {
+                        return createResource(src, "video", name, src);
+                    } else {
+                        // We should do a HEAD request and check the
+                        // content-type but it is not possible to do sync
+                        // cross-domain requests, so we should return a
+                        // Future value.
+                        return null;
+                    }
+                    return null;
+                },
+                function (src, name) {
                     // Default fallback, will work for any URL
                     if (/(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])/.exec(src)) {
                         var r = createResource(src, "webpage", name);

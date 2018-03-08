@@ -73,7 +73,7 @@ FrameTrail.defineType(
                     }
 
                     resourceDetail.data('map', map);
-
+                    
                 	return resourceDetail;
 
                 },
