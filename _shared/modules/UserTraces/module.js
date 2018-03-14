@@ -29,7 +29,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	function initTraces() {
 		
 		if (!FrameTrail.module('Database').config.captureUserTraces) {
-			return false;
+			return;
 		}
 		
 		FrameTrail.addEventListener('userAction', function(evt) {
@@ -225,7 +225,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 
 		if (!FrameTrail.module('Database').config.captureUserTraces) {
 			console.warn('Could not start user trace. Capturing user traces not allowed.');
-			return false;
+			return;
 		}
 
 		//console.log('Start Trace');
@@ -283,7 +283,7 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 	function addTraceEvent(traceType, attributes) {
 
 		if (!currentSessionID) {
-			console.warn('Could not add trace event. Please start session first.');
+			//console.warn('Could not add trace event. Please start session first.');
 			return;
 		}
 
