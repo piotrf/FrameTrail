@@ -454,6 +454,7 @@
 			newUnsavedChange('codeSnippets');
 
 			var codesnippetData = newData;
+			
 			FrameTrail.triggerEvent('userAction', {
 				action: 'CodeSnippetAdd',
 				codesnippet: codesnippetData
@@ -1681,6 +1682,7 @@
 			});
 		codeEditor.on('change', function(instance, changeObj) {
 
+			console.log('TEST 2');
 			var thisTextarea = $(instance.getTextArea());
 
 			thisTextarea.val(instance.getValue());

@@ -30,7 +30,7 @@
 
         $.ajax({
             type:     "GET",
-            url:      '../_data/tagdefinitions.json',
+            url:      '_data/tagdefinitions.json',
             cache:    false,
             dataType: "json",
             mimeType: "application/json"
@@ -65,7 +65,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
             data: {
                 a:              'tagSet',
@@ -85,7 +85,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
             data: {
                 a:              'tagLangDelete',
@@ -103,7 +103,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
             data: {
                 a:              'tagDelete',

@@ -43,7 +43,7 @@
 
 
     /**
-     * I load the config data (../_data/config.json) from the server
+     * I load the config data (_data/config.json) from the server
      * and save the data in my attribute {{#crossLink "Database/config:attribute"}}Database/config{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -56,7 +56,7 @@
         $.ajax({
 
             type:   "GET",
-            url:    ('../_data/config.json'),
+            url:    ('_data/config.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -83,7 +83,7 @@
 
 
     /**
-     * I load the resource index data (../_data/resources/_index.json) from the server
+     * I load the resource index data (_data/resources/_index.json) from the server
      * and save the data in my attribute {{#crossLink "Database/resources:attribute"}}Database/resources{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -96,7 +96,7 @@
         $.ajax({
 
             type:   "GET",
-            url:    ('../_data/resources/_index.json'),
+            url:    ('_data/resources/_index.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -130,7 +130,7 @@
 
             $.ajax({
                 type:   "GET",
-                url:    ('../_data/users.json'),
+                url:    ('_data/users.json'),
                 cache:  false,
                 dataType: "json",
                 mimeType: "application/json"
@@ -150,7 +150,7 @@
             $.ajax({
 
                 type:   "POST",
-                url:    ('../_server/ajaxServer.php'),
+                url:    ('_server/ajaxServer.php'),
                 cache:  false,
                 dataType: "json",
                 mimeType: "application/json",
@@ -180,7 +180,7 @@
 
 
     /**
-     * I load the hypervideo index data (../_data/hypervideos/_index.json) from the server
+     * I load the hypervideo index data (_data/hypervideos/_index.json) from the server
      * and save the data in my attribute {{#crossLink "Database/hypervideos:attribute"}}Database/hypervideos{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -194,7 +194,7 @@
         $.ajax({
 
             type:   "GET",
-            url:    ('../_data/hypervideos/_index.json'),
+            url:    ('_data/hypervideos/_index.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -215,7 +215,7 @@
 
                     $.ajax({
                         type:   "GET",
-                        url:    ('../_data/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
+                        url:    ('_data/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
                         cache:  false,
                         dataType: "json",
                         mimeType: "application/json"
@@ -223,7 +223,7 @@
 
                         $.ajax({
                             type:   "GET",
-                            url:    ('../_data/hypervideos/' + data.hypervideos[key] + '/annotations/_index.json'),
+                            url:    ('_data/hypervideos/' + data.hypervideos[key] + '/annotations/_index.json'),
                             cache:  false,
                             dataType: "json",
                             mimeType: "application/json"
@@ -283,7 +283,7 @@
 
 
     /**
-     * I load the hypervideo sequence data (../_data/hypervideos/ 
+     * I load the hypervideo sequence data (_data/hypervideos/ 
      * {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) 
      * from the server and save the data in my attribute {{#crossLink "Database/hypervideo:attribute"}}Database/hypervideos{{/crossLink}}.
      * I call my success or fail callback respectively.
@@ -399,7 +399,7 @@
 
 
     /**
-     * I load the annotation data (../_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
+     * I load the annotation data (_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
      * and save the data in my attribute {{#crossLink "Database/annotations:attribute"}}Database/annotations{{/crossLink}},
      * and the respective annotationfileIDs in my attribute {{#crossLink "Database/annotationfileIDs:attribute"}}Database/annotationfileIDs{{/crossLink}},
      *
@@ -426,7 +426,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: ('../_data/hypervideos/' + hypervideoID + '/annotations/' + id + '.json'),
+                    url: ('_data/hypervideos/' + hypervideoID + '/annotations/' + id + '.json'),
                     cache: false,
                     dataType: "json",
                     mimeType: "application/json"
@@ -504,7 +504,7 @@
 
 
     /**
-     * I load the subtitles data (../_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /subtitles/...) from the server
+     * I load the subtitles data (_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /subtitles/...) from the server
      * and save the data in my attribute {{#crossLink "Database/subtitles:attribute"}}Database/subtitles{{/crossLink}}
      *
      * I call my success or fail callback respectively.
@@ -535,7 +535,7 @@
                     $.ajax({
 
                         type: "GET",
-                        url: ('../_data/hypervideos/' + hypervideoID + '/subtitles/' + currentSubtitles.src),
+                        url: ('_data/hypervideos/' + hypervideoID + '/subtitles/' + currentSubtitles.src),
                         cache: false
 
                     }).done(function(data){
@@ -943,7 +943,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
 
             data: {
@@ -997,7 +997,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
 
             data: {
@@ -1054,7 +1054,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
 
             data: {
@@ -1224,7 +1224,7 @@
 
         $.ajax({
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
 
             data: {
@@ -1326,7 +1326,7 @@
     return {
 
         /**
-         * I store the hypervideo index data (from the server's ../_data/hypervideos/_index.json)
+         * I store the hypervideo index data (from the server's _data/hypervideos/_index.json)
          * @attribute hypervideos
          */
         get hypervideos()   { return hypervideos },
@@ -1340,23 +1340,23 @@
         set hypervideo(data) { return hypervideo = data },
 
         /**
-         * I store the hypervideo sequence data (from the server's ../_data/hypervideos/<ID>/hypervideo.json)
+         * I store the hypervideo sequence data (from the server's _data/hypervideos/<ID>/hypervideo.json)
          * @attribute sequence
          */
         get sequence()      { return sequence },
         /**
-         * I store the overlays data (from the server's ../_data/hypervideos/<ID>/overlays.json)
+         * I store the overlays data (from the server's _data/hypervideos/<ID>/overlays.json)
          * @attribute overlays
          */
         get overlays()      { return overlays },
         /**
-         * I store the code snippets data (from the server's ../_data/hypervideos/<ID>/codeSnippets.json)
+         * I store the code snippets data (from the server's _data/hypervideos/<ID>/codeSnippets.json)
          * @attribute codesnippets
          */
         get codeSnippets()         { return codeSnippets },
 
         /**
-         * I store the annotation data (from all json files from the server's ../_data/hypervideos/<ID>/annotationfiles/).
+         * I store the annotation data (from all json files from the server's _data/hypervideos/<ID>/annotationfiles/).
          *
          * I am a map of keys (userIDs) to an array of all annotations from that user.
          *
@@ -1383,7 +1383,7 @@
         get annotationfileIDs()  { return annotationfileIDs },
 
         /**
-         * I store the subtitle data (from all .vtt files from the server's ../_data/hypervideos/<ID>/subtitles/).
+         * I store the subtitle data (from all .vtt files from the server's _data/hypervideos/<ID>/subtitles/).
          *
          * @attribute annotations
          */
@@ -1397,7 +1397,7 @@
         get subtitlesLangMapping() { return subtitlesLangMapping },
 
         /**
-         * I store the resource index data (from the server's ../_data/resources/_index.json)
+         * I store the resource index data (from the server's _data/resources/_index.json)
          * @attribute resources
          */
         get resources()     { return resources },

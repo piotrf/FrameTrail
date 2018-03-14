@@ -43,7 +43,7 @@ FrameTrail.defineModule('RouteNavigation', function(FrameTrail){
 
 	    } else {
 
-	    	return '../_data/resources/' + src;
+	    	return '_data/resources/' + src;
 
 	    }
 

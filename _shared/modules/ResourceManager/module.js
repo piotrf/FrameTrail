@@ -66,7 +66,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
             $.ajax({
                 type:     'GET',
-                url:        '../_server/ajaxServer.php',
+                url:        '_server/ajaxServer.php',
                 data:       {'a':'fileGetMaxUploadSize'},
                 success: function(response) {
 
@@ -205,7 +205,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                     //Ajaxform
                     uploadDialog.find('.uploadForm').ajaxForm({
                         method:     'POST',
-                        url:        '../_server/ajaxServer.php',
+                        url:        '_server/ajaxServer.php',
                         beforeSerialize: function() {
 
                             uploadDialog.find('.message.error').remove();
@@ -314,7 +314,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                                 canvas.toDataURL();
 
                                                 $.ajax({
-                                                    url:        '../_server/ajaxServer.php',
+                                                    url:        '_server/ajaxServer.php',
                                                     type:       'post',
                                                     data:       {'a':'fileUploadThumb','resourcesID':respText['response']['resId'],'type':respText['response']['resource']['type'],'thumb':canvas.toDataURL()},
                                                     /**
@@ -369,7 +369,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                                 canvas.toDataURL();
 
                                                 $.ajax({
-                                                    url:        '../_server/ajaxServer.php',
+                                                    url:        '_server/ajaxServer.php',
                                                     type:       'post',
                                                     data:       {'a':'fileUploadThumb','resourcesID':respText['response']['resId'],'type':respText['response']['resource']['type'],'thumb':canvas.toDataURL()},
                                                     success: function() {
@@ -709,7 +709,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 		$.ajax({
 			type:   'POST',
-			url:    '../_server/ajaxServer.php',
+			url:    '_server/ajaxServer.php',
 			cache:  false,
 			data: {
 				a: 			'fileDelete',
@@ -856,7 +856,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 		$.ajax({
 
             type:   'POST',
-            url:    '../_server/ajaxServer.php',
+            url:    '_server/ajaxServer.php',
             cache:  false,
 
             data: {

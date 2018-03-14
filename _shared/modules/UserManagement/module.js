@@ -137,7 +137,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 	domElement.find('.registrationForm').ajaxForm({
 		method: 	"POST",
-		url: 		"../_server/ajaxServer.php",
+		url: 		"_server/ajaxServer.php",
 		dataType:   "json",
 		success: function(response) {
 
@@ -162,7 +162,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 	domElement.find('.settingsForm').ajaxForm({
 		method: 	"POST",
-		url: 		"../_server/ajaxServer.php",
+		url: 		"_server/ajaxServer.php",
 		dataType:   "json",
 		success: function(response) {
 			switch(response.code){
@@ -206,7 +206,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 		$.ajax({
 			method: 	"POST",
-			url: 		"../_server/ajaxServer.php",
+			url: 		"_server/ajaxServer.php",
 			dataType: 	"json",
             data: 		"a=userGet",
 			success: function(data) {
@@ -227,7 +227,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 					$.ajax({
 						method: "POST",
-						url: 	"../_server/ajaxServer.php",
+						url: 	"_server/ajaxServer.php",
 						data: 	{	"a": "userGet",
 									"userID": $("#user_change_user option:selected").val()
 								},
@@ -266,7 +266,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 	domElement.find(".administrationForm").ajaxForm({
 		method: 	"POST",
-		url: 		"../_server/ajaxServer.php",
+		url: 		"_server/ajaxServer.php",
 		dataType: 	"json",
 		success: function(response) {
 			// TODO: Update client userData Object if Admin edited himself via this view instead of "Settings" Tab
@@ -319,7 +319,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 	}
 
 	function getUserColorCollection(callback) {
-		$.getJSON("../_data/config.json", function(data) {
+		$.getJSON("_data/config.json", function(data) {
 			userColorCollection = data["userColorCollection"];
 			if (typeof(callback) == "function") {
 				callback.call();
@@ -382,7 +382,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
     loginBox.find('.loginForm').ajaxForm({
 
 		method: 	"POST",
-		url: 		"../_server/ajaxServer.php",
+		url: 		"_server/ajaxServer.php",
 		dataType:   "json",
 
 		success: function(response) {
@@ -433,7 +433,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 	loginBox.find('.userRegistrationForm').ajaxForm({
 		method: 	"POST",
-		url: 		"../_server/ajaxServer.php",
+		url: 		"_server/ajaxServer.php",
 		dataType:   "json",
 		success: function(response) {
 
@@ -535,7 +535,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 		$.ajax({
 			method: 	"POST",
-			url: 		"../_server/ajaxServer.php",
+			url: 		"_server/ajaxServer.php",
 			dataType: 	"json",
             data: 		"a=userCheckLogin",
 			success: function(response) {
@@ -607,7 +607,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 
 		$.ajax({
 			method: 	"POST",
-			url: 		"../_server/ajaxServer.php",
+			url: 		"_server/ajaxServer.php",
 			dataType: 	"json",
             data: 		"a=userLogout",
 			success: function(data) {

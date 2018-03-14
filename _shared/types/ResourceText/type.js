@@ -352,7 +352,7 @@ FrameTrail.defineType(
                       useLineBreaks: false,
                       parserRules:  wysihtml5ParserRules, // defined in parser rules set
                       cleanUp:      true, 
-                      stylesheets:  ['../_shared/styles/generic.css']
+                      stylesheets:  ['_shared/styles/generic.css']
                     }).on('load', function() {
                         
                         visualEditorContent.find('.wysihtml5-sandbox').on('mouseenter', function() {
