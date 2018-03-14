@@ -46,10 +46,10 @@ FrameTrail.defineType(
                 	var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'"></div>');
 
                     var iFrameSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src.replace('http:', '').replace('https:', '') : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src),
-                        pdfjsViewerPathPrefix = (this.resourceData.src.indexOf('//') != -1) ? '' : '../../';
+                        pdfjsViewerPathPrefix = (this.resourceData.src.indexOf('//') != -1) ? '' : '../../../';
 
                     if ( iFrameSource.substr( (iFrameSource.lastIndexOf('.') +1) ) == 'pdf' ) {
-                        iFrameSource = '../_lib/pdfjs/web/viewer.html?file='+ pdfjsViewerPathPrefix + iFrameSource;
+                        iFrameSource = '_lib/pdfjs/web/viewer.html?file='+ pdfjsViewerPathPrefix + iFrameSource;
                     }
 
                     var iFrame = $(
