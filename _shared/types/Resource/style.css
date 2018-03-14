@@ -319,5 +319,5 @@
 .editPropertiesContainer textarea {
 	box-sizing: border-box;
     width: 100%;
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
