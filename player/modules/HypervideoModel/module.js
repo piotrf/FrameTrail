@@ -1105,7 +1105,7 @@
 		ra = false;
 
 		FrameTrail.module('RouteNavigation').hypervideoID = newHypervideoID;
-		FrameTrail.module('RouteNavigation').hashTime = undefined;
+		//FrameTrail.module('RouteNavigation').hashTime = undefined;
 
 		FrameTrail.module('Database').updateHypervideoData(function() {
 
@@ -1128,6 +1128,7 @@
 
 
 					FrameTrail.module('ViewLayout').create();
+					FrameTrail.module('ViewOverview').refreshList();
 					FrameTrail.module('ViewVideo').create();
 
 					FrameTrail.module('HypervideoController').initController(
@@ -1162,8 +1163,8 @@
 			}
 
 
-		}, function() {
-			console.log('FAIL');
+		}, function(errorMsg) {
+			FrameTrail.module('InterfaceModal').showErrorMessage(errorMsg);
 		});
 
 	}
@@ -1433,7 +1434,7 @@
 
 		EditHypervideoForm.ajaxForm({
 			method:     'POST',
-			url:        '../_server/ajaxServer.php',
+			url:        '_server/ajaxServer.php',
 			beforeSubmit: function (array, form, options) {
 
 				updateDatabaseFromForm();
