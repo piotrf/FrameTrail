@@ -29,7 +29,6 @@
         config       = {},
 
         annotations            = {},
-        annotationfileIDs      = {},
 
         subtitles              = {},
         subtitlesLangMapping   = {
@@ -63,7 +62,7 @@
         }).done(function(data){
 
             config = data;
-            
+
             // TODO: Check if this makes sense here
             if (data.theme) {
                 $(FrameTrail.getState('target')).attr('data-frametrail-theme', data.theme);
@@ -241,7 +240,6 @@
                                     "config": hypervideoData.config,
                                     "mainAnnotation": annotationsIndex.mainAnnotation,
                                     "annotationfiles": annotationsIndex.annotationfiles,
-                                    "annotation-increment": annotationsIndex['annotation-increment'],
                                     "subtitles": hypervideoData.subtitles,
                                     "clips": hypervideoData.clips,
                                     "hypervideoData": hypervideoData
@@ -283,8 +281,8 @@
 
 
     /**
-     * I load the hypervideo sequence data (_data/hypervideos/ 
-     * {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) 
+     * I load the hypervideo sequence data (_data/hypervideos/
+     * {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json)
      * from the server and save the data in my attribute {{#crossLink "Database/hypervideo:attribute"}}Database/hypervideos{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -400,8 +398,7 @@
 
     /**
      * I load the annotation data (_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
-     * and save the data in my attribute {{#crossLink "Database/annotations:attribute"}}Database/annotations{{/crossLink}},
-     * and the respective annotationfileIDs in my attribute {{#crossLink "Database/annotationfileIDs:attribute"}}Database/annotationfileIDs{{/crossLink}},
+     * and save the data in my attribute {{#crossLink "Database/annotations:attribute"}}Database/annotations{{/crossLink}}.
      *
      *
      * I call my success or fail callback respectively.
@@ -416,7 +413,6 @@
         var annotationsCount = Object.keys(hypervideo.annotationfiles).length;
 
         // clear previous data
-        annotationfileIDs = {};
         annotations  = {};
 
 
@@ -455,7 +451,7 @@
                             "attributes": data[i].body['frametrail:attributes'] || {},
                             "tags": data[i]['frametrail:tags']
                         });
-                        
+
                         if (annotationData[annotationData.length-1].type === 'location') {
                             var locationAttributes = annotationData[annotationData.length-1].attributes;
                             locationAttributes.lat = parseFloat(data[i].body['frametrail:lat']);
@@ -475,9 +471,10 @@
 
                     }
 
-                    //console.log('annotation', id, annotationData);
-                    annotations[hypervideo.annotationfiles[id].ownerId]       = annotationData;
-                    annotationfileIDs[hypervideo.annotationfiles[id].ownerId] = id;
+
+                    annotations[id] = annotationData;
+
+
 
                     annotationsCount--;
                     if(annotationsCount === 0){
@@ -1111,11 +1108,9 @@
     function saveAnnotations(callback) {
 
         var userID              = FrameTrail.module('UserManagement').userID,
-            action              = annotationfileIDs.hasOwnProperty(userID)
+            action              = annotations.hasOwnProperty(userID)
                                     ? 'save'
                                     : 'saveAs',
-
-            annotationfileID    = annotationfileIDs[userID],
 
             name                = FrameTrail.getState('username'),
             description         = FrameTrail.getState('username') + '\'s annotations',
@@ -1232,7 +1227,7 @@
                 a:                'annotationfileSave',
                 hypervideoID:     hypervideoID,
                 action:           action,
-                annotationfileID: annotationfileID,
+                annotationfileID: userID,
                 name:             name,
                 description:      description,
                 hidden:           hidden,
@@ -1244,10 +1239,6 @@
         }).done(function(data) {
 
             if (data.code === 0) {
-
-                if (action === 'saveAs') {
-                    annotationfileIDs[userID] = data.annotationID.toString();
-                }
 
                 callback.call(window, { success: true });
 
@@ -1368,24 +1359,11 @@
          * @attribute annotations
          */
         get annotations()        { return annotations       },
-        /**
-         * I store the file IDs of the user's annotation sets.
-         *
-         * The server manages file names automatically without influence of the client. That is why the client has to remeber the file ID
-         * of the several sets of annotations, which belong to a single user.
-         *
-         *     {
-         *       "userID": "fileID"
-         *     }
-         *
-         * @attribute annotationfileIDs
-         */
-        get annotationfileIDs()  { return annotationfileIDs },
 
         /**
          * I store the subtitle data (from all .vtt files from the server's _data/hypervideos/<ID>/subtitles/).
          *
-         * @attribute annotations
+         * @attribute subtitles
          */
         get subtitles()        { return subtitles       },
 
