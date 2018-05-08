@@ -496,6 +496,20 @@
 					"attributes":   protoData.attributes,
 					"tags":         []
 				}
+			} else if (!protoData.resourceId) {
+				newData = {
+					"name":         protoData.name,
+					"creator":      FrameTrail.getState('username'),
+					"creatorId":    FrameTrail.module('UserManagement').userID,
+					"created":      Date.now(),
+					"type":         protoData.type,
+					"src":          protoData.src,
+					"thumb":        protoData.thumb,
+					"start":        protoData.start,
+					"end":          protoData.end,
+					"attributes":   protoData.attributes,
+					"tags":         protoData.tags
+				};
 			} else {
 				newData = {
 					"name":         resourceDatabase[protoData.resourceId].name,
@@ -1106,6 +1120,9 @@
 			clearTimeout(i);
 		}
 
+		$(FrameTrail.getState('target')).find('.viewVideo').remove();
+		FrameTrail.changeState('viewMode', 'video');
+
 		FrameTrail.module('RouteNavigation').hypervideoID = newHypervideoID;
 		//FrameTrail.module('RouteNavigation').hashTime = undefined;
 
@@ -1123,7 +1140,7 @@
 			function reInitHypervideo() {
 
 				//TODO: Implement proper destroy method
-				$(FrameTrail.getState('target')).find('.viewVideo').remove();
+				
 				ra = false;
 
 				FrameTrail.initModule('ViewVideo');
