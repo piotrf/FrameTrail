@@ -596,14 +596,23 @@ FrameTrail.defineType(
                  */
                 renderCompareTimelineItem: function() {
 
-                    var compareTimelineElement = $(
+                    var cleanStart = FrameTrail.module('HypervideoController').formatTime(this.data.start),
+                        cleanEnd = FrameTrail.module('HypervideoController').formatTime(this.data.end),
+                        compareTimelineElement = $(
                             '<div class="compareTimelineElement" '
                         +   ' data-start="'
                         +   this.data.start
                         +   '" data-end="'
                         +   this.data.end
                         +   '">'
-                        +   '    <div class="previewWrapper">'
+                        +   '    <div class="previewWrapper"></div>'
+                        +   '    <div class="compareTimelineElementTime">'
+                        +   '        <div class="compareTimeStart">'
+                        +   cleanStart
+                        +   '        </div>'
+                        +   '        <div class="compareTimeEnd">'
+                        +   cleanEnd
+                        +   '        </div>'
                         +   '    </div>'
                         +   '</div>'
                     ),
