@@ -53,9 +53,8 @@
     function loadConfigData(success, fail) {
 
         $.ajax({
-
             type:   "GET",
-            url:    ('_data/config.json'),
+            url:    FrameTrail.getState('config') || ('_data/config.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -74,7 +73,7 @@
 
         }).fail(function(){
 
-            fail('No resources index file.');
+            fail('No config file.');
 
         });
 
@@ -92,24 +91,46 @@
      */
     function loadResourceData(success, fail) {
 
-        $.ajax({
+        var initOptionsResources = FrameTrail.getState('resources'),
+            countdown = initOptionsResources.length;
 
-            type:   "GET",
-            url:    ('_data/resources/_index.json'),
-            cache:  false,
-            dataType: "json",
-            mimeType: "application/json"
-        }).done(function(data){
+        for (var i = 0, l = countdown; i < l; i++) {
 
-            resources = data.resources;
-            //console.log('resources', resources);
-            success.call(this);
+            if (initOptionsResources[i].type === 'frametrail') {
 
-        }).fail(function(){
+                $.ajax({
+                    type:   "GET",
+                    url:    (typeof initOptionsResources[i].data === 'string')
+                                ? initOptionsResources[i].data
+                                : ('_data/resources/_index.json'),
+                    cache:  false,
+                    dataType: "json",
+                    mimeType: "application/json"
+                }).done(function(data){
+                    resources = Object.assign(resources, data.resources);
+                    //console.log('resources', resources);
+                    ready();
+                }).fail(function(){
+                    fail('No resources index file.');
+                });
 
-            fail('No resources index file.');
+            } else if (initOptionsResources[i].type === 'iiif') {
 
-        });
+                // TODO
+                ready();
+
+            } else {
+                fail('unknown resource data endpoint');
+            }
+
+            function ready() {
+                if (--countdown === 0) {
+                    success.call(this);
+                    //console.log('resources', resources);
+                }
+            }
+
+        }
 
     };
 
@@ -154,9 +175,7 @@
                 dataType: "json",
                 mimeType: "application/json",
                 data:   {
-
-                    a:          'userGet'
-
+                    a: 'userGet'
                 }
 
             }).done(function(data){
@@ -190,10 +209,40 @@
      */
     function loadHypervideoData(success, fail) {
 
-        $.ajax({
+        var initOptionsHypervideoData = FrameTrail.getState('contents');
 
+        if (initOptionsHypervideoData === null) {
+            loadHypervideoData_FrametrailServer('_data/hypervideos/_index.json', success, fail);
+        } else if (typeof initOptionsHypervideoData === 'string') {
+            loadHypervideoData_FrametrailServer(initOptionsHypervideoData, success, fail);
+        } else if (Array.isArray(initOptionsHypervideoData)) {
+            hypervideos = initOptionsHypervideoData;
+            success();
+        } else {
+            fail('Unkown hypervideo data init options.')
+        }
+
+
+    }
+
+
+
+    /**
+     * I load the hypervideo index data (_data/hypervideos/_index.json) from the server
+     * and save the data in my attribute {{#crossLink "Database/hypervideos:attribute"}}Database/hypervideos{{/crossLink}}.
+     * I call my success or fail callback respectively.
+     *
+     * @method loadHypervideoData_FrametrailServer
+     * @param {String} urlpath
+     * @param {Function} success
+     * @param {Function} fail
+     * @private
+     */
+    function loadHypervideoData_FrametrailServer(urlpath, success, fail) {
+
+        $.ajax({
             type:   "GET",
-            url:    ('_data/hypervideos/_index.json'),
+            url:    urlpath,
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -214,7 +263,7 @@
 
                     $.ajax({
                         type:   "GET",
-                        url:    ('_data/hypervideos/' + data.hypervideos[key] + '/hypervideo.json'),
+                        url:    ('_data/hypervideos/' + data.hypervideos[hypervideoID] + '/hypervideo.json'),
                         cache:  false,
                         dataType: "json",
                         mimeType: "application/json"
@@ -222,7 +271,7 @@
 
                         $.ajax({
                             type:   "GET",
-                            url:    ('_data/hypervideos/' + data.hypervideos[key] + '/annotations/_index.json'),
+                            url:    ('_data/hypervideos/' + data.hypervideos[hypervideoID] + '/annotations/_index.json'),
                             cache:  false,
                             dataType: "json",
                             mimeType: "application/json"
@@ -611,7 +660,7 @@
     function loadData(success, fail) {
 
 
-        hypervideoID = FrameTrail.module('RouteNavigation').hypervideoID;
+        hypervideoID = FrameTrail.getState('startID');
 
 
        if(hypervideoID === undefined){

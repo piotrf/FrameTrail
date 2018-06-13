@@ -39,7 +39,7 @@
     }
 
 
-    function _init(tmp, options) {
+    function _init(options) {
 
     	var FrameTrail = {
     		start: 			_start,
@@ -67,16 +67,35 @@
 
 
         _initTypes();
-        _start(tmp, options);
+        _start(options);
 
 
-    	function _start(mainModule, runtimeConfig) {
+    	function _start(runtimeConfig) {
 
     		// TODO: Check if this belongs here
             $(runtimeConfig.target).addClass('frametrail-body');
 
-            state = runtimeConfig || {};
-    		_initModule(mainModule);
+            state = {
+                target:             options.target || 'body',
+                contentTargets:     options.contentTargets || {},
+                contents:           options.contents,
+                startID:            options.startID,
+                resources:          options.resources || [],
+                tagdefinitions:     options.tagdefinitions,
+                config:             options.config,
+
+                loggedIn:           false,
+                username:           '',
+                viewMode:           'video',
+                editMode:           false,
+                slidePosition:      'middle',
+                sidebarOpen:        false,
+                fullscreen:         false,
+                viewSize:           [0,0],
+                unsavedChanges:     false
+            };
+
+    		_initModule('PlayerLauncher');
 
     	}
 

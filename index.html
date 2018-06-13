@@ -147,6 +147,7 @@
             $(document).ready( function() {
 
                 // Check Setup
+                // TODO move to php server
                 if (!!document.location.host) {
                     $.ajax({
                         "type": "POST",
@@ -162,28 +163,23 @@
                     });
                 }
 
-                window.myInstance = FrameTrail.init('PlayerLauncher', {
-
+                window.myInstance = FrameTrail.init({
                     target:             'body',
                     contentTargets:     {},
-                    contents:           {
-                                            hypervideo: '',
-                                            annotationsIndex: '',
-                                            annotations: [],
-                                            resources: [],
-                                            users: ''
-                                        },
-
-                    loggedIn:           false,
-                    username:           '',
-                    viewMode:           'video',
-                    editMode:           false,
-                    slidePosition:      'middle',
-                    sidebarOpen:        false,
-                    fullscreen:         false,
-                    viewSize:           [0,0],
-                    unsavedChanges:     false
-
+                    contents:           null,
+                    startID:            "1",
+                    resources:          [{
+                                                label: "Choose Resources",
+                                                data: {},
+                                                type: "frametrail"
+                                            },
+                                            {
+                                                label: "British Library",
+                                                data: "https://..../lorem.json",
+                                                type: "iiif"
+			                             }],
+                    tagdefinitions:      null,
+                    config:              null
                 });
 
             });

@@ -30,7 +30,11 @@
 
         $.ajax({
             type:     "GET",
-            url:      '_data/tagdefinitions.json',
+            url:      typeof FrameTrail.getState('tagdefinitions') === 'string'
+                        ? FrameTrail.getState('tagdefinitions')
+                        : FrameTrail.getState('tagdefinitions') === null
+                            ? '_data/tagdefinitions.json'
+                            : FrameTrail.getState('tagdefinitions'),
             cache:    false,
             dataType: "json",
             mimeType: "application/json"
