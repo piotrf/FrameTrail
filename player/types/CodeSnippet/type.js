@@ -246,7 +246,10 @@ FrameTrail.defineType(
                  */
                 stopEditing: function () {
 
-                    this.timelineElement.draggable('destroy');
+                    if (this.timelineElement.data('ui-draggable')) {
+                        this.timelineElement.draggable('destroy');
+                    }
+                    
                     this.timelineElement.unbind('click');
 
 

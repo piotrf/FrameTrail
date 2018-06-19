@@ -532,11 +532,19 @@ FrameTrail.defineType(
                  */
                 stopEditing: function () {
 
-                    this.timelineElement.draggable('destroy');
-                    this.timelineElement.resizable('destroy');
+                    if (this.timelineElement.data('ui-draggable')) {
+                        this.timelineElement.draggable('destroy');
+                    }
+                    if (this.timelineElement.data('ui-resizable')) {
+                        this.timelineElement.resizable('destroy');
+                    }
 
-                    this.overlayElement.draggable('destroy');
-                    this.overlayElement.resizable('destroy');
+                    if (this.overlayElement.data('ui-draggable')) {
+                        this.overlayElement.draggable('destroy');
+                    }
+                    if (this.overlayElement.data('ui-resizable')) {
+                        this.overlayElement.resizable('destroy');
+                    }
 
                     this.timelineElement.unbind('click.edit');
                     this.overlayElement.unbind('click.edit');
