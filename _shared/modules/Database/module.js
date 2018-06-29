@@ -893,12 +893,10 @@
      * @param {Function} fail
      */
     function loadData(success, fail) {
+        
+        hypervideoID = FrameTrail.module('RouteNavigation').hypervideoID;
 
-
-        hypervideoID = FrameTrail.getState('startID');
-
-
-       if(hypervideoID === undefined){
+       if(!hypervideoID){
 
             //FrameTrail.module('InterfaceModal').showStatusMessage('No Hypervideo is selected.');
 
