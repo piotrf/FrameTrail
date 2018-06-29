@@ -155,9 +155,9 @@
             get subtitles()      { return FrameTrail.module('HypervideoModel').subtitles },
             get overlays()       { return FrameTrail.module('HypervideoModel').overlays },
             get codeSnippets()   { return FrameTrail.module('HypervideoModel').codeSnippets },
-            get annotationSets() { return FrameTrail.module('HypervideoModel').annotationSets },
+            // get annotationSets() { return FrameTrail.module('HypervideoModel').annotationSets },
             get annotations()    { return FrameTrail.module('HypervideoModel').annotations },
-            get allAnnotations() { return FrameTrail.module('HypervideoModel').allAnnotations },
+            // get allAnnotations() { return FrameTrail.module('HypervideoModel').allAnnotations },
 
             traces: {
                 startTrace:     (FrameTrail.module('UserTraces')) ? FrameTrail.module('UserTraces').startTrace : null,

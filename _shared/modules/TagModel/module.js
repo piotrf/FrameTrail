@@ -130,7 +130,7 @@
         arrayOfContentTypes // frametrail:type
     ) {
 
-        var result = FrameTrail.module('HypervideoModel').allAnnotations.filter(function (annotationItem) {
+        var result = FrameTrail.module('HypervideoModel').annotations.filter(function (annotationItem) {
 
             var match = false,
                 annotationData = annotationItem.data;

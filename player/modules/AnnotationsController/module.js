@@ -73,13 +73,13 @@
      */
     function initAnnotations() {
 
-        var annotationColor;
-
-        if (!FrameTrail.module('Database').users[FrameTrail.module('HypervideoModel').annotationSet]) {
-            annotationColor = '999999';
-        } else {
-            annotationColor = FrameTrail.module('Database').users[FrameTrail.module('HypervideoModel').annotationSet].color;
-        }
+        // var annotationColor;
+        //
+        // if (!FrameTrail.module('Database').users[FrameTrail.module('HypervideoModel').annotationSet]) {
+        //     annotationColor = '999999';
+        // } else {
+        //     annotationColor = FrameTrail.module('Database').users[FrameTrail.module('HypervideoModel').annotationSet].color;
+        // }
 
         // update references
         annotations = FrameTrail.module('HypervideoModel').annotations;
@@ -403,7 +403,7 @@
 
         } else if ( editMode && oldEditMode === false ) {
 
-            HypervideoModel.annotationSet = '#myAnnotationSet';
+            // HypervideoModel.annotationSet = '#myAnnotationSet';
 
             //console.log('HIDE SEARCH BUTTON');
 
@@ -487,8 +487,8 @@
                                       heightStyle: "fill"
                                   }),
 
-            timelineList        = annotationsEditingOptions.find('.timelineList')
-            annotationAllSets   = FrameTrail.module('HypervideoModel').annotationAllSets;
+            timelineList        = annotationsEditingOptions.find('.timelineList');
+
 
 
         ViewVideo.EditingOptions.append(annotationsEditingOptions);
@@ -535,20 +535,21 @@
 
         /* Choose Annotations of other users */
 
-        for (var id in annotationAllSets) {
+        for (var idx in annotations) {
 
-            if (id === FrameTrail.module('UserManagement').userID) {
+            if (annotations[idx].data.creatorId === FrameTrail.module('UserManagement').userID) {
                 continue;
             }
 
-            var otherUsername =  '',
-                otherUserColor = '';
-            for (var key in HypervideoModel.annotationSets) {
-                if (HypervideoModel.annotationSets[key].id === id) {
-                    otherUsername  = HypervideoModel.annotationSets[key].name;
-                    otherUserColor = HypervideoModel.annotationSets[key].color;
-                }
-            }
+            // TODO
+            var otherUsername =  'OTHER',
+                otherUserColor = '990000';
+            // for (var key in HypervideoModel.annotationSets) {
+            //     if (HypervideoModel.annotationSets[key].id === id) {
+            //         otherUsername  = HypervideoModel.annotationSets[key].name;
+            //         otherUserColor = HypervideoModel.annotationSets[key].color;
+            //     }
+            // }
 
             var userTimelineWrapper = $(    '<div class="userTimelineWrapper">'
                                         +   '    <div class="userLabel" style="color: #'+ otherUserColor +'">'
@@ -559,15 +560,11 @@
                                         +   '</div>'),
                 userTimeline = userTimelineWrapper.find('.userTimeline');
 
-            for (var idx in annotationAllSets[id]) {
 
-                var compareTimelineItem = annotationAllSets[id][idx].renderCompareTimelineItem();
-                    compareTimelineItem.css('background-color', '#' + otherUserColor);
+            var compareTimelineItem = annotations[idx].renderCompareTimelineItem();
+                compareTimelineItem.css('background-color', '#' + otherUserColor);
 
-                userTimeline.append(compareTimelineItem);
-
-            }
-
+            userTimeline.append(compareTimelineItem);
             timelineList.append(userTimelineWrapper);
 
         }
@@ -712,21 +709,21 @@
      */
     function changeUserColor(newColor) {
 
-        var annotationSets = HypervideoModel.annotationSets;
-
-        for (var idx in annotationSets) {
-
-            if (annotationSets[idx].id == FrameTrail.module('UserManagement').userID && newColor.length > 1) {
-                annotationSets[idx].color = newColor;
-            }
-
-        }
-
-        if (newColor.length > 1) {
-
-            // REFRESH COLOR VALUES SOMEWHERE
-
-        }
+        // var annotationSets = HypervideoModel.annotationSets;
+        //
+        // for (var idx in annotationSets) {
+        //
+        //     if (annotationSets[idx].id == FrameTrail.module('UserManagement').userID && newColor.length > 1) {
+        //         annotationSets[idx].color = newColor;
+        //     }
+        //
+        // }
+        //
+        // if (newColor.length > 1) {
+        //
+        //     // REFRESH COLOR VALUES SOMEWHERE
+        //
+        // }
 
     }
 

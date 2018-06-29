@@ -28,7 +28,7 @@
         resources    = {},
         config       = {},
 
-        annotations            = {},
+        annotations  = [],
 
         subtitles              = {},
         subtitlesLangMapping   = {
@@ -198,7 +198,7 @@
 
 
     /**
-     * I load the hypervideo index data (_data/hypervideos/_index.json) from the server
+     * I load the hypervideo index data (_data/hypervideos/_index.json) according to the definitions in the init-options
      * and save the data in my attribute {{#crossLink "Database/hypervideos:attribute"}}Database/hypervideos{{/crossLink}}.
      * I call my success or fail callback respectively.
      *
@@ -211,15 +211,50 @@
 
         var initOptionsHypervideoData = FrameTrail.getState('contents');
 
-        if (initOptionsHypervideoData === null) {
-            loadHypervideoData_FrametrailServer('_data/hypervideos/_index.json', success, fail);
+        if (!initOptionsHypervideoData) {
+
+            loadHypervideoData_FrametrailServer('_data/hypervideos/', success, fail);
+
         } else if (typeof initOptionsHypervideoData === 'string') {
+
             loadHypervideoData_FrametrailServer(initOptionsHypervideoData, success, fail);
+
         } else if (Array.isArray(initOptionsHypervideoData)) {
-            hypervideos = initOptionsHypervideoData;
-            success();
+
+            var countdown = initOptionsHypervideoData.length;
+            function ready() {
+                if (!--countdown) success();
+            }
+
+            for (var i = 0, l = initOptionsHypervideoData.length; i < l; i++) {
+
+                if (typeof initOptionsHypervideoData[i].hypervideo === 'string') {
+
+                    loadHypervideoData_DefaultServer(i, initOptionsHypervideoData[i].hypervideo, ready, fail)
+
+                } else if (typeof initOptionsHypervideoData[i].hypervideo === 'object' && initOptionsHypervideoData[i].hypervideo !== null) {
+
+                    if (initOptionsHypervideoData[i].hypervideo.url && initOptionsHypervideoData[i].hypervideo.type) {
+
+                        // TODO Dropbox, Github...
+                        // hypervideos[i] = ...
+
+                    } else {
+                        hypervideos[i] = initOptionsHypervideoData[i].hypervideo;
+                        ready();
+                    }
+
+                } else {
+                    fail('Unkown hypervideo data init options.');
+                }
+
+            }
+
+
         } else {
-            fail('Unkown hypervideo data init options.')
+
+            fail('Unkown hypervideo data init options.');
+
         }
 
 
@@ -242,7 +277,7 @@
 
         $.ajax({
             type:   "GET",
-            url:    urlpath,
+            url:    urlpath + '_index.json',
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
@@ -263,7 +298,7 @@
 
                     $.ajax({
                         type:   "GET",
-                        url:    ('_data/hypervideos/' + data.hypervideos[hypervideoID] + '/hypervideo.json'),
+                        url:    (urlpath + data.hypervideos[hypervideoID] + '/hypervideo.json'),
                         cache:  false,
                         dataType: "json",
                         mimeType: "application/json"
@@ -271,7 +306,7 @@
 
                         $.ajax({
                             type:   "GET",
-                            url:    ('_data/hypervideos/' + data.hypervideos[hypervideoID] + '/annotations/_index.json'),
+                            url:    (urlpath + data.hypervideos[hypervideoID] + '/annotations/_index.json'),
                             cache:  false,
                             dataType: "json",
                             mimeType: "application/json"
@@ -326,6 +361,53 @@
         });
 
     };
+
+
+
+    /**
+     * I load the Hypervideo data from a standard HTTP server.
+     *
+     * @method loadHypervideoData_DefaultServer
+     * @param {String} id
+     * @param {String} url
+     * @param {Function} success
+     * @param {Function} fail
+     * @private
+     */
+    function loadHypervideoData_DefaultServer(id, url, success, fail) {
+
+        $.ajax({
+            type:   "GET",
+            url:    url,
+            cache:  false,
+            dataType: "json",
+            mimeType: "application/json"
+        }).done(function (hypervideoData) {
+
+            hypervideos[id] = {
+                "name": hypervideoData.meta.name,
+                "description": hypervideoData.meta.description,
+                "thumb": hypervideoData.meta.thumb,
+                "creator": hypervideoData.meta.creator,
+                "creatorId": hypervideoData.meta.creatorId,
+                "created": hypervideoData.meta.created,
+                "lastchanged": hypervideoData.meta.lastchanged,
+                "hidden": hypervideoData.config.hidden,
+                "config": hypervideoData.config,
+                "mainAnnotation": null,
+                "annotationfiles": null,
+                "subtitles": hypervideoData.subtitles,
+                "clips": hypervideoData.clips,
+                "hypervideoData": hypervideoData
+            };
+
+            success();
+
+        }).fail(function(){
+            fail('No hypervideo file.');
+        });
+
+    }
 
 
 
@@ -446,23 +528,58 @@
 
 
     /**
+     * I load the annotation data.
+     *
+     * @method loadAnnotationData
+     * @param {Function} success
+     * @param {Function} fail
+     * @private
+     */
+    function loadAnnotationData(success, fail) {
+
+        var initOptionsHypervideoData = FrameTrail.getState('contents');
+
+        if (!initOptionsHypervideoData) {
+
+            loadAnnotationData_FrametrailServer('_data/hypervideos/', success, fail);
+
+        } else if (typeof initOptionsHypervideoData === 'string') {
+
+            loadAnnotationData_FrametrailServer(initOptionsHypervideoData, success, fail);
+
+        } else if (Array.isArray(initOptionsHypervideoData)) {
+
+            loadAnnotationData_DefaultServer(success, fail);
+
+        } else {
+            fail('Unkown init option/');
+        }
+
+    };
+
+
+
+
+    /**
      * I load the annotation data (_data/hypervideos/ {{#crossLink "RouteNavigation/hypervideoID:attribute"}}RouteNavigation/hypervideoID{{/crossLink}} /hypervideo.json) from the server
      * and save the data in my attribute {{#crossLink "Database/annotations:attribute"}}Database/annotations{{/crossLink}}.
      *
      *
      * I call my success or fail callback respectively.
      *
-     * @method loadAnnotationData
+     * @method loadAnnotationData_FrametrailServer
+     * @param {String} url
      * @param {Function} success
-     * @param {Function} failannotationData
+     * @param {Function} fail
      * @private
      */
-    function loadAnnotationData(success, fail) {
+    function loadAnnotationData_FrametrailServer(url, success, fail) {
+
 
         var annotationsCount = Object.keys(hypervideo.annotationfiles).length;
 
         // clear previous data
-        annotations  = {};
+        annotations  = [];
 
 
         for (var id in hypervideo.annotationfiles) {
@@ -471,17 +588,15 @@
 
                 $.ajax({
                     type: "GET",
-                    url: ('_data/hypervideos/' + hypervideoID + '/annotations/' + id + '.json'),
+                    url: (url + hypervideoID + '/annotations/' + id + '.json'),
                     cache: false,
                     dataType: "json",
                     mimeType: "application/json"
                 }).done(function(data){
 
-                    var annotationData = [];
-
                     for (var i in data) {
 
-                        annotationData.push({
+                        annotations.push({
                             "name": data[i].body['frametrail:name'],
                             "creator": data[i].creator.nickname,
                             "creatorId": data[i].creator.id,
@@ -498,18 +613,22 @@
                             "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(data[i].target.selector.value)[2]),
                             "resourceId": data[i].body["frametrail:resourceId"],
                             "attributes": data[i].body['frametrail:attributes'] || {},
-                            "tags": data[i]['frametrail:tags']
+                            "tags": data[i]['frametrail:tags'],
+                            "source": {
+                                frametrail: true,
+                                url: url
+                            }
                         });
 
-                        if (annotationData[annotationData.length-1].type === 'location') {
-                            var locationAttributes = annotationData[annotationData.length-1].attributes;
+                        if (annotations[annotations.length-1].type === 'location') {
+                            var locationAttributes = annotations[annotations.length-1].attributes;
                             locationAttributes.lat = parseFloat(data[i].body['frametrail:lat']);
                             locationAttributes.lon = parseFloat(data[i].body['frametrail:long']);
                             locationAttributes.boundingBox = data[i].body['frametrail:boundingBox'].split(',').map(parseFloat);
                         }
 
-                        if (annotationData[annotationData.length-1].type === 'video') {
-                            var annotationItem = annotationData[annotationData.length-1];
+                        if (annotations[annotations.length-1].type === 'video') {
+                            var annotationItem = annotations[annotations.length-1];
                             annotationItem.startOffset = (data[i].body.selector && data[i].body.selector.value)
                                                          ? parseFloat(/t=(\d+)/g.exec(data[i].body.selector.value)[1])
                                                          : 0;
@@ -519,10 +638,6 @@
                         }
 
                     }
-
-
-                    annotations[id] = annotationData;
-
 
 
                     annotationsCount--;
@@ -546,6 +661,126 @@
 
 
     };
+
+
+
+
+
+    /**
+     * I load the annotation data from init option sources
+     *
+     * @method loadAnnotationData_DefaultServer
+     * @param {Function} success
+     * @param {Function} fail
+     * @private
+     */
+    function loadAnnotationData_DefaultServer(success, fail) {
+
+        var initAnnotations = FrameTrail.getState('contents')[hypervideoID].annotations;
+
+        // clear previous data
+        annotations = [];
+
+        if (!initAnnotations) {
+            success();
+        }
+
+        var countdown = initAnnotations.length;
+        function ready() {
+            if (!--countdown) success();
+        }
+
+        for (var i = 0, l = initAnnotations.length; i < l; i++) {
+
+            if (typeof initAnnotations[i] === 'string') {
+
+                $.ajax({
+                    type: "GET",
+                    url: initAnnotations[i],
+                    cache: false,
+                    dataType: "json",
+                    mimeType: "application/json"
+                }).done(function(data){
+
+                    for (var i in data) {
+
+                        annotations.push({
+                            "name": data[i].body['frametrail:name'],
+                            "creator": data[i].creator.nickname,
+                            "creatorId": data[i].creator.id,
+                            "created": (new Date(data[i].created)).getTime(),
+                            "type": data[i].body['frametrail:type'],
+                            "src": (function () {
+                                        if (data[i].body["frametrail:type"] === 'location') { return null; }
+                                        return (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( data[i].body["frametrail:type"] ) >= 0)
+                                                ? data[i].body.value
+                                                : data[i].body.source
+                                    })(),
+                            "thumb": data[i].body['frametrail:thumb'],
+                            "start": parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].target.selector.value)[1]),
+                            "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(data[i].target.selector.value)[2]),
+                            "resourceId": data[i].body["frametrail:resourceId"],
+                            "attributes": data[i].body['frametrail:attributes'] || {},
+                            "tags": data[i]['frametrail:tags'],
+                            "source": {
+                                frametrail: false,
+                                url: initAnnotations[i]
+                            }
+                        });
+
+                        if (annotations[annotations.length-1].type === 'location') {
+                            var locationAttributes = annotations[annotations.length-1].attributes;
+                            locationAttributes.lat = parseFloat(data[i].body['frametrail:lat']);
+                            locationAttributes.lon = parseFloat(data[i].body['frametrail:long']);
+                            locationAttributes.boundingBox = data[i].body['frametrail:boundingBox'].split(',').map(parseFloat);
+                        }
+
+                        if (annotations[annotations.length-1].type === 'video') {
+                            var annotationItem = annotations[annotations.length-1];
+                            annotationItem.startOffset = (data[i].body.selector && data[i].body.selector.value)
+                                                         ? parseFloat(/t=(\d+)/g.exec(data[i].body.selector.value)[1])
+                                                         : 0;
+                            annotationItem.endOffset = (data[i].body.selector && data[i].body.selector.value)
+                                                        ? parseFloat(/t=(\d+\.?\d*)/g.exec(data[i].body.selector.value)[2])
+                                                        : 0;
+                        }
+
+                    }
+
+                    ready();
+
+
+                }).fail(function() {
+
+                    fail('Missing annotation file.');
+
+                });
+
+            } else if (initAnnotations[i].url && initAnnotations[i].type) {
+
+                // TODO git, dropbox ...
+                // annotations.push(...)
+
+            } else {
+                initAnnotations[i].source = {
+                    frametrail: false
+                };
+                annotations.push(initAnnotations[i]);
+                ready();
+            }
+
+
+
+        }
+
+
+    };
+
+
+
+
+
+
 
 
 
@@ -669,7 +904,7 @@
 
             hypervideo   = null;
             sequence     = {};
-            annotations  = {};
+            annotations  = [];
             overlays     = [];
             codeSnippets = {};
 
@@ -1157,9 +1392,9 @@
     function saveAnnotations(callback) {
 
         var userID              = FrameTrail.module('UserManagement').userID,
-            action              = annotations.hasOwnProperty(userID)
-                                    ? 'save'
-                                    : 'saveAs',
+            action              = 'save'; //= annotations.hasOwnProperty(userID)
+                                //    ? 'save'
+                                //    : 'saveAs',
 
             name                = FrameTrail.getState('username'),
             description         = FrameTrail.getState('username') + '\'s annotations',
@@ -1168,8 +1403,13 @@
             annotationsToSave   = [];
 
 
-        for (var i in annotations[userID]) {
-            var annotationItem = annotations[userID][i];
+        for (var i in annotations) {
+            var annotationItem = annotations[i];
+
+            if (!annotationItem.source.frametrail || annotationItem.creatorId !== userID) {
+                continue;
+            }
+
             annotationsToSave.push({
         		"@context": [
         			"http://www.w3.org/ns/anno.jsonld",
