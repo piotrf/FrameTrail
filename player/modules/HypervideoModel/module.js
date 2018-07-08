@@ -193,7 +193,7 @@
 
 		// clear previous data
 		annotations = [];
-console.log(database.annotations);
+		//console.log(database.annotations);
 		for (var idx in database.annotations) {
 
 			annotations.push(
