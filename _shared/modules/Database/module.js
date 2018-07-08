@@ -120,7 +120,7 @@
                 ready();
 
             } else {
-                fail('unknown resource data endpoint');
+                fail('Unknown resource data endpoint');
             }
 
             function ready() {
@@ -245,7 +245,7 @@
                     }
 
                 } else {
-                    fail('Unkown hypervideo data init options.');
+                    fail('Unknown hypervideo data init options.');
                 }
 
             }
@@ -253,7 +253,7 @@
 
         } else {
 
-            fail('Unkown hypervideo data init options.');
+            fail('Unknown hypervideo data init options.');
 
         }
 
@@ -552,7 +552,7 @@
             loadAnnotationData_DefaultServer(success, fail);
 
         } else {
-            fail('Unkown init option/');
+            fail('Unknown init option/');
         }
 
     };
