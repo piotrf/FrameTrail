@@ -115,21 +115,30 @@
 
             if (initOptionsResources[i].type === 'frametrail') {
 
-                $.ajax({
-                    type:   "GET",
-                    url:    (typeof initOptionsResources[i].data === 'string')
-                                ? initOptionsResources[i].data
-                                : ('_data/resources/_index.json'),
-                    cache:  false,
-                    dataType: "json",
-                    mimeType: "application/json"
-                }).done(function(data){
-                    resources = Object.assign(resources, data.resources);
-                    //console.log('resources', resources);
+                if (typeof initOptionsResources[i].data === 'string') {
+
+                    $.ajax({
+                        type:   "GET",
+                        url:    initOptionsResources[i].data,
+                        cache:  false,
+                        dataType: "json",
+                        mimeType: "application/json"
+                    }).done(function(data){
+                        resources = Object.assign(resources, data.resources);
+                        //console.log('resources', resources);
+                        ready();
+                    }).fail(function(){
+                        fail('No resources index file.');
+                    });
+
+                } else if (typeof initOptionsResources[i].data === 'object' && initOptionsResources[i].data !== null) {
+
+                    resources = Object.assign(resources, initOptionsResources[i].data);
                     ready();
-                }).fail(function(){
-                    fail('No resources index file.');
-                });
+
+                }
+                
+                
 
             } else if (initOptionsResources[i].type === 'iiif') {
 
@@ -143,7 +152,7 @@
             function ready() {
                 if (--countdown === 0) {
                     success.call(this);
-                    //console.log('resources', resources);
+                    console.log('resources', resources);
                 }
             }
 
@@ -180,6 +189,7 @@
             }).fail(function(){
 
                 fail('No user index file.');
+                success.call(this);
 
             });
         } else {
@@ -197,13 +207,20 @@
 
             }).done(function(data){
 
+                if (!data.response) {
+                    throw new Error('No user index file.');
+                    success.call(this);
+                    return;
+                }
+
                 users = data.response.user;
                 //console.log('users', users);
                 success.call(this);
 
             }).fail(function(){
 
-                fail('No user index file.');
+                throw new Error('No user index file.');
+                success.call(this);
 
             });
 

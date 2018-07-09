@@ -211,6 +211,11 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
             data: 		"a=userGet",
 			success: function(data) {
 
+				if (!data.response) {
+					throw new Error('User file is missing.');
+					return;
+				}
+
 				var allUsers = data.response.user;
 
 				domElement.find("#user_change_user").html('<option value="" selected disabled>Select a User</option>');
