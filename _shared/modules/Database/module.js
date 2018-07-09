@@ -59,8 +59,8 @@
             config = configInitOptions;
 
             // TODO: Check if this makes sense here
-            if (data.theme) {
-                $(FrameTrail.getState('target')).attr('data-frametrail-theme', data.theme);
+            if (config.theme) {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', config.theme);
             } else {
                 $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
             }
@@ -80,8 +80,8 @@
             config = data;
 
             // TODO: Check if this makes sense here
-            if (data.theme) {
-                $(FrameTrail.getState('target')).attr('data-frametrail-theme', data.theme);
+            if (config.theme) {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', config.theme);
             } else {
                 $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
             }
