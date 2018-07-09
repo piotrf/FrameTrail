@@ -28,13 +28,21 @@
 
     function updateTagModel (success, fail) {
 
+        var tagInitOptions = FrameTrail.getState('tagdefinitions');
+
+        if (typeof tagInitOptions === 'object' && tagInitOptions !== null) {
+
+            tags = tagInitOptions;
+
+            return success();
+
+        }
+
         $.ajax({
             type:     "GET",
             url:      typeof FrameTrail.getState('tagdefinitions') === 'string'
                         ? FrameTrail.getState('tagdefinitions')
-                        : FrameTrail.getState('tagdefinitions') === null
-                            ? '_data/tagdefinitions.json'
-                            : FrameTrail.getState('tagdefinitions'),
+                        : '_data/tagdefinitions.json',
             cache:    false,
             dataType: "json",
             mimeType: "application/json"

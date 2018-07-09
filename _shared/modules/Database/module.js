@@ -52,9 +52,26 @@
      */
     function loadConfigData(success, fail) {
 
+        var configInitOptions = FrameTrail.getState('config');
+
+        if (typeof configInitOptions === 'object' && configInitOptions !== null) {
+
+            config = configInitOptions;
+
+            // TODO: Check if this makes sense here
+            if (data.theme) {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', data.theme);
+            } else {
+                $(FrameTrail.getState('target')).attr('data-frametrail-theme', '');
+            }
+
+            return success.call(this);
+
+        }
+
         $.ajax({
             type:   "GET",
-            url:    FrameTrail.getState('config') || ('_data/config.json'),
+            url:    configInitOptions || ('_data/config.json'),
             cache:  false,
             dataType: "json",
             mimeType: "application/json"
