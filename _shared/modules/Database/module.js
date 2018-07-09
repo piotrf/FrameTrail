@@ -240,7 +240,29 @@
                         // hypervideos[i] = ...
 
                     } else {
-                        hypervideos[i] = initOptionsHypervideoData[i].hypervideo;
+                        // hypervideos[i] = initOptionsHypervideoData[i].hypervideo;
+                        var hypervideoData = initOptionsHypervideoData[i].hypervideo;
+                        hypervideos[i] = {
+                            "name": hypervideoData.meta.name,
+                            "description": hypervideoData.meta.description,
+                            "thumb": hypervideoData.meta.thumb,
+                            "creator": hypervideoData.meta.creator,
+                            "creatorId": hypervideoData.meta.creatorId,
+                            "created": hypervideoData.meta.created,
+                            "lastchanged": hypervideoData.meta.lastchanged,
+                            "hidden": hypervideoData.config.hidden,
+                            "config": hypervideoData.config,
+                            "mainAnnotation": null,
+                            "annotationfiles": null,
+                            "subtitles": hypervideoData.subtitles,
+                            "clips": hypervideoData.clips,
+                            "hypervideoData": hypervideoData
+                        };
+
+
+
+
+
                         ready();
                     }
 
@@ -549,7 +571,7 @@
 
         } else if (Array.isArray(initOptionsHypervideoData)) {
 
-            loadAnnotationData_DefaultServer(success, fail);
+            loadAnnotationData_Default(success, fail);
 
         } else {
             fail('Unknown init option/');
@@ -669,12 +691,12 @@
     /**
      * I load the annotation data from init option sources
      *
-     * @method loadAnnotationData_DefaultServer
+     * @method loadAnnotationData_Default
      * @param {Function} success
      * @param {Function} fail
      * @private
      */
-    function loadAnnotationData_DefaultServer(success, fail) {
+    function loadAnnotationData_Default(success, fail) {
 
         var initAnnotations = FrameTrail.getState('contents')[hypervideoID].annotations;
 
@@ -762,11 +784,58 @@
                 // annotations.push(...)
 
             } else {
-                initAnnotations[i].source = {
-                    frametrail: false
-                };
-                annotations.push(initAnnotations[i]);
-                ready();
+
+                for (var i in initAnnotations) {
+
+                    annotations.push({
+                        "source": {
+                            frametrail: false
+                        },
+                        "name": initAnnotations[i].body['frametrail:name'],
+                        "creator": initAnnotations[i].creator.nickname,
+                        "creatorId": initAnnotations[i].creator.id,
+                        "created": (new Date(initAnnotations[i].created)).getTime(),
+                        "type": initAnnotations[i].body['frametrail:type'],
+                        "src": (function () {
+                                    if (initAnnotations[i].body["frametrail:type"] === 'location') { return null; }
+                                    return (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( initAnnotations[i].body["frametrail:type"] ) >= 0)
+                                            ? initAnnotations[i].body.value
+                                            : initAnnotations[i].body.source
+                                })(),
+                        "thumb": initAnnotations[i].body['frametrail:thumb'],
+                        "start": parseFloat(/t=(\d+\.?\d*)/g.exec(initAnnotations[i].target.selector.value)[1]),
+                        "end": parseFloat(/t=(\d+\.?\d*),(\d+\.?\d*)/g.exec(initAnnotations[i].target.selector.value)[2]),
+                        "resourceId": initAnnotations[i].body["frametrail:resourceId"],
+                        "attributes": initAnnotations[i].body['frametrail:attributes'] || {},
+                        "tags": initAnnotations[i]['frametrail:tags'],
+                        "source": {
+                            frametrail: false,
+                            url: initAnnotations[i]
+                        }
+                    });
+
+                    if (annotations[annotations.length-1].type === 'location') {
+                        var locationAttributes = annotations[annotations.length-1].attributes;
+                        locationAttributes.lat = parseFloat(initAnnotations[i].body['frametrail:lat']);
+                        locationAttributes.lon = parseFloat(initAnnotations[i].body['frametrail:long']);
+                        locationAttributes.boundingBox = initAnnotations[i].body['frametrail:boundingBox'].split(',').map(parseFloat);
+                    }
+
+                    if (annotations[annotations.length-1].type === 'video') {
+                        var annotationItem = annotations[annotations.length-1];
+                        annotationItem.startOffset = (initAnnotations[i].body.selector && initAnnotations[i].body.selector.value)
+                                                     ? parseFloat(/t=(\d+)/g.exec(initAnnotations[i].body.selector.value)[1])
+                                                     : 0;
+                        annotationItem.endOffset = (initAnnotations[i].body.selector && initAnnotations[i].body.selector.value)
+                                                    ? parseFloat(/t=(\d+\.?\d*)/g.exec(initAnnotations[i].body.selector.value)[2])
+                                                    : 0;
+                    }
+
+                    ready();
+
+                }
+
+
             }
 
 
@@ -893,7 +962,7 @@
      * @param {Function} fail
      */
     function loadData(success, fail) {
-        
+
         hypervideoID = FrameTrail.module('RouteNavigation').hypervideoID;
 
        if(!hypervideoID){
