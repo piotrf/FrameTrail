@@ -93,7 +93,11 @@
 		}
 
 		// Set video source or NullVideo
-		if (!videoData.resourceId) {
+		if (videoData.src && videoData.src.length > 3) {
+
+			sourceFiles.mp4  = videoData.src;
+
+		} else if (!videoData.resourceId) {
 
 			hasHTML5Video = false;
 			duration      = videoData.duration;
@@ -101,6 +105,7 @@
 
 		} else {
 
+			// TODO: Remove when compatibility no longer needed
 			sourceFiles.mp4  = database.resources[videoData.resourceId].src;
 
 		}
