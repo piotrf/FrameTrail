@@ -212,7 +212,7 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 			success: function(data) {
 
 				if (!data.response) {
-					throw new Error('User file is missing.');
+					console.error('User file is missing.');
 					return;
 				}
 
@@ -558,15 +558,22 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						break;
 
 					case 2:
-						throw new Error('User file is missing.');
+						console.error('User file is missing.');
+						FrameTrail.changeState({
+							editMode: false,
+							loggedIn: false,
+							username: '',
+							userColor: ''
+						});
+						callback.call(window, false);
 						break;
 
 					case 3:
-						throw new Error('Logged in but user not active');
+						console.error('Logged in but user not active');
 						break;
 
 					case 4:
-						throw new Error('Logged in but not with required role.');
+						console.error('Logged in but not with required role.');
 						break;
 
 				}

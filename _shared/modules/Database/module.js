@@ -152,7 +152,7 @@
             function ready() {
                 if (--countdown === 0) {
                     success.call(this);
-                    console.log('resources', resources);
+                    //console.log('resources', resources);
                 }
             }
 
@@ -208,7 +208,7 @@
             }).done(function(data){
 
                 if (!data.response) {
-                    throw new Error('No user index file.');
+                    console.error('No user index file.');
                     success.call(this);
                     return;
                 }
@@ -219,7 +219,7 @@
 
             }).fail(function(){
 
-                throw new Error('No user index file.');
+                console.error('No user index file.');
                 success.call(this);
 
             });
