@@ -40,8 +40,8 @@
 
         $.ajax({
             type:     "GET",
-            url:      typeof FrameTrail.getState('tagdefinitions') === 'string'
-                        ? FrameTrail.getState('tagdefinitions')
+            url:      typeof tagInitOptions === 'string'
+                        ? tagInitOptions
                         : '_data/tagdefinitions.json',
             cache:    false,
             dataType: "json",
