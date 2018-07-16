@@ -614,7 +614,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
          * @writeOnly
          */
         set title(aString) {
-            domElement.find('.titlebarTitle').text(aString);
+            domElement.find('.titlebarTitle').html(aString);
         },
 
         /**
