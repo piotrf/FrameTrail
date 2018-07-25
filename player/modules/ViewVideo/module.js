@@ -1439,7 +1439,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
      */
     function toggleNativeFullscreenState() {
 
-        var element = $('.mainContainer')[0];
+        var element = $(FrameTrail.getState('target'))[0];
 
         if (element.requestFullScreen) {
             if (!document.fullScreen) {
