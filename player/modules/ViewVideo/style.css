@@ -709,12 +709,18 @@
 }
 
 .hypervideoContainer .videoContainer .hypervideo video.video {
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    backface-visibility: hidden;
+    will-change: filter;
     width: 1920px;
     height: 1080px;
     background: #101010;
     filter: none;
     transition-property: filter;
-    transition-duration: 3s;
+    transition-duration: 1s;
     /*
     -moz-transition-property: width, height;
     -moz-transition-duration: 200ms;
@@ -732,11 +738,11 @@
 }
 
 .hypervideoContainer .videoContainer .hypervideo video.video.nocolor {
-    filter: blur(1px) grayscale(90%) brightness(0.5);
+    filter: grayscale(90%) brightness(0.5);
 }
 
 .hypervideoContainer .videoContainer .hypervideo video.video.dark {
-    filter: blur(1px) grayscale(90%) brightness(0.1);
+    filter: grayscale(90%) brightness(0.2);
 }
 
 .hypervideoContainer .videoContainer .hypervideo .overlayContainer {
