@@ -66,7 +66,8 @@
             o.levelMemory.level[thisLevel] = (this_props.left + this_props.width);
             //level the next element
             if (next_ele.length > 0) {
-                if ((this_props.left + this_props.width) > next_props.left) {
+                //if ((this_props.left + this_props.width) > next_props.left) {
+                if ( ((this_props.left + this_props.width) > next_props.left) || isLongElemOverlap() ) {
                     $.each(o.levelMemory.level, function (level, filled) {
                         if (filled < next_props.left) {
                             newLevel = level;
@@ -82,6 +83,12 @@
             //push element into the right level object
             if (!o.levelMemory.levelObjects[thisLevel]) { o.levelMemory.levelObjects[thisLevel] = []; }
             o.levelMemory.levelObjects[thisLevel].push(this_ele);
+
+            // FrameTrail Custom: check long overlapping elements
+            function isLongElemOverlap() {
+                // TODO: Implement check to improve performance.
+                return true;
+            }
         });
     };
     CollisionDetection.prototype.setDimensions = function () {
