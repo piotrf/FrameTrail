@@ -37,7 +37,7 @@ FrameTrail.defineModule('RouteNavigation', function(FrameTrail){
 	 */
 	function getResourceURL(src) {
 
-		if (/^https?:/.exec(src)) {
+		if (/^https?:/.exec(src) || /^\/\//.exec(src)) {
 
 	        return src;
 
