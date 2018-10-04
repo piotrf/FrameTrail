@@ -4,6 +4,8 @@
 
 var ra = false;
 
+(function ($, document, window) {
+
 function initRaphael() {
     ra = Raphael( $('#SlideArea').get(0), 0,0, $(document).width(), $(document).height());
     $("#SlideArea > svg").css({
@@ -143,3 +145,5 @@ Raphael.fn.connection = function (obj1, obj2, curviness, attr, line, bg) {
 	    };
 	}
 }
+
+})(jQuery, document, window);
