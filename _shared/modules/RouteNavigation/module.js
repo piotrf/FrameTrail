@@ -107,6 +107,10 @@ FrameTrail.defineModule('RouteNavigation', function(FrameTrail){
 			'hostname': document.location.hostname
 		}
 
+                if (getQueryVariable('ajax') == 'disable') {
+                    environmentObj.server = false;
+                }
+		
 		return environmentObj;
 
 	}
