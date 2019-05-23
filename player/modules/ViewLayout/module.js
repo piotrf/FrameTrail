@@ -315,6 +315,9 @@ FrameTrail.defineModule('ViewLayout', function(FrameTrail){
 						+  '        <div class="contentViewTemplate" data-type="Transcript" data-size="large">'
 						+  '            <div class="contentViewTemplateType"><span class="icon-doc-text">Text Transcript</span></div>'
 						+  '        </div>'
+						+  '        <div class="contentViewTemplate" data-type="Timelines" data-size="large">'
+						+  '            <div class="contentViewTemplateType"><span class="icon-doc-text">Timelines</span></div>'
+						+  '        </div>'
 						+  '    </div>'
 						+  '</div>'),
 
