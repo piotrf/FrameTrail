@@ -45,23 +45,27 @@ FrameTrail.defineType(
 
                 	var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'"></div>');
 
-                    var iFrameSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src.replace('http:', '') : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src),
-                        pdfjsViewerPathPrefix = (this.resourceData.src.indexOf('//') != -1) ? '' : '../../../';
+                    var documentSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src.replace('http:', '') : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src);
 
-                    if ( iFrameSource.substr( (iFrameSource.lastIndexOf('.') +1) ) == 'pdf' ) {
-                        iFrameSource = '_lib/pdfjs/web/viewer.html?file='+ pdfjsViewerPathPrefix + iFrameSource;
-                    }
+                    var pdfDocument = $(
+                        '<object'
+                    +   ' data="'+ documentSource +'"'
+                    +   ' type="application/pdf"'
+                    +   ' width="100%"'
+                    +   ' height="100%">'
+                    +   ' <iframe webkitAllowFullScreen mozallowfullscreen allowFullScreen '
+                    +   ' src="'+ documentSource +'"'
+                    +   ' width="100%"'
+                    +   ' height="100%"'
+                    +   ' sandbox="allow-same-origin allow-scripts allow-popups allow-forms"'
+                    +   ' frameborder="0"'
+                    +   ' style="border: none;">'
+                    +   ' <p>Your browser does not support PDFs.'
+                    +   ' <a href="'+ documentSource +'">Download the PDF</a>.</p>'
+                    +   ' </iframe>'
+                    +   '</object>');
 
-                    var iFrame = $(
-                            '<iframe frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
-                        +   iFrameSource
-                        +   '" sandbox="allow-same-origin allow-scripts allow-popups allow-forms">'
-                        +    '</iframe>'
-                    ).bind('error, message', function() {
-                        return true;
-                    });
-
-                    resourceDetail.append(iFrame);
+                    resourceDetail.append(pdfDocument);
 
                     resourceDetail.append('<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>');
 
