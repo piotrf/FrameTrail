@@ -18,7 +18,7 @@ function initRaphael() {
     });
 }
 
-function drawConnections(from, to, curviness, attr) {
+window.drawConnections = function(from, to, curviness, attr) {
         if ($(to).length>1) {
             $(to).each(function(){
                 drawConnections(from,this,curviness,attr);
