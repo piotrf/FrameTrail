@@ -473,6 +473,11 @@
 
         }
 
+        // just to be sure
+        window.setTimeout(function() {
+            stackTimelineView();
+        }, 500);
+
     }
 
 
@@ -589,6 +594,17 @@
 
                 drop: function( event, ui ) {
 
+                    //console.log(ui);
+                    if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
+                        var elementFinder = TogetherJS.require("elementFinder");
+                        var location = elementFinder.elementLocation(ui.draggable[0]);
+                        TogetherJS.send({
+                            type: "simulate-annotation-add", 
+                            element: location,
+                            containerElement: '.annotationTimeline'
+                        });
+                    }
+                    
                     var resourceID      = ui.helper.attr('data-resourceID'),
                         videoDuration   = FrameTrail.module('HypervideoModel').duration,
                         startTime,

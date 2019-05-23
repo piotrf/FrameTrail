@@ -74,6 +74,16 @@ FrameTrail.defineType(
                             height: 400,
                             modal: true,
                             close: function() {
+                                
+                                if (TogetherJS && TogetherJS.running) {
+                                    var elementFinder = TogetherJS.require("elementFinder");
+                                    var location = elementFinder.elementLocation($(this)[0]);
+                                    TogetherJS.send({
+                                        type: "simulate-dialog-close", 
+                                        element: location
+                                    });
+                                }
+
                                 $(this).dialog('close');
                                 $(this).remove();
                                 animationDiv.animate({
@@ -892,6 +902,15 @@ FrameTrail.defineType(
 
                     controlsContainer.find('.deleteAnnotation').click(function(){
 
+                        if (TogetherJS && TogetherJS.running) {
+                            var elementFinder = TogetherJS.require("elementFinder");
+                            var location = elementFinder.elementLocation($(this)[0]);
+                            TogetherJS.send({
+                                type: "simulate-special-click", 
+                                element: location
+                            });
+                        }
+                        
                         FrameTrail.module('AnnotationsController').deleteAnnotation(annotation);
 
                     });

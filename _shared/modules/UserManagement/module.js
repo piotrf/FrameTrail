@@ -633,6 +633,25 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						resizable: false,
 						modal: true,
 						close: function() {
+							
+							if (TogetherJS && TogetherJS.running) {
+                                var elementFinder = TogetherJS.require("elementFinder");
+                                var location = elementFinder.elementLocation($(this)[0]);
+                                TogetherJS.send({
+                                    type: "simulate-dialog-close", 
+                                    element: location
+                                });
+                            }
+
+							FrameTrail.triggerEvent('userAction', {
+								action: 'UserLogout'
+							});
+
+							if (FrameTrail.module('Database').config.alwaysForceLogin) {
+								FrameTrail.module('InterfaceModal').hideMessage();
+								FrameTrail.module('UserManagement').ensureAuthenticated(function() {}, function() {}, true);
+							}
+
 							loggedOutDialog.remove();
 							/*
 							window.setTimeout(function() {
@@ -642,15 +661,6 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						},
 						buttons: {
 							"OK": function() {
-								FrameTrail.triggerEvent('userAction', {
-									action: 'UserLogout'
-								});
-
-								if (FrameTrail.module('Database').config.alwaysForceLogin) {
-									FrameTrail.module('InterfaceModal').hideMessage();
-									FrameTrail.module('UserManagement').ensureAuthenticated(function() {}, function() {}, true);
-								}
-
 								$( this ).dialog( "close" );
 							}
 						}

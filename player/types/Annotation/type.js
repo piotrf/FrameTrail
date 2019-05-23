@@ -393,6 +393,18 @@ FrameTrail.defineType(
                             self.data.start = leftPercent * (videoDuration / 100);
                             self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
+                            if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
+                                var elementFinder = TogetherJS.require("elementFinder");
+                                var location = elementFinder.elementLocation(ui.helper[0]);
+                                TogetherJS.send({
+                                    type: "simulate-annotation-change", 
+                                    element: location,
+                                    containerElement: '.annotationTimeline',
+                                    startTime: self.data.start,
+                                    endTime: self.data.end
+                                });
+                            }
+
                             self.updateTimelineElement();
 
                             FrameTrail.module('AnnotationsController').stackTimelineView();
@@ -522,6 +534,18 @@ FrameTrail.defineType(
                             self.data.start = leftPercent * (videoDuration / 100);
                             self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
+                            if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
+                                var elementFinder = TogetherJS.require("elementFinder");
+                                var location = elementFinder.elementLocation(ui.helper[0]);
+                                TogetherJS.send({
+                                    type: "simulate-annotation-change", 
+                                    element: location,
+                                    containerElement: '.annotationTimeline',
+                                    startTime: self.data.start,
+                                    endTime: self.data.end
+                                });
+                            }
+                            
                             FrameTrail.module('AnnotationsController').stackTimelineView();
 
                             FrameTrail.module('HypervideoModel').newUnsavedChange('annotations');
@@ -600,7 +624,7 @@ FrameTrail.defineType(
                  * @return HTMLElement
                  */
                 renderCompareTimelineItem: function() {
-
+                    
                     var cleanStart = FrameTrail.module('HypervideoController').formatTime(this.data.start),
                         cleanEnd = FrameTrail.module('HypervideoController').formatTime(this.data.end),
                         compareTimelineElement = $(
