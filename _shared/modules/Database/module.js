@@ -176,13 +176,18 @@
      * @param {Function} fail
      */
     function loadUserData(success, fail) {
+        
+        if (FrameTrail.getState('users')) {
+            
+            users = FrameTrail.getState('users');
+            success.call(this);
 
-        if (!FrameTrail.module('RouteNavigation').environment.server) {
+        } else if (!FrameTrail.module('RouteNavigation').environment.server) {
 
             $.ajax({
                 type:   "GET",
                 url:    ('_data/users.json'),
-                cache:  false,
+                cache:  (config.allowCaching) ? config.allowCaching : false,
                 dataType: "json",
                 mimeType: "application/json"
             }).done(function(data){
