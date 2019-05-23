@@ -57,6 +57,7 @@
         if (typeof configInitOptions === 'object' && configInitOptions !== null) {
 
             config = configInitOptions;
+            FrameTrail.changeState('config', config);
 
             // TODO: Check if this makes sense here
             if (config.theme) {
@@ -72,12 +73,13 @@
         $.ajax({
             type:   "GET",
             url:    configInitOptions || ('_data/config.json'),
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
             dataType: "json",
             mimeType: "application/json"
         }).done(function(data){
 
             config = data;
+            FrameTrail.changeState('config', config);
 
             // TODO: Check if this makes sense here
             if (config.theme) {
@@ -123,7 +125,7 @@
                     $.ajax({
                         type:   "GET",
                         url:    initOptionsResources[i].data,
-                        cache:  false,
+                        cache:  (config.allowCaching) ? config.allowCaching : false,
                         dataType: "json",
                         mimeType: "application/json"
                     }).done(function(data){
@@ -201,7 +203,7 @@
 
                 type:   "POST",
                 url:    ('_server/ajaxServer.php'),
-                cache:  false,
+                cache:  (config.allowCaching) ? config.allowCaching : false,
                 dataType: "json",
                 mimeType: "application/json",
                 data:   {
@@ -337,7 +339,7 @@
         $.ajax({
             type:   "GET",
             url:    urlpath + '_index.json',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
             dataType: "json",
             mimeType: "application/json"
         }).done(function(data){
@@ -358,7 +360,7 @@
                     $.ajax({
                         type:   "GET",
                         url:    (urlpath + data.hypervideos[hypervideoID] + '/hypervideo.json'),
-                        cache:  false,
+                        cache:  (config.allowCaching) ? config.allowCaching : false,
                         dataType: "json",
                         mimeType: "application/json"
                     }).done(function (hypervideoData) {
@@ -366,7 +368,7 @@
                         $.ajax({
                             type:   "GET",
                             url:    (urlpath + data.hypervideos[hypervideoID] + '/annotations/_index.json'),
-                            cache:  false,
+                            cache:  (config.allowCaching) ? config.allowCaching : false,
                             dataType: "json",
                             mimeType: "application/json"
                         }).done(function (annotationsIndex) {
@@ -438,7 +440,7 @@
         $.ajax({
             type:   "GET",
             url:    url,
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
             dataType: "json",
             mimeType: "application/json"
         }).done(function (hypervideoData) {
@@ -648,7 +650,7 @@
                 $.ajax({
                     type: "GET",
                     url: (url + hypervideoID + '/annotations/' + id + '.json'),
-                    cache: false,
+                    cache: (config.allowCaching) ? config.allowCaching : false,
                     dataType: "json",
                     mimeType: "application/json"
                 }).done(function(data){
@@ -756,7 +758,7 @@
                 $.ajax({
                     type: "GET",
                     url: initAnnotations[i],
-                    cache: false,
+                    cache: (config.allowCaching) ? config.allowCaching : false,
                     dataType: "json",
                     mimeType: "application/json"
                 }).done(function(data){
@@ -923,7 +925,7 @@
 
                         type: "GET",
                         url: ('_data/hypervideos/' + hypervideoID + '/subtitles/' + currentSubtitles.src),
-                        cache: false
+                        cache: (config.allowCaching) ? config.allowCaching : false
 
                     }).done(function(data){
 
@@ -1329,7 +1331,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
 
             data: {
                 a:              'configChange',
@@ -1383,7 +1385,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
 
             data: {
                 a:              'globalCSSChange',
@@ -1440,7 +1442,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
 
             data: {
                 a:              'hypervideoChange',
@@ -1613,7 +1615,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
 
             data: {
 

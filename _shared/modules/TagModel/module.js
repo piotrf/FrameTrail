@@ -15,13 +15,15 @@
  FrameTrail.defineModule('TagModel', function(FrameTrail){
 
 
-    var tags        = {};
+    var tags        = {},
+        config      = {};
 
 
 
 
     function initTagModel (success, fail) {
 
+        config = FrameTrail.getState('config');
         updateTagModel(success, fail);
 
     }
@@ -43,7 +45,7 @@
             url:      typeof tagInitOptions === 'string'
                         ? tagInitOptions
                         : '_data/tagdefinitions.json',
-            cache:    false,
+            cache:    (config.allowCaching) ? config.allowCaching : false,
             dataType: "json",
             mimeType: "application/json"
         }).done(function(data){
@@ -78,7 +80,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
             data: {
                 a:              'tagSet',
                 tagName:        tagname,
@@ -98,7 +100,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
             data: {
                 a:              'tagLangDelete',
                 tagName:        tagname,
@@ -116,7 +118,7 @@
         $.ajax({
             type:   'POST',
             url:    '_server/ajaxServer.php',
-            cache:  false,
+            cache:  (config.allowCaching) ? config.allowCaching : false,
             data: {
                 a:              'tagDelete',
                 tagName:        tagname
