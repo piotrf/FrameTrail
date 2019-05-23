@@ -37,6 +37,7 @@ FrameTrail.defineModule('RouteNavigation', function(FrameTrail){
 	 */
 	function getResourceURL(src) {
 
+		//if (/^https?:/.exec(src)) {
 		if (/^https?:/.exec(src) || /^\/\//.exec(src) || /^file:/.exec(src)) {
 
 	        return src;
@@ -107,10 +108,6 @@ FrameTrail.defineModule('RouteNavigation', function(FrameTrail){
 			'hostname': document.location.hostname
 		}
 
-                if (getQueryVariable('ajax') == 'disable') {
-                    environmentObj.server = false;
-                }
-		
 		return environmentObj;
 
 	}
@@ -205,39 +202,11 @@ FrameTrail.defineModule('RouteNavigation', function(FrameTrail){
 
 	}
 
-
-	//$(window).on('hashchange', routeHasChanged);
-
-	$(window).on('popstate', routeHasChanged);
-	//$(window).on('popstate', function(event) {
-
-        /*
-        * when accessed from the overview panel,
-        * event.originalEvent.state.editMode
-        * contains the previous editMode state
-        */
-
-    	//console.log(FrameTrail.module('RouteNavigation').hypervideoID, getQueryVariable('hypervideo'));
-
-    	/*
-    	var hypervideoID = getQueryVariable('hypervideo');
-
-    	if ( hypervideoID ) {
-
-    		if ( FrameTrail.getState('editMode') ) {
-    			FrameTrail.changeState('editMode', false);
-    			FrameTrail.module('HypervideoModel').updateHypervideo(hypervideoID, true);
-    		} else if (FrameTrail.module('RouteNavigation').hypervideoID != hypervideoID) {
-    			//console.log('change');
-    			FrameTrail.module('HypervideoModel').updateHypervideo(hypervideoID);
-    		}
-
-    	}
-    	*/
-
-
-     //});
-
+	if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
+		$(window).on('hashchange', routeHasChanged);
+	} else {
+		$(window).on('popstate', routeHasChanged);
+	}
 
 	routeHasChanged();
 
