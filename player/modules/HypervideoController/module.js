@@ -156,7 +156,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			initVideo(
 				function(){
 
-					HypervideoModel.duration = videoElement.duration;
+					HypervideoModel.offsetOut = (HypervideoModel.offsetOut) ? HypervideoModel.offsetOut : videoElement.duration;
+					HypervideoModel.durationFull = videoElement.duration;
+					HypervideoModel.duration = HypervideoModel.offsetOut - HypervideoModel.offsetIn;
 
 					if (update) {
 						AnnotationsController.updateController();
@@ -188,7 +190,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					if (RouteNavigation.hashTime) {
 						setCurrentTime(RouteNavigation.hashTime);
 					} else {
-						setCurrentTime(0);
+						setCurrentTime(HypervideoModel.offsetIn);
 					}
 
 					FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -204,6 +206,10 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			highPriorityUpdater = highPriorityUpdater_NullVideo;
 			lowPriorityUpdater  = lowPriorityUpdater_NullVideo;
 
+			HypervideoModel.offsetOut = (HypervideoModel.offsetOut) ? HypervideoModel.offsetOut : HypervideoModel.duration;
+			HypervideoModel.durationFull = HypervideoModel.duration;
+			HypervideoModel.duration = HypervideoModel.offsetOut - HypervideoModel.offsetIn;		
+			
 			if (update) {
 				AnnotationsController.updateController();
 			} else {
@@ -234,7 +240,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			if (RouteNavigation.hashTime) {
 				setCurrentTime(RouteNavigation.hashTime);
 			} else {
-				setCurrentTime(0);
+				setCurrentTime(HypervideoModel.offsetIn);
 			}
 
 			FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
@@ -349,6 +355,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	function initProgressBar() {
 
 		ViewVideo.duration = formatTime(HypervideoModel.duration);
+		ViewVideo.durationFull = formatTime(HypervideoModel.durationFull, true);
 
 		ViewVideo.PlayerProgress.slider({
 			value: 0,
@@ -373,7 +380,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					},
 
 			slide:  function(evt, ui) {
-						setCurrentTime(ui.value);
+						setCurrentTime(HypervideoModel.offsetIn+ui.value);
 					},
 
 			start: 	function(evt, ui) {
@@ -381,7 +388,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					},
 
 			stop: 	function(evt, ui) {
-						setCurrentTime(ui.value);
+						setCurrentTime(HypervideoModel.offsetIn+ui.value);
 
 						FrameTrail.triggerEvent('userAction', {
 							action: 'VideoJumpTime',
@@ -455,7 +462,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 		currentTime = videoElement.currentTime;
 
-		ViewVideo.PlayerProgress.slider('value', currentTime);
+		if (ViewVideo.PlayerProgress.data('ui-slider')) {
+			ViewVideo.PlayerProgress.slider('value', currentTime-HypervideoModel.offsetIn);
+		}
 
 		FrameTrail.triggerEvent('timeupdate', {});
 
@@ -480,7 +489,11 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function lowPriorityUpdater_HTML5() {
 
-		ViewVideo.currentTime = formatTime(currentTime);
+		//console.log('CURRENTTIME: '+currentTime);
+		//console.log('CURRENTTIMEOFFSET: ', HypervideoModel.offsetIn);
+
+		ViewVideo.currentTime = formatTime(currentTime-HypervideoModel.offsetIn);
+		ViewVideo.currentTimeFull = formatTime(currentTime, true);
 
 		OverlaysController.updateStatesOfOverlays(currentTime);
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
@@ -505,7 +518,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function highPriorityUpdater_NullVideo() {
 
-		ViewVideo.PlayerProgress.slider('value', currentTime);
+		if (ViewVideo.PlayerProgress.data('ui-slider')) {
+			ViewVideo.PlayerProgress.slider('value', currentTime-HypervideoModel.offsetIn);
+		}
 
 		FrameTrail.triggerEvent('timeupdate', {});
 
@@ -529,7 +544,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function lowPriorityUpdater_NullVideo() {
 
-		ViewVideo.currentTime = formatTime(currentTime);
+		ViewVideo.currentTime = formatTime(currentTime-HypervideoModel.offsetIn);
+		ViewVideo.currentTimeFull = formatTime(currentTime, true);
 
 		OverlaysController.updateStatesOfOverlays(currentTime);
 		CodeSnippetsController.updateStatesOfCodeSnippets(currentTime);
@@ -552,9 +568,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 		currentTime = (Date.now() - nullVideoStartDate) / 1000;
 
-		if (currentTime >= HypervideoModel.duration) {
-			currentTime = HypervideoModel.duration;
-			pause();
+		if (currentTime >= HypervideoModel.offsetIn+HypervideoModel.duration) {
+			currentTime = HypervideoModel.duration;					currentTime = HypervideoModel.offsetIn+HypervideoModel.duration;
+			pause();					pause();
 		}
 
 	};
@@ -581,9 +597,16 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		if (HypervideoModel.hasHTML5Video) {
 
 			var promise = videoElement.play();
-            if (promise) {
-                promise.catch(function(){});
-            }
+            
+            if (promise !== undefined) {
+
+				promise.then(function(_) {
+	                onPlaySuccess();
+				}).catch(function(error) {
+					// play error (most likely autoplay prevented)
+				});
+
+			}
 
 		} else {
 
@@ -596,27 +619,29 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 				nullVideoStartDate = Date.now() - (currentTime * 1000)
 				_play();
 
+				onPlaySuccess();
+
 			}
 
 		}
 
-		if ( !ViewVideo.VideoStartOverlay.hasClass('inactive') ) {
-			ViewVideo.VideoStartOverlay.addClass('inactive').fadeOut();
+		function onPlaySuccess() {
+			if ( !ViewVideo.VideoStartOverlay.hasClass('inactive') ) {
+				ViewVideo.VideoStartOverlay.addClass('inactive').fadeOut();
+			}
+
+			FrameTrail.triggerEvent('play', {});
+
+			if (HypervideoModel.events.onPlay) {
+				try {
+	            	var playEvent = new Function(HypervideoModel.events.onPlay);
+	            	playEvent();
+	            } catch (exception) {
+	                // could not parse and compile JS code!
+	                console.warn('Event handler contains errors: '+ exception.message);
+	            }
+			}
 		}
-
-		FrameTrail.triggerEvent('play', {});
-
-		if (HypervideoModel.events.onPlay) {
-			try {
-            	var playEvent = new Function(HypervideoModel.events.onPlay);
-            	playEvent();
-            } catch (exception) {
-                // could not parse and compile JS code!
-                console.warn('Event handler contains errors: '+ exception.message);
-            }
-		}
-
-
 
 	};
 
@@ -658,7 +683,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	            }
 			}
 
-		} else if (!HypervideoModel.hasHTML5Video && currentTime == HypervideoModel.duration) {
+		} else if (!HypervideoModel.hasHTML5Video && currentTime == HypervideoModel.offsetIn+HypervideoModel.duration) {
 
 			FrameTrail.triggerEvent('ended', {});
 
@@ -877,9 +902,10 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 *
 	 * @method formatTime
 	 * @param {Number} aNumber
+	 * @param {Boolean} forceHourDisplay
 	 * @return String
 	 */
-	function formatTime(aNumber) {
+	function formatTime(aNumber, forceHourDisplay) {
 
 		var hours, minutes, seconds, hourValue;
 
@@ -891,7 +917,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		seconds 	= Math.ceil(seconds % (60*60) % 60);
 		seconds 	= (seconds >= 10) ? seconds : '0' + seconds;
 
-		if (hours >= 1) {
+		if (hours >= 1 || forceHourDisplay == true) {
 			hourValue = hours + ':';
 		} else {
 			hourValue = '';

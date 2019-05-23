@@ -150,6 +150,14 @@ FrameTrail.defineType(
                         width: width + '%'
                     });
 
+                    this.timelineElement.removeClass('previewPositionLeft previewPositionRight');
+
+                    if (positionLeft < 10 && width < 10) {
+                        this.timelineElement.addClass('previewPositionLeft');
+                    } else if (positionLeft > 90) {
+                        this.timelineElement.addClass('previewPositionRight');
+                    }
+
                 },
 
 
@@ -646,14 +654,24 @@ FrameTrail.defineType(
                         +   '</div>'
                     ),
 
+                        timeStart     = this.data.start - FrameTrail.module('HypervideoModel').offsetIn,
+                        timeEnd       = this.data.end - FrameTrail.module('HypervideoModel').offsetOut;
                         videoDuration   = FrameTrail.module('HypervideoModel').duration,
-                        positionLeft    = 100 * (this.data.start / videoDuration),
+                        positionLeft    = 100 * (timeStart / videoDuration),
                         width           = 100 * ((this.data.end - this.data.start) / videoDuration);
 
                     compareTimelineElement.css({
                         left:  positionLeft + '%',
                         width: width + '%'
                     });
+
+                    compareTimelineElement.removeClass('previewPositionLeft previewPositionRight');
+
+                    if (positionLeft < 10 && width < 10) {
+                        compareTimelineElement.addClass('previewPositionLeft');
+                    } else if (positionLeft > 90) {
+                        compareTimelineElement.addClass('previewPositionRight');
+                    }
 
                     compareTimelineElement.find('.previewWrapper').append(
                         this.resourceItem.renderThumb()

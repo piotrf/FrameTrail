@@ -36,7 +36,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                         + '                </div>'
                         + '                <div class="videoContainer">'
                         + '                    <div class="hypervideo">'
-                        + '                        <video class="video nocolor"></video>'
+                        + '                        <video class="video nocolor" '+ ((!!screenfull) ? 'playsinline webkit-playsinline' : '') +'></video>'
                         + '                        <div class="overlayContainer"></div>'
                         + '                        <div class="captionContainer"></div>'
                         + '                    </div>'
@@ -66,6 +66,10 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                         + '                    <div class="timeDisplay playerControl">'
                         + '                        <div class="currentTime">00:00</div>'
                         + '                        <div class="totalDuration">00:00</div>'
+                        + '                    </div>'
+                        + '                    <div class="timeDisplayFull playerControl">'
+                        + '                        <div class="currentTimeFull">00:00</div>'
+                        + '                        <div class="totalDurationFull">00:00</div>'
                         + '                    </div>'
                         + '                </div>'
                         + '                <div class="rightControlPanel">'
@@ -153,6 +157,8 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
 
         CurrentTime                 = domElement.find('.currentTime'),
         TotalDuration               = domElement.find('.totalDuration'),
+        CurrentTimeFull             = domElement.find('.currentTimeFull'),
+        TotalDurationFull           = domElement.find('.totalDurationFull'),
         PlayButton                  = domElement.find('.playButton'),
         VideoStartOverlay           = domElement.find('.videoStartOverlay'),
         VolumeButton                = domElement.find('.volumeButton'),
@@ -301,16 +307,20 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
      * @method create
      */
     function create() {
-
-        $('.mainContainer').append(domElement);
+        
+        $(FrameTrail.getState('target')).find('.mainContainer').append(domElement);
 
         if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
             fixGoddamnSafariBug();
         };
 
+        if (FrameTrail.getState('hv_config_clipTimeVisible')) {
+            Controls.find('.timeDisplayFull').show();
+        }
+
         toggleViewMode(FrameTrail.getState('viewMode'));
 
-        toggleConfig_captionsVisible(FrameTrail.getState('hv_config_captionsVisible'))
+        toggleConfig_captionsVisible(FrameTrail.getState('hv_config_captionsVisible'));
 
         FrameTrail.changeState('hv_config_overlaysVisible', true);
 
@@ -320,7 +330,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
 
     function fixGoddamnSafariBug() {
 
-        $($('.sidebar'), $('.mainContainer'), $('.viewVideo'), $('.slideArea') ).css({
+        $($(FrameTrail.getState('target')).find('.sidebar'), $(FrameTrail.getState('target')).find('.mainContainer'), $(FrameTrail.getState('target')).find('.viewVideo'), $(FrameTrail.getState('target')).find('.slideArea') ).css({
             'transition-duration': '0ms',
             '-moz-transition-duration': '0ms',
             '-webkit-transition-duration': '0ms',
@@ -332,7 +342,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
             slidePositionDown();
             showDetails(false);
 
-            alert('Safari tests are still ongoing. To avoid problems, please switch to any other browser for now.');
+            //alert('Safari tests are still ongoing. To avoid problems, please switch to any other browser for now.');
 
             /*
             window.setTimeout(function() {
@@ -457,7 +467,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                 'flex-grow': 0,
                 'flex-shrink': 0,
                 'flex-basis':
-                    $('.mainContainer').height()
+                    $(FrameTrail.getState('target')).find('.mainContainer').height()
                     - ((areaTopVisible) ? (AreaTopContainer.height() + playerMargin) : 0)
                     - ((areaBottomVisible) ? (AreaBottomContainer.height() + playerMargin) : 0)
                     - editBorder
@@ -478,7 +488,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                         - ((editMode != false && editMode != 'preview' && editMode != 'settings') ? playerMargin : 0)
                         + 'px',
                     minHeight:
-                        $('.mainContainer').height()
+                        $(FrameTrail.getState('target')).find('.mainContainer').height()
                         + (areaBottomVisible ? AreaBottomDetails.height() + AreaBottomContainer.height() : 0)
                         + playerMargin
                         - editBorder
@@ -529,7 +539,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                         - playerMargin
                         + 'px',
                     minHeight:
-                        $('.mainContainer').height()
+                        $(FrameTrail.getState('target')).find('.mainContainer').height()
                         + (areaTopVisible ? AreaTopDetails.height() + AreaTopContainer.height() : 0)
                         - editBorder
                         + 'px'
@@ -575,7 +585,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                     - topMargin
                     + 'px',
                 minHeight:
-                    $('.mainContainer').height()
+                    $(FrameTrail.getState('target')).find('.mainContainer').height()
                     + ((areaTopVisible && editMode != 'settings') ? AreaTopDetails.height() : playerMargin)
                     + ((areaBottomVisible && editMode != 'settings') ? AreaBottomDetails.height() : playerMargin)
                     - editBorder
@@ -648,7 +658,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
                                     - ((FrameTrail.getState('sidebarOpen') && !FrameTrail.getState('fullscreen')) ? FrameTrail.module('Sidebar').width : 0)
                                     - editBorder,
             mainContainerHeight = $(FrameTrail.getState('target')).height()
-                                    - $('.titlebar').height()
+                                    - $(FrameTrail.getState('target')).find('.titlebar').height()
                                     - editBorder,
             _video              = $(Video),
             videoFit            = (FrameTrail.module('Database').config.videoFit) ? FrameTrail.module('Database').config.videoFit : 'contain';
@@ -762,11 +772,11 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
     function toggleFullscreen(aBoolean) {
 
         if (aBoolean) {
-            $('.fullscreenButton').addClass('active');
-            $('.mainContainer').addClass('inFullscreen');
+            $(FrameTrail.getState('target')).find('.fullscreenButton').addClass('active');
+            $(FrameTrail.getState('target')).find('.mainContainer').addClass('inFullscreen');
         } else {
-            $('.fullscreenButton').removeClass('active');
-            $('.mainContainer').removeClass('inFullscreen');
+            $(FrameTrail.getState('target')).find('.fullscreenButton').removeClass('active');
+            $(FrameTrail.getState('target')).find('.mainContainer').removeClass('inFullscreen');
         }
 
     };
@@ -1356,8 +1366,8 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
             return;
         }
 
-        var timelineItems = $('.timelineElement').not('.ui-draggable'),
-            draggableElements = $('.timelineElement.ui-draggableable');
+        var timelineItems = $(FrameTrail.getState('target')).find('.timelineElement').not('.ui-draggable'),
+            draggableElements = $(FrameTrail.getState('target')).find('.timelineElement.ui-draggableable');
             GridContainer = $('<div class="gridContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3"></div>');
 
 
@@ -1489,7 +1499,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
      */
     function toggleFullscreenState() {
 
-        var element = $('.mainContainer')[0];
+        var element = $(FrameTrail.getState('target')).find('.mainContainer')[0];
 
         if (element.requestFullScreen) {
             if (!document.fullScreen) {
@@ -1586,6 +1596,19 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
          * @type String
          */
         set duration(aString)    { return TotalDuration.text(aString) },
+
+        /**
+         * I display a (formated time) string in an area of the progress bar.
+         * @attribute currentTimeFull
+         * @type String
+         */
+        set currentTimeFull(aString) { return CurrentTimeFull.text(aString)   },
+        /**
+         * I display a (formated time) string in an area of the progress bar.
+         * @attribute durationFull
+         * @type String
+         */
+        set durationFull(aString)    { return TotalDurationFull.text(aString) },
 
         /**
          * I contain the HypervideoContainer element.

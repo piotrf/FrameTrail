@@ -1155,6 +1155,7 @@
         		"slidingTrigger": hypervideos[thisHypervideoID].config.slidingTrigger,
         		"autohideControls": hypervideos[thisHypervideoID].config.autohideControls,
         		"captionsVisible": hypervideos[thisHypervideoID].config.captionsVisible,
+                "clipTimeVisible": hypervideos[thisHypervideoID].config.clipTimeVisible,
         		"hidden": hypervideos[thisHypervideoID].hidden,
                 "layoutArea": FrameTrail.module('ViewLayout').getLayoutAreaData()
         	},

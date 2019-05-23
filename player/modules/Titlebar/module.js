@@ -248,6 +248,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
                         "theme": "",
                         "autohideControls": false,
                         "captionsVisible": false,
+                        "clipTimeVisible": false,
                         "hidden": $('.newHypervideoForm').find('input[name="hidden"]').is(':checked'),
                         "layoutArea": {
                             "areaTop": [],
