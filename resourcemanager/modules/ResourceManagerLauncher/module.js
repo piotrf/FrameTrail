@@ -108,15 +108,15 @@
     function toggleLoginState(loggedIn) {
 
         if (loggedIn) {
-            $('.resourcesControls, .logoutButton').show();
-            $('.startEditButton').hide();
-            $('.titlebar, .mainContainer').addClass('editActive');
-            $('.viewResources').removeClass('resourceManager');
+            $(FrameTrail.getState('target')).find('.resourcesControls, .logoutButton').show();
+            $(FrameTrail.getState('target')).find('.startEditButton').hide();
+            $(FrameTrail.getState('target')).find('.titlebar, .mainContainer').addClass('editActive');
+            $(FrameTrail.getState('target')).find('.viewResources').removeClass('resourceManager');
         } else {
-            $('.resourcesControls, .logoutButton').hide();
-            $('.startEditButton').show();
-            $('.titlebar, .mainContainer').removeClass('editActive');
-            $('.viewResources').addClass('resourceManager');
+            $(FrameTrail.getState('target')).find('.resourcesControls, .logoutButton').hide();
+            $(FrameTrail.getState('target')).find('.startEditButton').show();
+            $(FrameTrail.getState('target')).find('.titlebar, .mainContainer').removeClass('editActive');
+            $(FrameTrail.getState('target')).find('.viewResources').addClass('resourceManager');
         }
 
     }
@@ -135,10 +135,10 @@
             var width   = _window.width(),
                 height  = _window.height();
 
-            $('.mainContainer').height( height );
-            $('.viewResources').css({
+            $(FrameTrail.getState('target')).find('.mainContainer').height( height );
+            $(FrameTrail.getState('target')).find('.viewResources').css({
                 margin: 10 + 'px',
-                height: height - 20 - $('.titlebar').height() + 'px'
+                height: height - 20 - $(FrameTrail.getState('target')).find('.titlebar').height() + 'px'
             });
             FrameTrail.changeState('viewSize', [width, height])
 

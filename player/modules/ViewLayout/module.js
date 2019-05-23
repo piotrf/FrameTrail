@@ -579,7 +579,7 @@ FrameTrail.defineModule('ViewLayout', function(FrameTrail){
 
     	// TODO: find way to avoid jQuery selector
     	if ( newState == 'middle' ) {
-    		$('.viewVideo').find('.collectionElement.open').removeClass('open');
+    		$(FrameTrail.getState('target')).find('.viewVideo').find('.collectionElement.open').removeClass('open');
     	}
 
     }
