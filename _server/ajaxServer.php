@@ -270,6 +270,7 @@ switch($_REQUEST["a"]) {
 			$tmpConf = array(
 				"updateServiceURL"=> "https://update.frametrail.org",
 				"autoUpdate"=> false,
+				"allowCaching"=> false,
 				"defaultUserRole"=> "user",
 				"captureUserTraces"=> false,
 				"userTracesStartAction"=> "",
