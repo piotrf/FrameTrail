@@ -48,6 +48,18 @@
 	clear: both;
 }
 
+.viewResources .resourcesFilter input[type="radio"] {
+	margin: 0px 5px 3px 10px;
+}
+
+.viewResources .resourcesFilter input[type="radio"]:hover {
+	cursor: pointer;
+}
+
+.viewResources .resourcesFilter label {
+	cursor: pointer;
+}
+
 .viewResources .resourcesList {
 	position: relative;
 	width: 100%;
