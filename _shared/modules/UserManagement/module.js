@@ -634,14 +634,16 @@ FrameTrail.defineModule('UserManagement', function(FrameTrail){
 						modal: true,
 						close: function() {
 							
-							if (TogetherJS && TogetherJS.running) {
-                                var elementFinder = TogetherJS.require("elementFinder");
-                                var location = elementFinder.elementLocation($(this)[0]);
-                                TogetherJS.send({
-                                    type: "simulate-dialog-close", 
-                                    element: location
-                                });
-                            }
+							try {
+								if (TogetherJS && TogetherJS.running) {
+	                                var elementFinder = TogetherJS.require("elementFinder");
+	                                var location = elementFinder.elementLocation($(this)[0]);
+	                                TogetherJS.send({
+	                                    type: "simulate-dialog-close", 
+	                                    element: location
+	                                });
+	                          	}
+	                        } catch (e) {}
 
 							FrameTrail.triggerEvent('userAction', {
 								action: 'UserLogout'

@@ -401,17 +401,19 @@ FrameTrail.defineType(
                             self.data.start = leftPercent * (videoDuration / 100);
                             self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
-                            if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
-                                var elementFinder = TogetherJS.require("elementFinder");
-                                var location = elementFinder.elementLocation(ui.helper[0]);
-                                TogetherJS.send({
-                                    type: "simulate-annotation-change", 
-                                    element: location,
-                                    containerElement: '.annotationTimeline',
-                                    startTime: self.data.start,
-                                    endTime: self.data.end
-                                });
-                            }
+                            try {
+                                if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
+                                    var elementFinder = TogetherJS.require("elementFinder");
+                                    var location = elementFinder.elementLocation(ui.helper[0]);
+                                    TogetherJS.send({
+                                        type: "simulate-annotation-change", 
+                                        element: location,
+                                        containerElement: '.annotationTimeline',
+                                        startTime: self.data.start,
+                                        endTime: self.data.end
+                                    });
+                                }
+                            } catch (e) {}
 
                             self.updateTimelineElement();
 
@@ -542,17 +544,19 @@ FrameTrail.defineType(
                             self.data.start = leftPercent * (videoDuration / 100);
                             self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
 
-                            if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
-                                var elementFinder = TogetherJS.require("elementFinder");
-                                var location = elementFinder.elementLocation(ui.helper[0]);
-                                TogetherJS.send({
-                                    type: "simulate-annotation-change", 
-                                    element: location,
-                                    containerElement: '.annotationTimeline',
-                                    startTime: self.data.start,
-                                    endTime: self.data.end
-                                });
-                            }
+                            try {
+                                if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
+                                    var elementFinder = TogetherJS.require("elementFinder");
+                                    var location = elementFinder.elementLocation(ui.helper[0]);
+                                    TogetherJS.send({
+                                        type: "simulate-annotation-change", 
+                                        element: location,
+                                        containerElement: '.annotationTimeline',
+                                        startTime: self.data.start,
+                                        endTime: self.data.end
+                                    });
+                                }
+                            } catch (e) {}
                             
                             FrameTrail.module('AnnotationsController').stackTimelineView();
 

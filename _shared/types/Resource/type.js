@@ -75,14 +75,16 @@ FrameTrail.defineType(
                             modal: true,
                             close: function() {
                                 
-                                if (TogetherJS && TogetherJS.running) {
-                                    var elementFinder = TogetherJS.require("elementFinder");
-                                    var location = elementFinder.elementLocation($(this)[0]);
-                                    TogetherJS.send({
-                                        type: "simulate-dialog-close", 
-                                        element: location
-                                    });
-                                }
+                                try {
+                                    if (TogetherJS && TogetherJS.running) {
+                                        var elementFinder = TogetherJS.require("elementFinder");
+                                        var location = elementFinder.elementLocation($(this)[0]);
+                                        TogetherJS.send({
+                                            type: "simulate-dialog-close", 
+                                            element: location
+                                        });
+                                    }
+                                } catch (e) {}
 
                                 $(this).dialog('close');
                                 $(this).remove();
@@ -902,14 +904,16 @@ FrameTrail.defineType(
 
                     controlsContainer.find('.deleteAnnotation').click(function(){
 
-                        if (TogetherJS && TogetherJS.running) {
-                            var elementFinder = TogetherJS.require("elementFinder");
-                            var location = elementFinder.elementLocation($(this)[0]);
-                            TogetherJS.send({
-                                type: "simulate-special-click", 
-                                element: location
-                            });
-                        }
+                        try {
+                            if (TogetherJS && TogetherJS.running) {
+                                var elementFinder = TogetherJS.require("elementFinder");
+                                var location = elementFinder.elementLocation($(this)[0]);
+                                TogetherJS.send({
+                                    type: "simulate-special-click", 
+                                    element: location
+                                });
+                            }
+                        } catch (e) {}
                         
                         FrameTrail.module('AnnotationsController').deleteAnnotation(annotation);
 
