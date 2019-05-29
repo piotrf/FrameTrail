@@ -48,3 +48,27 @@
 	height: 80px;
 	margin: 6px;
 }
+
+/* Upload Form */
+
+.uploadForm .resourceURLPreview {
+	position: absolute;
+	top: 80px;
+	right: 10px;
+	width: 150px;
+	height: 110px;
+}
+
+.uploadForm .resourceInput {
+	width: 280px;
+}
+
+.uploadForm .resourceNameInput {
+	width: 290px;
+}
+
+.uploadForm .resourceURLPreview .resourceThumb {
+	width: 100%;
+	height: 100%;
+	cursor: default;
+}

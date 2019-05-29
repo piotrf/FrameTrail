@@ -53,8 +53,6 @@ switch($_REQUEST["a"]) {
 		break;
 
 
-
-
 	/*#########################################
 	 ############ File Handling
 	 #########################################*/
@@ -84,12 +82,16 @@ switch($_REQUEST["a"]) {
 		$return = fileGetMaxUploadSize();
 		break;
 
-
+	case "fileGetUrlInfo":
+		include_once("files.php");
+		$return = fileGetUrlInfo($_REQUEST["url"]);
+		break;
 
 
 	/*#########################################
 	 ############ Hypervideo Handling
 	 #########################################*/
+
 	case "hypervideoAdd":
 		include_once("hypervideos.php");
 		$return = hypervideoAdd($_REQUEST["src"], $_FILES["subtitles"]);

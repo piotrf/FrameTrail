@@ -18,7 +18,8 @@
 FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 	var maxUploadBytes,
-        tmpObj;
+        tmpObj,
+        previewXHR;
 
 
 
@@ -35,8 +36,14 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 
 	//Check for valid URL
-    $(document).on('paste blur keyup', '#resourceInputTabURL input', function(evt) {
-        checkResourceInput( this.value, $('.resourceNameInput')[0].value );
+    var previewTimeout = null;
+    $(document).on('change paste keyup', '#resourceInputTabURL input', function(evt) {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(function() {
+            $('#resourceInputTabURL .resourceURLPreview').empty();
+            $('.resourceInput[name="thumbnail"]').val('');
+            checkResourceInput( $('#resourceInputTabURL input')[0].value, $('.resourceNameInput')[0].value );
+        }, 800);
         evt.stopPropagation();
     });
 
@@ -47,6 +54,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
         } else {
             $('.newResourceConfirm').button('disable');
         }
+        $('.resourceURLPreview .resourceTitle').text($(this).val());
         evt.stopPropagation();
     });
 
@@ -86,6 +94,8 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                         + '            <div id="resourceInputTabURL">'
                                         + '                <div class="resourceInputMessage message active">Paste any URL (eg. http://example.com).<br>Some types will be detected automatically (ie. Image, Wikipedia, Youtube, Vimeo).</div>'
                                         + '                <input type="text" name="url" placeholder="URL" class="resourceInput">'
+                                        + '                <input type="hidden" name="thumbnail" class="resourceInput">'
+                                        + '                <div class="resourceURLPreview"></div>'
                                         + '            </div>'
                                         + '            <div id="resourceInputTabImage">'
                                         + '                <div class="message active">Add image file in the format <b>jpg, jpeg, gif, png</b>. Maximum File Size: <b>3 MB</b></div>'
@@ -213,12 +223,14 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                         url:        '_server/ajaxServer.php',
                         beforeSerialize: function() {
 
+                            if (previewXHR) { previewXHR.abort() };
+
                             uploadDialog.find('.message.error').remove();
 
                             var tmpType = uploadDialog.find('.nameInputContainer input[name="type"]').val();
 
                             if (tmpType == 'url') {
-                                tmpObj = checkResourceInput( uploadDialog.find('.resourceInput').val(), uploadDialog.find('.resourceNameInput').val() );
+                                tmpObj = checkResourceInput( uploadDialog.find('.resourceInput').val(), uploadDialog.find('.resourceNameInput').val(), uploadDialog.find('.resourceInput[name="thumbnail"]').val() );
                                 uploadDialog.find('.nameInputContainer input[name="attributes"]').val(JSON.stringify(tmpObj));
                                 tmpObj = [];
                             }
@@ -501,6 +513,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                         height: 'auto',
                         modal: true,
                         close: function() {
+                            if (previewXHR) { previewXHR.abort() };
                             $(this).dialog('close');
                             //$(this).find('.uploadForm').resetForm();
                             $(this).remove();
@@ -512,6 +525,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                 text: 'Add Resource',
                                 click: function() {
                                     //addResource( checkResourceInput( $('.resourceInput')[0].value, $('.resourceNameInput')[0].value ) );
+                                    if (previewXHR) { previewXHR.abort() };
                                     $('.uploadForm').submit();
                                 }
                             },
@@ -555,9 +569,10 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
      * @method checkResourceInput
      * @param {String} uriValue
      * @param {String} nameValue
+     * @param {String} thumbValue
      * @return
      */
-    function checkResourceInput(uriValue, nameValue) {
+    function checkResourceInput(uriValue, nameValue, thumbValue) {
 
         if ( uriValue.length > 3 ) {
 
@@ -566,10 +581,11 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
             var checkers = [
                 function (src, name) {
                     // Wikipedia
+                    var thumbSrc = (thumbValue) ? thumbValue : null;
                     var res = /wikipedia\.org\/wiki\//.exec(src);
 
                     if (res !== null) {
-                        return createResource(src, "wikipedia", name);
+                        return createResource(src, "wikipedia", name, thumbSrc);
                     }
                     return null;
                 },
@@ -648,7 +664,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 function (src, name) {
                     // Video
                     if (/\.(mp4)$/i.exec(src)) {
-                        return createResource(src, "video", name, src);
+                        return createResource(src, "video", name);
                     } else {
                         // We should do a HEAD request and check the
                         // content-type but it is not possible to do sync
@@ -660,8 +676,9 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 },
                 function (src, name) {
                     // Audio
+                    var thumbSrc = (thumbValue) ? thumbValue : null;
                     if (/\.(mp3)$/i.exec(src)) {
-                        return createResource(src, "audio", name, src);
+                        return createResource(src, "audio", name, thumbSrc);
                     } else {
                         // We should do a HEAD request and check the
                         // content-type but it is not possible to do sync
@@ -673,8 +690,9 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 },
                 function (src, name) {
                     // PDF
+                    var thumbSrc = (thumbValue) ? thumbValue : null;
                     if (/\.(pdf)$/i.exec(src)) {
-                        return createResource(src, "pdf", name, src);
+                        return createResource(src, "pdf", name, thumbSrc);
                     } else {
                         // We should do a HEAD request and check the
                         // content-type but it is not possible to do sync
@@ -686,8 +704,9 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 },
                 function (src, name) {
                     // Default fallback, will work for any URL
+                    var thumbSrc = (thumbValue) ? thumbValue : null;
                     if (/(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])/.exec(src)) {
-                        var r = createResource(src, "webpage", name);
+                        var r = createResource(src, "webpage", name, thumbSrc);
                             //r.thumb = "http://immediatenet.com/t/l3?Size=1024x768&URL="+src;
                         return r;
                     }
@@ -699,12 +718,81 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 newResource = checkers[i](uriValue, nameValue);
                 if (newResource !== null) {
                     $('.resourceInputMessage').attr('class', 'resourceInputMessage message active success').text('Valid '+ newResource.type +' URL' );
+                    renderWebsitePreview(uriValue, newResource.type);
                     return newResource;
                     break;
                 } else {
-                    $('.resourceInputMessage').attr('class', 'resourceInputMessage message active error').text('Not a valid URL (try adding http://)');
+                    $('.resourceInputMessage').attr('class', 'resourceInputMessage message active error').text('Not a valid URL (try adding https://)');
                 }
             }
+
+        } else {
+            // uri value length <= 3
+        }
+
+    }
+
+
+
+
+    /**
+     * I render a preview of a website
+     * @method renderWebsitePreview
+     * @param {String} uriValue
+     * @param {String} resourceType
+     * @return
+     */
+    function renderWebsitePreview(uriValue, resourceType) {
+
+        $('#resourceInputTabURL .resourceURLPreview').empty();
+        $('.resourceInput[name="thumbnail"]').val('');
+
+        $('#resourceInputTabURL .resourceURLPreview').append('<div class="workingSpinner dark"></div>');
+
+        if ( uriValue.length > 3 ) {
+
+            if (previewXHR) { previewXHR.abort(); }
+
+            previewXHR = $.ajax({
+                type:   'POST',
+                url:    '_server/ajaxServer.php',
+                cache:  false,
+                data: {
+                    a:          'fileGetUrlInfo',
+                    url: uriValue
+                }
+            }).done(function(data) {
+
+                //console.log(data);
+                
+                if (data.code == 0) {
+                    
+                    $('.resourceInput[name="thumbnail"]').val(data.urlInfo.image);
+                    if ($('.resourceNameInput').val().length < 3) {
+                        $('.resourceNameInput').val(data.urlInfo.title);
+                        $('.resourceNameInput').trigger('change');
+                    }
+                    
+                    var previewTitle = ($('.resourceNameInput').val().length > 3) ? $('.resourceNameInput').val() : data.urlInfo.title;
+                    var previewImageString = (data.urlInfo.image) ? 'background-image:url('+ data.urlInfo.image +')' : '';
+                    
+                    var previewElem = $('<div class="resourceThumb" data-type="'+ resourceType +'" style="'+ previewImageString +'">'
+                                       +'    <div class="resourceOverlay">'
+                                       +'        <div class="resourceIcon">'
+                                       +'            <span class="icon-window"></span>'
+                                       +'        </div>'
+                                       +'    </div>'
+                                       +'    <div class="resourceTitle">'+ previewTitle +'</div>'
+                                       +'</div>');
+                    
+                    $('#resourceInputTabURL .resourceURLPreview .resourceThumb').remove();
+                    $('#resourceInputTabURL .resourceURLPreview').append(previewElem);
+
+                    $('#resourceInputTabURL .resourceURLPreview .workingSpinner').remove();
+
+                }
+
+            });
 
         } else {
             // uri value length <= 3

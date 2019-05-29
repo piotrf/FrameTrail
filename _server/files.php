@@ -2,6 +2,7 @@
 
 require_once("./config.php");
 require_once("./user.php");
+include_once("./opengraph.php");
 
 /**
  * @param $type
@@ -115,7 +116,7 @@ function fileUpload($type, $name, $description="", $attributes, $files, $lat, $l
 				}
 			}
 
-			if ( (string)$xFrameResult == 'SAMEORIGIN' ) {
+			if ( (string)$xFrameResult == 'SAMEORIGIN' || (string)$xFrameResult == 'deny' ) {
 				$return["status"] = "fail";
 				$return["code"] = 12;
 				$return["string"] = "Embedding not allowed.";
@@ -609,6 +610,81 @@ function fileGetByFilter($key,$condition,$value) {
 	$return["string"] = "see result";
 	return $return;
 }
+
+//fileGetUrlInfo("https://read.oecd-ilibrary.org/education/equity-in-education_9789264073234-en#page1");
+/**
+ * @param $url
+ * @return mixed
+ *
+ *
+Returning Code:
+0		=	Success. URL Info successfully retrieved
+1		=	failed. 
+ *
+ */
+function fileGetUrlInfo($url) {
+	
+	$siteInfo = OpenGraph::fetch($url);
+
+	stream_context_set_default( [
+	  'ssl' => [
+	      'verify_peer' => false,
+	      'verify_peer_name' => false,
+	  ],
+	]);
+	$headers = get_headers($url, 1);
+
+	if (isset($headers["X-Frame-Options"])) {
+		if (is_array($headers["X-Frame-Options"])) {
+			end($headers["X-Frame-Options"]);
+			$xFrameResult = current($headers["X-Frame-Options"]);
+			reset($headers["X-Frame-Options"]);
+		} else {
+			$xFrameResult = $headers["X-Frame-Options"];
+		}
+	}
+
+	if ( (string)$xFrameResult == 'SAMEORIGIN' || $siteInfo["status"] == "error" ) {
+		$return["embed"] = "forbidden";
+	} else {
+		$return["embed"] = "allowed";
+	}
+
+	if ($siteInfo["status"] == "error") {
+		$return["status"] = "error";
+		$return["code"] = 1;
+		$return["string"] = $siteInfo["string"];
+		$return["urlInfo"] = false;
+		return $return;
+	} else {
+		
+		if (isAbsoluteUrl($siteInfo["result"]->image)) {
+			$imagePath = $siteInfo["result"]->image;
+		} else {
+			$urlResult = parse_url($url);
+			$imagePath = $urlResult['scheme']."://".$urlResult['host']."/".$siteInfo["result"]->image;
+		}
+
+		$return["status"] = "success";
+		$return["code"] = 0;
+		$return["string"] = "URL Info successfully retrieved";
+		$return["urlInfo"] = Array();
+		$return["urlInfo"]["title"] = $siteInfo["result"]->title;
+		$return["urlInfo"]["image"] = $imagePath;
+		return $return;
+	}
+}
+
+
+function isAbsoluteUrl($url) {
+    $pattern = "/^(?:ftp|https?|file)?:?\/\/(?:(?:(?:[\w\.\-\+!$&'\(\)*\+,;=]|%[0-9a-f]{2})+:)*
+    (?:[\w\.\-\+%!$&'\(\)*\+,;=]|%[0-9a-f]{2})+@)?(?:
+    (?:[a-z0-9\-\.]|%[0-9a-f]{2})+|(?:\[(?:[0-9a-f]{0,4}:)*(?:[0-9a-f]{0,4})\]))(?::[0-9]+)?(?:[\/|\?]
+    (?:[\w#!:\.\?\+\|=&@$'~*,;\/\(\)\[\]\-]|%[0-9a-f]{2})*)?$/xi";
+
+    return (bool) preg_match($pattern, $url);
+}
+
 
 /**
  *
