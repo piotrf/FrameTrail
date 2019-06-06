@@ -165,6 +165,8 @@ class OpenGraph implements Iterator
             }
         }
     }
+    // final fallback to use first image in the page (not working really well)
+    /*
     if (!isset($page->_values['image'])) {
         $domxpath = new DOMXPath($doc);
         $elements = $domxpath->query("//img");
@@ -176,8 +178,10 @@ class OpenGraph implements Iterator
             }
         }
     }
+    */
 		if (empty($page->_values)) { return false; }
 		
+    $page->_values['image'] = ltrim($page->_values['image'], '/');
 		return $page;
 	}
   /**

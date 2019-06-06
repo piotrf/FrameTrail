@@ -27,7 +27,6 @@ Returning Code:
 	9		= 	failed. $type was wrong.
 	10		=	failed. File size too big.
 	11		=	failed. Type "url" was expected but url is empty.
-	12		=	failed. Type "url" was expected but embed not allowed.
  *
  *
  */
@@ -98,32 +97,6 @@ function fileUpload($type, $name, $description="", $attributes, $files, $lat, $l
 				return $return;
 				exit;
 			}
-			stream_context_set_default( [
-			    'ssl' => [
-			        'verify_peer' => false,
-			        'verify_peer_name' => false,
-			    ],
-			]);
-			$headers = get_headers($urlAttr["src"], 1);
-
-			if (isset($headers["X-Frame-Options"])) {
-				if (is_array($headers["X-Frame-Options"])) {
-					end($headers["X-Frame-Options"]);
-					$xFrameResult = current($headers["X-Frame-Options"]);
-					reset($headers["X-Frame-Options"]);
-				} else {
-					$xFrameResult = $headers["X-Frame-Options"];
-				}
-			}
-
-			if ( (string)$xFrameResult == 'SAMEORIGIN' || (string)$xFrameResult == 'deny' ) {
-				$return["status"] = "fail";
-				$return["code"] = 12;
-				$return["string"] = "Embedding not allowed.";
-				return $return;
-				exit;
-			}
-
 			$newResource["src"] = $urlAttr["src"];
 			$newResource["type"] = $urlAttr["type"];
 			$newResource["attributes"] = $urlAttr["attributes"];
@@ -644,7 +617,7 @@ function fileGetUrlInfo($url) {
 		}
 	}
 
-	if ( (string)$xFrameResult == 'SAMEORIGIN' || $siteInfo["status"] == "error" ) {
+	if ( (string)$xFrameResult == 'SAMEORIGIN' || (string)$xFrameResult == 'deny' || $siteInfo["status"] == "error" ) {
 		$return["embed"] = "forbidden";
 	} else {
 		$return["embed"] = "allowed";
@@ -662,7 +635,7 @@ function fileGetUrlInfo($url) {
 			$imagePath = $siteInfo["result"]->image;
 		} else {
 			$urlResult = parse_url($url);
-			$imagePath = $urlResult['scheme']."://".$urlResult['host']."/".$siteInfo["result"]->image;
+			$imagePath = ($siteInfo["result"]->image) ? $urlResult['scheme']."://".$urlResult['host']."/".$siteInfo["result"]->image : null;
 		}
 
 		$return["status"] = "success";

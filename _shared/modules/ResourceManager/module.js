@@ -95,6 +95,8 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                         + '                <div class="resourceInputMessage message active">Paste any URL (eg. http://example.com).<br>Some types will be detected automatically (ie. Image, Wikipedia, Youtube, Vimeo).</div>'
                                         + '                <input type="text" name="url" placeholder="URL" class="resourceInput">'
                                         + '                <input type="hidden" name="thumbnail" class="resourceInput">'
+                                        + '                <input type="hidden" name="embed" class="resourceInput">'
+                                        + '                <div class="corsWarning message warning">The site owner does not allow this URL to be embedded in other pages (Same Origin Policy). This means it can not be shown inside FrameTrail. </div>'
                                         + '                <div class="resourceURLPreview"></div>'
                                         + '            </div>'
                                         + '            <div id="resourceInputTabImage">'
@@ -524,7 +526,6 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                                 class: 'newResourceConfirm',
                                 text: 'Add Resource',
                                 click: function() {
-                                    //addResource( checkResourceInput( $('.resourceInput')[0].value, $('.resourceNameInput')[0].value ) );
                                     if (previewXHR) { previewXHR.abort() };
                                     $('.uploadForm').submit();
                                 }
@@ -599,11 +600,13 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                     for (var i in yt_list) {
                         var res = yt_list[i].exec(src);
                         if (res !== null) {
-                            return createResource("//www.youtube.com/embed/" + res[1],
+                            var timeCode = /t=([0-9]*)/.exec(src),
+                                tcString = (timeCode) ? '?start=' + timeCode[1] : '';
+                            return createResource("//www.youtube.com/embed/" + res[1] + tcString,
                                                    "youtube", name, "http://img.youtube.com/vi/" + res[1] + "/2.jpg");
                         }
-                        return null;
                     }
+                    return null;
                 },
                 function (src, name) {
                     // Vimeo
@@ -691,7 +694,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 function (src, name) {
                     // PDF
                     var thumbSrc = (thumbValue) ? thumbValue : null;
-                    if (/\.(pdf)$/i.exec(src)) {
+                    if (/\.(pdf)/i.exec(src)) {
                         return createResource(src, "pdf", name, thumbSrc);
                     } else {
                         // We should do a HEAD request and check the
@@ -718,7 +721,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                 newResource = checkers[i](uriValue, nameValue);
                 if (newResource !== null) {
                     $('.resourceInputMessage').attr('class', 'resourceInputMessage message active success').text('Valid '+ newResource.type +' URL' );
-                    renderWebsitePreview(uriValue, newResource.type);
+                    renderWebsitePreview(uriValue, newResource.type, newResource);
                     return newResource;
                     break;
                 } else {
@@ -736,16 +739,19 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
 
     /**
-     * I render a preview of a website
+     * I render a preview of a resource
      * @method renderWebsitePreview
      * @param {String} uriValue
      * @param {String} resourceType
+     * @param {Object} resourceObj (optional)
      * @return
      */
-    function renderWebsitePreview(uriValue, resourceType) {
+    function renderWebsitePreview(uriValue, resourceType, resourceObj) {
 
         $('#resourceInputTabURL .resourceURLPreview').empty();
         $('.resourceInput[name="thumbnail"]').val('');
+        $('.resourceInput[name="embed"]').val('');
+        $('.uploadForm .corsWarning').removeClass('active');
 
         $('#resourceInputTabURL .resourceURLPreview').append('<div class="workingSpinner dark"></div>');
 
@@ -753,46 +759,35 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
             if (previewXHR) { previewXHR.abort(); }
 
-            previewXHR = $.ajax({
-                type:   'POST',
-                url:    '_server/ajaxServer.php',
-                cache:  false,
-                data: {
-                    a:          'fileGetUrlInfo',
-                    url: uriValue
-                }
-            }).done(function(data) {
-
-                //console.log(data);
-                
-                if (data.code == 0) {
-                    
-                    $('.resourceInput[name="thumbnail"]').val(data.urlInfo.image);
-                    if ($('.resourceNameInput').val().length < 3) {
-                        $('.resourceNameInput').val(data.urlInfo.title);
-                        $('.resourceNameInput').trigger('change');
+            if (resourceType == 'webpage' || resourceType == 'wikipedia') {
+                previewXHR = $.ajax({
+                    type:   'POST',
+                    url:    '_server/ajaxServer.php',
+                    cache:  false,
+                    data: {
+                        a:          'fileGetUrlInfo',
+                        url: uriValue
                     }
-                    
-                    var previewTitle = ($('.resourceNameInput').val().length > 3) ? $('.resourceNameInput').val() : data.urlInfo.title;
-                    var previewImageString = (data.urlInfo.image) ? 'background-image:url('+ data.urlInfo.image +')' : '';
-                    
-                    var previewElem = $('<div class="resourceThumb" data-type="'+ resourceType +'" style="'+ previewImageString +'">'
-                                       +'    <div class="resourceOverlay">'
-                                       +'        <div class="resourceIcon">'
-                                       +'            <span class="icon-window"></span>'
-                                       +'        </div>'
-                                       +'    </div>'
-                                       +'    <div class="resourceTitle">'+ previewTitle +'</div>'
-                                       +'</div>');
-                    
-                    $('#resourceInputTabURL .resourceURLPreview .resourceThumb').remove();
-                    $('#resourceInputTabURL .resourceURLPreview').append(previewElem);
+                }).done(function(data) {
 
-                    $('#resourceInputTabURL .resourceURLPreview .workingSpinner').remove();
+                    //console.log(data);
+                    if (data.code == 0) {
+                        if (data.urlInfo.image == 'https://en.wikipedia.org/static/apple-touch/wikipedia.png') {
+                            data.urlInfo.image = null;
+                        }
+                        if (!data.urlInfo.title) {
+                            data.urlInfo.title = '';
+                        }
+                        renderResourcePreviewElement(resourceType, data.urlInfo.title, data.urlInfo.image, data.embed);
+                    } else if (data.code == 1) {
+                        console.log(data.string);
+                    }
 
-                }
-
-            });
+                });
+            } else {
+                renderResourcePreviewElement(resourceType, resourceObj.name, resourceObj.thumb);
+            }
+            
 
         } else {
             // uri value length <= 3
@@ -800,7 +795,45 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 
     }
 
+    /**
+     * I render the actual preview element
+     * @method renderResourcePreviewElement
+     * @param {String} resourceType
+     * @param {String} resourceTitle
+     * @param {String} resourceThumb
+     * @param {String} embed (optional)
+     * @return
+     */
+    function renderResourcePreviewElement(resourceType, resourceTitle, resourceThumb, embed) {
+        $('.resourceInput[name="thumbnail"]').val(resourceThumb);
+        $('.resourceInput[name="embed"]').val(embed);
 
+        if ($('.resourceNameInput').val().length < 3 && 
+            resourceTitle != 'YouTube') {
+            $('.resourceNameInput').val(resourceTitle);
+            $('.resourceNameInput').trigger('change');
+        }
+        
+        var previewTitle = ($('.resourceNameInput').val().length > 3) ? $('.resourceNameInput').val() : resourceTitle;
+        var previewImageString = (resourceThumb) ? 'background-image:url('+ resourceThumb +')' : '';
+        
+        var previewElem = $('<div class="resourceThumb" data-type="'+ resourceType +'" style="'+ previewImageString +'">'
+                           +'    <div class="resourceOverlay">'
+                           +'    </div>'
+                           +'    <div class="resourceTitle">'+ previewTitle +'</div>'
+                           +'</div>');
+        
+        $('#resourceInputTabURL .resourceURLPreview .resourceThumb').remove();
+        $('#resourceInputTabURL .resourceURLPreview').append(previewElem);
+
+        if (embed && embed == 'forbidden') {
+            $('.uploadForm .corsWarning').addClass('active');
+        } else {
+            $('.uploadForm .corsWarning').removeClass('active');
+        }
+
+        $('#resourceInputTabURL .resourceURLPreview .workingSpinner').remove();
+    }
 
 
     /**
@@ -821,7 +854,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
         r.name = name;
         if (! r.name) {
             // Use the url basename.
-            r.name = src.substring(src.lastIndexOf('/') + 1).replace(/_/g, " ").replace(/-/g, " ");
+            r.name = src.replace(/^(\w+:)?\/\/([^\/]+\/?).*$/,'$2').replace(/www./g, "").replace(/_/g, " ").replace(/-/g, " ").replace(/\//g, "");
         }
         r.thumb = thumb;
         r.attributes = {};
