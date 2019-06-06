@@ -6,6 +6,7 @@ body {
 	transition: all 200ms linear; /* Standard */
 }
 
+/*
 .titlebar {
 	background: var(--primary-bg-color);
 	font-weight: 200;
@@ -33,11 +34,13 @@ body {
 	background: var(--secondary-fg-color);
 	color: var(--primary-bg-color);
 }
+*/
 
 .resourcesControls {
 	display: none;
 }
 
+/*
 .mainContainer {
 	width: 100%;
 	background: var(--primary-bg-color);
@@ -46,9 +49,10 @@ body {
 
 .mainContainer.editActive {
 	border-top: 1px solid rgba(73, 76, 81, .6);
-	background-color: #ffffff;
+	background-color: var(--primary-fg-color);
 	color: var(--primary-bg-color);
 }
+*/
 
 .mainContainer .resourceManagerContent {
 	background: var(--secondary-bg-color);
@@ -58,14 +62,14 @@ body {
 }
 
 .mainContainer.editActive .resourceManagerContent {
-	background: transparent;
+	background: var(--primary-fg-color);
 }
 
-.mainContainer .viewResources {
+.mainContainer .resourceManagerContent .viewResources {
 	color: var(--primary-fg-color);
 }
 
-.mainContainer.editActive .viewResources {
+.mainContainer.editActive .resourceManagerContent .viewResources {
 	color: var(--primary-bg-color);
 }
 
