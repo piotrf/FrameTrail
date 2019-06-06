@@ -73,9 +73,12 @@
      */
     function appendTitlebar() {
 
-        var titlebar = $(  '<div class="titlebar">Resource Manager'
-                         + '    <button type="button" class="startEditButton" data-tooltip-bottom-left="Edit"><span class="icon-edit"></span></button>'
-                         + '    <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
+        var titlebar = $(  '<div class="titlebar">'
+                         + '    <div class="titlebarTitle">Resource Manager</div>'
+                         + '    <div class="titlebarActionButtonContainer">'
+                         + '        <button type="button" class="startEditButton" data-tooltip-bottom-left="Edit"><span class="icon-edit"></span></button>'
+                         + '        <button type="button" class="logoutButton" data-tooltip-bottom-right="Logout"><span class="icon-logout"></span></button>'
+                         + '    </div>'
                          + '</div>');
 
         titlebar.appendTo($(FrameTrail.getState('target')));
