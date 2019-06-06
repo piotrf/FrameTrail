@@ -617,7 +617,9 @@ function fileGetUrlInfo($url) {
 		}
 	}
 
-	if ( (string)$xFrameResult == 'SAMEORIGIN' || (string)$xFrameResult == 'deny' || $siteInfo["status"] == "error" ) {
+	$xFrameResult = strtolower((string)$xFrameResult);
+
+	if ( $xFrameResult == 'sameorigin' || $xFrameResult == 'deny' || $siteInfo["status"] == "error" ) {
 		$return["embed"] = "forbidden";
 	} else {
 		$return["embed"] = "allowed";
