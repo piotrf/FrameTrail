@@ -51,20 +51,28 @@
 
 /* Upload Form */
 
+.uploadForm .resourceInput {
+	width: 230px;
+}
+
+.uploadForm .resourceNameInput {
+	width: 239px;
+}
+
+.uploadForm .corsWarning {
+	position: absolute;
+	top: 78px;
+	right: 170px;
+	width: 180px;
+	height: 110px;
+}
+
 .uploadForm .resourceURLPreview {
 	position: absolute;
 	top: 80px;
 	right: 10px;
 	width: 150px;
 	height: 110px;
-}
-
-.uploadForm .resourceInput {
-	width: 280px;
-}
-
-.uploadForm .resourceNameInput {
-	width: 290px;
 }
 
 .uploadForm .resourceURLPreview .resourceThumb {
