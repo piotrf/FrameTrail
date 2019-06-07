@@ -858,6 +858,9 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
         }
         r.thumb = thumb;
         r.attributes = {};
+        if ($('.resourceInput[name="embed"]').val() == 'forbidden') {
+            r.attributes['embed'] = 'forbidden';
+        }
         return r;
     }
 
