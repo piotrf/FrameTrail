@@ -933,7 +933,7 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
      * @method enterPreviewMode
      */
     function enterPreviewMode() {
-
+        FrameTrail.module('ViewLayout').updateContentInContentViews();
     }
 
     /**
