@@ -758,7 +758,7 @@
                     break;
             }
 
-            console.log(currentAspectID);
+            //console.log(currentAspectID);
 
             if (!currentAspectID) {
                 return;
