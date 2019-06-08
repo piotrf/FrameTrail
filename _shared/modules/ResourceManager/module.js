@@ -778,14 +778,17 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
                         if (!data.urlInfo.title) {
                             data.urlInfo.title = '';
                         }
-                        renderResourcePreviewElement(resourceType, data.urlInfo.title, data.urlInfo.image, data.embed);
+                        if (!data.urlInfo.description) {
+                            data.urlInfo.description = '';
+                        }
+                        renderResourcePreviewElement(resourceType, data.urlInfo.title, data.urlInfo.image, data.urlInfo.description, data.embed);
                     } else if (data.code == 1) {
                         console.log(data.string);
                     }
 
                 });
             } else {
-                renderResourcePreviewElement(resourceType, resourceObj.name, resourceObj.thumb);
+                renderResourcePreviewElement(resourceType, resourceObj.name, resourceObj.description, resourceObj.thumb);
             }
             
 
@@ -801,10 +804,11 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
      * @param {String} resourceType
      * @param {String} resourceTitle
      * @param {String} resourceThumb
+     * @param {String} resourceDescription
      * @param {String} embed (optional)
      * @return
      */
-    function renderResourcePreviewElement(resourceType, resourceTitle, resourceThumb, embed) {
+    function renderResourcePreviewElement(resourceType, resourceTitle, resourceThumb, resourceDescription, embed) {
         $('.resourceInput[name="thumbnail"]').val(resourceThumb);
         $('.resourceInput[name="embed"]').val(embed);
 

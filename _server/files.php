@@ -646,6 +646,7 @@ function fileGetUrlInfo($url) {
 		$return["urlInfo"] = Array();
 		$return["urlInfo"]["title"] = $siteInfo["result"]->title;
 		$return["urlInfo"]["image"] = $imagePath;
+		$return["urlInfo"]["description"] = $siteInfo["result"]->description;
 		return $return;
 	}
 }
