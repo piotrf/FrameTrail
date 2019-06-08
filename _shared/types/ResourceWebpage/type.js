@@ -45,23 +45,36 @@ FrameTrail.defineType(
 
                 	var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'"></div>');
 
-                    var iFrameSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src/*.replace('http:', '')*/ : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src),
-                        pdfjsViewerPathPrefix = (this.resourceData.src.indexOf('//') != -1) ? '' : '../../';
+                    if (this.resourceData.attributes.embed && this.resourceData.attributes.embed == 'forbidden') {
 
-                    if ( iFrameSource.substr( (iFrameSource.lastIndexOf('.') +1) ) == 'pdf' ) {
-                        iFrameSource = '_lib/pdfjs/web/viewer.html?file='+ pdfjsViewerPathPrefix + iFrameSource;
+                        var thumbSource = (this.resourceData.thumb) ? this.resourceData.thumb : '';
+                        
+                        var embedFallback = $(
+                                '<div class="embedFallback">'
+                            +   '    <div class="resourceDetailPreviewTitle">'+ this.resourceData.name +'</div>'
+                            +   '    <img class="resourceDetailPreviewThumb" src="'+ thumbSource +'"/>'
+                            +   '</div>'
+                        );
+
+                        resourceDetail.append(embedFallback);
+
+                    } else {
+
+                        var iFrameSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src/*.replace('http:', '')*/ : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src);
+
+                        var iFrame = $(
+                                '<iframe frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
+                            +   iFrameSource
+                            +   '" sandbox="allow-same-origin allow-scripts allow-popups allow-forms">'
+                            +    '</iframe>'
+                        ).bind('error, message', function() {
+                            return true;
+                        });
+
+                        resourceDetail.append(iFrame);
+
                     }
-
-                    var iFrame = $(
-                            '<iframe frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen src="'
-                        +   iFrameSource
-                        +   '" sandbox="allow-same-origin allow-scripts allow-popups allow-forms">'
-                        +    '</iframe>'
-                    ).bind('error, message', function() {
-                        return true;
-                    });
-
-                    resourceDetail.append(iFrame);
+                    
 
                     return resourceDetail;
 
