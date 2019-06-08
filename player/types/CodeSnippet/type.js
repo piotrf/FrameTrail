@@ -140,8 +140,9 @@ FrameTrail.defineType(
                  */
                 updateTimelineElement: function () {
 
-                    var videoDuration   = FrameTrail.module('HypervideoModel').duration,
-                        positionLeft    = 100 * (this.data.start / videoDuration);
+                    var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                        videoDuration   = HypervideoModel.duration,
+                        positionLeft    = 100 * ((this.data.start - HypervideoModel.offsetIn) / videoDuration);
 
                     this.timelineElement.css({
                         top: '',
@@ -297,9 +298,10 @@ FrameTrail.defineType(
                                 }
                             }
 
-                            var videoDuration = FrameTrail.module('HypervideoModel').duration,
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                videoDuration = HypervideoModel.duration,
                                 leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
-                                newStartValue = leftPercent * (videoDuration / 100);
+                                newStartValue = (leftPercent * (videoDuration / 100)) + HypervideoModel.offsetIn;
 
                             FrameTrail.module('HypervideoController').currentTime = newStartValue;
 
@@ -320,10 +322,11 @@ FrameTrail.defineType(
                             }
 
 
-                            var videoDuration = FrameTrail.module('HypervideoModel').duration,
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                videoDuration = HypervideoModel.duration,
                                 leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width());
 
-                            self.data.start = leftPercent * (videoDuration / 100);
+                            self.data.start = (leftPercent * (videoDuration / 100)) + HypervideoModel.offsetIn;
 
                             self.updateTimelineElement();
 

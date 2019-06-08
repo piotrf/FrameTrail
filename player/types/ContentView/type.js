@@ -1148,7 +1148,7 @@ FrameTrail.defineType(
 
                         startTime   = annotations[i].data.start;
                         endTime     = annotations[i].data.end;
-                        middleTime  = startTime + ( (endTime-startTime)/2 );
+                        middleTime  = (startTime + ( (endTime-startTime)/2 )) - FrameTrail.module('HypervideoModel').offsetIn;
 
                         desiredPosition = ( (sliderParent.width() / videoDuration) * middleTime ) - ( thisElement.width()/2 );
                         //console.log(desiredPosition);
@@ -1241,7 +1241,7 @@ FrameTrail.defineType(
 
                             groupStartTime  = parseInt(groupCollection.eq(0).attr('data-in'));
                             groupEndTime    = parseInt(groupCollection.eq(groupCollection.length-1).attr('data-out'));
-                            groupMiddleTime = groupStartTime + ( (groupEndTime-groupStartTime)/2 );
+                            groupMiddleTime = (groupStartTime + ( (groupEndTime-groupStartTime)/2 )) - FrameTrail.module('HypervideoModel').offsetIn;
 
                             desiredGroupPosition = ( (sliderParent.width() / videoDuration) * groupMiddleTime ) - ( totalWidth/2 );
 

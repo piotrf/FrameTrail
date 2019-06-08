@@ -139,8 +139,9 @@ FrameTrail.defineType(
                  */
                 updateTimelineElement: function () {
 
-                    var videoDuration   = FrameTrail.module('HypervideoModel').duration,
-                        positionLeft    = 100 * (this.data.start / videoDuration),
+                    var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                        videoDuration   = HypervideoModel.duration,
+                        positionLeft    = 100 * ((this.data.start - HypervideoModel.offsetIn) / videoDuration),
                         width           = 100 * ((this.data.end - this.data.start) / videoDuration);
 
                     this.timelineElement.css({
@@ -365,15 +366,16 @@ FrameTrail.defineType(
                                 }
                             }
 
-                            var videoDuration = FrameTrail.module('HypervideoModel').duration,
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                videoDuration = HypervideoModel.duration,
                                 leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                                 widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width()),
-                                newStartValue = leftPercent * (videoDuration / 100),
-                                newEndValue   = (leftPercent + widthPercent) * (videoDuration / 100);
+                                newStartValue = (leftPercent * (videoDuration / 100)) + HypervideoModel.offsetIn,
+                                newEndValue   = ((leftPercent + widthPercent) * (videoDuration / 100)) + HypervideoModel.offsetIn;
 
                             FrameTrail.module('HypervideoController').currentTime = newStartValue;
                             FrameTrail.module('AnnotationsController').updateControlsStart(newStartValue);
-                            FrameTrail.module('AnnotationsController').updateControlsEnd( newEndValue );
+                            FrameTrail.module('AnnotationsController').updateControlsEnd(newEndValue);
 
                         },
 
@@ -394,12 +396,13 @@ FrameTrail.defineType(
                             }
 
 
-                            var videoDuration = FrameTrail.module('HypervideoModel').duration,
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                videoDuration = HypervideoModel.duration,
                                 leftPercent   = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                                 widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width());
 
-                            self.data.start = leftPercent * (videoDuration / 100);
-                            self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
+                            self.data.start = (leftPercent * (videoDuration / 100)) + HypervideoModel.offsetIn;
+                            self.data.end   = ((leftPercent + widthPercent) * (videoDuration / 100)) + HypervideoModel.offsetIn;
 
                             try {
                                 if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
@@ -496,20 +499,21 @@ FrameTrail.defineType(
                             }
 
 
-                            var videoDuration = FrameTrail.module('HypervideoModel').duration,
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                videoDuration = HypervideoModel.duration,
                                 leftPercent   = 100 * (ui.position.left / ui.helper.parent().width()),
                                 widthPercent  = 100 * (ui.helper.width() / ui.helper.parent().width()),
                                 newValue;
 
                             if ( endHandleGrabbed ) {
 
-                                newValue = (leftPercent + widthPercent) * (videoDuration / 100);
+                                newValue = ((leftPercent + widthPercent) * (videoDuration / 100)) + HypervideoModel.offsetIn;
                                 FrameTrail.module('HypervideoController').currentTime = newValue;
                                 FrameTrail.module('AnnotationsController').updateControlsEnd(newValue);
 
                             } else {
 
-                                newValue = leftPercent * (videoDuration / 100);
+                                newValue = (leftPercent * (videoDuration / 100)) + HypervideoModel.offsetIn;
                                 FrameTrail.module('HypervideoController').currentTime = newValue;
                                 FrameTrail.module('AnnotationsController').updateControlsStart(newValue);
 
@@ -536,13 +540,14 @@ FrameTrail.defineType(
                             }
 
 
-                            var videoDuration = FrameTrail.module('HypervideoModel').duration,
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                videoDuration = HypervideoModel.duration,
                                 leftPercent  = 100 * (ui.helper.position().left / ui.helper.parent().width()),
                                 widthPercent = 100 * (ui.helper.width() / ui.helper.parent().width());
 
 
-                            self.data.start = leftPercent * (videoDuration / 100);
-                            self.data.end   = (leftPercent + widthPercent) * (videoDuration / 100);
+                            self.data.start = (leftPercent * (videoDuration / 100)) + HypervideoModel.offsetIn;
+                            self.data.end   = ((leftPercent + widthPercent) * (videoDuration / 100)) + HypervideoModel.offsetIn;
 
                             try {
                                 if (TogetherJS && TogetherJS.running && !event.relatedTarget) {
@@ -658,9 +663,10 @@ FrameTrail.defineType(
                         +   '</div>'
                     ),
 
-                        timeStart     = this.data.start - FrameTrail.module('HypervideoModel').offsetIn,
-                        timeEnd       = this.data.end - FrameTrail.module('HypervideoModel').offsetOut;
-                        videoDuration   = FrameTrail.module('HypervideoModel').duration,
+                        HypervideoModel = FrameTrail.module('HypervideoModel'),
+                        timeStart       = this.data.start - HypervideoModel.offsetIn,
+                        timeEnd         = this.data.end - HypervideoModel.offsetOut;
+                        videoDuration   = HypervideoModel.duration,
                         positionLeft    = 100 * (timeStart / videoDuration),
                         width           = 100 * ((this.data.end - this.data.start) / videoDuration);
 
