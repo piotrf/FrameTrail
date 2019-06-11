@@ -174,6 +174,7 @@
 	box-sizing: border-box;
 	background: var(--secondary-bg-color);
 	color: var(--primary-fg-color);
+	overflow: hidden;
 	display: none;
 }
 

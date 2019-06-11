@@ -290,6 +290,16 @@ body.userinactive .mainContainer:not(.editActive) .playerContainer .controls, bo
     min-width: 400px;
 }
 
+.areaTopContainer.closed, .areaBottomContainer.closed {
+    min-height: 36px !important;
+    flex-basis: 36px !important;
+}
+
+.areaLeftContainer.closed, .areaRightContainer.closed {
+    flex: 0 0 36px;
+    min-width: 36px;
+}
+
 /* Annotations */
 
 .playerContainer .annotationTimeline {

@@ -4,6 +4,8 @@
 
 .layoutArea {
     overflow: hidden;
+    transition-property: flex, min-height, min-width;
+    transition-duration: 200ms;
 }
 
 /* Layout Area Tabs */
@@ -91,6 +93,94 @@
     position: absolute;
     box-sizing: border-box;
     overflow: hidden;
+}
+
+/* Open & Close Mechanism */
+
+.layoutArea .layoutAreaToggleCloseButton {
+    position: absolute;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    opacity: .7;
+}
+
+.layoutArea .layoutAreaToggleCloseButton:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.layoutArea .layoutAreaToggleCloseButton:after {
+    display: block;
+    font-family: "frametrail-webfont";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    text-decoration: inherit;
+    width: 100%;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 30px;
+    font-size: 120%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3);
+    color: var(--primary-fg-color);
+}
+
+.layoutArea[data-area="areaTop"] .layoutAreaToggleCloseButton, .layoutArea[data-area="areaBottom"] .layoutAreaToggleCloseButton {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.layoutArea[data-area="areaLeft"] .layoutAreaToggleCloseButton, .layoutArea[data-area="areaRight"] .layoutAreaToggleCloseButton {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.layoutArea[data-area="areaTop"] .layoutAreaToggleCloseButton {
+    bottom: 3px;
+}
+
+.layoutArea[data-area="areaBottom"] .layoutAreaToggleCloseButton {
+    top: 3px;
+}
+
+.layoutArea[data-area="areaLeft"] .layoutAreaToggleCloseButton {
+    right: 3px;
+}
+
+.layoutArea[data-area="areaRight"] .layoutAreaToggleCloseButton {
+    left: 3px;
+}
+
+.layoutArea[data-area="areaTop"] .layoutAreaToggleCloseButton:after {
+    content: '\f102';
+}
+.layoutArea[data-area="areaTop"].closed .layoutAreaToggleCloseButton:after {
+    content: '\f103';
+}
+
+.layoutArea[data-area="areaBottom"] .layoutAreaToggleCloseButton:after {
+    content: '\f103';
+}
+.layoutArea[data-area="areaBottom"].closed .layoutAreaToggleCloseButton:after {
+    content: '\f102';
+}
+
+.layoutArea[data-area="areaLeft"] .layoutAreaToggleCloseButton:after {
+    content: '\f100';
+}
+.layoutArea[data-area="areaLeft"].closed .layoutAreaToggleCloseButton:after {
+    content: '\f101';
+}
+
+.layoutArea[data-area="areaRight"] .layoutAreaToggleCloseButton:after {
+    content: '\f101';
+}
+.layoutArea[data-area="areaRight"].closed .layoutAreaToggleCloseButton:after {
+    content: '\f100';
 }
 
 
