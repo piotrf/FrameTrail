@@ -25,7 +25,7 @@
 
 .resourceThumb {
 	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-size: cover;
 	background-color: var(--primary-bg-color);
 	outline: 1px solid var(--primary-bg-color);
 	cursor: pointer;
@@ -87,7 +87,7 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	max-height: 100%;
+	max-height: 50px;
 	background-color: var(--semi-transparent-bg-color);
 	font-size: 13px;
 	padding: 6px 5px 3px 5px;
