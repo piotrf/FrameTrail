@@ -32,6 +32,7 @@ FrameTrail.defineType(
                 contentViewData.transcriptSource       = contentViewData.transcriptSource || "";
                 contentViewData.contentSize            = contentViewData.contentSize || "small";
                 contentViewData.onClickContentItem     = contentViewData.onClickContentItem || "";
+                contentViewData.initClosed             = contentViewData.initClosed || false;
 
                 this.contentViewData = contentViewData;
 
@@ -63,6 +64,10 @@ FrameTrail.defineType(
 
                     self.contentViewContainer.attr('data-type', self.contentViewData.type);
                     self.contentViewContainer.attr('data-size', self.contentViewData.contentSize);
+
+                    if (self.contentViewData.initClosed) {
+                        self.getLayoutAreaContainer().addClass('closed');
+                    }
 
                     switch (this.contentViewData.type) {
 
