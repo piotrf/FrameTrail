@@ -715,6 +715,10 @@ FrameTrail.defineType(
 
                     });
 
+                    compareTimelineElement.click(function() {
+                        FrameTrail.module('HypervideoController').currentTime = parseFloat($(this).data('start'));
+                    });
+
 
                     return compareTimelineElement;
 
