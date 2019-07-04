@@ -670,7 +670,7 @@
                             "type": data[i].body['frametrail:type'],
                             "src": (function () {
                                         if (data[i].body["frametrail:type"] === 'location') { return null; }
-                                        return (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( data[i].body["frametrail:type"] ) >= 0)
+                                        return (['codesnippet', 'text', 'webpage', 'wikipedia'].indexOf( data[i].body["frametrail:type"] ) >= 0)
                                                 ? data[i].body.value
                                                 : data[i].body.source
                                     })(),
@@ -971,7 +971,9 @@
 
                     }).fail(function() {
 
-                        fail('Missing subtitle file.');
+                        //fail('Missing subtitle file.');
+                        console.warn('Missing subtitle file. ');
+                        success.call(this);
 
                     });
 
