@@ -95,7 +95,8 @@ FrameTrail.defineModule('SubtitlesController', function(FrameTrail){
                 var videoElement = FrameTrail.module('ViewVideo').Video;
                 
                 for (var s=0; s<HypervideoModel.subtitleFiles.length; s++) {
-                    var vttSource = '_data/hypervideos/' + hypervideoID + '/subtitles/' + HypervideoModel.subtitleFiles[s].src;
+                    var fallbackSrc = HypervideoModel.subtitleFiles[s].src.replace('.vtt', '_iphone.vtt');
+                    var vttSource = '_data/hypervideos/' + hypervideoID + '/subtitles/' + fallbackSrc;
                     
                     var track = document.createElement('track');
                     track.kind = 'captions';
