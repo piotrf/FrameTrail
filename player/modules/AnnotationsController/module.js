@@ -754,7 +754,17 @@
                     var currentAspectID = annotationCollection[anno].data[filterAspect];
                     break;
                 case 'annotationType':
-                    var currentAspectID = (annotationCollection[anno].data.source.url.body) ? annotationCollection[anno].data.source.url.body[0][filterAspect]: null;
+                    var currentAspectID;
+                    if (annotationCollection[anno].data.source.url.body) {
+                        if (Array.isArray(annotationCollection[anno].data.source.url.body)) {
+                            currentAspectID = annotationCollection[anno].data.source.url.body[0][filterAspect];
+                        } else {
+                            currentAspectID = annotationCollection[anno].data.source.url.body[filterAspect] ;
+                        }
+                        
+                    } else {
+                        currentAspectID = null;
+                    } 
                     break;
             }
 
