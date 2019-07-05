@@ -178,6 +178,18 @@ body > .timelineElement.previewPositionRight .previewWrapper:after {
 	left: 62px;
 }
 
+.compareTimelineElement .previewWrapper:before, 
+.timelineElement .previewWrapper:before, 
+body > .compareTimelineElement .previewWrapper:before,
+body > .timelineElement .previewWrapper:before {
+	position: absolute;
+	bottom: -8px;
+	height: 8px;
+	left: 0px;
+	width: 100%;
+	content: '';
+}
+
 .compareTimelineElement .previewWrapper .resourceThumb, 
 .timelineElement .previewWrapper .resourceThumb, 
 body > .compareTimelineElement .previewWrapper .resourceThumb,
