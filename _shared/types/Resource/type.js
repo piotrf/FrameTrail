@@ -47,7 +47,7 @@ FrameTrail.defineType(
                     var animationDiv = elementOrigin.clone(),
                         originOffset = elementOrigin.offset(),
                         finalTop = ($(window).height()/2) - 220,
-                        finalLeft = ($(window).width()/2) - 360,
+                        finalLeft = ($(window).width()/2) - 390,
                         self = this;
 
                     animationDiv.addClass('resourceAnimationDiv').css({
@@ -62,15 +62,15 @@ FrameTrail.defineType(
                     animationDiv.animate({
                         top: finalTop + 'px',
                         left: finalLeft + 'px',
-                        width: 720 + 'px',
-                        height: 400 + 'px'
+                        width: 780 + 'px',
+                        height: 440 + 'px'
                     }, 300, function() {
                         var previewDialog   = $('<div class="resourcePreviewDialog" title="'+ ((self.resourceData.type == 'text') ? '' : self.resourceData.name) +'"></div>')
                             .append(self.renderContent());
 
                         previewDialog.dialog({
                             resizable: true,
-                            width: 720,
+                            width: 780,
                             height: 440,
                             modal: true,
                             close: function() {
