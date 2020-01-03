@@ -28,8 +28,19 @@
     };
     CollisionDetection.prototype.sort = function (els) {
         var o = this.opts, t = this, x = els.sort(function (a, b) {
-            //sort elements by left positioning
-            var a_left = $(a).position().left, b_left = $(b).position().left, ret;
+            //sort elements by left positioning, if same then width
+            var a_left = $(a).position().left, 
+                b_left = $(b).position().left, 
+                a_width = $(a).width(),
+                b_width = $(b).width(),
+                ret;
+            
+            if (a_left == b_left) {
+                return (a_width < b_width) ? -1 : (a_width > b_width) ? 1 : 0;
+            } else {
+                return (a_left < b_left) ? -1 : 1;
+            }
+            /*
             if (a_left < b_left) {
                 ret = -1;
             } else if (a_left > b_left) {
@@ -38,6 +49,7 @@
                 ret = 0;
             }
             return ret;
+            */
         }).detach();
         //reattach elements
         t.container.append(x);
