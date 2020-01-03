@@ -296,11 +296,11 @@ FrameTrail.defineModule('UserTraces', function(FrameTrail){
 			'timestamp': currentTime,
 			'sessionTime': sessionTime.hours +':'+ sessionTime.minutes +':'+ sessionTime.seconds,
 			'currentVideo': {
-				'id': FrameTrail.module('RouteNavigation').hypervideoID,
-				'name': FrameTrail.module('HypervideoModel').hypervideoName
+				'id': (FrameTrail.module('RouteNavigation')) ? FrameTrail.module('RouteNavigation').hypervideoID : null,
+				'name': (FrameTrail.module('HypervideoModel')) ? FrameTrail.module('HypervideoModel').hypervideoName : null
 			},
-			'currentVideoTime': FrameTrail.module('HypervideoController').currentTime,
-			'playing': FrameTrail.module('HypervideoController').isPlaying,
+			'currentVideoTime': (FrameTrail.module('HypervideoController')) ? FrameTrail.module('HypervideoController').currentTime : null,
+			'playing': (FrameTrail.module('HypervideoController')) ? FrameTrail.module('HypervideoController').isPlaying : null,
 			'editing': FrameTrail.getState('editMode'),
 			'attributes': (attributes ? attributes : {})
 		}
