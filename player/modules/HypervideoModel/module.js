@@ -13,12 +13,10 @@
  FrameTrail.defineModule('HypervideoModel', function(FrameTrail){
 
 
-	var hasHTML5Video           = true,
+	var videoType           	= 'native',
 		duration                = 0,
 		durationFull			= 0,
-		sourceFiles             = {
-									mp4:  ''
-								  },
+		sourcePath              = '',
 		offsetIn 				= 0,
 		offsetOut 				= null,
 
@@ -42,14 +40,14 @@
 
 		annotations             = [],
 
-		unsavedSettings         = false;
+		unsavedSettings         = false,
 		unsavedOverlays         = false,
 		unsavedCodeSnippets     = false,
 		unsavedEvents           = false,
 		unsavedCustomCSS        = false,
-		unsavedAnnotations      = false;
-		unsavedLayout           = false;
-		unsavedConfig           = false;
+		unsavedAnnotations      = false,
+		unsavedLayout           = false,
+		unsavedConfig           = false,
 		unsavedGlobalCSS        = false;
 
 
@@ -95,14 +93,30 @@
 			FrameTrail.changeState('hv_config_' + key, hypervideo.config[key]);
 		}
 
-		// Set video source or NullVideo
+		// Set video source and type or NullVideo
 		if (videoData.src && videoData.src.length > 3) {
 
-			sourceFiles.mp4  = videoData.src;
+			sourcePath  = videoData.src;
+
+			var yt_list = [ /youtube\.com\/watch\?v=([^\&\?\/]+)/,
+                            /youtube\.com\/embed\/([^\&\?\/]+)/,
+                            /youtube\.com\/v\/([^\&\?\/]+)/,
+                            /youtu\.be\/([^\&\?\/]+)/ ];
+            for (var i in yt_list) {
+                var yt_res = yt_list[i].exec(sourcePath);
+                if (yt_res !== null) {
+                    videoType = 'youtube';
+                }
+            }
+            
+            var vimeo_res = /^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.exec(sourcePath);
+            if (vimeo_res !== null) {
+            	videoType = 'vimeo';
+            }
 
 		} else if (!videoData.resourceId) {
 
-			hasHTML5Video = false;
+			videoType	  = 'canvas';
 			duration      = videoData.duration;
 			durationFull  = videoData.duration;
 
@@ -110,7 +124,7 @@
 		} else {
 
 			// TODO: Remove when compatibility no longer needed
-			sourceFiles.mp4  = database.resources[videoData.resourceId].src;
+			sourcePath  = database.resources[videoData.resourceId].src;
 
 		}
 
@@ -1831,22 +1845,21 @@
 	return {
 
 		/**
-		 * Wether the current hypervideo has a playable html5 video source file,
-		 * or (otherwise) only has a duration (then we are in "Null Player" mode).
-		 * @attribute hasHTML5Video
-		 * @type Boolean
+		 * I return the video type (native, canvas, youtube, vimeo, ...).
+		 * @attribute videoType
+		 * @type String
 		 * @readOnly
 		 */
-		get hasHTML5Video()     { return hasHTML5Video   },
+		get videoType()         { return videoType   },
 
 
 		/**
-		 * I contain a map to the .mp4 source filename.
-		 * @attribute sourceFiles
+		 * I contain the video source path.
+		 * @attribute sourcePath
 		 * @readOnly
 		 * @type {}
 		 */
-		get sourceFiles()       { return sourceFiles     },
+		get sourcePath()        { return sourcePath     },
 
 		/**
 		 * The hypervideo's creator name
