@@ -544,7 +544,7 @@ function fileDelete($resourcesID) {
 /**
  * @param $key
  * @param $condition
- * @param $value
+ * @param $values
  * @return mixed
  *
  *
@@ -553,13 +553,17 @@ Returning Code:
 1		=	failed. Missing parameter
  *
  */
-function fileGetByFilter($key,$condition,$value) {
+function fileGetByFilter($key,$condition,$values) {
 	global $conf;
-	if ((!$key) || (!$condition) || (!$value)) {
+	if ((!$key) || (!$condition) || (!$values)) {
 		$return["status"] = "fail";
 		$return["code"] = 1;
 		$return["string"] = "Parameter missing!";
 		return $return;
+	}
+	// allow string as values param
+	if (is_string($values)) {
+		$values = array($values);
 	}
 	$json = file_get_contents($conf["dir"]["data"]."/resources/_index.json");
 	$res = json_decode($json,true);
@@ -567,11 +571,11 @@ function fileGetByFilter($key,$condition,$value) {
 	$return["resultCount"] = 0;
 	foreach ($res["resources"] as $k=>$v) {
 		$map = array(
-			"==" => $v[$key] == $value,
-			"!=" => $v[$key] != $value,
-			"<=" => $v[$key] <= $value,
-			">=" => $v[$key] >= $value,
-			"contains" => strpos("x".$v[$key], $value)
+			"==" => in_array($v[$key],$values),
+			"!=" => !in_array($v[$key],$values),
+			"<=" => $v[$key] <= $values[0],
+			">=" => $v[$key] >= $values[0],
+			"contains" => array_search($v[$key], $values) !== false
 		);
 		if ($map[$condition]) {
 			$return["result"][$k] = $v;
