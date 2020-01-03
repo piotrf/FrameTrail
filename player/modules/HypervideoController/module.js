@@ -54,7 +54,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 		videoElement           = ViewVideo.Video;
 
-
+	window.player_youtube = {};
 
 
 	/**
@@ -76,21 +76,23 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			hypervideoID    = RouteNavigation.hypervideoID,
 			_video		    = $(videoElement);
 
+		HypervideoModel     = FrameTrail.module('HypervideoModel');
+
 		updateDescriptions();
 
 		_video.width(1920).height(1080);
 
-		if (HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'native') {
 
 			highPriorityUpdater = highPriorityUpdater_HTML5;
 			lowPriorityUpdater  = lowPriorityUpdater_HTML5;
 
 			FrameTrail.changeState('videoWorking', true);
 
-			if (HypervideoModel.sourceFiles.mp4.indexOf('.m3u8') != -1) {
+			if (HypervideoModel.sourcePath.indexOf('.m3u8') != -1) {
 				if(Hls.isSupported()) {
 					var hls = new Hls();
-					hls.loadSource(FrameTrail.module('RouteNavigation').getResourceURL(HypervideoModel.sourceFiles.mp4));
+					hls.loadSource(FrameTrail.module('RouteNavigation').getResourceURL(HypervideoModel.sourcePath));
 					hls.attachMedia(videoElement);
 					/*
 					hls.on(Hls.Events.MANIFEST_PARSED,function() {
@@ -104,7 +106,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 				// Note: it would be more normal to wait on the 'canplay' event below however on Safari (where you are most likely to find built-in HLS support) the video.src URL must be on the user-driven
 				// white-list before a 'canplay' event will be emitted; the last video event that can be reliably listened-for when the URL is not on the white-list is 'loadedmetadata'.
 				else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-					_video.append('<source src="'+ FrameTrail.module('RouteNavigation').getResourceURL(HypervideoModel.sourceFiles.mp4)  +'" type="video/mp4"></source>');
+					_video.append('<source src="'+ FrameTrail.module('RouteNavigation').getResourceURL(HypervideoModel.sourcePath)  +'" type="video/mp4"></source>');
 					/*
 					videoElement.addEventListener('loadedmetadata',function() {
 						//videoElement.play();
@@ -112,7 +114,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 					*/
 				}
 			} else {
-				_video.append('<source src="'+ FrameTrail.module('RouteNavigation').getResourceURL(HypervideoModel.sourceFiles.mp4)  +'" type="video/mp4"></source>');
+				_video.append('<source src="'+ FrameTrail.module('RouteNavigation').getResourceURL(HypervideoModel.sourcePath)  +'" type="video/mp4"></source>');
 			}
 
 			_video.on('play',  _play);
@@ -200,6 +202,151 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 				},
 				failCallback
 			);
+
+		} else if (HypervideoModel.videoType == 'youtube') {
+
+			highPriorityUpdater = highPriorityUpdater_HTML5;
+			lowPriorityUpdater  = lowPriorityUpdater_HTML5;
+
+			FrameTrail.changeState('videoWorking', true);
+
+			window.lastYoutubePlayerID = 'yt_' + Date.now();
+			var yt_options = 'autoplay=0&controls=0&rel=0&disablekb=1&enablejsapi=1&fs=0&modestbranding=1&playsinline=1&color=white&origin='+ window.location.origin;
+			var yt_iframe = $('<iframe id="'+ window.lastYoutubePlayerID +'" class="player_youtube" type="text/html" width="720" height="405" src="https:'+ HypervideoModel.sourcePath +'?'+ yt_options +'" frameborder="0" allowfullscreen>');
+						
+			_video.after(yt_iframe);
+
+			if (!window.YT) {
+				var tag = document.createElement('script');
+				tag.src = "https://www.youtube.com/iframe_api";
+				var firstScriptTag = document.getElementsByTagName('script')[0];
+				firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+			} else {
+				window.onYouTubeIframeAPIReady();
+			}
+
+			window.onYouTubeIframeAPIReady = function() {
+				
+				window.player_youtube[window.lastYoutubePlayerID] = new window.YT.Player(window.lastYoutubePlayerID, {
+					events: {
+						'onReady': onPlayerReady,
+						'onStateChange': onPlayerStateChange,
+						'onError': onError
+					}
+				});
+				
+				function onPlayerReady(event) {
+					
+					//console.log('Player READY', window.lastYoutubePlayerID, event.target.getDuration());
+					var HypervideoModel = FrameTrail.module('HypervideoModel');
+					HypervideoModel.offsetOut = (HypervideoModel.offsetOut) ? HypervideoModel.offsetOut : event.target.getDuration();
+					HypervideoModel.durationFull = event.target.getDuration();
+					HypervideoModel.duration = HypervideoModel.offsetOut - HypervideoModel.offsetIn;
+
+					if (update) {
+						AnnotationsController.updateController();
+					} else {
+						AnnotationsController.initController();
+					}
+
+					OverlaysController.initController();
+					CodeSnippetsController.initController();
+					SubtitlesController.initController();
+
+					initPlayButton();
+					initProgressBar();
+
+					InteractionController.initController();
+
+					FrameTrail.triggerEvent('ready', {});
+
+					if (HypervideoModel.events.onReady) {
+						try {
+		                	var readyEvent = new Function(HypervideoModel.events.onReady);
+		                	readyEvent();
+			            } catch (exception) {
+			                // could not parse and compile JS code!
+			                console.warn('Event handler contains errors: '+ exception.message);
+			            }
+					}
+
+					if (RouteNavigation.hashTime) {
+						setCurrentTime(RouteNavigation.hashTime);
+					} else {
+						setCurrentTime(HypervideoModel.offsetIn);
+					}
+
+					FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+
+					callback.call();
+				}
+
+				function onPlayerStateChange(event) {
+					switch(event.data) {
+						case -1:
+							// unstarted
+							break;
+						case 0:
+							// ended
+							_pause();
+							break;
+						case 1:
+							// playing
+							_play();
+							FrameTrail.changeState('videoWorking', false);
+							break;
+						case 2:
+							// paused
+							_pause();
+							break;
+						case 3:
+							// buffering
+							FrameTrail.changeState('videoWorking', true);
+							break;
+						case 5:
+							// video cued
+							break;
+						default:
+						// default
+					} 
+				}
+
+				function onError(event) {
+					switch(event.data) {
+						case 2:
+							// invalid parameter value
+							FrameTrail.module('InterfaceModal').showErrorMessage('Youtube Error: invalid parameter value.');
+							break;
+						case 5:
+							// error in HTML5 player
+							FrameTrail.module('InterfaceModal').showErrorMessage('Youtube Error: HTML5 playback error.');
+							break;
+						case 100:
+							// video has not been found (private?)
+							FrameTrail.module('InterfaceModal').showErrorMessage('Youtube Error: video not found or private.');
+							break;
+						case 101:
+							// owner does not allow embedding
+							FrameTrail.module('InterfaceModal').showErrorMessage('Youtube Error: owner does not allow embedding.');
+							break;
+						case 101:
+							// owner does not allow embedding
+							FrameTrail.module('InterfaceModal').showErrorMessage('Youtube Error: owner does not allow embedding.');
+							break;
+						default:
+						// default
+					} 
+				}
+			}
+
+		} else if (HypervideoModel.videoType == 'vimeo') {
+
+			highPriorityUpdater = highPriorityUpdater_NullVideo;
+			lowPriorityUpdater  = lowPriorityUpdater_NullVideo;
+
+			FrameTrail.changeState('videoWorking', true);
+
+			console.log('VIMEO API');
 
 		} else {
 
@@ -320,6 +467,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function initPlayButton(){
 
+		var ViewVideo = FrameTrail.module('ViewVideo');
+
 		ViewVideo.PlayButton.click(function(){
 
 			if ( isPlaying ) {
@@ -353,6 +502,9 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 * @private
 	 */
 	function initProgressBar() {
+
+		var HypervideoModel = FrameTrail.module('HypervideoModel');
+		var ViewVideo = FrameTrail.module('ViewVideo');
 
 		ViewVideo.duration = formatTime(HypervideoModel.duration);
 		ViewVideo.durationFull = formatTime(HypervideoModel.durationFull, true);
@@ -460,7 +612,13 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function highPriorityUpdater_HTML5() {
 
-		currentTime = videoElement.currentTime;
+		var ViewVideo = FrameTrail.module('ViewVideo');
+
+		if (HypervideoModel.videoType == 'youtube') {
+			currentTime = window.player_youtube[window.lastYoutubePlayerID].getCurrentTime();
+		} else {
+			currentTime = videoElement.currentTime;
+		}
 
 		if (ViewVideo.PlayerProgress.data('ui-slider')) {
 			ViewVideo.PlayerProgress.slider('value', currentTime-HypervideoModel.offsetIn);
@@ -492,6 +650,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		//console.log('CURRENTTIME: '+currentTime);
 		//console.log('CURRENTTIMEOFFSET: ', HypervideoModel.offsetIn);
 
+		var ViewVideo = FrameTrail.module('ViewVideo');
+		
 		ViewVideo.currentTime = formatTime(currentTime-HypervideoModel.offsetIn);
 		ViewVideo.currentTimeFull = formatTime(currentTime, true);
 
@@ -569,8 +729,8 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		currentTime = (Date.now() - nullVideoStartDate) / 1000;
 
 		if (currentTime >= HypervideoModel.offsetIn+HypervideoModel.duration) {
-			currentTime = HypervideoModel.duration;					currentTime = HypervideoModel.offsetIn+HypervideoModel.duration;
-			pause();					pause();
+			currentTime = HypervideoModel.offsetIn+HypervideoModel.duration;
+			pause();
 		}
 
 	};
@@ -594,7 +754,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
         FrameTrail.changeState('videoWorking', false);
 
-		if (HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'native') {
 
 			var promise = videoElement.play();
             
@@ -607,6 +767,12 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 				});
 
 			}
+
+		} else if (HypervideoModel.videoType == 'youtube') {
+
+			window.player_youtube[window.lastYoutubePlayerID].playVideo();
+			_play();
+			onPlaySuccess();
 
 		} else {
 
@@ -659,9 +825,16 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function pause() {
 
-		if (HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'native') {
 
 			videoElement.pause();
+
+		} else if (HypervideoModel.videoType == 'youtube') {
+
+			if (window.player_youtube[window.lastYoutubePlayerID]) {
+				window.player_youtube[window.lastYoutubePlayerID].pauseVideo();
+			}
+			_pause();
 
 		} else {
 
@@ -683,7 +856,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	            }
 			}
 
-		} else if (!HypervideoModel.hasHTML5Video && currentTime == HypervideoModel.offsetIn+HypervideoModel.duration) {
+		} else if (HypervideoModel.videoType == 'canvas' && currentTime == HypervideoModel.offsetIn+HypervideoModel.duration) {
 
 			FrameTrail.triggerEvent('ended', {});
 
@@ -714,10 +887,12 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function _play() {
 
+		var ViewVideo = FrameTrail.module('ViewVideo');
+
 		highPriorityIntervalID = window.setInterval(highPriorityUpdater, highPriorityInterval);
 		lowPriorityIntervalID  = window.setInterval(lowPriorityUpdater,  lowPriorityInterval);
 
-		if (!HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'canvas') {
 			nullVideoIntervalID = window.setInterval(nullVideoUpdater,  nullVideoInterval);
 		}
 
@@ -741,10 +916,12 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function _pause() {
 
+		var ViewVideo = FrameTrail.module('ViewVideo');
+
 		window.clearInterval(highPriorityIntervalID);
 		window.clearInterval(lowPriorityIntervalID);
 
-		if (!HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'canvas') {
 			window.clearInterval(nullVideoIntervalID);
 		}
 
@@ -776,7 +953,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
                 FrameTrail.changeState('videoWorking', true);
 
-                if (HypervideoModel.hasHTML5Video) {
+                if (HypervideoModel.videoType == 'native') {
                     videoElement.pause();
                 } else {
                     window.clearInterval(nullVideoIntervalID);
@@ -802,7 +979,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
                 if (isStalled) {
 
-                    if (HypervideoModel.hasHTML5Video) {
+                    if (HypervideoModel.videoType == 'native') {
             			var promise = videoElement.play();
                         if (promise) {
                             promise.catch(function(){ videoElement.play() });
@@ -850,9 +1027,14 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 			return;
 		}
 
-		if (HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'native') {
 
 			videoElement.currentTime = currentTime = aNumberAsFloat;
+
+		} else if (HypervideoModel.videoType == 'youtube') {
+
+			currentTime = aNumberAsFloat;
+			window.player_youtube[window.lastYoutubePlayerID].seekTo(currentTime, true);
 
 		} else {
 
@@ -883,9 +1065,17 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 	 */
 	function setMuted(muted) {
 
-		if (HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'native') {
 
 			videoElement.muted = muted;
+
+		} else if (HypervideoModel.videoType == 'youtube') {
+
+			if (muted) {
+				window.player_youtube[window.lastYoutubePlayerID].mute();
+			} else {
+				window.player_youtube[window.lastYoutubePlayerID].unMute();
+			}
 
 		}
 
@@ -939,7 +1129,7 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 		window.clearInterval(highPriorityIntervalID);
 		window.clearInterval(lowPriorityIntervalID);
 
-		if (!HypervideoModel.hasHTML5Video) {
+		if (HypervideoModel.videoType == 'canvas') {
 			window.clearInterval(nullVideoIntervalID);
 		}
 
