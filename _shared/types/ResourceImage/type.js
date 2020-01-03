@@ -42,12 +42,23 @@ FrameTrail.defineType(
                  */
                 renderContent: function() {
 
+                    var licenseType = (this.resourceData.licenseType && this.resourceData.licenseType == 'CC-BY-SA-3.0') ? '<a href="https://creativecommons.org/licenses/by-sa/3.0/" title="License: '+ this.resourceData.licenseType +'" target="_blank"><span class="cc-by-sa-bg-image"></span></a>' : this.resourceData.licenseType;
+                    var licenseString = (licenseType) ? licenseType +' - '+ this.resourceData.licenseAttribution : '';
+
+                    var downloadButton = '';
+                    if (this.resourceData.licenseType != 'Copyright') {
+                        downloadButton = '<a download class="button" href="'+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) +'" data-tooltip-right="Download"><span class="icon-download"></span></a>';
+                    }
+
                     var resourceElement = $(
-                            '<div class="resourceDetail" data-type="'+ this.resourceData.type +'">'
-                        +       '<img src="'+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) +'">'
-                        +       '<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>'
-                        +       '<div class="resourceTooltip"></div>'
-                        +    '</div>'
+                          '<div class="resourceDetail" data-type="'+ this.resourceData.type +'">'
+                        + '    <img src="'+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) +'">'
+                        + '    <div class="resourceOptions">'
+                        + '        <div class="licenseInformation">'+ licenseString +'</div>'
+                        + '        <div class="resourceButtons">'+ downloadButton +'</div>'
+                        + '    </div>'
+                        + '    <div class="resourceTooltip"></div>'
+                        + '</div>'
                     ).perfectScrollbar({
                         wheelSpeed: 4,
                         suppressScrollX: true
@@ -82,7 +93,7 @@ FrameTrail.defineType(
                     var thumbUrl = (this.resourceData.thumb ? FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.thumb)
                                     : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) );
 
-                    var thumbElement = $('<div class="resourceThumb" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="background-image:url('+ thumbUrl +');">'
+                    var thumbElement = $('<div class="resourceThumb" data-license-type="'+ this.resourceData.licenseType +'" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="background-image:url('+ thumbUrl +');">'
                         + '                  <div class="resourceOverlay">'
                         + '                      <div class="resourceIcon"><span class="icon-picture"></span></div>'
                         + '                  </div>'

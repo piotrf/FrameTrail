@@ -47,6 +47,14 @@ FrameTrail.defineType(
 
                     var documentSource = (this.resourceData.src.indexOf('//') != -1) ? this.resourceData.src.replace('http:', '') : FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src);
 
+                    var licenseType = (this.resourceData.licenseType && this.resourceData.licenseType == 'CC-BY-SA-3.0') ? '<a href="https://creativecommons.org/licenses/by-sa/3.0/" title="License: '+ this.resourceData.licenseType +'" target="_blank"><span class="cc-by-sa-bg-image"></span></a>' : this.resourceData.licenseType;
+                    var licenseString = (licenseType) ? licenseType +' - '+ this.resourceData.licenseAttribution : '';
+
+                    var downloadButton = '';
+                    if (this.resourceData.licenseType != 'Copyright') {
+                        downloadButton = '<a download class="button" href="'+ documentSource +'" data-tooltip-right="Download"><span class="icon-download"></span></a>';
+                    }
+
                     var pdfDocument = $(
                         '<object'
                     +   ' data="'+ documentSource +'"'
@@ -67,7 +75,10 @@ FrameTrail.defineType(
 
                     resourceDetail.append(pdfDocument);
 
-                    resourceDetail.append('<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>');
+                    resourceDetail.append('<div class="resourceOptions">'
+                                       +  '    <div class="licenseInformation">'+ licenseString +'</div>'
+                                       +  '    <div class="resourceButtons">'+ downloadButton +'</div>'
+                                       +  '</div>');
 
                     return resourceDetail;
 
@@ -98,7 +109,7 @@ FrameTrail.defineType(
                     var thumbBackground = (this.resourceData.thumb ?
                             'background-image: url('+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.thumb) +');' : '' );
 
-                    var thumbElement = $('<div class="resourceThumb" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="'+ thumbBackground +'">'
+                    var thumbElement = $('<div class="resourceThumb" data-license-type="'+ this.resourceData.licenseType +'" data-resourceID="'+ trueID +'" data-type="'+ this.resourceData.type +'" style="'+ thumbBackground +'">'
                         + '                  <div class="resourceOverlay">'
                         + '                      <div class="resourceIcon"><span class="icon-file-pdf"></span></div>'
                         + '                  </div>'

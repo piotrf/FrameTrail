@@ -75,8 +75,6 @@ FrameTrail.defineType(
 
                     }
                     
-                    //resourceDetail.append('<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>');
-
                 	return resourceDetail;
 
                 },
@@ -96,7 +94,7 @@ FrameTrail.defineType(
                         child,
                         unescapedString;
 
-                    var thumbElement = $('<div class="resourceThumb" data-type="'+ this.resourceData.type +'">'
+                    var thumbElement = $('<div class="resourceThumb" data-license-type="'+ this.resourceData.licenseType +'" data-type="'+ this.resourceData.type +'">'
                         + '                  <div class="resourceOverlay">'
                         + '                      <div class="resourceIcon"><span class="icon-tag-1"></span></div>'
                         + '                  </div>'

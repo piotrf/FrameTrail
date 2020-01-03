@@ -47,6 +47,9 @@ FrameTrail.defineType(
 
                     var self = this;
 
+                    var licenseType = (this.resourceData.licenseType && this.resourceData.licenseType == 'CC-BY-SA-3.0') ? '<a href="https://creativecommons.org/licenses/by-sa/3.0/" title="License: '+ this.resourceData.licenseType +'" target="_blank"><span class="cc-by-sa-bg-image"></span></a>' : this.resourceData.licenseType;
+                    var licenseString = (licenseType) ? licenseType +' - '+ this.resourceData.licenseAttribution : '';
+
                     var resourceDetail = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'" style="width: 100%; height: 100%;"></div>'),
                         unescapeHelper = document.createElement('div'),
                         child,
@@ -59,7 +62,7 @@ FrameTrail.defineType(
 
                     resourceDetail.html(unescapedString);
 
-                    //resourceDetail.append('<div class="licenseInformation">'+ this.resourceData.licenseType +' - '+ this.resourceData.licenseAttribution +'</div>');
+                    resourceDetail.append('<div class="resourceOptions"><div class="licenseInformation">'+ licenseString +'</div><div class="resourceButtons"></div>');
 
                 	return resourceDetail;
 
@@ -80,7 +83,7 @@ FrameTrail.defineType(
                         child,
                         unescapedString;
 
-                    var thumbElement = $('<div class="resourceThumb" data-type="'+ this.resourceData.type +'">'
+                    var thumbElement = $('<div class="resourceThumb" data-license-type="'+ this.resourceData.licenseType +'" data-type="'+ this.resourceData.type +'">'
                         + '                  <div class="resourceOverlay">'
                         + '                      <div class="resourceIcon"><span class="icon-doc-text"></span></div>'
                         + '                  </div>'
@@ -195,6 +198,13 @@ FrameTrail.defineType(
                         htmlEditorContent.show();
                         if (window.htmlCodeEditor) {
                             window.htmlCodeEditor.refresh();
+
+                            try {
+                                if (TogetherJS && TogetherJS.running) {
+                                    TogetherJS.reinitialize();
+                                }
+                            } catch (e) {}
+
                         }
                     });
 

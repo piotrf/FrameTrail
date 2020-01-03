@@ -8,17 +8,59 @@
 	background-size: 100% 100%;
 }
 
-.resourceDetail .licenseInformation {
+.resourceDetail .resourceOptions {
 	position: absolute;
 	bottom: 0px;
-	right: 0px;
-	width: auto;
-	max-width: 100%;
-	padding: 4px 14px 4px 6px;
-	font-size: 10px;
-	color: #555;
-	background: rgba(255,255,255,.7);
+	left: 0px;
+	width: 100%;
+	padding: 4px 1px 4px 14px;
+	color: var(--secondary-fg-color);
+	background: var(--primary-bg-color);
+	box-sizing: border-box;
+	opacity: 0.7;
 	display: none;
+}
+
+.resourcePreviewDialog .resourceDetail .resourceOptions {
+	display: block;
+}
+
+.resourceDetail:hover .resourceOptions {
+	opacity: 1;
+}
+
+.resourceDetail .resourceOptions .licenseInformation {
+	float: left;
+	line-height: 30px;
+	width: calc(100% - 70px);
+}
+
+.resourceDetail .resourceOptions .licenseInformation a {
+	border: 0;
+	outline: 0;
+}
+
+.resourceDetail .resourceOptions .licenseInformation a .cc-by-sa-bg-image {
+	display: inline-block;
+	width: 50px;
+	height: 30px;
+	vertical-align: bottom;
+}
+
+.resourceDetail .resourceOptions .resourceButtons {
+	float: right;
+	line-height: 30px;
+}
+
+.resourceDetail .resourceOptions .resourceButtons .button {
+	padding: 2px 4px;
+	border-color: transparent;
+	color: var(--secondary-fg-color);
+}
+
+.resourceDetail .resourceOptions .resourceButtons .button:hover {
+	background: var(--primary-fg-color);
+	color: var(--primary-bg-color);
 }
 
 /* Resource Thumb */
