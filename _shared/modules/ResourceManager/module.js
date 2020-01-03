@@ -1021,10 +1021,10 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
 	 * @param {HTMLElement} targetElement
 	 * @param {String} key
 	 * @param {String} condition
-	 * @param {String} value
+	 * @param {Array} values
 	 * @private
 	 */
-	function getFilteredList(targetElement, key, condition, value) {
+	function getFilteredList(targetElement, key, condition, values) {
 
 		$.ajax({
 
@@ -1036,7 +1036,7 @@ FrameTrail.defineModule('ResourceManager', function(FrameTrail){
             	a: 			'fileGetByFilter',
             	key: 		key,
             	condition: 	condition,
-            	value: 		value
+            	values: 	values
             }
 
         }).done(function(data){

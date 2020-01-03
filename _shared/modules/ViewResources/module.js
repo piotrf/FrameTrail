@@ -33,6 +33,9 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
                         +  '        <input id="cbWikipedia" name="ResourceFilterType" type="radio" value="wikipedia" /><label for="cbWikipedia">Wikipedia</label>'
                         +  '        <input id="cbYoutube" name="ResourceFilterType" type="radio" value="youtube" /><label for="cbYoutube">Youtube</label>'
                         +  '        <input id="cbVimeo" name="ResourceFilterType" type="radio" value="vimeo" /><label for="cbVimeo">Vimeo</label>'
+                        +  '        <div class="resourcesCheckboxes">'
+                        +  '            <input type="checkbox" id="onlyCC" name="onlyCC" /><label for="onlyCC">Show only Creative Commons</label>'
+                        +  '        </div>'
                         +  '    </div>'
                         +  '    <div class="resourcesList"></div>'
                         +  '</div>'),
@@ -65,6 +68,14 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
 
     domElement.find('input[name=ResourceFilterType]').change(updateList);
 
+    domElement.find('input[name=onlyCC]').change( function (evt) {
+     if ($(this).is(':checked')) {
+        ResourcesList.addClass('onlyCC');
+     } else {
+        ResourcesList.removeClass('onlyCC');
+     }   
+    });
+
 
 
 
@@ -86,7 +97,7 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
 
             domElement.dialog({
                 autoOpen: false,
-                width: 814,
+                width: 954,
                 height: 600,
                 modal: true,
                 close: function() {
@@ -256,7 +267,7 @@ FrameTrail.defineModule('ViewResources', function(FrameTrail){
      */
     function changeViewSize(arrayWidthAndHeight) {
 
-        ResourcesList.height( domElement.height() - ResourcesControls.outerHeight() - ResourcesFilter.outerHeight() );
+        
 
     }
 

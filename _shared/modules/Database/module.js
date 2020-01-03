@@ -668,6 +668,15 @@
                             "creatorId": data[i].creator.id,
                             "created": (new Date(data[i].created)).getTime(),
                             "type": data[i].body['frametrail:type'],
+                            "uri": (function () {
+                                        if (data[i]["frametrail:uri"]) { 
+                                            return data[i]["frametrail:uri"]; 
+                                        } else if (data[i].body["frametrail:type"] == 'entity') {
+                                            return data[i].body.source
+                                        } else {
+                                            return null;
+                                        }
+                                    })(),
                             "src": (function () {
                                         if (data[i].body["frametrail:type"] === 'location') { return null; }
                                         return (['codesnippet', 'text', 'webpage', 'wikipedia'].indexOf( data[i].body["frametrail:type"] ) >= 0)
@@ -776,6 +785,15 @@
                             "creatorId": data[i].creator.id,
                             "created": (new Date(data[i].created)).getTime(),
                             "type": data[i].body['frametrail:type'],
+                            "uri": (function () {
+                                        if (data[i]["frametrail:uri"]) { 
+                                            return data[i]["frametrail:uri"]; 
+                                        } else if (data[i].body["frametrail:type"] == 'entity') {
+                                            return data[i].body.source
+                                        } else {
+                                            return null;
+                                        }
+                                    })(),
                             "src": (function () {
                                         if (data[i].body["frametrail:type"] === 'location') { return null; }
                                         return (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( data[i].body["frametrail:type"] ) >= 0)
@@ -831,15 +849,31 @@
 
                 for (var i in initAnnotations) {
 
+                    var originalAnnoObject = initAnnotations[i];
+
+                    //console.log('ORIGINAL 1: ', originalAnnoObject.body);
+
+                    if (Array.isArray(initAnnotations[i].body)) {
+                        initAnnotations[i].body = initAnnotations[i].body[0];
+                    }
+
+                    //console.log('ORIGINAL 2: ', originalAnnoObject.body);
+
                     annotations.push({
-                        "source": {
-                            frametrail: false
-                        },
                         "name": initAnnotations[i].body['frametrail:name'],
                         "creator": initAnnotations[i].creator.nickname,
                         "creatorId": initAnnotations[i].creator.id,
                         "created": (new Date(initAnnotations[i].created)).getTime(),
                         "type": initAnnotations[i].body['frametrail:type'],
+                        "uri": (function () {
+                                        if (initAnnotations[i]["frametrail:uri"]) { 
+                                            return initAnnotations[i]["frametrail:uri"]; 
+                                        } else if (initAnnotations[i].body["frametrail:type"] == 'entity') {
+                                            return initAnnotations[i].body.source
+                                        } else {
+                                            return null;
+                                        }
+                                    })(),
                         "src": (function () {
                                     if (initAnnotations[i].body["frametrail:type"] === 'location') { return null; }
                                     return (['codesnippet', 'text', 'webpage', 'wikipedia',].indexOf( initAnnotations[i].body["frametrail:type"] ) >= 0)
@@ -854,7 +888,7 @@
                         "tags": initAnnotations[i]['frametrail:tags'],
                         "source": {
                             frametrail: false,
-                            url: initAnnotations[i]
+                            url: originalAnnoObject
                         }
                     });
 
@@ -1190,7 +1224,7 @@
             			"frametrail:tags": overlays[i].tags || [],
             			"target": {
             				"type": "Video",
-            				"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
+            				"source": FrameTrail.module('HypervideoModel').sourcePath,
             				"selector": {
             					"conformsTo": "http://www.w3.org/TR/media-frags/",
             					"type": "FragmentSelector",
@@ -1295,7 +1329,7 @@
             			"frametrail:tags": codeSnippetItem.tags,
             			"target": {
             				"type": "Video",
-            				"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
+            				"source": FrameTrail.module('HypervideoModel').sourcePath,
             				"selector": {
             					"conformsTo": "http://www.w3.org/TR/media-frags/",
             					"type": "FragmentSelector",
@@ -1540,9 +1574,10 @@
         		"type": "Annotation",
         		"frametrail:type": "Annotation",
         		"frametrail:tags": annotationItem.tags || [],
+                "frametrail:uri": annotationItem.uri || null,
         		"target": {
         			"type": "Video",
-        			"source": FrameTrail.module('HypervideoModel').sourceFiles.mp4,
+        			"source": FrameTrail.module('HypervideoModel').sourcePath,
         			"selector": {
         				"conformsTo": "http://www.w3.org/TR/media-frags/",
         				"type": "FragmentSelector",

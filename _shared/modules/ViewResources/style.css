@@ -1,5 +1,7 @@
 .viewResources {
 	color: var(--primary-bg-color);
+	display: flex;
+	flex-flow: column;
 }
 
 .viewResources .resourcesControls {
@@ -60,10 +62,23 @@
 	cursor: pointer;
 }
 
+.viewResources .resourcesFilter .resourcesCheckboxes {
+	float: right;
+}
+
+.viewResources .resourcesFilter .resourcesCheckboxes input {
+	vertical-align: baseline;
+}
+
 .viewResources .resourcesList {
 	position: relative;
 	width: 100%;
 	overflow: auto;
+	flex: 1;
+}
+
+.viewResources .resourcesList.onlyCC .resourceThumb:not([data-license-type^="CC-"]) {
+	display: none;
 }
 
 .viewResources .resourcesList .resourceThumb, .newHypervideoDialog .newHypervideoDialogResources .resourceThumb {

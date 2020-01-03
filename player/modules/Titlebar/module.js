@@ -200,7 +200,7 @@ FrameTrail.defineModule('Titlebar', function(FrameTrail){
         FrameTrail.module('ResourceManager').renderList(newDialog.find('.newHypervideoDialogResources'), true,
             'type',
             'contains',
-            'video'
+            ['video', 'youtube']
         );
 
         $('body').on('click.hypervideoAddResourcesItem', '.resourceThumb', function() {
