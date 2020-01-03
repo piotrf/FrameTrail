@@ -34,7 +34,7 @@ FrameTrail.defineType(
                     data
                 )
 
-                this.timelineElement   = $('<div class="timelineElement"><div class="previewWrapper"></div></div>');
+                this.timelineElement   = $('<div class="timelineElement" data-type="'+ this.data.type +'" data-uri="'+ this.data.uri +'"><div class="previewWrapper"></div></div>');
                 this.contentViewElements = [];
                 this.contentViewDetailElements = [];
 
@@ -412,6 +412,7 @@ FrameTrail.defineType(
                                         type: "simulate-annotation-change", 
                                         element: location,
                                         containerElement: '.annotationTimeline',
+                                        resourceID: self.data.resourceId,
                                         startTime: self.data.start,
                                         endTime: self.data.end
                                     });
@@ -557,6 +558,7 @@ FrameTrail.defineType(
                                         type: "simulate-annotation-change", 
                                         element: location,
                                         containerElement: '.annotationTimeline',
+                                        resourceID: self.data.resourceId,
                                         startTime: self.data.start,
                                         endTime: self.data.end
                                     });
@@ -646,7 +648,11 @@ FrameTrail.defineType(
                         cleanEnd = FrameTrail.module('HypervideoController').formatTime(this.data.end),
                         compareTimelineElement = $(
                             '<div class="compareTimelineElement" '
-                        +   ' data-start="'
+                        +   ' data-type="'
+                        +   this.data.type
+                        +   '" data-uri="'
+                        +   this.data.uri
+                        +   '" data-start="'
                         +   this.data.start
                         +   '" data-end="'
                         +   this.data.end
@@ -669,6 +675,35 @@ FrameTrail.defineType(
                         videoDuration   = HypervideoModel.duration,
                         positionLeft    = 100 * (timeStart / videoDuration),
                         width           = 100 * ((this.data.end - this.data.start) / videoDuration);
+
+                    var numericValue = false,
+                        maxNumericValue = '5'; 
+                    if (this.data.source.url.body) {
+                        if (Array.isArray(this.data.source.url.body)) {
+                            numericValue = this.data.source.url.body[1].annotationNumericValue;
+                            maxNumericValue = this.data.source.url.body[1].maxNumericValue;
+                        } else {
+                            numericValue = this.data.source.url.body.annotationNumericValue;
+                            maxNumericValue = this.data.source.url.body.maxNumericValue;
+                        }
+                    }
+
+                    //console.log('ORIGIN BODY:', this.data.source.url.body);
+                    //console.log('NumericValue:', numericValue);
+
+                    if (numericValue) {
+                        var numericRatio = numericValue / maxNumericValue,
+                            relativeHeight = 100 * (numericRatio),
+                            timelineColor = Math.round(numericRatio * 10);
+                        compareTimelineElement.attr({
+                            'data-numeric-value': numericValue,
+                            'data-numeric-min': '0',
+                            'data-numeric-max': maxNumericValue,
+                            'data-timeline-color': timelineColor
+                        });
+                        compareTimelineElement.css('height', relativeHeight + '%');
+                        compareTimelineElement.css('opacity', numericRatio);
+                    }
 
                     compareTimelineElement.css({
                         left:  positionLeft + '%',
@@ -716,7 +751,7 @@ FrameTrail.defineType(
                     });
 
                     compareTimelineElement.click(function() {
-                        FrameTrail.module('HypervideoController').currentTime = parseFloat($(this).data('start')) + 0.5;
+                        FrameTrail.module('HypervideoController').currentTime = parseFloat($(this).data('start')) + 0.05;
                     });
 
 

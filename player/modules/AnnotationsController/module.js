@@ -504,7 +504,7 @@
                                   +   '    <div id="CustomAnnotation"></div>'
                                   +   '    <div id="OtherUsers">'
                                   +   '        <div class="message active">Drag Annotations from the User Timelines to your Annotation Timeline</div>'
-                                  +   '        <div class="timelineList"></div>'
+                                  +   '        <div class="timelineList" data-zoom-level="1"></div>'
                                   +   '    </div>'
                                   +   '</div>')
                                   .tabs({
@@ -559,7 +559,7 @@
 
         /* Choose Annotations of other users */
 
-        renderAnnotationTimelines(annotations, timelineList);
+        renderAnnotationTimelines(annotations, timelineList, 'creatorId', true);
 
     }
 
@@ -736,8 +736,9 @@
      * @param {Array} annotationCollection
      * @param {HTMLElement} targetElement
      * @param {String} filterAspect
+     * @param {Boolean} zoomControls
      */
-    function renderAnnotationTimelines(annotationCollection, targetElement, filterAspect) {
+    function renderAnnotationTimelines(annotationCollection, targetElement, filterAspect, zoomControls) {
         
         var collectedAnnotationsPerAspect = [];
 
@@ -748,11 +749,10 @@
 
         for (var anno in annotationCollection) {
             
+            //console.log(annotationCollection[anno].data);
+
             //var currentAspectID = annotationCollection[anno].data[filterAspect];
             switch (filterAspect) {
-                case 'creatorId': 
-                    var currentAspectID = annotationCollection[anno].data[filterAspect];
-                    break;
                 case 'annotationType':
                     var currentAspectID;
                     if (annotationCollection[anno].data.source.url.body) {
@@ -765,6 +765,9 @@
                     } else {
                         currentAspectID = null;
                     } 
+                    break;
+                default:  
+                    var currentAspectID = annotationCollection[anno].data[filterAspect];
                     break;
             }
 
@@ -781,17 +784,6 @@
                 //console.log(annotationCollection[anno]);
                 switch (filterAspect) {
 
-                    case 'creatorId': 
-                        
-                        collectedAnnotationsPerAspect[currentAspectID] = {
-                            'userID': annotationCollection[anno].data.creatorId,
-                            'label': annotationCollection[anno].data.creator,
-                            'color' : (userInDatabase) ? '#'+ userInDatabase.color : '#444444',
-                            'annotations': []
-                        };
-
-                        break;
-                    
                     case 'annotationType':
                         
                         collectedAnnotationsPerAspect[currentAspectID] = {
@@ -802,6 +794,29 @@
                         };
 
                         break;
+
+                    case 'creatorId': 
+                        
+                        collectedAnnotationsPerAspect[currentAspectID] = {
+                            'userID': annotationCollection[anno].data.creatorId,
+                            'label': annotationCollection[anno].data.creator,
+                            'color' : (userInDatabase) ? '#'+ userInDatabase.color : '#444444',
+                            'annotations': []
+                        };
+
+                        break;
+
+                    default: 
+                        
+                        collectedAnnotationsPerAspect[currentAspectID] = {
+                            'userID': annotationCollection[anno].data.creatorId,
+                            'label': currentAspectID,
+                            'color' : (userInDatabase) ? '#'+ userInDatabase.color : '#444444',
+                            'annotations': []
+                        };
+
+                        break;
+
                 }
                 
             }
@@ -825,6 +840,77 @@
         }
         */
 
+        var timelineZoomWrapper = $('<div class="timelineZoomWrapper"></div>'),
+            timelineZoomScroller = $('<div class="timelineZoomScroller"></div>');
+
+        timelineZoomScroller.appendTo(timelineZoomWrapper);
+        
+        if (zoomControls) {
+            
+            timelineZoomWrapper.on('scroll', function(evt) {
+                var scrollLeftVal = $(this).scrollLeft();
+                $(this).find('.userLabel').css('left', scrollLeftVal + 'px');
+            });
+
+            var zoomControlsWrapper = $('<div class="zoomControlsWrapper"></div>'),
+                zoomMinus = $('<button class="button zoomMinus"><span class="icon-minus"></span></button>'),
+                zoomPlus = $('<button class="button zoomPlus"><span class="icon-plus"></span></button>');
+            
+            zoomMinus.click(function() {
+                var currentZoomLevel = parseFloat($(this).parent().parent().attr('data-zoom-level'));
+                zoomTimelines(timelineZoomWrapper, currentZoomLevel-0.5 );
+            });
+            zoomPlus.click(function() {
+                var currentZoomLevel = parseFloat($(this).parent().parent().attr('data-zoom-level'));
+                zoomTimelines(timelineZoomWrapper, currentZoomLevel+0.5);
+                //console.log(currentZoomLevel);
+            });
+            zoomControlsWrapper.append(zoomPlus, zoomMinus);
+
+            targetElement.append(zoomControlsWrapper);
+
+            var timelineProgress = $('<div class="timelineProgressWrapper"><div class="timelineProgressRange"></div></div>');
+            timelineZoomScroller.append(timelineProgress);
+
+            var leftStart;
+
+            /*
+            targetElement.draggable({
+                axis: 'x',
+                start: function(event, ui) {
+                    $(ui.helper).find('.userTimeline, .timelineProgressWrapper').css('transition-duration', '0ms');
+                    leftStart = parseInt($(ui.helper).find('.userTimeline').eq(0).css('left'));
+                    //console.log(leftStart);
+                },
+                drag: function(event, ui) {                    
+                    
+                    if ( $(ui.helper).attr('data-zoom-level') == '1' ) {
+                        ui.position.left = 0;
+                        return;
+                    }
+
+                    ui.position.left = ui.position.left + leftStart;
+
+                    if (ui.position.left > 0) {
+                        ui.position.left = 0;
+                    } else if (($(ui.helper).find('.userTimeline').eq(0).width() - $(ui.helper).width()) + ui.position.left < 0) {
+                        ui.position.left = ($(ui.helper).find('.userTimeline').eq(0).width() - $(ui.helper).width()) * -1;
+                    }
+
+                    //console.log(($(ui.helper).find('.userTimeline').eq(0).width() - $(ui.helper).width()) + ui.position.left)
+
+                    $(ui.helper).find('.userTimeline, .timelineProgressWrapper').each(function() {
+                        $(this).css('left', ui.position.left);
+                    });
+                    ui.position.left = 0;
+                },
+                stop: function(event, ui) {
+                    $(ui.helper).find('.userTimeline, .timelineProgressWrapper').css('transition-duration', '');
+                }
+            });
+            */
+        }
+
         for (var aspectidx in collectedAnnotationsPerAspect) {
 
             if (collectedAnnotationsPerAspect[aspectidx].userID === FrameTrail.module('UserManagement').userID) {
@@ -845,14 +931,24 @@
                                         +   '</div>'),
                 userTimeline = userTimelineWrapper.find('.userTimeline');
 
+            var firstAnnotation = (collectedAnnotationsPerAspect[aspectidx].annotations[0]) ? collectedAnnotationsPerAspect[aspectidx].annotations[0] : null;
+            if (firstAnnotation && firstAnnotation.data.source.url.body && firstAnnotation.data.source.url.body.maxNumericValue) {
+                var gridLevels = firstAnnotation.data.source.url.body.maxNumericValue;
+                //console.log(gridLevels);
+                for (var gl=1; gl<gridLevels; gl++) {
+                    var bottomValue = 100 * (gl / gridLevels);
+                    userTimeline.append('<div class="horizontalGridLine" style="bottom: '+ bottomValue +'%;"></div>');
+                }
+            }
+            
             for (var idx in collectedAnnotationsPerAspect[aspectidx].annotations) {
                 var compareTimelineItem = collectedAnnotationsPerAspect[aspectidx].annotations[idx].renderCompareTimelineItem();
                 compareTimelineItem.css('background-color', '#' + aspectColor);
 
                 userTimeline.append(compareTimelineItem);
             }
-            
-            targetElement.append(userTimelineWrapper);
+
+            timelineZoomScroller.append(userTimelineWrapper);
 
         }
 
@@ -873,6 +969,54 @@
         for (i = 0; i < timelinesArr.length; ++i) {
           targetElement.append(timelinesArr[i]);
         }
+
+        targetElement.append(timelineZoomWrapper);
+
+    }
+
+    /**
+     * I control the zoom level of all timelines which are children of the targetElement.
+     * @method zoomTimelines
+     * @param {HTMLElement} targetElement
+     * @param {Float} zoomLevel
+     */
+    function zoomTimelines(targetElement, zoomLevel) {
+
+        if (zoomLevel < 1) {
+            zoomLevel = 1;
+        }
+
+        var zoomPercent = zoomLevel*100,
+            currentLeft = parseInt(targetElement.eq(0).scrollLeft()),
+            currentWidth = targetElement.find('.timelineZoomScroller').eq(0).width(),
+            focusPoint = 2,
+            positionLeft = (targetElement.width() * (zoomLevel/focusPoint)) + (targetElement.width()/focusPoint),
+            currentOffset = currentLeft + (currentLeft + currentWidth - targetElement.width());
+
+        /*
+        console.log('Left: '+ currentLeft);
+        console.log('Right: '+ (currentLeft + currentWidth - targetElement.width()));
+        console.log('Offset: '+ currentOffset / zoomLevel);
+        */
+
+        positionLeft = (positionLeft + (currentOffset / zoomLevel));
+
+        if (positionLeft > 0 || zoomLevel == 1) {
+            positionLeft = 0;
+        }
+
+        if ( (targetElement.width()*zoomLevel) - targetElement.width() + currentOffset < 0  ) {
+            positionLeft = (targetElement.width()*zoomLevel) - targetElement.width();
+        }
+
+        targetElement.find('.timelineZoomScroller').css({
+            width: zoomPercent + '%'
+        });
+
+        //TODO: FIX POSITIONING
+        //targetElement.scrollLeft(positionLeft);
+
+        targetElement.parent().attr('data-zoom-level', zoomLevel);
 
     }
 

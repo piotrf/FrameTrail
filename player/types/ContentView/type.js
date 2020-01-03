@@ -33,6 +33,8 @@ FrameTrail.defineType(
                 contentViewData.contentSize            = contentViewData.contentSize || "small";
                 contentViewData.onClickContentItem     = contentViewData.onClickContentItem || "";
                 contentViewData.initClosed             = contentViewData.initClosed || false;
+                contentViewData.filterAspect           = contentViewData.filterAspect || "creatorId";
+                contentViewData.zoomControls           = contentViewData.zoomControls || false;
 
                 this.contentViewData = contentViewData;
 
@@ -186,11 +188,11 @@ FrameTrail.defineType(
                             );
 
                             var timelinesContainer = $('<div class="timelinesContainer"></div>');
-                            var timelineList = $('<div class="timelineList"></div>');
+                            var timelineList = $('<div class="timelineList" data-zoom-level="1"></div>');
 
                             //TODO: remove timeout (needed right now because video duration is not known)
                             //window.setTimeout(function() {
-                                FrameTrail.module('AnnotationsController').renderAnnotationTimelines(self.contentCollection, timelineList, 'annotationType');
+                                FrameTrail.module('AnnotationsController').renderAnnotationTimelines(self.contentCollection, timelineList, self.contentViewData.filterAspect, self.contentViewData.zoomControls);
 
                                 timelinesContainer.append(timelineList);
 
@@ -546,6 +548,16 @@ FrameTrail.defineType(
                                 }
 
                             }
+
+                            break;
+
+                        case 'Timelines':
+                            
+                            var HypervideoModel = FrameTrail.module('HypervideoModel'),
+                                timeWithOffset = currentTime-HypervideoModel.offsetIn,
+                                timePercent = 100 * (timeWithOffset / HypervideoModel.duration);
+                                
+                            self.contentViewContainer.find('.timelineProgressRange').css('width', timePercent + '%');
 
                             break;
                     }
