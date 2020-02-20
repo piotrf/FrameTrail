@@ -665,7 +665,8 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
     function adjustHypervideo(animate) {
 
 
-        var editBorder = (FrameTrail.getState('editMode') != false) ? (parseInt(domElement.css('borderTopWidth'))*2) : 0;
+        var isMobileWidth = ($(window).width() <= 768),
+            editBorder = (FrameTrail.getState('editMode') != false) ? (parseInt(domElement.css('borderTopWidth'))*2) : 0;
             mainContainerWidth  = $(FrameTrail.getState('target')).width()
                                     - ((FrameTrail.getState('sidebarOpen') && !FrameTrail.getState('fullscreen')) ? FrameTrail.module('Sidebar').width : 0)
                                     - editBorder,
@@ -712,8 +713,8 @@ FrameTrail.defineModule('ViewVideo', function(FrameTrail){
             videoContainerWidth = mainContainerWidth - domElement.find('.infoAreaRight').outerWidth();
         } else {
             videoContainerWidth = mainContainerWidth
-            - (FrameTrail.getState('hv_config_areaLeftVisible') ? AreaLeftContainer.outerWidth() : 0)
-            - (FrameTrail.getState('hv_config_areaRightVisible') ? AreaRightContainer.outerWidth() : 0);
+            - ((FrameTrail.getState('hv_config_areaLeftVisible') && !isMobileWidth) ? AreaLeftContainer.outerWidth() : 0)
+            - ((FrameTrail.getState('hv_config_areaRightVisible') && !isMobileWidth) ? AreaRightContainer.outerWidth() : 0);
         }
 
         VideoContainer.width(videoContainerWidth);
