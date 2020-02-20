@@ -54,7 +54,6 @@ FrameTrail.defineType(
 
                     var resourceDetailElement = $('<div class="resourceDetail" data-type="'+ this.resourceData.type +'">'
                            + '    <video controls autobuffer>'
-                           +        '<source src="'+ FrameTrail.module('RouteNavigation').getResourceURL(this.resourceData.src) +'" type="video/mp4">'
                            + '    </video>'
                            + '    <div class="resourceOptions">'
                            + '        <div class="licenseInformation">'+ licenseString +'</div>'
