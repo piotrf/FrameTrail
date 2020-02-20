@@ -17,7 +17,7 @@ FrameTrail let's you experience, manage & edit non-linear interactive video in a
 * Configure Overlay-Display (Opacity, etc.)
 * **Synchronize** Video Overlays with the main Video / Time Container (optional)
 * Add timebased **Videolinks** to other (internal or external) Hypervideo Documents
-* View, compare and re-use Annotations of other users in the same project
+* View, compare and re-use Annotations of other users
 
 ### Managing
 * Manage **users** (Access Rights, Activation)
