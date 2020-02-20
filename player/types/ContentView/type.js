@@ -192,7 +192,7 @@ FrameTrail.defineType(
 
                             //TODO: remove timeout (needed right now because video duration is not known)
                             //window.setTimeout(function() {
-                                FrameTrail.module('AnnotationsController').renderAnnotationTimelines(self.contentCollection, timelineList, self.contentViewData.filterAspect, self.contentViewData.zoomControls);
+                                FrameTrail.module('AnnotationsController').renderAnnotationTimelines(self.contentCollection, timelineList, self.contentViewData.filterAspect, 'label', self.contentViewData.zoomControls);
 
                                 timelinesContainer.append(timelineList);
 

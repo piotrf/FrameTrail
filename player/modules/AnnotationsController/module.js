@@ -559,7 +559,7 @@
 
         /* Choose Annotations of other users */
 
-        renderAnnotationTimelines(annotations, timelineList, 'creatorId', true);
+        renderAnnotationTimelines(annotations, timelineList, 'creatorId', 'label', true);
 
     }
 
@@ -736,15 +736,19 @@
      * @param {Array} annotationCollection
      * @param {HTMLElement} targetElement
      * @param {String} filterAspect
+     * @param {String} sortBy
      * @param {Boolean} zoomControls
      */
-    function renderAnnotationTimelines(annotationCollection, targetElement, filterAspect, zoomControls) {
+    function renderAnnotationTimelines(annotationCollection, targetElement, filterAspect, sortBy, zoomControls) {
         
         var collectedAnnotationsPerAspect = [];
 
         //console.log(FrameTrail.module('Database').users);
         if (!filterAspect) {
             var filterAspect = 'creatorId';
+        }
+        if (!sortBy) {
+            var sortBy = 'label';
         }
 
         for (var anno in annotationCollection) {
@@ -818,27 +822,37 @@
                         break;
 
                 }
+
+                if (typeof getAnnotationTypeValues !== 'undefined') {
+                    collectedAnnotationsPerAspect[currentAspectID]['annotationTypeValues'] = getAnnotationTypeValues(currentAspectID);
+                }
                 
             }
 
             collectedAnnotationsPerAspect[currentAspectID]['annotations'].push(annotationCollection[anno]);
         }
 
-        //console.log('ASPECTS: ', collectedAnnotationsPerAspect);
-
-        /*
-        if (filterAspect == 'annotationType') {
-            function compare(a,b) {
-                if (a.label < b.label)
-                    return -1;
-                if (a.label > b.label)
-                    return 1;
-                return 0;
-            }
-
-            collectedAnnotationsPerAspect.sort(compare);
+        collectedAnnotationsPerAspectData = [];
+        for (var obj in collectedAnnotationsPerAspect) {
+            collectedAnnotationsPerAspectData.push(collectedAnnotationsPerAspect[obj]);
         }
-        */
+
+        if (sortBy) {
+            function compare(a,b) {
+                if (a[sortBy] < b[sortBy])
+                    return -1;
+                if (a[sortBy] > b[sortBy])
+                    return 1;
+                if (a[sortBy] == b[sortBy]) {
+                    if (a.label < b.label) 
+                        return -1;
+                    if (a.label > b.label)
+                        return 1;
+                    return 0;
+                }
+            }
+            collectedAnnotationsPerAspectData.sort(compare);
+        }
 
         var timelineZoomWrapper = $('<div class="timelineZoomWrapper"></div>'),
             timelineZoomScroller = $('<div class="timelineZoomScroller"></div>');
@@ -853,8 +867,8 @@
             });
 
             var zoomControlsWrapper = $('<div class="zoomControlsWrapper"></div>'),
-                zoomMinus = $('<button class="button zoomMinus"><span class="icon-minus"></span></button>'),
-                zoomPlus = $('<button class="button zoomPlus"><span class="icon-plus"></span></button>');
+                zoomMinus = $('<button class="button zoomMinus"><span class="icon-zoom-out"></span></button>'),
+                zoomPlus = $('<button class="button zoomPlus"><span class="icon-zoom-in"></span></button>');
             
             zoomMinus.click(function() {
                 var currentZoomLevel = parseFloat($(this).parent().parent().attr('data-zoom-level'));
@@ -911,27 +925,40 @@
             */
         }
 
-        for (var aspectidx in collectedAnnotationsPerAspect) {
+        for (var i=0; i<collectedAnnotationsPerAspectData.length; i++) {
 
-            if (collectedAnnotationsPerAspect[aspectidx].userID === FrameTrail.module('UserManagement').userID) {
+            if (collectedAnnotationsPerAspectData[i].userID === FrameTrail.module('UserManagement').userID) {
                 //continue;
             }
                         
-            var aspectLabel =  collectedAnnotationsPerAspect[aspectidx].label,
-                aspectColor = collectedAnnotationsPerAspect[aspectidx].color;
+            var aspectLabel =  collectedAnnotationsPerAspectData[i].label,
+                aspectColor = collectedAnnotationsPerAspectData[i].color,
+                valueLegendString = '',
+                aspectValues = collectedAnnotationsPerAspectData[i].annotationTypeValues;
+
+            if (aspectValues) {
+                for (var v=0; v<aspectValues.values.length; v++) {
+                    var numericRatio = aspectValues.values[v].elementNumericValue / aspectValues.maxNumericValue,
+                        relativeHeight = 100 * (numericRatio),
+                        timelineColor = Math.round(numericRatio * 10);
+                    valueLegendString += '<span class="timelineLegendLabel" data-numeric-value="'+ aspectValues.values[v].elementNumericValue +'" data-timeline-color="'+ timelineColor +'">'+ aspectValues.values[v].name +'</span>';
+                }
+            }
 
             //console.log(aspectLabel);
 
+            var iconClass = (filterAspect == 'creatorId') ? 'icon-user' : 'icon-tag';
             var userTimelineWrapper = $(    '<div class="userTimelineWrapper">'
                                         +   '    <div class="userLabel" style="color: '+ aspectColor +'">'
-                                        +   '        <span class="icon-user"></span>'
+                                        +   '        <span class="'+ iconClass +'"></span>'
                                         +   '        <span>'+ aspectLabel + '</span>'
+                                        +   '        <div class="timelineValues">'+ valueLegendString + '</div>'
                                         +   '    </div>'
                                         +   '    <div class="userTimeline"></div>'
                                         +   '</div>'),
                 userTimeline = userTimelineWrapper.find('.userTimeline');
 
-            var firstAnnotation = (collectedAnnotationsPerAspect[aspectidx].annotations[0]) ? collectedAnnotationsPerAspect[aspectidx].annotations[0] : null;
+            var firstAnnotation = (collectedAnnotationsPerAspectData[i].annotations[0]) ? collectedAnnotationsPerAspectData[i].annotations[0] : null;
             if (firstAnnotation && firstAnnotation.data.source.url.body && firstAnnotation.data.source.url.body.maxNumericValue) {
                 var gridLevels = firstAnnotation.data.source.url.body.maxNumericValue;
                 //console.log(gridLevels);
@@ -941,33 +968,18 @@
                 }
             }
             
-            for (var idx in collectedAnnotationsPerAspect[aspectidx].annotations) {
-                var compareTimelineItem = collectedAnnotationsPerAspect[aspectidx].annotations[idx].renderCompareTimelineItem();
-                compareTimelineItem.css('background-color', '#' + aspectColor);
+            for (var idx in collectedAnnotationsPerAspectData[i].annotations) {
+                var compareTimelineItem = collectedAnnotationsPerAspectData[i].annotations[idx].renderCompareTimelineItem();
+                compareTimelineItem.css('background-color', aspectColor);
+                if (compareTimelineItem.attr('data-origin-type') == 'ao:EvolvingValuesAnnotationType') {
+                    compareTimelineItem.find('path').attr('fill', aspectColor);
+                }
 
                 userTimeline.append(compareTimelineItem);
             }
 
             timelineZoomScroller.append(userTimelineWrapper);
 
-        }
-
-        // TRY SORTING TIMELINES (TEMPORARY SOLUTION)
-        var timelines = targetElement.find('.userTimelineWrapper');
-
-        var timelinesArr = [];
-        timelines.each(function() {
-            timelinesArr.push($(this));
-        });
-
-        timelinesArr.sort(function(a, b) {
-          return a.find('.userLabel span').eq(1).text() == b.find('.userLabel span').eq(1).text()
-                  ? 0
-                  : (a.find('.userLabel span').eq(1).text() > b.find('.userLabel span').eq(1).text() ? 1 : -1);
-        });
-
-        for (i = 0; i < timelinesArr.length; ++i) {
-          targetElement.append(timelinesArr[i]);
         }
 
         targetElement.append(timelineZoomWrapper);
