@@ -120,13 +120,10 @@
 	float: right;
 	color: var(--primary-fg-color);
 	border-color: var(--primary-fg-color);
-}
-
-.timelineList .zoomControlsWrapper button.zoomPlus {
 	margin-left: 4px;
 }
 
-.timelineList .zoomControlsWrapper button.zoomMinus:after {
+.timelineList .zoomControlsWrapper button:last-child:after {
 	content: '';
 	display: block;
 	clear: both;
@@ -179,7 +176,7 @@
 	position: relative;
 	z-index: 2;
 	margin-top: 0px;
-	min-height: 60px;
+	padding-bottom: 40px;
 	clear: both;
 }
 
@@ -199,6 +196,7 @@
 	left: 0px;
 	font-weight: 300;
 	margin-bottom: 2px;
+	line-height: initial;
 }
 
 .timelineList .userTimeline {
@@ -213,11 +211,22 @@
 
 .timelineList .userTimeline .compareTimelineElement {
 	position: absolute;
-	height: 20px;
+	height: 100%;
 	background: #888;
 	opacity: .6;
 	border-left: 1px solid #fff;
     border-right: 1px solid #fff;
+}
+
+.timelineList .userTimeline .compareTimelineElement[data-origin-type="ao:EvolvingValuesAnnotationType"],
+.timelineList .userTimeline .compareTimelineElement[data-origin-type="ao:ContrastingValuesAnnotationType"] {
+	background: transparent;
+}
+
+.timelineList .userTimeline .compareTimelineElement .barchartFraction {
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
 }
 
 /* Timeline Element Preview */
