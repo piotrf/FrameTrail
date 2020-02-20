@@ -20,8 +20,7 @@ FrameTrail let's you experience, manage & edit non-linear interactive video in a
 * View, compare and re-use Annotations of other users in the same project
 
 ### Managing
-* Manage several **projects** with a custom user base and their own set of resources
-* Manage project **users** (Access Rights, Activation)
+* Manage **users** (Access Rights, Activation)
 * Manage **resources** (Add / Upload, Edit, Delete)
   * HTML5 Video (WEBM & MP4)
   * Image (JPG, PNG, GIF)
@@ -30,10 +29,10 @@ FrameTrail let's you experience, manage & edit non-linear interactive video in a
   * Youtube Video
   * Vimeo Video
   * Any other Webpage URL
-* Manage any number of **Hypervideo Documents** per project
+* Manage any number of **Hypervideo Documents**
 
 ### Data Policy
-All data is kept in files using a structured JSON format, there is no database. Yes, that means you can just copy and paste your entire OHV instance (including all user data etc.) to another server and it will instantly work.
+All data is kept in files using a structured JSON format, there is no database. Yes, that means you can just copy and paste your entire FrameTrail instance (including all user data etc.) to another server and it will instantly work.
 
 ### Browser Support
 
@@ -60,31 +59,21 @@ Please note that you can use FrameTrail "read-only" locally without any server, 
 
 1. `git clone https://github.com/OpenHypervideo/FrameTrail` or **Download ZIP** to your **server directory** (i.e. `http://example.com/DIRECTORY-NAME` or `http://localhost/DIRECTORY-NAME` if you're using XAMMP, MAMP etc. for a local setup).
 2. Open your **server directory** in your favourite browser.
-3. Follow the instructions to define a global **master password** configure your FrameTrail instance.
+3. Follow the instructions to define an administrator account and configure your FrameTrail instance.
 
 ### Getting Started
 
-#### Adding a new project
+#### Adding your first hypervideo
 
-1. Go to `http://example.com/DIRECTORY-NAME/projectmanager` and login with your global **master password**
-2. Click "Add New Project" and follow the instructions
-
-**Now something very important:**
-
-Every project has a separate user base and resource archive. When you create a new project, you can add and manage users for that project. Those users only have access to that very project.
-
-This means that **users always need to register per project** (including you). An account in one project doesn't exist in the other projects. Just see it as completely different installations, which you can manage through the project manager ;)
-
-#### Adding a new hypervideo
-
-1. Select your project in the **Project Manager** or go to `http://example.com/DIRECTORY-NAME/player/?project=PROJECTID`
-2. In the Overview, click "New Hypervideo" and follow the instructions
+1. Click the Edit Button on the top right and login with your administrator account details.
+2. In the titlebar, click "New Hypervideo" and follow the instructions
 
 #### Adding resources
 
-1. In the Overview, click "Manage Resources" to open the **Resource Manager**
-2. Click "Add Resource" and follow the instructions
-3. When your resource has been added, you and other users can use it as basis for new Hypervideos or for Overlays & Annotations
+1. Click the Edit Button on the top right and login with your administrator account details.
+2. In the titlebar, click "Manage Resources" to open the **Resource Manager**
+3. Click "Add Resource" and follow the instructions
+4. When your resource has been added, you and other users can use it as basis for new Hypervideos or for Overlays & Annotations
 
 -----------------
 
