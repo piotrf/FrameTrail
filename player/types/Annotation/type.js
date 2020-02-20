@@ -677,14 +677,32 @@ FrameTrail.defineType(
                         width           = 100 * ((this.data.end - this.data.start) / videoDuration);
 
                     var numericValue = false,
-                        maxNumericValue = '5'; 
+                        maxNumericValue = '5',
+                        dataType = false;
+
+                    /*
+                    console.log("ORIGIN-START: "+this.data.start);
+                    console.log("START: "+timeStart);
+                    console.log("DURATION: "+videoDuration);
+                    console.log("Position Left: "+positionLeft);
+                    */
+                        
                     if (this.data.source.url.body) {
                         if (Array.isArray(this.data.source.url.body)) {
-                            numericValue = this.data.source.url.body[1].annotationNumericValue;
-                            maxNumericValue = this.data.source.url.body[1].maxNumericValue;
+                            if (this.data.source.url.body[1].type == 'TextualBody') {
+                                numericValue = this.data.source.url.body[0].annotationNumericValue;
+                                maxNumericValue = this.data.source.url.body[0].maxNumericValue;
+                                dataType = this.data.source.url.body[0].type
+                            } else {
+                                numericValue = this.data.source.url.body[1].annotationNumericValue;
+                                maxNumericValue = this.data.source.url.body[1].maxNumericValue;
+                                dataType = this.data.source.url.body[1].type
+                            }
+                            
                         } else {
                             numericValue = this.data.source.url.body.annotationNumericValue;
                             maxNumericValue = this.data.source.url.body.maxNumericValue;
+                            dataType = this.data.source.url.body.type
                         }
                     }
 
@@ -692,17 +710,44 @@ FrameTrail.defineType(
                     //console.log('NumericValue:', numericValue);
 
                     if (numericValue) {
-                        var numericRatio = numericValue / maxNumericValue,
-                            relativeHeight = 100 * (numericRatio),
-                            timelineColor = Math.round(numericRatio * 10);
-                        compareTimelineElement.attr({
-                            'data-numeric-value': numericValue,
-                            'data-numeric-min': '0',
-                            'data-numeric-max': maxNumericValue,
-                            'data-timeline-color': timelineColor
-                        });
-                        compareTimelineElement.css('height', relativeHeight + '%');
-                        compareTimelineElement.css('opacity', numericRatio);
+                        if (Array.isArray(numericValue)) {
+                            compareTimelineElement.attr({
+                                'data-origin-type': dataType,
+                                'data-numeric-value': numericValue,
+                                'data-numeric-min': '0',
+                                'data-numeric-max': maxNumericValue
+                            });
+                            if (dataType == 'ao:EvolvingValuesAnnotationType') {
+                                var svgElem = this.renderEvolvingValues(numericValue, maxNumericValue);
+                                compareTimelineElement.append(svgElem);
+                                //jQuery SVG Hack
+                                compareTimelineElement.html(compareTimelineElement.html());
+                            } else if (dataType == 'ao:ContrastingValuesAnnotationType') {
+                                var highestNumericValue = Math.max.apply(null, numericValue),
+                                    relativeHeight = 100 * (highestNumericValue / maxNumericValue)
+                                var contrastingElems = this.renderContrastingValues(numericValue, maxNumericValue, highestNumericValue);
+                                compareTimelineElement.append(contrastingElems);
+                                compareTimelineElement.css('height', relativeHeight + '%');
+                            }
+                        } else {
+                            var numericRatio = numericValue / maxNumericValue,
+                                relativeHeight = 100 * (numericRatio),
+                                timelineColor = Math.round(numericRatio * 10);
+                            compareTimelineElement.attr({
+                                'data-origin-type': dataType,
+                                'data-numeric-value': numericValue,
+                                'data-numeric-min': '0',
+                                'data-numeric-max': maxNumericValue,
+                                'data-timeline-color': timelineColor
+                            });
+                            compareTimelineElement.css('height', relativeHeight + '%');
+                            compareTimelineElement.css('opacity', numericRatio);
+                        }
+                    }
+
+                    if (this.data.type == 'text' || this.data.type == 'entity') {
+                        var decoded_string = $("<div/>").html(this.data.attributes.text).text();
+                        compareTimelineElement.attr('title', decoded_string);
                     }
 
                     compareTimelineElement.css({
@@ -759,12 +804,46 @@ FrameTrail.defineType(
 
                 },
 
+                renderEvolvingValues: function(values, maxValue) {
+                    var svg = $('<svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>'),
+                        stepWidth = 100 / (values.length - 1),
+                        invertedValues = [];
 
+                    for (var i = 0; i < values.length; i++) {
+                        var numericRatio = values[i] / maxValue,
+                            relativeValue = 100 * (numericRatio);
+                        invertedValues.push(100 - relativeValue);
+                    }
+                    
+                    var path = "M 0 " + invertedValues[0];
 
+                    for (var v=1; v<invertedValues.length; v++) {
+                        path += " L " + stepWidth * v + " " + invertedValues[v];
+                    }
 
+                    path += " L 100 100 L 0 100 Z";
+                    svg.append('<path d="' + path + '"></path>');
 
+                    return svg;
+                },
 
+                renderContrastingValues: function(values, maxValue, highestValue) {
+                    
+                    var barchartFractions = '';
 
+                    values.sort(function(a, b) {
+                        return b - a;
+                    });
+
+                    for (var v=0; v<values.length; v++) {
+                        var numericRatio = (values[v] / maxValue),
+                            timelineColor = Math.round(numericRatio * 10),
+                            fractionPercentage = 100 * (values[v] / highestValue);
+                        barchartFractions += '<div class="barchartFraction" style="height: '+ fractionPercentage +'%" data-timeline-color="'+ timelineColor +'"></div>';
+                    }
+
+                    return $(barchartFractions);
+                },
 
                 // TODO
 
