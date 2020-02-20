@@ -350,49 +350,62 @@ FrameTrail.defineModule('HypervideoController', function(FrameTrail){
 
 		} else {
 
+			FrameTrail.changeState('videoWorking', true);
+
 			highPriorityUpdater = highPriorityUpdater_NullVideo;
 			lowPriorityUpdater  = lowPriorityUpdater_NullVideo;
 
+			/*
+			var HypervideoModel = FrameTrail.module('HypervideoModel');
 			HypervideoModel.offsetOut = (HypervideoModel.offsetOut) ? HypervideoModel.offsetOut : HypervideoModel.duration;
 			HypervideoModel.durationFull = HypervideoModel.duration;
-			HypervideoModel.duration = HypervideoModel.offsetOut - HypervideoModel.offsetIn;		
-			
-			if (update) {
-				AnnotationsController.updateController();
-			} else {
-				AnnotationsController.initController();
-			}
+			HypervideoModel.duration = HypervideoModel.offsetOut - HypervideoModel.offsetIn;
 
-			OverlaysController.initController();
-			CodeSnippetsController.initController();
-			SubtitlesController.initController();
+			console.log(HypervideoModel.durationFull);
+			console.log(HypervideoModel.duration);
+			console.log(HypervideoModel.offsetIn, HypervideoModel.offsetOut);
+			*/
 
-			initPlayButton();
-			initProgressBar();
+			window.setTimeout(function() {
+				
+				if (update) {
+					AnnotationsController.updateController();
+				} else {
+					AnnotationsController.initController();
+				}
 
-			InteractionController.initController();
+				OverlaysController.initController();
+				CodeSnippetsController.initController();
+				SubtitlesController.initController();
 
-			FrameTrail.triggerEvent('ready', {});
-			
-			if (HypervideoModel.events.onReady) {
-				try {
-                	var readyEvent = new Function(HypervideoModel.events.onReady);
-                	readyEvent();
-	            } catch (exception) {
-	                // could not parse and compile JS code!
-	                console.warn('Event handler contains errors: '+ exception.message);
-	            }
-			}
+				initPlayButton();
+				initProgressBar();
 
-			if (RouteNavigation.hashTime) {
-				setCurrentTime(RouteNavigation.hashTime);
-			} else {
-				setCurrentTime(HypervideoModel.offsetIn);
-			}
+				InteractionController.initController();
 
-			FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+				FrameTrail.triggerEvent('ready', {});
+				if (HypervideoModel.events.onReady) {
+					try {
+	                	var readyEvent = new Function(HypervideoModel.events.onReady);
+	                	readyEvent();
+		            } catch (exception) {
+		                // could not parse and compile JS code!
+		                console.warn('Event handler contains errors: '+ exception.message);
+		            }
+				}
 
-			callback.call();
+				if (RouteNavigation.hashTime) {
+					setCurrentTime(RouteNavigation.hashTime);
+				} else {
+					setCurrentTime(HypervideoModel.offsetIn);
+				}
+
+				FrameTrail.changeState('viewSize', FrameTrail.getState('viewSize'));
+
+				FrameTrail.changeState('videoWorking', true);
+
+				callback.call();
+			}, 1100);
 
 		}
 
