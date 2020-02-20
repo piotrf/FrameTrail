@@ -93,6 +93,9 @@
 			FrameTrail.changeState('hv_config_' + key, hypervideo.config[key]);
 		}
 
+		offsetIn  = (videoData.in) ? parseFloat(videoData.in) : 0;
+		offsetOut = (videoData.out) ? parseFloat(videoData.out) : null;
+
 		// Set video source and type or NullVideo
 		if (videoData.src && videoData.src.length > 3) {
 
@@ -117,7 +120,8 @@
 		} else if (!videoData.resourceId) {
 
 			videoType	  = 'canvas';
-			duration      = videoData.duration;
+			var offsetOutTmp = (offsetOut) ? offsetOut : videoData.duration;
+			duration      = offsetOutTmp - offsetIn;
 			durationFull  = videoData.duration;
 
 
@@ -127,9 +131,6 @@
 			sourcePath  = database.resources[videoData.resourceId].src;
 
 		}
-
-		offsetIn  = (videoData.in) ? parseFloat(videoData.in) : 0;
-		offsetOut = (videoData.out) ? parseFloat(videoData.out) : null;
 
 		// Set subtitle files
 		subtitleFiles        = hypervideo.subtitles;
